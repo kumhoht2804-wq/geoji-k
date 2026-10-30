@@ -550,7 +550,7 @@
       <button id="statsBtn" title="기록">📊<span class="lbl"> 기록</span></button>
       <button id="accBtn" title="온라인 계정">👤<span class="lbl"> 계정</span></button>
     </div>
-    <div class="credit">제작자 KSW · v1.0</div>
+    <div class="credit">제작자 KSW</div>
   </aside>
 </div>
 
@@ -1580,6 +1580,7 @@ function tick(now){
 
 /* start */
 const GAME_VER='v1.0';
+document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'),1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 fxInit(); sndIcon(); $('face').innerHTML=charSVG(Math.min(stageIdx(), S.route?8:2)); buildCity(stageIdx());
