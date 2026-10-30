@@ -1218,7 +1218,7 @@ function netChip(){
   if(NET.nick){ c.className=''; const rk=myOnlineRank(); c.textContent=`🌐 ${NET.nick}${rk?` · 전체 ${rk}위`:''}${NET.saving?' · 저장 중…':''}`; }
   else { c.className='off'; c.textContent='🌐 오프라인'; }
 }
-function meta(){ const i=Math.min(stageIdx(), !S.route?2:!S.sub?5:8); return {total:S.total,stage:getStage(i).name,route:S.route||'',rebirth:S.rebirth||0,chBest:S.chBest||0,endings:(S.routesDone||[]).filter(x=>x.includes('.')).length}; }
+function meta(){ const i=Math.min(stageIdx(), !S.route?2:!S.sub?5:8); const ch=Math.min(999,S.chBest||0), en=(S.routesDone||[]).filter(x=>x.includes('.')).length; return {total:S.total,stage:(getStage(i).name.slice(0,11)+'|'+ch+'|'+en),route:S.route||'',rebirth:S.rebirth||0,chBest:ch,endings:en}; }
 async function cloudSave(force){
   if(!NET.nick||!NET.token||NET.saving) return;
   if(!force && Date.now()-NET.lastSave<55000) return;
@@ -1352,7 +1352,7 @@ function checkOvertakes(){
 async function fetchBoard(force){
   if(!NET.url || (!force && Date.now()-NET.boardAt<45000)) return;
   NET.boardAt=Date.now();
-  try{ const r=await api('board'); NET.board=r.list; checkOvertakes(); if(tab==='rank') renderRank(); }catch(e){ NET.board=NET.board||[]; }
+  try{ const r=await api('board'); NET.board=(r.list||[]).map(x=>{ const p=String(x.stage||'').split('|'); return Object.assign({},x,{stage:p[0], chBest:x.chBest||Number(p[1])||0, endings:x.endings||Number(p[2])||0}); }); checkOvertakes(); if(tab==='rank') renderRank(); }catch(e){ NET.board=NET.board||[]; }
 }
 setInterval(()=>{ if(NET.nick) fetchBoard(); },10000);
 setInterval(()=>{ if(NET.nick && NET.board) checkOvertakes(); },2000);
@@ -1760,7 +1760,7 @@ function tick(now){
 
 /* start */
 setTimeout(requireLogin,0);
-const GAME_VER='v1.3';
+const GAME_VER='v1.3.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'),1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
