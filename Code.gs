@@ -10,7 +10,7 @@
 const SHEETS = {
   users: ['nick', 'hash', 'salt', 'token', 'created'],
   saves: ['nick', 'data', 'updated'],
-  board: ['nick', 'total', 'stage', 'route', 'rebirth', 'updated', 'chBest', 'endings'],
+  board: ['nick', 'total', 'stage', 'route', 'rebirth', 'updated', 'chBest', 'endings', 'meta'],
 };
 
 function sheet_(name) {
@@ -132,7 +132,8 @@ function save_(b) {
   const m = b.meta || {};
   const total = Math.max(0, Number(m.total) || 0);
   upsert_(sheet_('board'), nick, [total, String(m.stage || '').slice(0, 20), String(m.route || '').slice(0, 10), Number(m.rebirth) || 0, new Date(),
-    Math.max(0, Math.min(999, Number(m.chBest) || 0)), Math.max(0, Math.min(10, Number(m.endings) || 0))]);
+    Math.max(0, Math.min(999, Number(m.chBest) || 0)), Math.max(0, Math.min(10, Number(m.endings) || 0)),
+    JSON.stringify(m).slice(0, 3000)]);   // 앞으로 추가되는 랭킹 정보는 여기 통째로 저장 → 서버 재배포 불필요
   return { ok: true, at: Date.now() };
 }
 
@@ -149,10 +150,14 @@ function board_() {
   const s = sheet_('board');
   const last = s.getLastRow();
   if (last < 2) return { ok: true, list: [] };
-  const cols = Math.max(6, Math.min(8, s.getLastColumn()));
+  const cols = Math.max(6, Math.min(9, s.getLastColumn()));
   const v = s.getRange(2, 1, last - 1, cols).getValues();
-  const list = v.map(r => ({ nick: r[0], total: Number(r[1]) || 0, stage: r[2], route: r[3], rebirth: Number(r[4]) || 0,
-      chBest: Number(r[6]) || 0, endings: Number(r[7]) || 0 }))
+  const list = v.map(r => {
+      let extra = {};
+      try { extra = r[8] ? JSON.parse(r[8]) : {}; } catch (e) {}
+      return Object.assign(extra, { nick: r[0], total: Number(r[1]) || 0, stage: r[2], route: r[3], rebirth: Number(r[4]) || 0,
+        chBest: Number(r[6]) || 0, endings: Number(r[7]) || 0 });
+    })
     .sort((a, b) => (b.rebirth - a.rebirth) || (b.total - a.total))
     .slice(0, 300);
   return { ok: true, list: list };
