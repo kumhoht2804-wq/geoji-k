@@ -551,6 +551,40 @@
   body.mini #upd .ut{font-size:11px}
   body.mini #upd button{font-size:11.5px;padding:7px 9px}
 
+  /* ===== PvP tab ===== */
+  #pvpTab{position:relative}
+  #pvpTab.dot::after{content:'';position:absolute;top:1px;right:1px;width:7px;height:7px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 2px #fff}
+  .pvhero{background:linear-gradient(135deg,#2b1d1d,#1a1416);color:#fff;border-radius:14px;padding:12px;margin-bottom:8px;position:relative;overflow:hidden}
+  .pvhero::after{content:'⚔️';position:absolute;right:-6px;bottom:-14px;font-size:64px;opacity:.12}
+  .pvhero .t{font-size:11px;letter-spacing:.2em;color:#f2a4a4;font-weight:700}
+  .pvhero .big{font-size:18px;font-weight:800;margin:2px 0 6px;letter-spacing:-.02em}
+  .pvhero .st{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .pvhero .st div{background:rgba(255,255,255,.07);border-radius:9px;padding:6px 8px;font-size:10.5px;color:#d6d3d1}
+  .pvhero .st b{display:block;color:#fff;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pvhero .st b.cd{color:#fca5a5}
+  .tg{border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-bottom:6px;background:#fff;text-align:left}
+  .tg.rev{border-color:#fca5a5;background:#fff7f7}
+  .tg .h{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+  .tg .h .tgr{font-size:11px;color:#8b8b92;font-weight:700;min-width:24px}
+  .tg .h .rv{margin-left:auto;font-size:10px;font-weight:800;color:#fff;background:#e5484d;border-radius:999px;padding:1px 7px}
+  .tg .sub{font-size:10.5px;color:#8b8b92;margin:2px 0 7px 30px}
+  .tg .bt{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+  .tg .bt button{font-family:inherit;border:none;border-radius:9px;padding:8px 4px;cursor:pointer;font-weight:700;font-size:12px;line-height:1.25}
+  .tg .bt button small{display:block;font-weight:600;font-size:10px;opacity:.85}
+  .tg .bt .rob{background:#18181b;color:#fff}
+  .tg .bt .sue{background:#f1ede5;color:#3f3f46}
+  .tg .bt button:disabled{opacity:.4;cursor:not-allowed}
+  .pvempty{text-align:center;font-size:12px;color:#8b8b92;padding:14px 8px;border:1px dashed #e3ded4;border-radius:12px;margin-bottom:6px;line-height:1.6}
+  .plog{font-size:11px;line-height:1.7;color:#55555c}
+  .plog div{display:flex;gap:6px}
+  .plog .tm{color:#b5b5ba;min-width:34px;font-variant-numeric:tabular-nums}
+  .plog .in{color:#c0392b}
+  .plog b{font-weight:700}
+  .pvhelp{font-size:10.5px;color:#8b8b92;line-height:1.6;margin-top:6px}
+  body.mini .tabs button{font-size:9.5px;letter-spacing:-.06em;padding:4px 0}
+  body.mini .tg .bt button{font-size:11px;padding:7px 2px}
+  body.mini .pvhero .big{font-size:15px}
+
   /* boss key & paused cover */
   #boss{position:fixed;inset:0;background:#fff;z-index:100;display:none;font-family:'Malgun Gothic',sans-serif;color:#333}
   #boss.show{display:block}
@@ -632,6 +666,7 @@
       <button data-tab="click">👋 구걸</button>
       <button data-tab="skill">🌳 스킬</button>
       <button data-tab="rank">🏆 랭킹</button>
+      <button data-tab="pvp" id="pvpTab">⚔️ 맞짱</button>
     </div>
     <div class="list" id="list"></div>
     <div class="foot">
@@ -739,7 +774,7 @@ const PASSERBY = [
 ];
 
 let S = fresh();
-function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,owner:'',route:null,sub:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,slumpEnd:0,fireEnd:0,sueEnd:0,dogEnd:0,lawyerEnd:0,insEnd:0,grudge:{},pending:[],ach:{},chBest:0,maxCombo:0};}
+function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,owner:'',route:null,sub:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,slumpEnd:0,fireEnd:0,sueEnd:0,dogEnd:0,lawyerEnd:0,insEnd:0,grudge:{},cd:{},pvpLog:[],pvpNew:false,pending:[],ach:{},chBest:0,maxCombo:0};}
 
 function load(){
   try{
@@ -810,6 +845,7 @@ function log(msg){
 }
 
 function renderList(){
+  if(tab==='pvp') return renderPvp();
   if(tab==='rank') return renderRank();
   if(tab==='skill') return renderSkills();
   const arr = tab==='auto'?AUTO:CLICK, own = tab==='auto'?S.auto:S.click;
@@ -835,6 +871,7 @@ function renderList(){
   });
 }
 function refreshAffordable(){
+  if(tab==='pvp') return;
   if(tab==='rank') return;
   if(tab==='skill') return skillTick();
   const arr = tab==='auto'?AUTO:CLICK, own = tab==='auto'?S.auto:S.click;
@@ -1116,7 +1153,7 @@ function renderRank(){
     .sort((a,b)=>b.v-a.v);
   const done=ACH.filter(a=>S.ach[a.id]).length;
   L.innerHTML = (canRebirth()?`<button class="chbtn" id="rbBtn" style="background:linear-gradient(180deg,#ffd76a,#f0a92e);color:#5a3500">♻️ 환생하기 · 영구 수입 ×${(rebirthMult()+.5).toFixed(1)}</button>`:'') + `<button class="chbtn" id="chBtn" ${ch.on?'disabled':''}>${ch.on?'⏱ 챌린지 진행 중…':'⏱ 30초 연타 챌린지 · 최고 '+S.chBest+'회'}</button>
-  `+onlineBoardHtml()+defShopHtml()+`<div class="sec">동네 거지 랭킹 · 누적 수입</div>`+
+  `+onlineBoardHtml()+`<div class="sec">동네 거지 랭킹 · 누적 수입</div>`+
   rows.map((r,i)=>`<div class="rk${r.me?' me':''}"><span class="n">${i+1}</span><span>${r.ic}</span><span>${r.n}</span><span class="m">${fmt(r.v)}</span></div>`).join('')+
   `<div class="sec">업적 ${done} / ${ACH.length}</div>`+
   ACH.map(a=>`<div class="ach${S.ach[a.id]?'':' off'}"><span class="ai">${a.ic}</span><span>${a.n}<small>${a.d}</small></span></div>`).join('');
@@ -1660,15 +1697,19 @@ async function pvpDo(type,nick,c){
   try{
     const r=await api('attack',{nick:NET.nick,token:NET.token,target:nick,type,pct:(8+2*sk('s3'))/100});
     if(type==='rob'){
-      if(r.note==='blocked') { toast(`🐕 ${nick}님의 경비견에게 쫓겨났어요! 비용만 날렸어요`); }
-      else { const got=Math.min(r.amount, robCap(S.total)); S.money+=got; sfx('gold'); toast(`🤏 ${nick}님에게서 ${fmt(got)} 뜯어왔어요!${got<r.amount?' (한도까지)':''}${r.revenge?' (복수 성공 😤)':''}`); }
+      if(r.note==='blocked') { toast(`🐕 ${nick}님의 경비견에게 쫓겨났어요! 비용만 날렸어요`); pvpLogAdd('out',`🤏 ${nick} 뜯기 실패 (경비견) · 비용 -${fmt(c)}`); }
+      else { const got=Math.min(r.amount, robCap(S.total)); S.money+=got; sfx('gold'); pvpWin(); toast(`🤏 ${nick}님에게서 ${fmt(got)} 뜯어왔어요!${got<r.amount?' (한도까지)':''}${r.revenge?' (복수 성공 😤)':''}`); pvpLogAdd('out',`🤏 ${nick}에게서 <b>+${fmt(got)}</b>${r.revenge?' 😤복수':''}`); }
     } else {
       toast(r.note==='lawyer'?`🧾 고소했지만 ${nick}님 변호사가 막아서 1분만 적용돼요`:`🧾 ${nick}님을 고소했어요! 3분간 수입 -30%`);
+      pvpLogAdd('out',`🧾 ${nick} 고소${r.note==='lawyer'?' (변호사 방어 → 1분)':' (3분 -30%)'}`);
     }
+    S.cd=S.cd||{}; S.cd[type]=Date.now();
     if(S.grudge) delete S.grudge[nick];
+    if(tab==='pvp') renderPvp();
     cloudSave(true);
   }catch(e){
     S.money+=c; const m=String(e);
+    const cdm=m.match(/쿨타임 중이에요 \((\d+)분/); if(cdm){ S.cd=S.cd||{}; S.cd[type]=Date.now()-((type==='rob'?10:15)-Number(cdm[1]))*60000; if(tab==='pvp') renderPvp(); }
     toast(/알 수 없는 요청/.test(m)?'⚠️ 서버 업데이트가 필요해요 (관리자에게 문의)':'⚠️ '+m.replace(/^Error: /,''));
   }
 }
@@ -1681,19 +1722,56 @@ function handleEvents(list){
       if(sk('s5') && Math.random()<.3){ msgs.push(`🏰 철벽 발동! <b>${from}</b>님의 뜯기를 무효화했어요`); continue; }
       const atk=(NET.board||[]).find(x=>String(x.nick).toLowerCase()===from.toLowerCase()); const capAmt=atk?robCap(atk.total):ev.amount;
       const loss=Math.min(S.money, Math.min(ev.amount, capAmt)*dmgMult()); S.money-=loss; S.grudge=S.grudge||{}; S.grudge[from]=Date.now();
-      msgs.push(`😡 <b>${from}</b>님이 당신의 돈 <b>${fmt(loss)}</b>을 뜯어갔어요!`);
+      msgs.push(`😡 <b>${from}</b>님이 당신의 돈 <b>${fmt(loss)}</b>을 뜯어갔어요!`); pvpLogAdd('in',`😡 ${from}에게 <b>-${fmt(loss)}</b> 털림`);
     } else if(ev.type==='sue'){
       const dur=ev.note==='lawyer'?60000:180000; S.sueEnd=Math.max(S.sueEnd||0,Date.now()+dur); S.grudge=S.grudge||{}; S.grudge[from]=Date.now();
-      msgs.push(`🧾 <b>${from}</b>님에게 고소당했어요! ${dur/60000}분간 수입 -30%`);
+      msgs.push(`🧾 <b>${from}</b>님에게 고소당했어요! ${dur/60000}분간 수입 -30%`); pvpLogAdd('in',`🧾 ${from}에게 고소당함 (${dur/60000}분)`);
     }
   }
   if(!msgs.length) return;
+  S.pvpNew=true; pvpDot(); if(tab==='pvp') renderPvp();
   sfx('fever'); const sc=$('scene'); sc.classList.remove('hurt'); void sc.offsetWidth; sc.classList.add('hurt');
   const revs=[...new Set(list.filter(e=>e.note!=='blocked').map(e=>String(e.from)))];
   showModal(`<h2>📬 그동안 무슨 일이…</h2><p style="font-size:13px;line-height:1.8;text-align:left">${msgs.join('<br>')}</p>
     ${revs.length?`<button id="revBtn" style="background:#e5484d">😤 ${revs[0]}님에게 복수하기</button>`:''}<button class="gray" onclick="hideModal()">확인</button>`);
-  if($('revBtn')) $('revBtn').onclick=()=>{ hideModal(); pvpSheet(revs[0]); };
+  if($('revBtn')) $('revBtn').onclick=()=>{ hideModal(); document.querySelector('.tabs button[data-tab=pvp]').click(); };
 }
+function pvpLogAdd(dir,txt){ S.pvpLog=S.pvpLog||[]; S.pvpLog.unshift({d:dir,t:txt,at:Date.now()}); S.pvpLog=S.pvpLog.slice(0,20); }
+function pvpDot(){ const b=$('pvpTab'); if(b) b.classList.toggle('dot', !!S.pvpNew || Object.values(S.grudge||{}).some(t=>Date.now()-t<30*60000)); }
+function pvpWin(){ const sc=$('scene'), r=sc.getBoundingClientRect(); for(let k=0;k<14;k++) setTimeout(()=>coinBurst(r.left+r.width*(.3+Math.random()*.4), r.top+r.height*.4, 1), k*40); }
+function cdLeft(type){ const t=(S.cd||{})[type]||0, d=(type==='rob'?10:15)*60000; return Math.max(0, t+d-Date.now()); }
+function mmss(ms){ const s=Math.ceil(ms/1000); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function renderPvp(){
+  S.pvpNew=false; pvpDot();
+  const L=$('list');
+  if(!NET.nick){ L.innerHTML='<div class="pvempty">로그인하면 맞짱을 뜰 수 있어요</div>'; return; }
+  const B=liveBoard(), mi=B.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
+  const grudge=S.grudge||{}, now=Date.now();
+  const targets=B.map((x,i)=>({x,i})).filter(({x,i})=>i!==mi && (i<mi || (grudge[x.nick]&&now-grudge[x.nick]<30*60000)));
+  const rc=cdLeft('rob'), sc=cdLeft('sue');
+  let h=`<div class="pvhero"><div class="t">FIGHT CLUB</div><div class="big">⚔️ 맞짱 · 전체 ${mi+1}위</div><div class="st">
+    <div>🤏 뜯기 한도<b>${fmt(robCap(S.total))}</b></div>
+    <div>⏳ 쿨타임<b class="${rc||sc?'cd':''}">🤏${rc?mmss(rc):'OK'} · 🧾${sc?mmss(sc):'OK'}</b></div></div></div>`;
+  h+=`<div class="sec">🎯 털 수 있는 사람 (${targets.length})</div>`;
+  if(!targets.length) h+= mi===0 ? `<div class="pvempty">😎 당신이 1등이에요! 털 사람이 없어요.<br>대신 다들 당신을 노리고 있으니 <b>🛡️ 방어</b>를 챙기세요.</div>` : `<div class="pvempty">아직 공격할 수 있는 사람이 없어요.<br>나보다 순위가 높은 사람이 생기면 여기에 떠요.</div>`;
+  for(const {x,i} of targets.slice(0,15)){
+    const rev=grudge[x.nick]&&now-grudge[x.nick]<30*60000, nm=String(x.nick).replace(/</g,'&lt;');
+    h+=`<div class="tg ${rev?'rev':''}"><div class="h"><span class="tgr">${i+1}위</span>${x.route&&ROUTES[x.route]?ROUTES[x.route].ic:'🧎'} ${nm}${rev?'<span class="rv">😡 복수 가능</span>':''}</div>
+      <div class="sub">${x.stage||''} · 누적 ${fmt(x.total)}${x.rebirth?` · ♻️${x.rebirth}`:''}</div>
+      <div class="bt"><button class="rob" data-n="${nm}" ${rc?'disabled':''}>🤏 뜯기<small>${rc?'⏳ '+mmss(rc):'-'+fmt(robCost())}</small></button>
+      <button class="sue" data-n="${nm}" ${sc?'disabled':''}>🧾 고소<small>${sc?'⏳ '+mmss(sc):'-'+fmt(sueCost())}</small></button></div></div>`;
+  }
+  h+=defShopHtml();
+  h+=`<div class="sec">📜 최근 전투</div><div class="plog">${(S.pvpLog||[]).length?(S.pvpLog||[]).slice(0,10).map(e=>`<div class="${e.d}"><span class="tm">${new Date(e.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})}</span><span>${e.t}</span></div>`).join(''):'<div>아직 전투 기록이 없어요</div>'}</div>`;
+  h+=`<div class="pvhelp">• 🤏 뜯기: 내 현금 5%를 써서 상대 현금 ${8+2*sk('s3')}% 강탈 (최대 내 누적 수입의 10%) · 쿨 10분<br>• 🧾 고소: 내 현금 8%를 써서 상대 3분간 수입 -30% · 쿨 15분<br>• 나보다 높은 순위만 공격 가능 · 나를 공격한 사람은 30분간 복수 가능</div>`;
+  L.innerHTML=h;
+  L.querySelectorAll('.tg .rob').forEach(b=>b.onclick=()=>pvpDo('rob',b.dataset.n,robCost()));
+  L.querySelectorAll('.tg .sue').forEach(b=>b.onclick=()=>pvpDo('sue',b.dataset.n,sueCost()));
+  if($('defShop')) bindDefShop();
+  fetchBoard();
+}
+setInterval(()=>{ if(tab==='pvp' && !paused && !$('modal').classList.contains('show')) renderPvp(); else pvpDot(); },2000);
+
 const DEFS=[
   {k:'dogEnd',ic:'🐕',nm:'경비견',d:'뜯기 50% 차단'},
   {k:'lawyerEnd',ic:'🧑‍⚖️',nm:'변호사',d:'고소 1분으로'},
@@ -1702,6 +1780,7 @@ const DEFS=[
 function defCost(){ return Math.max(2e4, cps()*300); }
 function defShopHtml(){
   if(!NET.nick) return '';
+  /* 맞짱 탭에서 사용 */
   const n=Date.now();
   return `<div class="sec">🛡️ 방어 (30분 · ${fmt(defCost())})</div><div class="defs" id="defShop">${DEFS.map(d=>{ const l=(S[d.k]||0)-n;
     return `<button class="defb ${l>0?'on':''}" data-k="${d.k}"><i>${d.ic}</i>${d.nm}<small>${l>0?Math.ceil(l/60000)+'분 남음':d.d}</small></button>`; }).join('')}</div>`;
@@ -1710,7 +1789,7 @@ function bindDefShop(){
   document.querySelectorAll('.defb').forEach(b=>b.onclick=()=>{
     const c=defCost(); if(S.money<c){ toast('💸 돈이 부족해요'); return; }
     S.money-=c; S[b.dataset.k]=Math.max(S[b.dataset.k]||0,Date.now())+30*60000;
-    const d=DEFS.find(x=>x.k===b.dataset.k); toast(`${d.ic} ${d.nm} 고용! 30분간 ${d.d}`); sfx('gold'); cloudSave(true); renderRank();
+    const d=DEFS.find(x=>x.k===b.dataset.k); toast(`${d.ic} ${d.nm} 고용! 30분간 ${d.d}`); sfx('gold'); cloudSave(true); renderList();
   });
 }
 
@@ -1749,6 +1828,7 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkUpd
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.5',d:'10/30',items:['⚔️ <b>맞짱 탭</b> 신설! 털 수 있는 사람 목록에서 바로 🤏뜯기 · 🧾고소','⏳ 쿨타임 · 뜯기 한도 · 방어 상태를 한눈에','📜 최근 전투 기록','🔴 공격당하거나 복수 가능하면 맞짱 탭에 빨간 점']},
   {v:'v1.4.2',d:'10/30',items:['🆕 게임 중에도 새 패치를 자동으로 감지해요. 아래에 알림이 뜨면 [지금 적용]을 누르면 저장 후 바로 최신 버전으로 바뀌어요']},
   {v:'v1.4.1',d:'10/30',items:['⚖️ 뜯기 한도 추가: 가져올 수 있는 돈은 최대 <b>내 누적 수입의 10%</b>까지 (부자가 한 방에 털리는 문제 해결)','🎯 뜯기 창에 내 한도 금액 표시']},
   {v:'v1.4',d:'10/30',items:['⚔️ PvP 추가: 온라인 랭킹에서 상대를 눌러 🤏뜯기(현금 8% 강탈) · 🧾고소(3분간 수입 -30%) — 내 돈을 써야 해요','😡 공격당하면 30분간 복수 가능 (순위 상관없이)','🛡️ 방어 아이템: 🐕경비견 · 🧑‍⚖️변호사 · 🧾보험 (30분)','💸 1등 세금(-20%) · 2등(-10%), 🔥 하위권 추격 버프(최대 ×2)','⚠️ 랜덤 악재: 세무조사 · 소매치기 · 경기침체 · 화재 (순위 높을수록 자주) / 🍀 행운: 돈다발 · 복권','🌳 스킬트리 확장: 🛡️생존 갈래(눈치·맷집·조폭 형님·전관 변호사·철벽) + 🏭자동화 공장 · ☘️네잎클로버','📜 패치노트 추가']},
@@ -1978,7 +2058,7 @@ function tick(now){
 
 /* start */
 setTimeout(requireLogin,0);
-const GAME_VER='v1.4.2';
+const GAME_VER='v1.5';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
