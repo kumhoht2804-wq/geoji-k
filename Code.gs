@@ -4,13 +4,14 @@
  *
  * 이 코드를 구글 시트의 [확장 프로그램 → Apps Script]에 그대로 붙여넣고
  * [배포 → 새 배포 → 웹 앱]으로 배포하세요.
- * 시트 탭(users / saves / board)은 첫 요청 때 자동으로 만들어져요.
+ * 시트 탭(users / saves / board / events)은 첫 요청 때 자동으로 만들어져요.
  */
 
 const SHEETS = {
   users: ['nick', 'hash', 'salt', 'token', 'created'],
   saves: ['nick', 'data', 'updated'],
   board: ['nick', 'total', 'stage', 'route', 'rebirth', 'updated', 'chBest', 'endings', 'meta'],
+  events: ['to', 'from', 'type', 'amount', 'created', 'done', 'note'],
 };
 
 function sheet_(name) {
@@ -59,7 +60,9 @@ function doPost(e) {
       case 'save':     return out_(save_(b));
       case 'load':     return out_(load_(b));
       case 'board':    return out_(board_());
-      case 'ping':     return out_({ ok: true });
+      case 'ping':     return out_({ ok: true, pvp: true });
+      case 'attack':   return out_(attack_(b));
+      case 'inbox':    return out_({ ok: true, events: inbox_(auth_(b)) });
     }
     return out_({ ok: false, err: '알 수 없는 요청' });
   } catch (x) {
@@ -134,7 +137,7 @@ function save_(b) {
   upsert_(sheet_('board'), nick, [total, String(m.stage || '').slice(0, 20), String(m.route || '').slice(0, 10), Number(m.rebirth) || 0, new Date(),
     Math.max(0, Math.min(999, Number(m.chBest) || 0)), Math.max(0, Math.min(10, Number(m.endings) || 0)),
     JSON.stringify(m).slice(0, 3000)]);   // 앞으로 추가되는 랭킹 정보는 여기 통째로 저장 → 서버 재배포 불필요
-  return { ok: true, at: Date.now() };
+  return { ok: true, at: Date.now(), events: inbox_(nick) };
 }
 
 function load_(b) {
@@ -161,4 +164,62 @@ function board_() {
     .sort((a, b) => (b.rebirth - a.rebirth) || (b.total - a.total))
     .slice(0, 300);
   return { ok: true, list: list };
+}
+
+/* ---------- PvP (뜯기 / 고소) ---------- */
+const PVP = {
+  rob: { cd: 10 * 60 * 1000, pct: 0.08 },   // 뜯기: 상대 현금 8%, 쿨타임 10분
+  sue: { cd: 15 * 60 * 1000 },              // 고소: 상대 3분간 수입 -30%, 쿨타임 15분
+};
+function score_(rebirth, total) { return (Number(rebirth) || 0) * 1e18 + (Number(total) || 0); }
+function boardRow_(nick) {
+  const s = sheet_('board'), r = findRow_(s, nick);
+  if (r < 0) return null;
+  const v = s.getRange(r, 1, 1, 5).getValues()[0];
+  return { nick: v[0], score: score_(v[4], v[1]) };
+}
+function saveOf_(nick) {
+  const s = sheet_('saves'), r = findRow_(s, nick);
+  if (r < 0) return null;
+  try { return JSON.parse(s.getRange(r, 2).getValue()); } catch (e) { return null; }
+}
+function attack_(b) {
+  const me = auth_(b), type = b.type, P = PVP[type];
+  if (!P) throw '알 수 없는 공격';
+  const target = String(b.target || '');
+  if (target.toLowerCase() === me.toLowerCase()) throw '자기 자신은 안 돼요';
+  const T = boardRow_(target), M = boardRow_(me);
+  if (!T) throw '없는 사람이에요';
+  const ev = sheet_('events'), now = Date.now(), last = ev.getLastRow();
+  const rows = last >= 2 ? ev.getRange(2, 1, last - 1, 7).getValues() : [];
+  for (const r of rows) {
+    const t = new Date(r[4]).getTime();
+    if (String(r[1]).toLowerCase() === me.toLowerCase() && r[2] === type && now - t < P.cd)
+      throw `쿨타임 중이에요 (${Math.ceil((P.cd - (now - t)) / 60000)}분 남음)`;
+  }
+  const revenge = rows.some(r => String(r[0]).toLowerCase() === me.toLowerCase() && String(r[1]).toLowerCase() === target.toLowerCase()
+    && now - new Date(r[4]).getTime() < 30 * 60 * 1000);
+  if (!revenge && M && T.score <= M.score) throw '나보다 순위가 높은 사람만 공격할 수 있어요 (복수는 예외)';
+  const vs = saveOf_(target) || {};
+  let amount = 0, note = '';
+  if (type === 'rob') {
+    if ((Number(vs.dogEnd) || 0) > now && Math.random() < 0.5) note = 'blocked';
+    else amount = Math.floor(Math.max(0, Number(vs.money) || 0) * Math.min(0.18, Math.max(P.pct, Number(b.pct) || P.pct)));
+  }
+  if (type === 'sue' && (Number(vs.lawyerEnd) || 0) > now) note = 'lawyer';
+  ev.appendRow([T.nick, me, type, amount, new Date(), false, note]);
+  return { ok: true, type: type, amount: amount, note: note, target: T.nick, revenge: revenge };
+}
+function inbox_(nick) {
+  const ev = sheet_('events'), last = ev.getLastRow();
+  if (last < 2) return [];
+  const rows = ev.getRange(2, 1, last - 1, 7).getValues(), out = [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    if (String(r[0]).toLowerCase() === nick.toLowerCase() && r[5] !== true) {
+      out.push({ from: r[1], type: r[2], amount: Number(r[3]) || 0, note: r[6], at: new Date(r[4]).getTime() });
+      ev.getRange(i + 2, 6).setValue(true);
+    }
+  }
+  return out;
 }
