@@ -585,6 +585,19 @@
   body.mini .tg .bt button{font-size:11px;padding:7px 2px}
   body.mini .pvhero .big{font-size:15px}
 
+  #force{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;padding:16px;
+    background:rgba(14,12,10,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  #force.show{display:flex}
+  #force .fbox{width:100%;max-width:320px;background:#fff;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  #force .fi{font-size:38px}
+  #force .fk{font-size:10px;letter-spacing:.4em;color:#b8892f;font-weight:700;margin-top:4px}
+  #force h2{margin:4px 0 6px;font-size:19px;letter-spacing:-.02em}
+  #force p{font-size:12.5px;color:#55555c;line-height:1.6;margin:0 0 6px}
+  #force .fsub{font-size:10.5px;color:#a8a29e;margin-bottom:12px}
+  #force button{width:100%;font-family:inherit;font-weight:800;font-size:14px;border:none;border-radius:12px;padding:12px;cursor:pointer;
+    background:linear-gradient(180deg,#ffd76a,#f0a92e);color:#5a3500;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+  body.mini #force h2{font-size:16px}
+
   /* boss key & paused cover */
   #boss{position:fixed;inset:0;background:#fff;z-index:100;display:none;font-family:'Malgun Gothic',sans-serif;color:#333}
   #boss.show{display:block}
@@ -683,6 +696,7 @@
 
 <div id="toast"></div>
 <div id="upd"></div>
+<div id="force"></div>
 <div id="gate"></div>
 <div id="lvup"></div>
 <div id="choice"></div>
@@ -1800,7 +1814,7 @@ async function checkUpdate(){
   try{
     const r=await fetch(UPD_SRC+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
     const t=await r.text(); const m=t.match(/const GAME_VER='(v[0-9.]+)'/); if(!m) return;
-    const nv=m[1]; if(nv===GAME_VER) return;
+    const nv=m[1]; if(nv===GAME_VER){ try{ for(const k of Object.keys(sessionStorage)) if(k.startsWith('geoji_upd_try_')) sessionStorage.removeItem(k); }catch(e){} return; }
     // 최신 버전 내용 미리 저장 → 실행기가 바로 이걸로 켜요
     try{ localStorage.setItem('geoji_game_html',t); }catch(e){}
     const first=(t.match(/\{v:'[^']+',d:'[^']*',items:\[(['"])(.*?)\1/)||[])[2]||'';
@@ -1808,6 +1822,9 @@ async function checkUpdate(){
   }catch(e){}
 }
 function showUpd(nv,note){
+  // 강제 업데이트: 게임을 멈추고 업데이트 화면을 띄워요 (같은 버전으로 경쟁하도록)
+  let tries=0; try{ tries=Number(sessionStorage.getItem('geoji_upd_try_'+nv)||0); }catch(e){}
+  if(tries<2) return forceUpd(nv,note,tries);
   if(updSeen===nv && Date.now()-updDismissedAt<10*60000) return;
   updSeen=nv; const U=$('upd');
   U.innerHTML=`<div class="ut">🆕 <b>${nv}</b> 패치가 나왔어요!<small>${note?note.slice(0,60)+(note.length>60?'…':''):'지금 적용하면 바로 최신 버전으로 바뀌어요'}</small></div>
@@ -1822,12 +1839,30 @@ function showUpd(nv,note){
     else location.replace(location.pathname+'?v='+encodeURIComponent(nv)+location.hash);
   };
 }
-setTimeout(checkUpdate,20000);
+setTimeout(checkUpdate,3000);
 setInterval(checkUpdate,3*60000);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkUpdate(); });
 
+function forceUpd(nv,note,tries){
+  if($('force').classList.contains('show')) return;
+  paused=true; const F=$('force');
+  F.innerHTML=`<div class="fbox"><div class="fi">🆕</div><div class="fk">UPDATE</div><h2>${nv} 패치가 나왔어요!</h2>
+    <p>${note?note.slice(0,90)+(note.length>90?'…':''):'최신 버전으로 업데이트해야 계속할 수 있어요.'}</p>
+    <div class="fsub">진행 상황은 저장하고 업데이트해요 · 지금 버전 ${GAME_VER}</div>
+    <button id="fGo">지금 업데이트</button></div>`;
+  F.classList.add('show'); sfx('gold');
+  $('fGo').onclick=async()=>{
+    $('fGo').textContent='저장 중…'; $('fGo').disabled=true; save();
+    try{ await Promise.race([cloudSave(true), new Promise(r=>setTimeout(r,4000))]); }catch(e){}
+    try{ sessionStorage.setItem('geoji_updated','1'); sessionStorage.setItem('geoji_upd_try_'+nv,String(tries+1)); }catch(e){}
+    if(location.protocol==='file:') location.reload();
+    else location.replace(location.pathname+'?v='+encodeURIComponent(nv)+location.hash);
+  };
+}
+
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.5.1',d:'10/30',items:['🔒 구버전으로는 플레이할 수 없어요. 새 패치가 나오면 게임이 멈추고 업데이트 화면이 떠요 (진행 상황은 자동 저장)']},
   {v:'v1.5',d:'10/30',items:['⚔️ <b>맞짱 탭</b> 신설! 털 수 있는 사람 목록에서 바로 🤏뜯기 · 🧾고소','⏳ 쿨타임 · 뜯기 한도 · 방어 상태를 한눈에','📜 최근 전투 기록','🔴 공격당하거나 복수 가능하면 맞짱 탭에 빨간 점']},
   {v:'v1.4.2',d:'10/30',items:['🆕 게임 중에도 새 패치를 자동으로 감지해요. 아래에 알림이 뜨면 [지금 적용]을 누르면 저장 후 바로 최신 버전으로 바뀌어요']},
   {v:'v1.4.1',d:'10/30',items:['⚖️ 뜯기 한도 추가: 가져올 수 있는 돈은 최대 <b>내 누적 수입의 10%</b>까지 (부자가 한 방에 털리는 문제 해결)','🎯 뜯기 창에 내 한도 금액 표시']},
@@ -2058,7 +2093,7 @@ function tick(now){
 
 /* start */
 setTimeout(requireLogin,0);
-const GAME_VER='v1.5';
+const GAME_VER='v1.5.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
