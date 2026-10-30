@@ -24,6 +24,18 @@
   header h1 small{font-size:11px;font-weight:500;color:var(--sub);letter-spacing:.08em}
   .money{font-size:28px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-.03em;white-space:nowrap;line-height:1.25;height:1.25em;overflow:hidden}
   .money .mg{display:inline-block}
+  html,body{overflow-x:hidden}
+  header>div:last-child{min-width:0;flex:1}
+  header h1{white-space:nowrap;flex:none}
+  .money{max-width:100%}
+  .rates,#target{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (max-width:700px){
+    header{flex-direction:column;align-items:stretch;gap:2px}
+    header h1{font-size:15px}
+    header>div:last-child{text-align:center}
+    .money{text-align:center}
+    .rates{text-align:center}
+  }
   .money .mg u{text-decoration:none;font-weight:700;margin:0 .12em 0 .02em}
   .money .mg.fx .mn{display:inline-block;min-width:4.5ch;text-align:right}
   .money .mg:last-child u{margin-right:0}
@@ -824,6 +836,7 @@ function fmtFull(n){
 }
 /* 돈 표시: 단위 칸을 고정 폭으로 → 숫자가 바뀌어도 흔들리지 않아요 */
 let moneyKey='', moneyEls=null;
+addEventListener('resize',()=>{ moneyKey=''; });
 function renderMoney(v){
   const me=$('money'); v=Math.floor(Math.max(0,v));
   const U=[[1e16,'경'],[1e12,'조'],[1e8,'억'],[1e4,'만'],[1,'원']];
@@ -836,7 +849,7 @@ function renderMoney(v){
     me.innerHTML=groups.map(([d,u],i)=>`<span class="mg${i?' fx':''}"><span class="mn"></span><u>${u}</u></span>`).join('');
     moneyEls=[...me.querySelectorAll('.mn')];
     // 글씨 크기는 자릿수 구간이 바뀔 때만 계산
-    const len=groups.length*6.6+2, base=mini?18:28, room=mini?225:460;
+    const len=groups.length*6.6+2, base=mini?18:28, room=Math.max(160,(me.parentElement.clientWidth||(mini?225:460))-4);
     me.style.fontSize=Math.max(mini?10:15, Math.min(base, room/(len*.62)))+'px';
   }
   let r=v; const groups=U.slice(top);
@@ -1884,6 +1897,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.5.3',d:'10/30',items:['📱 모바일에서 큰 금액일 때 화면이 옆으로 밀리며 흔들리던 문제 수정 (상단 레이아웃 정리)']},
   {v:'v1.5.2',d:'10/30',items:['🐛 돈이 커지면(1000조 이상) 화면이 흔들리던 문제 수정 — 단위 칸을 고정해서 숫자만 부드럽게 바뀌어요']},
   {v:'v1.5.1',d:'10/30',items:['🔒 구버전으로는 플레이할 수 없어요. 새 패치가 나오면 게임이 멈추고 업데이트 화면이 떠요 (진행 상황은 자동 저장)']},
   {v:'v1.5',d:'10/30',items:['⚔️ <b>맞짱 탭</b> 신설! 털 수 있는 사람 목록에서 바로 🤏뜯기 · 🧾고소','⏳ 쿨타임 · 뜯기 한도 · 방어 상태를 한눈에','📜 최근 전투 기록','🔴 공격당하거나 복수 가능하면 맞짱 탭에 빨간 점']},
@@ -2116,7 +2130,7 @@ function tick(now){
 
 /* start */
 setTimeout(requireLogin,0);
-const GAME_VER='v1.5.2';
+const GAME_VER='v1.5.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
