@@ -500,13 +500,24 @@
   /* ===== expanded tree ===== */
   #choice,#route{overflow:auto;justify-content:safe center}
   .cards.c5{flex-wrap:wrap;max-width:760px}
-  .cards.c5 .card2{flex:1 1 130px;max-width:150px}
+  .cards.c5 .card2{flex:1 1 150px;max-width:170px}
+  .cards.c5{max-width:780px}
+  @media (max-width:560px){
+    .cards,.cards.c5{flex-direction:column;align-items:stretch;gap:7px}
+    .cards .card2,.cards.c5 .card2{flex:none;max-width:none;width:100%;display:grid!important;grid-template-columns:34px 1fr;text-align:left;align-items:center;column-gap:8px;padding:9px 10px}
+    .card2 .ci{grid-row:span 3;font-size:24px;text-align:center}
+    .card2 .ct{margin:0;font-size:13px}
+    .card2 .cr{margin:2px 0 3px;justify-self:start}
+    .card2 .co{font-size:10.5px}
+    .card2 .co .rpath{display:none}
+  }
   body.mini .cards.c5 .card2{max-width:none}
   body.mini .card2 .co .rpath{display:none}
   .trow.two{grid-template-columns:1fr 1fr;gap:10px}
   .sbcol{display:flex;flex-direction:column;align-items:center}
   .sbcol .rh{width:100%;margin-top:6px}
-  .rtabs{display:flex;gap:4px;width:100%;margin:10px 0 6px}
+  .rtabs{display:flex;flex-wrap:wrap;gap:4px;width:100%;margin:10px 0 6px}
+  .rtabs .rtab{flex:1 1 22%}
   .rtab{flex:1;font-family:inherit;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#d6d3d1;border-radius:10px;padding:6px 2px;cursor:pointer;
     display:flex;flex-direction:column;align-items:center;gap:2px;font-size:16px;position:relative}
   .rtab span{font-size:9.5px;font-weight:700}
@@ -771,7 +782,7 @@ const ROUTES={
     st:[{name:'편의점 알바생',face:'🧑‍💼',bowl:'🏪',o:'visor'},{name:'대기업 신입',face:'🧑‍💼',bowl:'💼',o:'lanyard'},{name:'팀장님',face:'👨‍💼',bowl:'📊',o:'manager'}],
     subs:{exec:{ic:'🏛️',nm:'임원 승진',perk:'방치 수입 효율 +20%',st:[{name:'전무 이사',face:'🕴️',bowl:'🏢',o:'suit'},{name:'대기업 회장',face:'🤴',bowl:'🏙️',o:'boss'}]},
           startup:{ic:'🦄',nm:'퇴사 후 창업',perk:'',st:[{name:'스타트업 대표',face:'🧑‍💻',bowl:'💡',o:'startup'},{name:'유니콘 창업자',face:'🦄',bowl:'🦄',o:'unicorn'}]},
-          civil:{ic:'🎓',nm:'공무원',perk:'',st:[{name:'5급 사무관',face:'👨‍💼',bowl:'📁',o:'civil'},{name:'장관',face:'🤴',bowl:'🏛️',o:'minister'}]}}},
+          global:{ic:'🌏',nm:'해외 법인장',perk:'',st:[{name:'해외 주재원',face:'👨‍💼',bowl:'✈️',o:'expat'},{name:'글로벌 CEO',face:'🤴',bowl:'🌏',o:'globalceo'}]}}},
   inv:{ic:'📈',nm:'투자자',color:'#e5484d',perk:'돈주머니 ×2 · 피버 확률 +15% · 도박 성공 +15%',desc:'인생은 한 방',
     st:[{name:'주식 개미',face:'🧑‍💻',bowl:'📱',o:'hoodie'},{name:'슈퍼개미',face:'🧑‍💻',bowl:'💻',o:'headset'},{name:'펀드매니저',face:'👨‍💼',bowl:'📈',o:'fund'}],
     subs:{wall:{ic:'🐺',nm:'월가',perk:'도박 성공률 +10%',st:[{name:'월가의 늑대',face:'🐺',bowl:'💰',o:'wolf'},{name:'투자의 신',face:'🧙',bowl:'💎',o:'god'}]},
@@ -787,6 +798,21 @@ const ROUTES={
     subs:{game:{ic:'🕹️',nm:'게임',perk:'콤보 최대 배율 +1.0',st:[{name:'프로게이머 레전드',face:'🎮',bowl:'🏆',o:'progamer'},{name:'e스포츠 구단주',face:'🕴️',bowl:'🏟️',o:'esports'}]},
           infl:{ic:'📱',nm:'인플루언서',perk:'',st:[{name:'메가 인플루언서',face:'🤳',bowl:'📸',o:'influencer'},{name:'미디어 제국 CEO',face:'🤴',bowl:'🌐',o:'mediaceo'}]},
           comm:{ic:'🛍️',nm:'커머스',perk:'',st:[{name:'라이브커머스 대표',face:'🤳',bowl:'🛍️',o:'commerce'},{name:'이커머스 제왕',face:'🤴',bowl:'📦',o:'commking'}]}}},
+  gov:{ic:'🏛️',nm:'공무원',color:'#0ea5e9',perk:'',desc:'철밥통의 길',
+    st:[{name:'공시생',face:'🧑‍🎓',bowl:'📚',o:'gongsi'},{name:'9급 공무원',face:'🧑‍💼',bowl:'📁',o:'civil9'},{name:'5급 사무관',face:'👨‍💼',bowl:'🗂️',o:'civil'}],
+    subs:{minister:{ic:'🏛️',nm:'장관',perk:'',st:[{name:'차관',face:'🕴️',bowl:'🏛️',o:'vice'},{name:'장관',face:'🤴',bowl:'🏛️',o:'minister'}]},
+          judge:{ic:'⚖️',nm:'법조인',perk:'',st:[{name:'부장판사',face:'🧑‍⚖️',bowl:'⚖️',o:'judge'},{name:'대법관',face:'🤴',bowl:'🔨',o:'chiefjudge'}]},
+          diplo:{ic:'🌐',nm:'외교관',perk:'',st:[{name:'영사',face:'👨‍💼',bowl:'🛂',o:'consul'},{name:'대사',face:'🤴',bowl:'🌐',o:'ambassador'}]}}},
+  doc:{ic:'🩺',nm:'의사',color:'#14b8a6',perk:'',desc:'생명을 구하고 돈도 번다',
+    st:[{name:'의대생',face:'🧑‍🎓',bowl:'📖',o:'medstu'},{name:'레지던트',face:'🧑‍⚕️',bowl:'💉',o:'resident'},{name:'전문의',face:'🧑‍⚕️',bowl:'🩺',o:'doctor'}],
+    subs:{dir:{ic:'🏥',nm:'병원장',perk:'',st:[{name:'대학병원장',face:'🧑‍⚕️',bowl:'🏥',o:'hospdir'},{name:'의료재단 이사장',face:'🤴',bowl:'🏨',o:'medking'}]},
+          bio:{ic:'💊',nm:'바이오',perk:'',st:[{name:'바이오 CEO',face:'🧑‍🔬',bowl:'🧪',o:'bioceo'},{name:'신약왕',face:'🤴',bowl:'💊',o:'bioking'}]},
+          tvdoc:{ic:'📺',nm:'스타 닥터',perk:'',st:[{name:'방송 명의',face:'🧑‍⚕️',bowl:'📺',o:'tvdoc'},{name:'건강 채널 제왕',face:'🤴',bowl:'📡',o:'tvdocking'}]}}},
+  ath:{ic:'⚽',nm:'운동선수',color:'#22c55e',perk:'',desc:'땀은 배신하지 않는다',
+    st:[{name:'동네 축구 유망주',face:'⚽',bowl:'⚽',o:'kid'},{name:'프로 선수',face:'🏃',bowl:'👟',o:'pro'},{name:'국가대표',face:'🏅',bowl:'🏅',o:'national'}],
+    subs:{abroad:{ic:'🌍',nm:'해외 진출',perk:'',st:[{name:'빅리그 스타',face:'⚽',bowl:'🏆',o:'bigleague'},{name:'발롱도르',face:'🤴',bowl:'🥇',o:'ballon'}]},
+          owner:{ic:'🏟️',nm:'구단주',perk:'',st:[{name:'감독',face:'🧑‍💼',bowl:'📋',o:'coach'},{name:'구단주',face:'🤴',bowl:'🏟️',o:'clubowner'}]},
+          caster:{ic:'🎙️',nm:'해설가',perk:'',st:[{name:'스포츠 해설가',face:'🎙️',bowl:'🎙️',o:'caster'},{name:'스포츠 미디어 왕',face:'🤴',bowl:'📺',o:'sportsking'}]}}},
 };
 const PERKS={
   biz:{auto:1.4},
@@ -799,8 +825,12 @@ const PERKS={
   'inv.wall':{auto:1.2,betP:.10}, 'inv.coin':{feverX:1,feverS:5},
   'star.top':{auto:1.1,click:1.4}, 'star.mc':{auto:1.3},
   'cre.game':{auto:1.1,click:1.3,comboMax:10}, 'cre.infl':{auto:1.15,goldX:1.6,goldFreq:.2},
-  'biz.estate':{auto:1.15,idleEff:.3}, 'job.civil':{auto:1.2,evRes:.3}, 'inv.oil':{auto:1.15,goldX:1.5,feverS:5},
+  'biz.estate':{auto:1.15,idleEff:.3}, 'job.global':{auto:1.2,idleEff:.2,idleH:4}, 'inv.oil':{auto:1.15,goldX:1.5,feverS:5},
   'star.actor':{auto:1.15,click:1.3,feverP:.05}, 'cre.comm':{auto:1.2,discount:.08},
+  gov:{auto:1.25,evRes:.2,idleEff:.2}, doc:{auto:1.3,click:1.15}, ath:{auto:1.15,click:1.4,comboMax:10},
+  'gov.minister':{auto:1.25}, 'gov.judge':{auto:1.15,evRes:.3}, 'gov.diplo':{auto:1.1,idleEff:.2,idleH:8},
+  'doc.dir':{auto:1.3}, 'doc.bio':{auto:1.1,goldX:1.5,feverP:.05}, 'doc.tvdoc':{auto:1.15,click:1.3},
+  'ath.abroad':{auto:1.1,click:1.4}, 'ath.owner':{auto:1.3}, 'ath.caster':{auto:1.15,feverS:5},
 };
 function perkText(o){
   const L={auto:v=>`자동 ×${v}`,click:v=>`클릭 ×${v}`,idleEff:v=>`방치 효율 +${Math.round(v*100)}%`,idleH:v=>`방치 최대 +${v}시간`,
@@ -812,6 +842,7 @@ for(const [k,R] of Object.entries(ROUTES)){ R.perk=perkText(PERKS[k]); for(const
 function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null].filter(Boolean); }
 function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1)*(1+jsk(k)); }
 function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0)+jsk(k); }
+function fixSub(){ if(S.route && (!ROUTES[S.route])) { S.route=null; S.sub=null; } if(S.route && S.sub && !ROUTES[S.route].subs[S.sub]) S.sub=null; }
 function getStage(i){
   const base=STAGES[i];
   if(i>=3 && i<=7){
@@ -997,6 +1028,7 @@ function render(){
   renderMoney(shownMoney);
   $('cps').textContent='초당 '+fmt(cps());
   $('cpc').textContent='클릭당 '+fmt(cpc());
+  fixSub();
   let i=stageIdx();
   if(i>=3 && (!S.route||!ROUTES[S.route])){ i=2; showRoute(); }
   else if(i>=6 && !S.sub){ i=5; showSub(); }
@@ -1223,7 +1255,7 @@ const ACH=[
   {id:'r1',ic:'👑',n:'동네 1등',d:'랭킹 1위 달성',f:()=>rankOf()===1},
   {id:'rb1',ic:'♻️',n:'다시 태어나다',d:'첫 환생',f:()=>(S.rebirth||0)>=1},
   {id:'rt3',ic:'🗺️',n:'인생 N회차',d:'서로 다른 엔딩 3개',f:()=>(S.routesDone||[]).filter(x=>x.includes('.')).length>=3},
-  {id:'rt10',ic:'🌌',n:'모든 인생을 살아본 자',d:'엔딩 15개 전부',f:()=>(S.routesDone||[]).filter(x=>x.includes('.')).length>=15},
+  {id:'rt10',ic:'🌌',n:'모든 인생을 살아본 자',d:'엔딩 24개 전부',f:()=>(S.routesDone||[]).filter(x=>x.includes('.')).length>=24},
 ];
 function checkAch(){
   for(const a of ACH) if(!S.ach[a.id] && a.f()){ S.ach[a.id]=1; toast(`🏅 업적 달성: ${a.n}`); if(tab==='rank') renderRank(); }
@@ -1309,6 +1341,33 @@ const OUTFIT={
   hollywood:{hair:'#fde68a',slick:1,top:'#7f1d1d',pants:'#7f1d1d',shoe:'#c9a24a',acc:'suit',tie:'#fde68a',shades:1,sparkle:1,aura:1},
   commerce:{hair:'#3b2a20',slick:1,top:'#22c55e',pants:'#1f2937',shoe:'#e5e7eb',acc:'polo',phone:1},
   commking:{hair:'#3b2a20',slick:1,top:'#0f172a',pants:'#0f172a',shoe:'#c9a24a',acc:'suit',tie:'#22c55e',aura:1,pocket:1,watch:1,phone:1},
+  expat:{hair:'#2b2b2b',slick:1,top:'#ffffff',vest:'#1e3a8a',pants:'#1e3a8a',shoe:'#111',acc:'shirt',tie:'#0ea5e9',lanyard:1},
+  globalceo:{hair:'#9aa0a6',slick:1,top:'#0f172a',pants:'#0f172a',shoe:'#c9a24a',acc:'suit',tie:'#0ea5e9',pocket:1,watch:1,aura:1,glasses:'gold'},
+  gongsi:{hair:'#3b2a20',messy:1,top:'#9ca3af',pants:'#4b5563',shoe:'#e5e7eb',acc:'hoodie',glasses:'round'},
+  civil9:{hair:'#2b2b2b',top:'#ffffff',pants:'#374151',shoe:'#111',acc:'shirt',tie:'#64748b',lanyard:1},
+  vice:{hair:'#4b5563',slick:1,top:'#1e293b',pants:'#1e293b',shoe:'#111',acc:'suit',tie:'#1d4ed8',glasses:'rect'},
+  judge:{hair:'#2b2b2b',slick:1,top:'#111111',pants:'#111111',shoe:'#111',acc:'robe',glasses:'rect'},
+  chiefjudge:{hair:'#9ca3af',slick:1,top:'#111111',pants:'#111111',shoe:'#111',acc:'robe',glasses:'gold',aura:1,medal:1},
+  consul:{hair:'#2b2b2b',slick:1,top:'#1e3a8a',pants:'#1e3a8a',shoe:'#111',acc:'suit',tie:'#e5e7eb',pocket:1},
+  ambassador:{hair:'#9aa0a6',slick:1,top:'#0b1b3f',pants:'#0b1b3f',shoe:'#111',acc:'suit',tie:'#c9a24a',pocket:1,aura:1,medal:1},
+  medstu:{hair:'#3b2a20',messy:1,top:'#e5e7eb',pants:'#4b5563',shoe:'#e5e7eb',acc:'hoodie',glasses:'round'},
+  resident:{hair:'#2b2b2b',messy:1,top:'#2f9e8f',pants:'#2f9e8f',shoe:'#e5e7eb',acc:'scrubs'},
+  doctor:{hair:'#2b2b2b',slick:1,top:'#ffffff',pants:'#475569',shoe:'#111',acc:'coat',tie:'#1d4ed8'},
+  hospdir:{hair:'#9aa0a6',slick:1,top:'#ffffff',pants:'#1f2937',shoe:'#111',acc:'coat',tie:'#b91c1c',glasses:'gold'},
+  medking:{hair:'#9aa0a6',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'coat',tie:'#c9a24a',aura:1,glasses:'gold'},
+  bioceo:{hair:'#2b2b2b',slick:1,top:'#ffffff',pants:'#1f2937',shoe:'#111',acc:'coat',tie:'#22c55e',glasses:'rect'},
+  bioking:{hair:'#2b2b2b',slick:1,top:'#0f172a',pants:'#0f172a',shoe:'#c9a24a',acc:'suit',tie:'#22c55e',aura:1,pocket:1,watch:1},
+  tvdoc:{hair:'#2b2b2b',slick:1,top:'#ffffff',pants:'#475569',shoe:'#111',acc:'coat',tie:'#f59e0b',mic:1},
+  tvdocking:{hair:'#2b2b2b',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'coat',tie:'#f59e0b',aura:1,mic:1},
+  kid:{hair:'#3b2a20',messy:1,top:'#16a34a',pants:'#e5e7eb',shoe:'#111',acc:'jersey'},
+  pro:{hair:'#1f2937',top:'#dc2626',pants:'#111827',shoe:'#e5e7eb',acc:'jersey'},
+  national:{hair:'#1f2937',top:'#e11d48',pants:'#1e3a8a',shoe:'#e5e7eb',acc:'jersey',medal:1},
+  bigleague:{hair:'#1f2937',slick:1,top:'#7c3aed',pants:'#111827',shoe:'#c9a24a',acc:'jersey',medal:1,sparkle:1},
+  ballon:{hair:'#1f2937',slick:1,top:'#111827',pants:'#111827',shoe:'#c9a24a',acc:'suit',tie:'#c9a24a',medal:1,aura:1,sparkle:1},
+  coach:{hair:'#4b5563',slick:1,top:'#1f2937',pants:'#1f2937',shoe:'#111',acc:'hoodie',headset:1},
+  clubowner:{hair:'#9aa0a6',slick:1,top:'#14532d',pants:'#14532d',shoe:'#c9a24a',acc:'suit',tie:'#facc15',aura:1,pocket:1,watch:1},
+  caster:{hair:'#2b2b2b',slick:1,top:'#1e3a8a',pants:'#1e3a8a',shoe:'#111',acc:'suit',tie:'#22c55e',headset:1},
+  sportsking:{hair:'#2b2b2b',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'suit',tie:'#22c55e',aura:1,mic:1},
   mediaceo:{hair:'#c084fc',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'suit',tie:'#ec4899',pocket:1,watch:1,aura:1},
 };
 function charSVG(st,big,ok){
@@ -1341,6 +1400,12 @@ function charSVG(st,big,ok){
      <path d="M50 80 L60 100 L52 104 L44 84Z M70 80 L60 100 L68 104 L76 84Z" fill="${o.top}" opacity=".85" style="filter:brightness(.92)"/>
      ${o.pocket?`<rect x="71" y="90" width="7" height="3" rx="1" fill="${o.top==='#f5f3ee'?'#e2b73b':'#fff'}"/>`:''}`;
   if(o.acc==='hoodie') torso+=`<path d="M54 82 L54 96 M66 82 L66 96" stroke="#e8e8ea" stroke-width="1.6" stroke-linecap="round"/><rect x="46" y="104" width="28" height="10" rx="4" fill="#000" opacity=".12"/>`;
+  if(o.acc==='robe') torso+=`<path d="M35 86 Q35 80 50 80 L60 92 L70 80 Q85 80 85 86 L88 126 L32 126Z" fill="#111"/><path d="M52 80 L60 92 L68 80Z" fill="#fff"/><rect x="57" y="84" width="6" height="4" fill="#fff"/><path d="M60 92 L60 124" stroke="#333" stroke-width="1"/>`;
+  if(o.acc==='coat') torso+=`<path d="M52 80 L60 92 L68 80Z" fill="#e9eef5"/><path d="M58 84 L62 84 L63 98 L60 102 L57 98Z" fill="${o.tie}"/>
+    <path d="M36 84 Q36 80 48 80 L58 104 L56 124 L34 124Z M84 84 Q84 80 72 80 L62 104 L64 124 L86 124Z" fill="#ffffff" stroke="#e5e7eb"/>
+    <path d="M47 84 Q44 100 52 104 Q56 106 58 100" stroke="#475569" stroke-width="1.8" fill="none"/><circle cx="58" cy="100" r="2.4" fill="#94a3b8"/><rect x="70" y="96" width="9" height="6" rx="1" fill="#93c5fd"/>`;
+  if(o.acc==='scrubs') torso+=`<path d="M50 80 L60 92 L70 80" stroke="#1f6f64" stroke-width="2.5" fill="none"/><rect x="66" y="96" width="9" height="7" rx="1.5" fill="#1f6f64" opacity=".6"/>`;
+  if(o.medal) torso+=`<path d="M54 80 L60 94 L66 80" stroke="#2563eb" stroke-width="2.2" fill="none"/><circle cx="60" cy="98" r="5" fill="#fbbf24" stroke="#c9a24a"/><path d="M60 95 l1 2 2 .2 -1.6 1.3 .5 2 -1.9 -1 -1.9 1 .5 -2 -1.6 -1.3 2 -.2Z" fill="#fff7d6"/>`;
   if(o.plaque) torso+=`<rect x="64" y="92" width="14" height="11" rx="2" fill="${o.plaque==='gold'?'#ffd34d':'#d1d5db'}" stroke="${o.plaque==='gold'?'#c9a24a':'#9ca3af'}"/><path d="M69 95 L74 97.5 L69 100Z" fill="#e5484d"/>`;
   if(o.acc==='jersey') torso+=`<path d="M48 80 L60 86 L72 80" stroke="#fff" stroke-width="2.5" fill="none"/><text x="60" y="108" text-anchor="middle" font-size="13" font-weight="800" fill="#fff" font-family="sans-serif">7</text><rect x="35" y="112" width="50" height="3" fill="#fff" opacity=".7"/>`;
   if(o.coin) torso+=`<circle cx="70" cy="98" r="6" fill="#ffd34d" stroke="#c9a24a"/><text x="70" y="101.5" text-anchor="middle" font-size="9" font-weight="800" fill="#8a5a00" font-family="sans-serif">₿</text>`;
@@ -1384,7 +1449,7 @@ function openTree(){
   const node=(i,stg,state)=>`<div class="tn ${state}"><div class="av">${charSVG(i,false,stg.o)}</div><div class="nm">${stg.name}</div><div class="nd">${fmt(STAGES[i].need)}</div></div>`;
   const stOf=(i,onPath)=> !onPath?'' : i<curShown?'done':i===curShown?'cur':'mine';
   const done=(S.routesDone||[]);
-  let h=`<div class="hd"><div class="k">CAREER TREE · 엔딩 ${done.filter(x=>x.includes('.')).length}/15</div><h3>신분 트리</h3><button class="x" id="stX">✕</button></div><div class="tr">`;
+  let h=`<div class="hd"><div class="k">CAREER TREE · 엔딩 ${done.filter(x=>x.includes('.')).length}/24</div><h3>신분 트리</h3><button class="x" id="stX">✕</button></div><div class="tr">`;
   h+=`<div class="trow one">${node(8,STAGES[8],stOf(8,!!S.sub))}</div><div class="split" style="transform:scaleY(-1)"></div>`;
   const subs=Object.entries(R.subs);
   h+=`<div class="trow two" style="grid-template-columns:repeat(${subs.length},1fr)">`+subs.map(([k,sb])=>`<div class="sbcol">${[1,0].map(j=>node(6+j,sb.st[j],stOf(6+j,mine&&S.sub===k))+(j?`<div class="conn ${mine&&S.sub===k&&curShown>=7?'lit':''}"></div>`:'')).join('')}
@@ -1569,7 +1634,7 @@ function onlineBoardHtml(){
   if(!NET.board) h+='<div class="rk"><span></span><span></span><span style="color:#8b8b92">불러오는 중…</span><span></span></div>';
   else {
     const L=obMode==='total'?liveBoard():sortedBoard(obMode), me=L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
-    const val=x=> obMode==='ch'? `${x.chBest||0}회` : obMode==='end'? `${x.endings||0}/15` : fmt(x.total);
+    const val=x=> obMode==='ch'? `${x.chBest||0}회` : obMode==='end'? `${x.endings||0}/24` : fmt(x.total);
     const show=L.slice(0,10).map((x,i)=>[x,i]); if(me>=10) show.push([L[me],me]);
     if(!L.length) h+='<div class="rk"><span></span><span></span><span style="color:#8b8b92">아직 아무도 없어요. 1등을 노려보세요!</span><span></span></div>';
     h+=show.map(([x,i])=>`<div class="rk${i===me?' me':' tgt'}" data-nick="${String(x.nick).replace(/"/g,'')}" data-i="${i}"><span class="n">${i+1}</span><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':(x.route&&ROUTES[x.route]?ROUTES[x.route].ic:'🧎')}</span><span>${String(x.nick).replace(/</g,'&lt;')}${x.rebirth?` <span class="rb">♻️${x.rebirth}</span>`:''}</span><span class="m">${val(x)}${i!==me&&NET.nick?' <span class="pv">⚔️</span>':''}</span></div>`).join('');
@@ -1662,6 +1727,9 @@ function jobSkills(){
     inv:[['📊','차트 분석',{betP:.03}],['🎢','레버리지',{feverX:.2}],['✂️','손절의 미학',{evRes:.08}],['💎','존버',{idleEff:.10}]],
     star:[['💖','팬클럽',{click:.15}],['🧸','굿즈 판매',{auto:.08}],['🔁','역주행',{feverP:.03}],['🧊','악플 내성',{evRes:.08}]],
     cre:[['🤖','알고리즘의 선택',{goldFreq:.10}],['🤝','협찬',{auto:.08}],['🎁','구독자 이벤트',{feverS:2}],['💸','슈퍼챗',{click:.15}]],
+    gov:[['🕔','칼퇴',{click:.15}],['🍚','철밥통',{evRes:.08}],['🏦','공무원 연금',{idleEff:.10}],['📜','청렴 표창',{auto:.08}]],
+    doc:[['🌙','당직',{click:.15}],['👨‍⚕️','명의 소문',{auto:.08}],['🎤','학회 발표',{feverP:.03}],['🛡️','배상 보험',{evRes:.08}]],
+    ath:[['🏋️','체력 단련',{click:.15}],['🤝','스폰서 계약',{auto:.08}],['🔥','클러치 능력',{feverS:2}],['🧘','멘탈 관리',{evRes:.08}]],
   };
   const L={auto:v=>`자동 +${Math.round(v*100)}%`,click:v=>`클릭 +${Math.round(v*100)}%`,goldFreq:v=>`돈주머니 등장 +${Math.round(v*100)}%`,idleEff:v=>`방치 효율 +${Math.round(v*100)}%`,
     discount:v=>`아이템 가격 -${Math.round(v*100)}%`,defDisc:v=>`방어권 -${Math.round(v*100)}%`,evRes:v=>`악재 피해 -${Math.round(v*100)}%`,betP:v=>`도박 성공 +${Math.round(v*100)}%`,
@@ -1825,6 +1893,12 @@ function jobEvent(){
           ()=>{ addBuff('all',1-.4*dm,60000,'📰'); badEvent('📰 스캔들 터짐!','1분 동안 모든 수입 -40%'); }],
     cre:[()=>{ for(let i=0;i<3;i++) setTimeout(spawnGold,i*400); goodEvent('🔥 영상 떡상!','돈주머니가 쏟아져요'); },
          ()=>{ addBuff('auto',1-.5*dm,60000,'⚠️'); badEvent('⚠️ 노란딱지!','1분 동안 자동 수입 반토막'); }],
+    gov:[()=>{ const g=Math.max(1e4,cps()*300); earn(g); goodEvent('🏅 모범 공무원 표창!',`+${fmt(g)}`); },
+         ()=>{ addBuff('auto',1-.5*dm,60000,'🗂️'); badEvent('🗂️ 감사 시즌!','1분 동안 자동 수입 반토막'); }],
+    doc:[()=>{ addBuff('auto',2,60000,'🩺×2'); goodEvent('🩺 명의로 소문났어요!','1분 동안 자동 수입 ×2'); },
+         ()=>{ const l=S.money*.05*dm; S.money-=l; badEvent('⚖️ 의료 소송!',`현금 ${fmt(l)} 손실`); }],
+    ath:[()=>{ addBuff('click',3,60000,'⚽×3'); goodEvent('⚽ 해트트릭!','1분 동안 클릭 수입 ×3'); },
+         ()=>{ addBuff('all',1-.4*dm,60000,'🤕'); badEvent('🤕 부상!','1분 동안 모든 수입 -40%'); }],
   }[S.route];
   if(E) E[good?0:1]();
 }
@@ -2019,6 +2093,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.8',d:'10/30',items:['🗺️ 1차 진로 <b>5개 → 8개</b>: 🏛️공무원 · 🩺의사 · ⚽운동선수 추가','👔 직장인 3번째 갈래: 공무원 → 🌏해외 법인장 (팀장님 다음이 공무원인 건 이상하잖아요)','🏆 엔딩 <b>24개</b>, 새 의상 27종, 새 직업 스킬 · 돌발 이벤트']},
   {v:'v1.7',d:'10/30',items:['🗺️ 루트마다 <b>세 번째 갈림길</b> 추가 → 엔딩 15개 (🏗️부동산 · 🎓공무원 · 🛢️원자재 · 🎬배우 · 🛍️커머스)','🎭 <b>직업 전용 스킬트리</b>: 진로마다 다른 스킬 4개','🎲 <b>직업별 돌발 이벤트</b>: 맛집 방송/식중독, 성과급/구조조정, 떡상/떡락, 역주행/스캔들, 영상 떡상/노란딱지','👕 새 의상 10종']},
   {v:'v1.6.1',d:'10/30',items:['🎲 뜯기에 <b>성공 확률</b> 추가: 기본 60% (복수할 땐 +15%, 💪조폭 형님 스킬 레벨당 +4%, 최대 90%)','실패하면 비용만 날리고 쿨타임은 그대로 — 버튼에 성공률이 표시돼요']},
   {v:'v1.6',d:'10/30',items:['⚖️ <b>직업 밸런스 패치</b>: 모든 루트에 자동 수입 보너스 기본 장착 (사업가 ×1.4 · 직장인 ×1.3 · 크리에이터 ×1.25 · 투자자/연예인 ×1.2) + 루트별 특기 유지/강화','🛡️ 방어권 가격이 <b>내 보유 현금의 4%</b>로 변경','💰 1경 이상부터는 경·조·억까지만 표시','📱 갤럭시 · 갤럭시 폴드(접었을 때/펼쳤을 때) 화면 최적화','♻️ 환생하면 온라인 랭킹 금액이 바로 0원으로 반영']},
@@ -2205,7 +2280,7 @@ $('statsBtn').onclick=()=>{
   showModal(`<h2>📊 거지 일지</h2><p style="text-align:left;line-height:1.9">
   누적 수입: <b>${fmt(S.total)}</b><br>구걸 횟수: <b>${S.clicks.toLocaleString()}번</b><br>
   주운 돈주머니: <b>${S.golds}개</b><br>보유 돈벌이: <b>${items}개</b><br>
-  신분 보너스: <b>+${Math.round((stageBonus()-1)*100)}%</b><br>인생 선택 보너스: <b>×${(S.pathMul||1).toFixed(2)}</b><br>루트: <b>${S.route&&ROUTES[S.route]?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+(S.sub?' · '+ROUTES[S.route].subs[S.sub].nm:''):'미정'}</b> · 엔딩 <b>${(S.routesDone||[]).filter(x=>x.includes('.')).length}/15</b> · 환생 <b>${S.rebirth||0}회</b> (×${rebirthMult().toFixed(1)})<br>플레이 시간: <b>${Math.floor(mins/60)}시간 ${mins%60}분</b></p>
+  신분 보너스: <b>+${Math.round((stageBonus()-1)*100)}%</b><br>인생 선택 보너스: <b>×${(S.pathMul||1).toFixed(2)}</b><br>루트: <b>${S.route&&ROUTES[S.route]?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+(S.sub?' · '+ROUTES[S.route].subs[S.sub].nm:''):'미정'}</b> · 엔딩 <b>${(S.routesDone||[]).filter(x=>x.includes('.')).length}/24</b> · 환생 <b>${S.rebirth||0}회</b> (×${rebirthMult().toFixed(1)})<br>플레이 시간: <b>${Math.floor(mins/60)}시간 ${mins%60}분</b></p>
   ${(S.path&&S.path.length)?`<div style="text-align:left;font-size:12px;line-height:1.8;border-top:1px solid #eee;padding-top:8px"><b>🛤️ 인생 루트</b><br>${S.path.map(p=>`${p.key==='safe'?'🛡️':p.key==='risk'?'💼':'🎰'} ${p.sn||getStage(p.st).name} · ${p.nm} ${p.win?'✅':'❌'}`).join('<br>')}</div>`:''}
   <button class="gray" onclick="showPatchNotes()">📜 패치노트</button><button class="gray" onclick="askReset()">🔄 처음부터</button><button onclick="hideModal()">닫기</button>`);
 };
@@ -2256,7 +2331,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v1.7.1';
+const GAME_VER='v1.8';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
