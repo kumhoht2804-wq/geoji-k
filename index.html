@@ -537,6 +537,20 @@
   .scene.hurt{animation:hurt .6s}
   @keyframes hurt{0%{box-shadow:inset 0 0 0 3px rgba(229,72,77,.9),inset 0 0 50px rgba(229,72,77,.5)}100%{box-shadow:inset 0 0 0 0 rgba(229,72,77,0)}}
 
+  /* ===== live update banner ===== */
+  #upd{position:fixed;left:50%;bottom:14px;transform:translate(-50%,140%);z-index:110;width:calc(100% - 20px);max-width:420px;
+    background:#18181b;color:#fff;border-radius:14px;padding:12px 12px 12px 14px;display:flex;align-items:center;gap:10px;
+    box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .45s var(--ease)}
+  #upd.show{transform:translate(-50%,0)}
+  #upd .ut{flex:1;font-size:12.5px;line-height:1.45}
+  #upd .ut b{color:#ffd76a}
+  #upd .ut small{display:block;color:#a8a29e;font-size:11px}
+  #upd button{font-family:inherit;font-weight:700;font-size:13px;border:none;border-radius:10px;padding:9px 14px;cursor:pointer;background:linear-gradient(180deg,#ffd76a,#f0a92e);color:#5a3500;white-space:nowrap}
+  #upd .ux{background:transparent;color:#8b8b92;padding:6px;font-size:14px}
+  body.mini #upd{bottom:8px;padding:9px 8px 9px 10px;gap:6px}
+  body.mini #upd .ut{font-size:11px}
+  body.mini #upd button{font-size:11.5px;padding:7px 9px}
+
   /* boss key & paused cover */
   #boss{position:fixed;inset:0;background:#fff;z-index:100;display:none;font-family:'Malgun Gothic',sans-serif;color:#333}
   #boss.show{display:block}
@@ -633,6 +647,7 @@
 </div>
 
 <div id="toast"></div>
+<div id="upd"></div>
 <div id="gate"></div>
 <div id="lvup"></div>
 <div id="choice"></div>
@@ -1699,8 +1714,42 @@ function bindDefShop(){
   });
 }
 
+/* ---------- live update check ---------- */
+const UPD_SRC='https://raw.githubusercontent.com/kumhoht2804-wq/geoji-k/main/index.html';
+let updSeen=null, updDismissedAt=0;
+async function checkUpdate(){
+  try{
+    const r=await fetch(UPD_SRC+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
+    const t=await r.text(); const m=t.match(/const GAME_VER='(v[0-9.]+)'/); if(!m) return;
+    const nv=m[1]; if(nv===GAME_VER) return;
+    // 최신 버전 내용 미리 저장 → 실행기가 바로 이걸로 켜요
+    try{ localStorage.setItem('geoji_game_html',t); }catch(e){}
+    const first=(t.match(/\{v:'[^']+',d:'[^']*',items:\[(['"])(.*?)\1/)||[])[2]||'';
+    showUpd(nv, first.replace(/<[^>]+>/g,''));
+  }catch(e){}
+}
+function showUpd(nv,note){
+  if(updSeen===nv && Date.now()-updDismissedAt<10*60000) return;
+  updSeen=nv; const U=$('upd');
+  U.innerHTML=`<div class="ut">🆕 <b>${nv}</b> 패치가 나왔어요!<small>${note?note.slice(0,60)+(note.length>60?'…':''):'지금 적용하면 바로 최신 버전으로 바뀌어요'}</small></div>
+    <button id="updGo">지금 적용</button><button class="ux" id="updX">✕</button>`;
+  U.classList.add('show'); sfx('gold');
+  $('updX').onclick=()=>{ U.classList.remove('show'); updDismissedAt=Date.now(); };
+  $('updGo').onclick=async()=>{
+    $('updGo').textContent='저장 중…'; save();
+    try{ await Promise.race([cloudSave(true), new Promise(r=>setTimeout(r,4000))]); }catch(e){}
+    try{ sessionStorage.setItem('geoji_updated','1'); }catch(e){}
+    if(location.protocol==='file:') location.reload();
+    else location.replace(location.pathname+'?v='+encodeURIComponent(nv)+location.hash);
+  };
+}
+setTimeout(checkUpdate,20000);
+setInterval(checkUpdate,3*60000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkUpdate(); });
+
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.4.2',d:'10/30',items:['🆕 게임 중에도 새 패치를 자동으로 감지해요. 아래에 알림이 뜨면 [지금 적용]을 누르면 저장 후 바로 최신 버전으로 바뀌어요']},
   {v:'v1.4.1',d:'10/30',items:['⚖️ 뜯기 한도 추가: 가져올 수 있는 돈은 최대 <b>내 누적 수입의 10%</b>까지 (부자가 한 방에 털리는 문제 해결)','🎯 뜯기 창에 내 한도 금액 표시']},
   {v:'v1.4',d:'10/30',items:['⚔️ PvP 추가: 온라인 랭킹에서 상대를 눌러 🤏뜯기(현금 8% 강탈) · 🧾고소(3분간 수입 -30%) — 내 돈을 써야 해요','😡 공격당하면 30분간 복수 가능 (순위 상관없이)','🛡️ 방어 아이템: 🐕경비견 · 🧑‍⚖️변호사 · 🧾보험 (30분)','💸 1등 세금(-20%) · 2등(-10%), 🔥 하위권 추격 버프(최대 ×2)','⚠️ 랜덤 악재: 세무조사 · 소매치기 · 경기침체 · 화재 (순위 높을수록 자주) / 🍀 행운: 돈다발 · 복권','🌳 스킬트리 확장: 🛡️생존 갈래(눈치·맷집·조폭 형님·전관 변호사·철벽) + 🏭자동화 공장 · ☘️네잎클로버','📜 패치노트 추가']},
   {v:'v1.3',d:'10/30',items:['🗺️ 진로 5갈래×2 = 엔딩 10개 (🎤연예인 · 🎮크리에이터 추가)','👕 캐릭터 의상 20종 추가','🔒 로그인해야 플레이 가능 · 클라우드 자동 동기화','⚔️ 온라인 경쟁: 전체 순위 · 추월 알림 · 연타왕/엔딩 랭킹','📈 난이도 상향 (신분 기준액·가격 상승률·라이벌)','🐛 신분 상승 화면 캐릭터 눕는 버그 수정']},
@@ -1929,7 +1978,7 @@ function tick(now){
 
 /* start */
 setTimeout(requireLogin,0);
-const GAME_VER='v1.4.1';
+const GAME_VER='v1.4.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
