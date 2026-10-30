@@ -885,18 +885,13 @@ function beg(x,y){
   render(); refreshAffordable();
 }
 $('beggar').addEventListener('click',e=>beg(e.clientX,e.clientY));
-let holdCount=0, holdWarned=false;
+
 document.addEventListener('keydown',e=>{
   if(e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
   if(e.code==='Escape'){ $('boss').classList.toggle('show'); return; }
   if(e.code!=='Space') return;
   e.preventDefault();
-  if((e.repeat && ch.on) || paused || $('boss').classList.contains('show') || $('modal').classList.contains('show')) return;
-  if(!e.repeat){ holdCount=0; holdWarned=false; }
-  else if(++holdCount>50){
-    if(!holdWarned){ holdWarned=true; const sr=$('scene').getBoundingClientRect(), br=$('beggar').getBoundingClientRect(); floatText(br.left-sr.left+br.width/2-40, br.top-sr.top+10, '✋ 손 떼고 다시!'); }
-    return;
-  }
+  if(e.repeat || paused || $('boss').classList.contains('show') || $('modal').classList.contains('show')) return;
   const b=$('beggar'), r=b.getBoundingClientRect();
   beg(r.left+r.width/2, r.top+r.height/3);
 });
@@ -1579,7 +1574,7 @@ function tick(now){
 }
 
 /* start */
-const GAME_VER='v1.0';
+const GAME_VER='v1.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'),1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
