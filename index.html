@@ -1625,7 +1625,7 @@ const SKILLS=[
   {id:'l6',br:2,ic:'☘️',nm:'네잎클로버',max:5,base:5e10,gr:3,req:['l5',1],ef:l=>`행운 이벤트 확률 +${l*20}% · 보상 +${l*50}%`},
   {id:'s1',br:3,ic:'👀',nm:'눈치',max:5,base:2e4,gr:2.2,ef:l=>`악재 확률 -${l*10}%`},
   {id:'s2',br:3,ic:'🦴',nm:'맷집',max:5,base:2e5,gr:2.3,req:['s1',2],ef:l=>`악재·뜯기 피해 -${l*10}%`},
-  {id:'s3',br:3,ic:'💪',nm:'조폭 형님',max:5,base:3e6,gr:2.4,req:['s2',2],ef:l=>`뜯기 강탈률 ${8+l*2}%`},
+  {id:'s3',br:3,ic:'💪',nm:'조폭 형님',max:5,base:3e6,gr:2.4,req:['s2',2],ef:l=>`뜯기 강탈률 ${8+l*2}% · 성공률 +${l*4}%`},
   {id:'s4',br:3,ic:'⚖️',nm:'전관 변호사',max:5,base:5e7,gr:2.5,req:['s3',2],ef:l=>`뜯기·고소 비용 -${l*10}%`},
   {id:'s5',br:3,ic:'🏰',nm:'철벽',max:1,base:5e10,gr:1,req:['s4',5],ef:l=>l?'뜯기 30% 무효화':'뜯기 30% 무효화 (궁극기)'},
 ];
@@ -1762,6 +1762,7 @@ setInterval(rollEvent,45000);
 /* ---------- PvP: 뜯기 / 고소 (내 돈으로) ---------- */
 const ROB_CAP=0.10;   // 뜯기 한도: 공격자 누적 수입의 10%
 function robCap(total){ return Math.max(1e4, (Number(total)||0)*ROB_CAP); }
+function robChance(nick){ const rev=nick&&(S.grudge||{})[nick]&&Date.now()-S.grudge[nick]<30*60000; return Math.min(.9, .60+.04*sk('s3')+(rev?.15:0)); }
 function robCost(){ return Math.max(1e4, S.money*.05)*(1-.1*sk('s4')); }
 function sueCost(){ return Math.max(5e4, S.money*.08)*(1-.1*sk('s4')); }
 function pvpSheet(nick){
@@ -1770,7 +1771,7 @@ function pvpSheet(nick){
   const T=L[ti], revenge=(S.grudge||{})[nick] && Date.now()-S.grudge[nick]<30*60000;
   const can = revenge || mi<0 || ti<mi;
   showModal(`<div class="pvp"><h2>🎯 ${nick.replace(/</g,'&lt;')}</h2><div class="who">${ti+1}위 · ${T.stage||''} · 누적 ${fmt(T.total)}${revenge?' · <b style="color:#c0392b">😡 복수 가능</b>':''}</div>
-    <button class="pvbtn" id="pvRob" ${can?'':'disabled'}><span class="cost">-${fmt(robCost())}</span><b>🤏 뜯기</b><small>상대 현금의 ${8+2*sk('s3')}% 강탈 (최대 <b>${fmt(robCap(S.total))}</b> = 내 누적 수입의 10%) · 쿨타임 10분 · 경비견 있으면 50% 실패</small></button>
+    <button class="pvbtn" id="pvRob" ${can?'':'disabled'}><span class="cost">-${fmt(robCost())}</span><b>🤏 뜯기</b><small><b>성공률 ${Math.round(robChance(nick)*100)}%</b> · 상대 현금의 ${8+2*sk('s3')}% 강탈 (최대 <b>${fmt(robCap(S.total))}</b> = 내 누적 수입의 10%) · 쿨타임 10분 · 경비견 있으면 50% 실패</small></button>
     <button class="pvbtn" id="pvSue" ${can?'':'disabled'}><span class="cost">-${fmt(sueCost())}</span><b>🧾 고소</b><small>상대 3분간 수입 -30% · 쿨타임 15분 · 변호사 있으면 1분</small></button>
     ${can?'':'<div class="pvnote">나보다 순위가 높은 사람만 공격할 수 있어요 (나를 공격한 사람은 30분간 복수 가능)</div>'}
     <button class="gray" onclick="hideModal()" style="margin-top:6px">닫기</button></div>`);
@@ -1780,6 +1781,13 @@ function pvpSheet(nick){
 async function pvpDo(type,nick,c){
   if(S.money<c){ toast('💸 돈이 부족해요'); return; }
   S.money-=c; hideModal(); toast(type==='rob'?'🤏 뜯으러 가는 중…':'🧾 고소장 접수 중…');
+  if(type==='rob' && Math.random()>=robChance(nick)){
+    const fails=['🚨 뜯다가 경찰에 딱 걸렸어요!','🏃 들켜서 도망쳤어요!','🥊 역으로 한 대 맞고 왔어요!','🙅 상대가 지갑을 꽉 쥐고 안 놔줘요!'];
+    setTimeout(()=>{ sfx('fever'); const sc=$('scene'); sc.classList.remove('hurt'); void sc.offsetWidth; sc.classList.add('hurt');
+      toast(`${fails[Math.floor(Math.random()*fails.length)]} 비용 ${fmt(c)}만 날렸어요`); }, 700);
+    pvpLogAdd('out',`🤏 ${nick} 뜯기 <b>실패</b> · 비용 -${fmt(c)}`);
+    S.cd=S.cd||{}; S.cd.rob=Date.now(); if(tab==='pvp') renderPvp(); return;
+  }
   try{
     const r=await api('attack',{nick:NET.nick,token:NET.token,target:nick,type,pct:(8+2*sk('s3'))/100});
     if(type==='rob'){
@@ -1844,12 +1852,12 @@ function renderPvp(){
     const rev=grudge[x.nick]&&now-grudge[x.nick]<30*60000, nm=String(x.nick).replace(/</g,'&lt;');
     h+=`<div class="tg ${rev?'rev':''}"><div class="h"><span class="tgr">${i+1}위</span>${x.route&&ROUTES[x.route]?ROUTES[x.route].ic:'🧎'} ${nm}${rev?'<span class="rv">😡 복수 가능</span>':''}</div>
       <div class="sub">${x.stage||''} · 누적 ${fmt(x.total)}${x.rebirth?` · ♻️${x.rebirth}`:''}</div>
-      <div class="bt"><button class="rob" data-n="${nm}" ${rc?'disabled':''}>🤏 뜯기<small>${rc?'⏳ '+mmss(rc):'-'+fmt(robCost())}</small></button>
+      <div class="bt"><button class="rob" data-n="${nm}" ${rc?'disabled':''}>🤏 뜯기<small>${rc?'⏳ '+mmss(rc):`${Math.round(robChance(x.nick)*100)}% · -${fmt(robCost())}`}</small></button>
       <button class="sue" data-n="${nm}" ${sc?'disabled':''}>🧾 고소<small>${sc?'⏳ '+mmss(sc):'-'+fmt(sueCost())}</small></button></div></div>`;
   }
   h+=defShopHtml();
   h+=`<div class="sec">📜 최근 전투</div><div class="plog">${(S.pvpLog||[]).length?(S.pvpLog||[]).slice(0,10).map(e=>`<div class="${e.d}"><span class="tm">${new Date(e.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})}</span><span>${e.t}</span></div>`).join(''):'<div>아직 전투 기록이 없어요</div>'}</div>`;
-  h+=`<div class="pvhelp">• 🤏 뜯기: 내 현금 5%를 써서 상대 현금 ${8+2*sk('s3')}% 강탈 (최대 내 누적 수입의 10%) · 쿨 10분<br>• 🧾 고소: 내 현금 8%를 써서 상대 3분간 수입 -30% · 쿨 15분<br>• 나보다 높은 순위만 공격 가능 · 나를 공격한 사람은 30분간 복수 가능</div>`;
+  h+=`<div class="pvhelp">• 🤏 뜯기: 성공률 ${Math.round(robChance()*100)}% (복수 +15%) · 내 현금 5%를 써서 상대 현금 ${8+2*sk('s3')}% 강탈 (최대 내 누적 수입의 10%) · 쿨 10분<br>• 🧾 고소: 내 현금 8%를 써서 상대 3분간 수입 -30% · 쿨 15분<br>• 나보다 높은 순위만 공격 가능 · 나를 공격한 사람은 30분간 복수 가능</div>`;
   L.innerHTML=h;
   L.querySelectorAll('.tg .rob').forEach(b=>b.onclick=()=>pvpDo('rob',b.dataset.n,robCost()));
   L.querySelectorAll('.tg .sue').forEach(b=>b.onclick=()=>pvpDo('sue',b.dataset.n,sueCost()));
@@ -1934,6 +1942,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.6.1',d:'10/30',items:['🎲 뜯기에 <b>성공 확률</b> 추가: 기본 60% (복수할 땐 +15%, 💪조폭 형님 스킬 레벨당 +4%, 최대 90%)','실패하면 비용만 날리고 쿨타임은 그대로 — 버튼에 성공률이 표시돼요']},
   {v:'v1.6',d:'10/30',items:['⚖️ <b>직업 밸런스 패치</b>: 모든 루트에 자동 수입 보너스 기본 장착 (사업가 ×1.4 · 직장인 ×1.3 · 크리에이터 ×1.25 · 투자자/연예인 ×1.2) + 루트별 특기 유지/강화','🛡️ 방어권 가격이 <b>내 보유 현금의 4%</b>로 변경','💰 1경 이상부터는 경·조·억까지만 표시','📱 갤럭시 · 갤럭시 폴드(접었을 때/펼쳤을 때) 화면 최적화','♻️ 환생하면 온라인 랭킹 금액이 바로 0원으로 반영']},
   {v:'v1.5.3',d:'10/30',items:['📱 모바일에서 큰 금액일 때 화면이 옆으로 밀리며 흔들리던 문제 수정 (상단 레이아웃 정리)']},
   {v:'v1.5.2',d:'10/30',items:['🐛 돈이 커지면(1000조 이상) 화면이 흔들리던 문제 수정 — 단위 칸을 고정해서 숫자만 부드럽게 바뀌어요']},
@@ -2169,7 +2178,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v1.6';
+const GAME_VER='v1.6.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
