@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>메모</title>
+<style>
+  html,body{margin:0;height:100%;background:#f5f4f1;font-family:system-ui,'Malgun Gothic',sans-serif;color:#18181b}
+  .ld{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:16px;box-sizing:border-box}
+  .sp{width:26px;height:26px;border-radius:50%;border:3px solid #ece5d8;border-top-color:#f0a92e;animation:r .8s linear infinite}
+  @keyframes r{to{transform:rotate(360deg)}}
+  .t{font-size:13px;color:#8b8b92}
+  .t b{color:#18181b}
+  button{font:inherit;font-size:13px;border:none;border-radius:10px;padding:8px 16px;background:#18181b;color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="ld" id="ld"><div class="sp"></div><div class="t" id="msg">최신 버전 확인 중…</div></div>
+<script>
+/* 거지키우기_k 실행기 · 제작자 KSW
+   실행할 때마다 서버에서 최신 게임을 받아와요. 인터넷이 안 되면 마지막으로 받은 버전으로 실행돼요. */
+const SOURCES = [
+  'https://raw.githubusercontent.com/kumhoht2804-wq/geoji-k/main/index.html',
+  'https://api.github.com/repos/kumhoht2804-wq/geoji-k/contents/index.html',
+];
+const KEY_HTML = 'geoji_game_html', KEY_VER = 'geoji_game_ver';
+
+function hash(s){ let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))|0; return String(h>>>0); }
+function cached(){ try{ return { html: localStorage.getItem(KEY_HTML), ver: localStorage.getItem(KEY_VER) }; }catch(e){ return {}; } }
+function run(html){ document.open(); document.write(html); document.close(); }
+function fail(){
+  document.getElementById('ld').innerHTML =
+    '<div style="font-size:30px">📡</div><div class="t"><b>서버에 연결할 수 없어요</b><br>인터넷 연결을 확인해 주세요</div><button onclick="location.reload()">다시 시도</button>';
+}
+
+(async () => {
+  const c = cached();
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), c.html ? 4000 : 15000);
+  try {
+    let html = null;
+    for (const src of SOURCES) {
+      try {
+        const api = src.includes('api.github.com');
+        const r = await fetch(api ? src : src + '?t=' + Date.now(), { signal: ctl.signal, cache: 'no-store',
+          headers: api ? { Accept: 'application/vnd.github.raw' } : {} });
+        if (r.ok) { const t = await r.text(); if (t.includes('<html')) { html = t; break; } }
+      } catch (e) { if (ctl.signal.aborted) break; }
+    }
+    clearTimeout(timer);
+    if (!html) throw 0;
+    const j = { html, ver: hash(html) };
+    try { localStorage.setItem(KEY_HTML, j.html); localStorage.setItem(KEY_VER, j.ver); } catch (e) {}
+    if (c.ver && c.ver !== j.ver) { try { sessionStorage.setItem('geoji_updated', '1'); } catch (e) {} }
+    run(j.html);
+  } catch (e) {
+    clearTimeout(timer);
+    if (c.html) run(c.html); else fail();
+  }
+})();
+</script>
+</body>
+</html>
