@@ -175,7 +175,7 @@
   #lvup .in{display:flex;flex-direction:column;align-items:center}
   #lvup .k{font-size:10px;letter-spacing:.5em;color:#cdb27a;font-weight:500;margin-bottom:18px;opacity:0;transform:translateY(6px);transition:all .8s var(--ease) .15s}
   #lvup .halo{position:relative;width:min(42vmin,180px);height:min(42vmin,180px);display:flex;align-items:center;justify-content:center}
-  #lvup .halo svg{position:absolute;inset:0;transform:rotate(-90deg)}
+  #lvup .halo > svg{position:absolute;inset:0;transform:rotate(-90deg)}
   #lvup .halo circle{fill:none;stroke-width:1.2}
   #lvup .halo .bg{stroke:rgba(255,255,255,.08)}
   #lvup .halo .fg{stroke:url(#lg);stroke-linecap:round;stroke-dasharray:302;stroke-dashoffset:302;transition:stroke-dashoffset 1.4s var(--ease) .25s}
@@ -459,6 +459,52 @@
   .ob .rk .rb{font-size:9px;color:var(--accent2);font-weight:700}
   .oblogin{width:100%;font-family:inherit;font-size:12px;border:1px dashed #cfc6b4;background:#fbfaf7;border-radius:10px;padding:9px;cursor:pointer;color:#6b5a3c;margin:4px 0}
 
+  /* ===== expanded tree ===== */
+  #choice,#route{overflow:auto;justify-content:safe center}
+  .cards.c5{flex-wrap:wrap;max-width:760px}
+  .cards.c5 .card2{flex:1 1 130px;max-width:150px}
+  body.mini .cards.c5 .card2{max-width:none}
+  body.mini .card2 .co .rpath{display:none}
+  .trow.two{grid-template-columns:1fr 1fr;gap:10px}
+  .sbcol{display:flex;flex-direction:column;align-items:center}
+  .sbcol .rh{width:100%;margin-top:6px}
+  .rtabs{display:flex;gap:4px;width:100%;margin:10px 0 6px}
+  .rtab{flex:1;font-family:inherit;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#d6d3d1;border-radius:10px;padding:6px 2px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:2px;font-size:16px;position:relative}
+  .rtab span{font-size:9.5px;font-weight:700}
+  .rtab.on{border-color:var(--cc);background:color-mix(in srgb,var(--cc) 22%,transparent);color:#fff}
+  .rtab i{position:absolute;top:-6px;right:-2px;font-style:normal;font-size:7.5px;font-weight:800;background:#ffd76a;color:#5a3500;border-radius:999px;padding:0 4px}
+  .rperk{font-size:10.5px;color:#d6d3d1;text-align:center;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid color-mix(in srgb,var(--cc) 50%,transparent);width:100%;box-sizing:border-box}
+  .rperk b{color:#fff}
+
+  /* ===== online competition ===== */
+  #target{font-size:11px;color:#6b5a3c;margin-top:5px}
+  #target:empty{display:none}
+  #target b{color:#b8892f}
+  body.mini #target{font-size:10px;margin-top:3px}
+  .obtabs{display:flex;gap:4px;margin:2px 0 6px}
+  .obt{flex:1;font-family:inherit;font-size:11px;font-weight:600;border:1px solid var(--line);background:#fff;color:#8b8b92;border-radius:8px;padding:5px 2px;cursor:pointer}
+  .obt.on{background:#18181b;border-color:#18181b;color:#fff}
+  body.mini .obt{font-size:10px;padding:4px 1px}
+
+  /* ===== login gate ===== */
+  #gate{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:16px;
+    background:radial-gradient(circle at 50% 30%,#2b2416,#0d0c0a 75%)}
+  #gate.show{display:flex}
+  #gate .gbox{width:100%;max-width:320px;background:#fff;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  #gate .gl{font-size:10px;letter-spacing:.4em;color:#b8892f;font-weight:700}
+  #gate h2{margin:4px 0 2px;font-size:22px;letter-spacing:-.03em}
+  #gate .gs{font-size:12px;color:#8b8b92;margin-bottom:12px}
+  #gate .gchar{width:84px;margin:0 auto 6px}
+  #gate .gchar svg{width:100%;height:auto;overflow:visible}
+  #gate .row{display:flex;gap:6px;margin-top:6px}
+  #gate .row button{flex:1;font-family:inherit;font-weight:700;font-size:14px;border:none;border-radius:10px;padding:11px;cursor:pointer;background:#18181b;color:#fff}
+  #gate .row button.gray{background:#f1ede5;color:#3f3f46}
+  #gate .cr{font-size:10px;color:#b5b5ba;letter-spacing:.14em;margin-top:12px}
+  body.mini #gate .gbox{padding:16px 12px}
+  body.mini #gate h2{font-size:18px}
+  body.mini #gate .gchar{width:60px}
+
   /* boss key & paused cover */
   #boss{position:fixed;inset:0;background:#fff;z-index:100;display:none;font-family:'Malgun Gothic',sans-serif;color:#333}
   #boss.show{display:block}
@@ -510,7 +556,7 @@
     <div>
       <div class="money" id="money">0원</div>
       <div class="rates"><span id="cps">초당 0원</span> · <span id="cpc">클릭당 1원</span></div>
-      <div id="rankChip">🏆 동네 랭킹 -위</div><div id="netChip"></div>
+      <div id="rankChip">🏆 동네 랭킹 -위</div><div id="netChip"></div><div id="target"></div>
     </div>
   </header>
 
@@ -555,6 +601,7 @@
 </div>
 
 <div id="toast"></div>
+<div id="gate"></div>
 <div id="lvup"></div>
 <div id="choice"></div>
 <div id="route"></div>
@@ -568,30 +615,53 @@
 <script>
 const STAGES = [
   {need:0,    name:'길바닥 거지',   face:'🧎', bowl:'🥫', o:'rags'},
-  {need:1e3,  name:'동냥 전문가',   face:'🧍', bowl:'🥣', o:'beanie'},
-  {need:3e4,  name:'폐지 줍는 사람', face:'🚶', bowl:'📦', o:'cap'},
-  {need:5e5}, {need:1e7}, {need:3e8}, {need:1e10}, {need:5e11},
-  {need:3e13, name:'세계 최고 부자', face:'👑', bowl:'🚀', o:'king'},
+  {need:3e3,  name:'동냥 전문가',   face:'🧍', bowl:'🥣', o:'beanie'},
+  {need:1.5e5,name:'폐지 줍는 사람', face:'🚶', bowl:'📦', o:'cap'},
+  {need:4e6}, {need:1.5e8}, {need:8e9}, {need:5e11}, {need:4e13},
+  {need:5e15, name:'세계 최고 부자', face:'👑', bowl:'🚀', o:'king'},
 ];
 const ROUTES={
   biz:{ic:'🍗',nm:'사업가',color:'#f0a92e',perk:'자동 수입 ×1.5',desc:'장사로 일어선다',
-    st:[{name:'노점 사장님',face:'🧑‍🍳',bowl:'🐟',o:'bandana'},{name:'치킨집 사장님',face:'🧑‍🍳',bowl:'🍗',o:'chef'},
-        {name:'프랜차이즈 대표',face:'🤵',bowl:'🏪',o:'polo'},{name:'외식그룹 회장',face:'🕴️',bowl:'🏢',o:'boss'},{name:'요식업 황제',face:'🤴',bowl:'🍽️',o:'god'}]},
+    st:[{name:'노점 사장님',face:'🧑‍🍳',bowl:'🐟',o:'bandana'},{name:'치킨집 사장님',face:'🧑‍🍳',bowl:'🍗',o:'chef'},{name:'프랜차이즈 대표',face:'🤵',bowl:'🏪',o:'polo'}],
+    subs:{food:{ic:'🍽️',nm:'외식 재벌',perk:'자동 수입 +25%',st:[{name:'외식그룹 회장',face:'🕴️',bowl:'🏢',o:'boss'},{name:'요식업 황제',face:'🤴',bowl:'🍽️',o:'god'}]},
+          retail:{ic:'🛒',nm:'유통 재벌',perk:'모든 아이템 가격 -10%',st:[{name:'유통공룡 CEO',face:'🕴️',bowl:'🛒',o:'retail'},{name:'쇼핑제국 황제',face:'🤴',bowl:'🛍️',o:'retailking'}]}}},
   job:{ic:'👔',nm:'직장인',color:'#3d8bfd',perk:'방치 수입 +30% · 최대 +8시간 · 클릭 ×1.2',desc:'꾸준함이 최고다',
-    st:[{name:'편의점 알바생',face:'🧑‍💼',bowl:'🏪',o:'visor'},{name:'대기업 신입',face:'🧑‍💼',bowl:'💼',o:'lanyard'},
-        {name:'팀장님',face:'👨‍💼',bowl:'📊',o:'manager'},{name:'전무 이사',face:'🕴️',bowl:'🏢',o:'suit'},{name:'대기업 회장',face:'🤴',bowl:'🏙️',o:'boss'}]},
-  inv:{ic:'📈',nm:'투자자',color:'#e5484d',perk:'돈주머니 보상 ×2 · 피버 확률 +15% · 도박 성공률 45%',desc:'인생은 한 방',
-    st:[{name:'주식 개미',face:'🧑‍💻',bowl:'📱',o:'hoodie'},{name:'슈퍼개미',face:'🧑‍💻',bowl:'💻',o:'headset'},
-        {name:'펀드매니저',face:'👨‍💼',bowl:'📈',o:'fund'},{name:'월가의 늑대',face:'🐺',bowl:'💰',o:'wolf'},{name:'투자의 신',face:'🧙',bowl:'💎',o:'god'}]},
+    st:[{name:'편의점 알바생',face:'🧑‍💼',bowl:'🏪',o:'visor'},{name:'대기업 신입',face:'🧑‍💼',bowl:'💼',o:'lanyard'},{name:'팀장님',face:'👨‍💼',bowl:'📊',o:'manager'}],
+    subs:{exec:{ic:'🏛️',nm:'임원 승진',perk:'방치 수입 효율 +20%',st:[{name:'전무 이사',face:'🕴️',bowl:'🏢',o:'suit'},{name:'대기업 회장',face:'🤴',bowl:'🏙️',o:'boss'}]},
+          startup:{ic:'🦄',nm:'퇴사 후 창업',perk:'인생 갈림길 도전 성공률 +15%',st:[{name:'스타트업 대표',face:'🧑‍💻',bowl:'💡',o:'startup'},{name:'유니콘 창업자',face:'🦄',bowl:'🦄',o:'unicorn'}]}}},
+  inv:{ic:'📈',nm:'투자자',color:'#e5484d',perk:'돈주머니 ×2 · 피버 확률 +15% · 도박 성공 +15%',desc:'인생은 한 방',
+    st:[{name:'주식 개미',face:'🧑‍💻',bowl:'📱',o:'hoodie'},{name:'슈퍼개미',face:'🧑‍💻',bowl:'💻',o:'headset'},{name:'펀드매니저',face:'👨‍💼',bowl:'📈',o:'fund'}],
+    subs:{wall:{ic:'🐺',nm:'월가',perk:'도박 성공률 +10%',st:[{name:'월가의 늑대',face:'🐺',bowl:'💰',o:'wolf'},{name:'투자의 신',face:'🧙',bowl:'💎',o:'god'}]},
+          coin:{ic:'🪙',nm:'코인',perk:'피버 배율 +1',st:[{name:'코인 고래',face:'🐋',bowl:'🪙',o:'whale'},{name:'비트 황제',face:'🤴',bowl:'🚀',o:'bitking'}]}}},
+  star:{ic:'🎤',nm:'연예인',color:'#ec4899',perk:'클릭 ×1.5 · 콤보 최대 배율 +1.0',desc:'무대 위에서 빛난다',
+    st:[{name:'길거리 버스커',face:'🧑‍🎤',bowl:'🎸',o:'busker'},{name:'인디 가수',face:'🧑‍🎤',bowl:'🎤',o:'indie'},{name:'아이돌',face:'🌟',bowl:'💖',o:'idol'}],
+    subs:{top:{ic:'🌟',nm:'톱스타',perk:'클릭 ×1.5',st:[{name:'월드 스타',face:'🌟',bowl:'🏆',o:'worldstar'},{name:'엔터 제국 회장',face:'🤴',bowl:'🎬',o:'entceo'}]},
+          mc:{ic:'📺',nm:'방송인',perk:'자동 수입 +25%',st:[{name:'국민 MC',face:'🎙️',bowl:'📺',o:'mc'},{name:'방송국 사장',face:'🕴️',bowl:'📡',o:'tvceo'}]}}},
+  cre:{ic:'🎮',nm:'크리에이터',color:'#8b5cf6',perk:'피버 지속 +5초 · 돈주머니 등장 +30%',desc:'구독과 좋아요',
+    st:[{name:'방송 새내기',face:'🧑‍💻',bowl:'🎙️',o:'streamer'},{name:'10만 유튜버',face:'🧑‍💻',bowl:'🥈',o:'yt10'},{name:'100만 유튜버',face:'🧑‍💻',bowl:'🥇',o:'yt100'}],
+    subs:{game:{ic:'🕹️',nm:'게임',perk:'콤보 최대 배율 +1.0',st:[{name:'프로게이머 레전드',face:'🎮',bowl:'🏆',o:'progamer'},{name:'e스포츠 구단주',face:'🕴️',bowl:'🏟️',o:'esports'}]},
+          infl:{ic:'📱',nm:'인플루언서',perk:'돈주머니 보상 ×1.5',st:[{name:'메가 인플루언서',face:'🤳',bowl:'📸',o:'influencer'},{name:'미디어 제국 CEO',face:'🤴',bowl:'🌐',o:'mediaceo'}]}}},
 };
+const PERKS={
+  biz:{auto:1.5}, job:{click:1.2,idleEff:.3,idleH:8}, inv:{goldX:2,feverP:.15,betP:.15}, star:{click:1.5,comboMax:10}, cre:{feverS:5,goldFreq:.3},
+  'biz.food':{auto:1.25}, 'biz.retail':{discount:.1}, 'job.exec':{idleEff:.2}, 'job.startup':{riskP:.15},
+  'inv.wall':{betP:.10}, 'inv.coin':{feverX:1}, 'star.top':{click:1.5}, 'star.mc':{auto:1.25}, 'cre.game':{comboMax:10}, 'cre.infl':{goldX:1.5},
+};
+function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null].filter(Boolean); }
+function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1); }
+function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0); }
 function getStage(i){
   const base=STAGES[i];
   if(i>=3 && i<=7){
-    if(!S.route) return {need:base.need,name:'갈림길',face:'🔀',bowl:'❔',o:'cap'};
-    return Object.assign({need:base.need}, ROUTES[S.route].st[i-3]);
+    if(!S.route || !ROUTES[S.route]) return {need:base.need,name:'진로 선택',face:'🔀',bowl:'❔',o:'cap'};
+    const R=ROUTES[S.route];
+    if(i<=5) return Object.assign({need:base.need}, R.st[i-3]);
+    if(!S.sub || !R.subs[S.sub]) return {need:base.need,name:'갈림길',face:'🔀',bowl:'❔',o:R.st[2].o};
+    return Object.assign({need:base.need}, R.subs[S.sub].st[i-6]);
   }
   return base;
 }
+function endingKey(){ return S.route&&S.sub ? S.route+'.'+S.sub : null; }
 function route(){ return S.route; }
 
 const AUTO = [
@@ -622,7 +692,7 @@ const PASSERBY = [
 ];
 
 let S = fresh();
-function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,route:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,pending:[],ach:{},chBest:0,maxCombo:0};}
+function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,owner:'',route:null,sub:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,pending:[],ach:{},chBest:0,maxCombo:0};}
 
 function load(){
   try{
@@ -652,12 +722,12 @@ function fmtFull(n){
   for(const [v,u] of U){ const q=Math.floor(r/v); r-=q*v; if(q>0 || (u===''&&!parts.length)) parts.push(q.toLocaleString('ko-KR')+u); if(u==='경'&&q>0){} }
   return parts.join(' ')+'원';
 }
-const cost = (b,n)=>Math.ceil(b*Math.pow(1.15,n));
+const cost = (b,n)=>Math.ceil(b*Math.pow(1.17,n)*(1-perkA('discount')));
 
 function sk(id){ return (S.skill&&S.skill[id])||0; }
-function feverMult(){ return (typeof feverEnd!=='undefined' && Date.now()<feverEnd) ? (sk('l5')?5:3) : 1; }
-function mgmtMult(){ return (1+.1*sk('m1')+.15*sk('m2')+.25*sk('m3'))*(sk('m5')?2:1)*(S.route==='biz'?1.5:1); }
-const MS=[10,25,50,100,150,200,250,300,400,500,600,700,800,900,1000];
+function feverMult(){ return (typeof feverEnd!=='undefined' && Date.now()<feverEnd) ? (sk('l5')?5:3)+perkA('feverX') : 1; }
+function mgmtMult(){ return (1+.1*sk('m1')+.15*sk('m2')+.25*sk('m3'))*(sk('m5')?2:1)*perkM('auto'); }
+const MS=[25,50,100,200,300,400,500,600,700,800,900,1000];
 function msCount(n){ let k=0; for(const m of MS) if(n>=m) k++; return k; }
 function msMult(n){ return Math.pow(2,msCount(n)); }
 function msNext(n){ return MS.find(m=>m>n); }
@@ -667,7 +737,7 @@ function pathMult(){ return (S.pathMul||1)*rebirthMult()*((S.debuffEnd||0)>Date.
 function cps(){ return baseCps()*feverMult()*pathMult(); }
 function cpc(){
   let c=1; for(const k of CLICK){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
-  return c*stageBonus()*feverMult()*pathMult()*(S.route==='job'?1.2:1);
+  return c*stageBonus()*feverMult()*pathMult()*perkM('click');
 }
 function stageIdx(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }
 function stageBonus(){ return 1+stageIdx()*0.1; }
@@ -733,7 +803,8 @@ function render(){
   $('cps').textContent='초당 '+fmt(cps());
   $('cpc').textContent='클릭당 '+fmt(cpc());
   let i=stageIdx();
-  if(i>=3 && !S.route){ i=2; showRoute(); }
+  if(i>=3 && (!S.route||!ROUTES[S.route])){ i=2; showRoute(); }
+  else if(i>=6 && !S.sub){ i=5; showSub(); }
   const st=getStage(i), nx=STAGES[i+1]?getStage(i+1):null;
   if(i!==lastStage){
     $('title').textContent=st.name; $('face').innerHTML=charSVG(i); $('bowl').textContent=st.bowl;
@@ -865,7 +936,7 @@ function floatText(x,y,txt){
 
 let combo=0, lastBeg=0, comboTimer=null;
 let ch={on:false,end:0,count:0};
-function comboMult(){ return 1+Math.min(20+sk('l3')*5,Math.floor(combo/10))*0.1; }
+function comboMult(){ return 1+Math.min(20+sk('l3')*5+perkA('comboMax'),Math.floor(combo/10))*0.1; }
 function beg(x,y){
   const now=performance.now();
   combo = (now-lastBeg<700) ? combo+1 : 1; lastBeg=now;
@@ -875,7 +946,7 @@ function beg(x,y){
   updateCombo();
   const v=cpc()*comboMult(); earn(v); S.clicks++;
   sfx('click');
-  if(combo===100 && Date.now()-lastComboFever>120000){ lastComboFever=Date.now(); startFever(10+3*sk('l4')); }
+  if(combo===100 && Date.now()-lastComboFever>120000){ lastComboFever=Date.now(); startFever(10+3*sk('l4')+perkA('feverS')); }
   const bg=$('beggar'); bg.classList.add('hit'); clearTimeout(bg._t); bg._t=setTimeout(()=>bg.classList.remove('hit'),160);
   tiltBowl(); ripple(x,y);
   const bb=$('bowl').getBoundingClientRect(); coinBurst(bb.left+bb.width/2, bb.top+4, combo>=30?3:combo>=10?2:1);
@@ -909,13 +980,13 @@ function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('sho
 
 /* rivals */
 const RIVALS=[
-  {n:'공원 이씨',ic:'🧔',v:5e3,t:'이 공원은 내 구역이야!'},
-  {n:'역전 박씨',ic:'👴',v:2e5,t:'젊은 놈이 벌써 따라와?'},
-  {n:'지하철 최씨',ic:'🧓',v:8e6,t:'2호선은 내가 접수했지'},
-  {n:'옆동네 김씨',ic:'😏',v:3e8,t:'따라와 보시지~ ㅋ'},
-  {n:'시장통 큰손',ic:'🤑',v:2e10,t:'돈은 이렇게 버는 거야'},
-  {n:'강남 건물주 정씨',ic:'🕶️',v:1e12,t:'자네가 날 넘는다고? 허허'},
-  {n:'전설의 왕거지',ic:'👺',v:5e13,t:'나를 넘는 자, 아직 없었다'},
+  {n:'공원 이씨',ic:'🧔',v:2e4,t:'이 공원은 내 구역이야!'},
+  {n:'역전 박씨',ic:'👴',v:1e6,t:'젊은 놈이 벌써 따라와?'},
+  {n:'지하철 최씨',ic:'🧓',v:5e7,t:'2호선은 내가 접수했지'},
+  {n:'옆동네 김씨',ic:'😏',v:3e9,t:'따라와 보시지~ ㅋ'},
+  {n:'시장통 큰손',ic:'🤑',v:3e11,t:'돈은 이렇게 버는 거야'},
+  {n:'강남 건물주 정씨',ic:'🕶️',v:3e13,t:'자네가 날 넘는다고? 허허'},
+  {n:'전설의 왕거지',ic:'👺',v:3e15,t:'나를 넘는 자, 아직 없었다'},
 ];
 function playMin(){ return (Date.now()-S.start)/60000; }
 function rivalVal(r){ return r.v*(1+playMin()*0.03); }
@@ -956,7 +1027,8 @@ const ACH=[
   {id:'h1',ic:'⏱️',n:'연타왕',d:'30초 챌린지 150회',f:()=>S.chBest>=150},
   {id:'r1',ic:'👑',n:'동네 1등',d:'랭킹 1위 달성',f:()=>rankOf()===1},
   {id:'rb1',ic:'♻️',n:'다시 태어나다',d:'첫 환생',f:()=>(S.rebirth||0)>=1},
-  {id:'rt3',ic:'🗺️',n:'인생 N회차',d:'세 루트 모두 클리어',f:()=>(S.routesDone||[]).length>=3},
+  {id:'rt3',ic:'🗺️',n:'인생 N회차',d:'서로 다른 엔딩 3개',f:()=>(S.routesDone||[]).filter(x=>x.includes('.')).length>=3},
+  {id:'rt10',ic:'🌌',n:'모든 인생을 살아본 자',d:'엔딩 10개 전부',f:()=>(S.routesDone||[]).filter(x=>x.includes('.')).length>=10},
 ];
 function checkAch(){
   for(const a of ACH) if(!S.ach[a.id] && a.f()){ S.ach[a.id]=1; toast(`🏅 업적 달성: ${a.n}`); if(tab==='rank') renderRank(); }
@@ -973,7 +1045,7 @@ function startCh(){
     if(Date.now()>=ch.end){
       clearInterval(iv); ch.on=false; updateCombo();
       const reward=cpc()*ch.count*3; earn(reward);
-      if(ch.count>S.chBest){ S.chBest=ch.count; toast(`🎉 신기록! ${ch.count}회 · 보상 +${fmt(reward)}`); }
+      if(ch.count>S.chBest){ S.chBest=ch.count; cloudSave(true); toast(`🎉 신기록! ${ch.count}회 · 보상 +${fmt(reward)}`); }
       else toast(`⏱ ${ch.count}회 (최고 ${S.chBest}회) · 보상 +${fmt(reward)}`);
       checkAch(); if(tab==='rank') renderRank();
     }
@@ -990,7 +1062,7 @@ function renderRank(){
   rows.map((r,i)=>`<div class="rk${r.me?' me':''}"><span class="n">${i+1}</span><span>${r.ic}</span><span>${r.n}</span><span class="m">${fmt(r.v)}</span></div>`).join('')+
   `<div class="sec">업적 ${done} / ${ACH.length}</div>`+
   ACH.map(a=>`<div class="ach${S.ach[a.id]?'':' off'}"><span class="ai">${a.ic}</span><span>${a.n}<small>${a.d}</small></span></div>`).join('');
-  $('chBtn').onclick=startCh; if($('rbBtn')) $('rbBtn').onclick=doRebirth; if($('obLogin')) $('obLogin').onclick=openAccount; fetchBoard();
+  $('chBtn').onclick=startCh; if($('rbBtn')) $('rbBtn').onclick=doRebirth; if($('obLogin')) $('obLogin').onclick=openAccount; document.querySelectorAll('.obt').forEach(b=>b.onclick=()=>{ obMode=b.dataset.m; renderRank(); }); fetchBoard();
 }
 setInterval(()=>{ if(paused) return; checkRivals(); checkAch(); if(tab==='rank' && !ch.on) renderRank(); else if(tab==='rank') { const rows=document.querySelectorAll('.rk .m'); } },1000);
 
@@ -1013,6 +1085,26 @@ const OUTFIT={
   wolf:{hair:'#1a1a1a',slick:1,top:'#3a2626',pants:'#3a2626',shoe:'#111',acc:'suit',tie:'#e2b73b',shades:1,pocket:1,watch:1},
   god:{hair:'#d9b45a',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'suit',tie:'#e2b73b',pocket:1,watch:1,aura:1},
   king:{hair:'#3a2a1a',top:'#6c2bd9',pants:'#3d1a7a',shoe:'#2a1450',acc:'king'},
+  retail:{hair:'#2b2b2b',slick:1,top:'#0f766e',pants:'#0f766e',shoe:'#151515',acc:'suit',tie:'#facc15',watch:1,glasses:'rect'},
+  retailking:{hair:'#2b2b2b',slick:1,top:'#134e4a',pants:'#134e4a',shoe:'#c9a24a',acc:'suit',tie:'#facc15',pocket:1,watch:1,aura:1,shades:1},
+  startup:{hair:'#3b2a20',messy:1,top:'#334155',pants:'#1f2937',shoe:'#e5e7eb',acc:'hoodie',glasses:'round'},
+  unicorn:{hair:'#c084fc',top:'#a78bfa',pants:'#312e81',shoe:'#f5f3ee',acc:'hoodie',shades:1,aura:1,horn:1},
+  whale:{hair:'#1f2937',top:'#f59e0b',pants:'#1f2937',shoe:'#111',acc:'hoodie',shades:1,coin:1},
+  bitking:{hair:'#1f2937',slick:1,top:'#e2b73b',pants:'#b8892f',shoe:'#111',acc:'suit',tie:'#111',coin:1,aura:1,shades:1},
+  busker:{hair:'#6b4a2f',messy:1,top:'#3f6fb5',pants:'#2f3a4f',shoe:'#4a3b30',acc:'none',guitar:1},
+  indie:{hair:'#1f1f24',top:'#2b2b33',pants:'#3b3b45',shoe:'#e5e7eb',acc:'hoodie',mic:1},
+  idol:{hair:'#ff7eb6',top:'#f5f3ee',pants:'#f5f3ee',shoe:'#ff7eb6',acc:'suit',tie:'#ff7eb6',mic:1,sparkle:1},
+  worldstar:{hair:'#f2d16b',slick:1,top:'#111',pants:'#111',shoe:'#c9a24a',acc:'suit',tie:'#ff7eb6',shades:1,sparkle:1,aura:1,mic:1},
+  entceo:{hair:'#2b2b2b',slick:1,top:'#4b2a6b',pants:'#4b2a6b',shoe:'#111',acc:'suit',tie:'#ff7eb6',glasses:'gold',watch:1,pocket:1},
+  mc:{hair:'#2b2b2b',slick:1,top:'#2c3e66',pants:'#2c3e66',shoe:'#151515',acc:'suit',tie:'#f0a92e',mic:1},
+  tvceo:{hair:'#9aa0a6',slick:1,top:'#1f3d2f',pants:'#1f3d2f',shoe:'#111',acc:'suit',tie:'#e2b73b',glasses:'gold',pocket:1,watch:1},
+  streamer:{hair:'#3b2a20',top:'#6c5ce7',pants:'#3b3b45',shoe:'#1f1f24',acc:'hoodie',headset:1},
+  yt10:{hair:'#3b2a20',messy:1,top:'#e5484d',pants:'#2f3440',shoe:'#e5e7eb',acc:'hoodie',plaque:'silver'},
+  yt100:{hair:'#111',slick:1,top:'#111',pants:'#2f3440',shoe:'#e5e7eb',acc:'hoodie',plaque:'gold',headset:1},
+  progamer:{hair:'#1f1f24',top:'#1e90ff',pants:'#1f2937',shoe:'#e5e7eb',acc:'jersey',headset:1},
+  esports:{hair:'#1f1f24',slick:1,top:'#1e3a8a',pants:'#1e3a8a',shoe:'#111',acc:'suit',tie:'#1e90ff',watch:1,shades:1},
+  influencer:{hair:'#c084fc',slick:1,top:'#fbcfe8',pants:'#f5f3ee',shoe:'#ec4899',acc:'polo',shades:1,phone:1},
+  mediaceo:{hair:'#c084fc',slick:1,top:'#f5f3ee',pants:'#f5f3ee',shoe:'#c9a24a',acc:'suit',tie:'#ec4899',pocket:1,watch:1,aura:1},
 };
 function charSVG(st,big,ok){
   const o=OUTFIT[ok||getStage(st).o]||OUTFIT.rags, skin='#ffdcbf', sh='#f2c3a0';
@@ -1020,6 +1112,7 @@ function charSVG(st,big,ok){
   const aura = st>=6 || o.aura;
   if(aura) back+=`<ellipse class="aura" cx="60" cy="80" rx="54" ry="58" fill="url(#au${st})" opacity=".9"/>`;
   if(o.acc==='king') back+=`<path class="cape" d="M36 84 Q30 120 26 136 L94 136 Q90 120 84 84 Z" fill="#c0392b"/><path d="M34 84 Q60 96 86 84 Q60 90 34 84Z" fill="#fff"/>`;
+  if(o.guitar) back+=`<g transform="rotate(-35 60 96)"><rect x="57" y="60" width="6" height="44" rx="2" fill="#6b4a2f"/><ellipse cx="60" cy="112" rx="16" ry="13" fill="#c8843c"/><circle cx="60" cy="110" r="4" fill="#3b2a20"/></g>`;
   if(o.acc==='hoodie') back+=`<path d="M36 86 Q34 70 48 72 L72 72 Q86 70 84 86Z" fill="${o.top}" opacity=".9"/>`;
   torso+=`<rect x="45" y="112" width="12" height="20" rx="5" fill="${o.pants}"/><rect x="63" y="112" width="12" height="20" rx="5" fill="${o.pants}"/>
     <ellipse cx="50" cy="133" rx="9" ry="4.5" fill="${o.shoe}"/><ellipse cx="70" cy="133" rx="9" ry="4.5" fill="${o.shoe}"/>`;
@@ -1043,9 +1136,13 @@ function charSVG(st,big,ok){
      <path d="M50 80 L60 100 L52 104 L44 84Z M70 80 L60 100 L68 104 L76 84Z" fill="${o.top}" opacity=".85" style="filter:brightness(.92)"/>
      ${o.pocket?`<rect x="71" y="90" width="7" height="3" rx="1" fill="${o.top==='#f5f3ee'?'#e2b73b':'#fff'}"/>`:''}`;
   if(o.acc==='hoodie') torso+=`<path d="M54 82 L54 96 M66 82 L66 96" stroke="#e8e8ea" stroke-width="1.6" stroke-linecap="round"/><rect x="46" y="104" width="28" height="10" rx="4" fill="#000" opacity=".12"/>`;
-  if(o.acc==='king') torso+=`<path d="M44 82 Q60 104 76 82" stroke="#ffd34d" stroke-width="2.5" fill="none"/><circle cx="60" cy="96" r="4" fill="#ffd34d"/><circle cx="60" cy="96" r="1.8" fill="#e8394d"/><rect x="35" y="110" width="50" height="5" fill="#ffd34d" opacity=".9"/>`;
+  if(o.plaque) torso+=`<rect x="64" y="92" width="14" height="11" rx="2" fill="${o.plaque==='gold'?'#ffd34d':'#d1d5db'}" stroke="${o.plaque==='gold'?'#c9a24a':'#9ca3af'}"/><path d="M69 95 L74 97.5 L69 100Z" fill="#e5484d"/>`;
+  if(o.acc==='jersey') torso+=`<path d="M48 80 L60 86 L72 80" stroke="#fff" stroke-width="2.5" fill="none"/><text x="60" y="108" text-anchor="middle" font-size="13" font-weight="800" fill="#fff" font-family="sans-serif">7</text><rect x="35" y="112" width="50" height="3" fill="#fff" opacity=".7"/>`;
+  if(o.coin) torso+=`<circle cx="70" cy="98" r="6" fill="#ffd34d" stroke="#c9a24a"/><text x="70" y="101.5" text-anchor="middle" font-size="9" font-weight="800" fill="#8a5a00" font-family="sans-serif">₿</text>`;
+  if(o.sparkle) torso+=[[42,92],[76,104],[48,112],[70,88]].map(([x,y])=>`<path d="M${x} ${y-3} L${x+1} ${y-1} L${x+3} ${y} L${x+1} ${y+1} L${x} ${y+3} L${x-1} ${y+1} L${x-3} ${y} L${x-1} ${y-1}Z" fill="#ffd34d"/>`).join('');
+  if(o.acc==='king') torso+=`<path d="M44 82 Q60 104 76 82\" stroke="#ffd34d" stroke-width="2.5" fill="none"/><circle cx="60" cy="96" r="4" fill="#ffd34d"/><circle cx="60" cy="96" r="1.8" fill="#e8394d"/><rect x="35" y="110" width="50" height="5" fill="#ffd34d" opacity=".9"/>`;
   const hand = o.acc==='cap'?'#d8c49a':skin;
-  torso+=`<g class="armR"><rect x="81" y="86" width="11" height="24" rx="5.5" fill="${o.top}"/><circle cx="86.5" cy="111" r="5.5" fill="${hand}"/></g>`;
+  torso+=`<g class="armR"><rect x="81" y="86" width="11" height="24" rx="5.5" fill="${o.top}"/><circle cx="86.5" cy="111" r="5.5" fill="${hand}"/>${o.mic?'<rect x="84.5" y="112" width="4" height="12" rx="1.5" fill="#333"/><circle cx="86.5" cy="111" r="4.2" fill="#9ca3af"/>':''}${o.phone?'<rect x="82" y="100" width="9" height="15" rx="2" fill="#111"/><rect x="83.2" y="101.5" width="6.6" height="11" rx="1" fill="#93c5fd"/>':''}</g>`;
   head+=`<circle cx="31" cy="56" r="5" fill="${sh}"/><circle cx="89" cy="56" r="5" fill="${sh}"/><circle cx="60" cy="52" r="30" fill="${skin}"/>`;
   if(o.slick) head+=`<path d="M29 50 Q28 20 60 20 Q92 20 91 50 Q86 32 66 30 Q48 30 40 38 Q33 42 29 50Z" fill="${o.hair}"/><path d="M62 26 Q74 26 82 34" stroke="rgba(255,255,255,.35)" stroke-width="2" fill="none"/>`;
   else if(o.messy) head+=`<path d="M29 54 Q24 34 34 26 L36 32 Q40 18 54 20 L54 26 Q62 14 74 22 L72 26 Q86 22 90 36 L86 36 Q94 44 91 54 Q86 38 72 36 Q60 44 46 36 Q36 40 29 54Z" fill="${o.hair}"/>`;
@@ -1065,6 +1162,7 @@ function charSVG(st,big,ok){
   if(o.acc==='bandana') top+=`<path d="M29 44 Q30 18 60 18 Q90 18 91 44 Q60 34 29 44Z" fill="#e74c3c"/><circle cx="45" cy="30" r="2" fill="#fff"/><circle cx="62" cy="25" r="2" fill="#fff"/><circle cx="76" cy="32" r="2" fill="#fff"/><path d="M90 40 l10 -4 l-2 10z" fill="#c0392b"/>`;
   if(o.acc==='chef') top+=`<rect x="38" y="22" width="44" height="16" rx="3" fill="#fff" stroke="#e6e6e6"/><circle cx="44" cy="14" r="11" fill="#fff"/><circle cx="60" cy="8" r="13" fill="#fff"/><circle cx="76" cy="14" r="11" fill="#fff"/>`;
   if(o.headset) top+=`<path d="M28 54 Q28 16 60 16 Q92 16 92 54" stroke="#111" stroke-width="4" fill="none"/><rect x="22" y="48" width="10" height="16" rx="4" fill="#e5484d"/><rect x="88" y="48" width="10" height="16" rx="4" fill="#e5484d"/><path d="M30 62 Q34 74 48 72" stroke="#111" stroke-width="2" fill="none"/><circle cx="49" cy="72" r="2.2" fill="#111"/>`;
+  if(o.horn) top+=`<path d="M56 22 L60 0 L64 22Z" fill="#ffd34d" stroke="#f0a92e"/>`;
   if(o.acc==='king') top+=`<path d="M38 30 L42 12 L51 24 L60 6 L69 24 L78 12 L82 30Z" fill="#ffd34d" stroke="#d9a520" stroke-width="1.2"/><circle cx="60" cy="18" r="2.6" fill="#e8394d"/><circle cx="46" cy="24" r="1.8" fill="#3fa9f5"/><circle cx="74" cy="24" r="1.8" fill="#3fa9f5"/>`;
   let spk='';
   if(st>=7) [[18,40],[104,52],[22,104],[100,98],[60,-4]].forEach(([x,y],k)=>spk+=`<path class="spk" style="animation-delay:${k*.4}s" d="M${x} ${y-5} L${x+1.4} ${y-1.4} L${x+5} ${y} L${x+1.4} ${y+1.4} L${x} ${y+5} L${x-1.4} ${y+1.4} L${x-5} ${y} L${x-1.4} ${y-1.4}Z" fill="#ffe38a"/>`);
@@ -1073,34 +1171,32 @@ function charSVG(st,big,ok){
 }
 
 /* ---------- status tree viewer ---------- */
+let treeView=null;
 function openTree(){
-  const T=$('stree'), cur=stageIdx(), curShown=(cur>=3&&!S.route)?2:cur, rk=['biz','job','inv'];
-  const node=(i,stg,ok,state)=>`<div class="tn ${state}"><div class="av">${charSVG(i,false,ok)}</div><div class="nm">${stg.name}</div><div class="nd">${fmt(STAGES[i].need)}</div></div>`;
-  const stOf=(i)=> i<curShown?'done':i===curShown?'cur':'';
-  let h=`<div class="hd"><div class="k">CAREER TREE</div><h3>신분 트리</h3><button class="x" id="stX">✕</button></div><div class="tr">`;
-  // top: final
-  h+=`<div class="trow one">${node(8,STAGES[8],'king',stOf(8))}</div>`;
+  const T=$('stree'), cur=stageIdx();
+  const curShown = (cur>=3&&!S.route)?2 : (cur>=6&&!S.sub)?5 : cur;
+  const rv = treeView || S.route || 'biz', R=ROUTES[rv], mine = rv===S.route;
+  const node=(i,stg,state)=>`<div class="tn ${state}"><div class="av">${charSVG(i,false,stg.o)}</div><div class="nm">${stg.name}</div><div class="nd">${fmt(STAGES[i].need)}</div></div>`;
+  const stOf=(i,onPath)=> !onPath?'' : i<curShown?'done':i===curShown?'cur':'mine';
+  const done=(S.routesDone||[]);
+  let h=`<div class="hd"><div class="k">CAREER TREE · 엔딩 ${done.filter(x=>x.includes('.')).length}/10</div><h3>신분 트리</h3><button class="x" id="stX">✕</button></div><div class="tr">`;
+  h+=`<div class="trow one">${node(8,STAGES[8],stOf(8,!!S.sub))}</div><div class="split" style="transform:scaleY(-1)"></div>`;
+  const subs=Object.entries(R.subs);
+  h+=`<div class="trow two">`+subs.map(([k,sb])=>`<div class="sbcol">${[1,0].map(j=>node(6+j,sb.st[j],stOf(6+j,mine&&S.sub===k))+(j?`<div class="conn ${mine&&S.sub===k&&curShown>=7?'lit':''}"></div>`:'')).join('')}
+     <div class="rh ${mine&&S.sub===k?'sel':mine&&S.sub?'dim':''}" style="--cc:${R.color}">${sb.ic} ${sb.nm}${done.includes(rv+'.'+k)?' <span class="cl">✓</span>':''}<small>${sb.perk}</small></div></div>`).join('')+`</div>`;
   h+=`<div class="split" style="transform:scaleY(-1)"></div>`;
-  for(let i=7;i>=3;i--){
-    h+=`<div class="trow">`+rk.map(k=>{
-      const r=ROUTES[k], stg=r.st[i-3]; let state='';
-      if(S.route===k) state=stOf(i)||'mine'; 
-      return node(i,stg,stg.o,state);
-    }).join('')+`</div>`;
-    if(i>3) h+=`<div class="trow">`+rk.map(k=>`<div class="conn ${S.route===k&&i<=curShown?'lit':''}"></div>`).join('')+`</div>`;
-  }
-  h+=`<div class="rhead">`+rk.map(k=>{ const r=ROUTES[k];
-    return `<div class="rh ${S.route===k?'sel':S.route?'dim':''}" style="--cc:${r.color}">${r.ic} ${r.nm}${(S.routesDone||[]).includes(k)?' <span class="cl">✓</span>':''}<small>${r.perk}</small></div>`; }).join('')+`</div>`;
-  h+=`<div class="split"></div>`;
-  for(let i=2;i>=0;i--){
-    h+=`<div class="trow one">${node(i,STAGES[i],STAGES[i].o,stOf(i))}</div>`;
-    if(i>0) h+=`<div class="conn ${i<=curShown?'lit':''}"></div>`;
-  }
+  for(let i=5;i>=3;i--){ h+=`<div class="trow one">${node(i,R.st[i-3],stOf(i,mine))}</div>`; if(i>3) h+=`<div class="conn ${mine&&curShown>=i?'lit':''}"></div>`; }
+  h+=`<div class="rtabs">`+Object.entries(ROUTES).map(([k,r])=>`<button class="rtab ${k===rv?'on':''}" data-k="${k}" style="--cc:${r.color}">${r.ic}<span>${r.nm}</span>${k===S.route?'<i>MY</i>':''}</button>`).join('')+`</div>`;
+  h+=`<div class="rperk" style="--cc:${R.color}">${R.ic} <b>${R.nm}</b> · ${R.perk}</div><div class="conn ${S.route?'lit':''}"></div>`;
+  for(let i=2;i>=0;i--){ h+=`<div class="trow one">${node(i,STAGES[i],stOf(i,true))}</div>`; if(i>0) h+=`<div class="conn ${i<=curShown?'lit':''}"></div>`; }
   h+=`</div>`;
+  const keep=T.classList.contains('show')?T.scrollTop:null;
   T.innerHTML=h; T.classList.add('show');
-  $('stX').onclick=()=>T.classList.remove('show');
-  T.onclick=e=>{ if(e.target===T) T.classList.remove('show'); };
-  const c=T.querySelector('.tn.cur'); if(c) setTimeout(()=>c.scrollIntoView({block:'center',behavior:'smooth'}),60);
+  $('stX').onclick=()=>{ T.classList.remove('show'); treeView=null; };
+  T.onclick=e=>{ if(e.target===T){ T.classList.remove('show'); treeView=null; } };
+  T.querySelectorAll('.rtab').forEach(b=>b.onclick=()=>{ treeView=b.dataset.k; openTree(); });
+  if(keep!==null) T.scrollTop=keep;
+  else { const c=T.querySelector('.tn.cur'); if(c) setTimeout(()=>c.scrollIntoView({block:'center',behavior:'smooth'}),60); }
 }
 $('treeBtn').onclick=openTree;
 $('stChip').style.cursor='pointer'; $('stChip').onclick=openTree;
@@ -1119,38 +1215,76 @@ async function api(action,payload,opt){
 }
 function netChip(){
   const c=$('netChip');
-  if(NET.nick){ c.className=''; c.textContent=`🌐 ${NET.nick}${NET.saving?' · 저장 중…':NET.lastSave?' · 저장됨':''}`; }
+  if(NET.nick){ c.className=''; const rk=myOnlineRank(); c.textContent=`🌐 ${NET.nick}${rk?` · 전체 ${rk}위`:''}${NET.saving?' · 저장 중…':''}`; }
   else { c.className='off'; c.textContent='🌐 오프라인'; }
 }
-function meta(){ const i=Math.min(stageIdx(), S.route?8:2); return {total:S.total,stage:getStage(i).name,route:S.route||'',rebirth:S.rebirth||0}; }
+function meta(){ const i=Math.min(stageIdx(), !S.route?2:!S.sub?5:8); return {total:S.total,stage:getStage(i).name,route:S.route||'',rebirth:S.rebirth||0,chBest:S.chBest||0,endings:(S.routesDone||[]).filter(x=>x.includes('.')).length}; }
 async function cloudSave(force){
   if(!NET.nick||!NET.token||NET.saving) return;
   if(!force && Date.now()-NET.lastSave<55000) return;
   NET.saving=true; netChip();
-  try{ S.last=Date.now(); await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); NET.lastSave=Date.now(); NET.boardAt=0; }
-  catch(e){ if(String(e).includes('로그인')){ toast('🌐 '+e); NET.token=''; NET.nick=''; netStore(); } }
+  try{ S.last=Date.now(); await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); NET.lastSave=Date.now(); NET.boardAt=0; fetchBoard(true); }
+  catch(e){ if(String(e).includes('로그인')){ NET.token=''; NET.nick=''; netStore(); showGate(String(e)); } }
   NET.saving=false; netChip();
 }
 function applyData(d){
-  S=Object.assign(fresh(),d); lastStage=-1; cityStage=-1; shownMoney=S.money;
+  S=Object.assign(fresh(),d); S.owner=NET.nick||S.owner; lastStage=-1; cityStage=-1; shownMoney=S.money;
   save(); buildCity(stageIdx()); $('log').innerHTML=''; renderList(); render();
 }
-async function afterLogin(){
+async function afterLogin(silent){
   netStore(); netChip();
   try{
     const r=await api('load',{nick:NET.nick,token:NET.token});
+    const mine = S.owner && S.owner.toLowerCase()===NET.nick.toLowerCase();
     if(r.data){
       const cloud=JSON.parse(r.data);
-      const lt=(S.rebirth||0)*1e18+S.total, ct=(cloud.rebirth||0)*1e18+(cloud.total||0);
-      if(S.total>1000 && Math.abs(lt-ct)>1 ){
-        showModal(`<h2>☁️ 어떤 기록으로 할까요?</h2><p style="font-size:13px;line-height:1.8">클라우드: <b>${fmt(cloud.total||0)}</b> (환생 ${cloud.rebirth||0})<br>이 기기: <b>${fmt(S.total)}</b> (환생 ${S.rebirth||0})</p>
-          <button class="gray" id="useLocal">이 기기 기록</button><button id="useCloud">클라우드 기록</button>`);
-        $('useCloud').onclick=()=>{ applyData(cloud); hideModal(); toast('☁️ 클라우드 기록을 불러왔어요'); };
-        $('useLocal').onclick=()=>{ hideModal(); cloudSave(true); toast('☁️ 이 기기 기록으로 덮어썼어요'); };
-      } else { applyData(cloud); toast(`🌐 ${NET.nick}님 환영해요! 기록을 불러왔어요`); }
-    } else { await cloudSave(true); toast(`🌐 ${NET.nick}님 환영해요! 기록을 클라우드에 저장했어요`); }
-  }catch(e){ toast('🌐 불러오기 실패: '+e); }
+      const sc=x=>(x.rebirth||0)*1e18+(x.total||0);
+      const useLocal = mine && (S.last||0) > (cloud.last||0) && sc(S) >= sc(cloud)*0.5;
+      if(useLocal){ await cloudSave(true); }
+      else { applyData(cloud); if(!silent) toast(`🌐 ${NET.nick}님 환영해요! 기록을 불러왔어요`); }
+    } else {
+      if(!mine && S.owner) applyData(fresh());     // 다른 사람이 쓰던 기기 기록은 가져오지 않음
+      await cloudSave(true); if(!silent) toast(`🌐 ${NET.nick}님 환영해요!`);
+    }
+    S.owner=NET.nick;
+  }catch(e){ if(String(e).includes('로그인')){ NET.token=''; NET.nick=''; netStore(); return showGate(String(e)); } toast('🌐 서버 연결이 불안정해요. 이 기기 기록으로 계속해요'); S.owner=NET.nick; }
+  grantOffline(); fetchBoard(true);
 }
+function grantOffline(){
+  const away=(Date.now()-(S.last||Date.now()))/1000;
+  if(away>60 && cps()>0){
+    const secs=Math.min(away, (8+2*sk('m4')+perkA('idleH'))*3600), gain=cps()*secs*(0.5+.1*sk('m4')+perkA('idleEff'));
+    earn(gain);
+    const h=Math.floor(secs/3600), m=Math.floor(secs%3600/60);
+    showModal(`<h2>😴 자는 동안…</h2><p>${h?h+'시간 ':''}${m}분 동안 거지가 혼자 일했어요!</p><div class="jua" style="font-size:26px;color:var(--accent2)">+${fmt(gain)}</div><button onclick="hideModal()">받기</button>`);
+    log(`😴 오프라인 수입 +${fmt(gain)}`);
+  }
+  S.last=Date.now(); save();
+}
+function showGate(msg){
+  const G=$('gate'); paused=true;
+  G.innerHTML=`<div class="gbox acc"><div class="gchar">${charSVG(0,false,'rags')}</div><div class="gl">ONLINE</div><h2>거지키우기_k</h2>
+    <div class="gs">로그인하고 전국 거지들과 경쟁하세요</div>
+    <input id="gNick" placeholder="닉네임 (한글/영문/숫자 2~12자)" maxlength="12" autocomplete="username">
+    <input id="gPw" type="password" placeholder="비밀번호 (4자 이상)" autocomplete="current-password">
+    <div class="err" id="gErr">${msg||''}</div>
+    <div class="row"><button class="gray" id="gReg">회원가입</button><button id="gIn">로그인</button></div>
+    <div class="cr">제작자 KSW · ${typeof GAME_VER!=='undefined'?GAME_VER:''}</div></div>`;
+  G.classList.add('show');
+  const go=async(action)=>{
+    const err=$('gErr'); const nick=$('gNick').value.trim(), pw=$('gPw').value;
+    if(!nick||!pw){ err.textContent='닉네임과 비밀번호를 입력해 주세요'; return; }
+    err.textContent= action==='register'?'가입 중…':'로그인 중…';
+    $('gIn').disabled=$('gReg').disabled=true;
+    try{ const r=await api(action,{nick,pw}); NET.nick=r.nick; NET.token=r.token; G.classList.remove('show'); paused=false; prev=performance.now(); afterLogin(); }
+    catch(e){ const m=String(e); err.textContent=/fetch|network|Load failed/i.test(m)?'서버에 연결할 수 없어요. 인터넷을 확인해 주세요':m.replace(/^Error: /,''); }
+    $('gIn').disabled=$('gReg').disabled=false;
+  };
+  $('gIn').onclick=()=>go('login'); $('gReg').onclick=()=>go('register');
+  $('gPw').onkeydown=e=>{ if(e.key==='Enter') go('login'); };
+  setTimeout(()=>$('gNick').focus(),80);
+}
+function requireLogin(){ if(!(NET.nick&&NET.token)) showGate(); }
 function openAccount(){
   if(NET.nick && NET.token){
     showModal(`<div class="acc"><h2>👤 ${NET.nick}</h2><p style="font-size:12px;color:#8b8b92">${NET.lastSave?'마지막 저장: '+new Date(NET.lastSave).toLocaleTimeString('ko-KR'):'아직 저장 안 됨'} · 1분마다 자동 저장</p>
@@ -1158,7 +1292,7 @@ function openAccount(){
       <div class="row"><button class="gray" id="aOut">로그아웃</button><button class="gray" onclick="hideModal()">닫기</button></div></div>`);
     $('aSave').onclick=async()=>{ $('aSave').textContent='저장 중…'; await cloudSave(true); hideModal(); toast('☁️ 저장 완료'); };
     $('aLoad').onclick=async()=>{ hideModal(); afterLogin(); };
-    $('aOut').onclick=async()=>{ await cloudSave(true); NET.nick=''; NET.token=''; netStore(); netChip(); hideModal(); toast('로그아웃했어요'); };
+    $('aOut').onclick=async()=>{ await cloudSave(true); NET.nick=''; NET.token=''; netStore(); netChip(); hideModal(); prevAbove=null; showGate('로그아웃했어요'); };
     return;
   }
   showModal(`<div class="acc"><h2>🌐 온라인 로그인</h2>
@@ -1183,21 +1317,57 @@ function openAccount(){
   $('aPw').onkeydown=e=>{ if(e.key==='Enter') go('login'); };
   setTimeout(()=>$('aNick').focus(),50);
 }
-async function fetchBoard(){
-  if(!NET.url || Date.now()-NET.boardAt<60000) return;
-  NET.boardAt=Date.now();
-  try{ const r=await api('board'); NET.board=r.list; if(tab==='rank') renderRank(); }catch(e){ NET.board=NET.board||[]; }
+function boardScore(x){ return (Number(x.rebirth)||0)*1e18+(Number(x.total)||0); }
+function sortedBoard(mode){
+  const L=(NET.board||[]).slice();
+  if(mode==='ch') return L.filter(x=>x.chBest>0).sort((a,b)=>b.chBest-a.chBest);
+  if(mode==='end') return L.filter(x=>x.endings>0).sort((a,b)=>(b.endings-a.endings)||(boardScore(b)-boardScore(a)));
+  return L.sort((a,b)=>boardScore(b)-boardScore(a));
 }
+function liveBoard(){ // 내 최신 기록을 반영한 정렬 (서버 저장 전에도 실시간)
+  if(!NET.board) return [];
+  const me=NET.nick.toLowerCase(), m=meta();
+  const L=NET.board.map(x=>String(x.nick).toLowerCase()===me?Object.assign({},x,{total:m.total,rebirth:m.rebirth,stage:m.stage,route:m.route,chBest:m.chBest,endings:m.endings}):x);
+  if(NET.nick && !L.some(x=>String(x.nick).toLowerCase()===me)) L.push(Object.assign({nick:NET.nick},m));
+  return L.sort((a,b)=>boardScore(b)-boardScore(a));
+}
+function myOnlineRank(){ if(!NET.nick||!NET.board) return 0; const L=liveBoard(); return L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase())+1; }
+let prevAbove=null;
+function checkOvertakes(){
+  if(!NET.nick||!NET.board) return;
+  const L=liveBoard(), me=NET.nick.toLowerCase(), idx=L.findIndex(x=>String(x.nick).toLowerCase()===me);
+  const above=new Set(L.slice(0,idx).map(x=>String(x.nick)));
+  if(prevAbove){
+    for(const n of above) if(!prevAbove.has(n)) toast(`😱 ${n}님이 나를 추월했어요! 전체 ${idx+1}위`);
+    for(const n of prevAbove) if(!above.has(n) && L.some(x=>String(x.nick)===n)) toast(`🔥 ${n}님을 제쳤어요! 전체 ${idx+1}위`);
+  }
+  prevAbove=above;
+  // 바로 위 라이벌
+  const t=$('target');
+  if(idx>0){ const up=L[idx-1], gap=boardScore(up)-boardScore(L[idx]);
+    t.innerHTML = up.rebirth>(S.rebirth||0) ? `🎯 위: <b>${String(up.nick).replace(/</g,'&lt;')}</b> (환생 ${up.rebirth}회)` : `🎯 <b>${String(up.nick).replace(/</g,'&lt;')}</b>까지 ${fmt(gap)}`;
+  } else t.innerHTML = idx===0 && L.length>1 ? '👑 온라인 전체 1위!' : '';
+  netChip();
+}
+async function fetchBoard(force){
+  if(!NET.url || (!force && Date.now()-NET.boardAt<45000)) return;
+  NET.boardAt=Date.now();
+  try{ const r=await api('board'); NET.board=r.list; checkOvertakes(); if(tab==='rank') renderRank(); }catch(e){ NET.board=NET.board||[]; }
+}
+setInterval(()=>{ if(NET.nick) fetchBoard(); },10000);
+setInterval(()=>{ if(NET.nick && NET.board) checkOvertakes(); },2000);
+let obMode='total';
 function onlineBoardHtml(){
   if(!NET.url) return '';
-  let h='<div class="sec">🌐 온라인 랭킹</div><div class="ob">';
+  let h=`<div class="sec">🌐 온라인 랭킹</div><div class="obtabs">${[['total','💰 부자'],['ch','⏱ 연타왕'],['end','🗺️ 엔딩']].map(([k,n])=>`<button class="obt ${obMode===k?'on':''}" data-m="${k}">${n}</button>`).join('')}</div><div class="ob">`;
   if(!NET.nick) h+='<button class="oblogin" id="obLogin">👤 로그인하고 온라인 랭킹에 도전하기</button>';
   if(!NET.board) h+='<div class="rk"><span></span><span></span><span style="color:#8b8b92">불러오는 중…</span><span></span></div>';
   else {
-    const L=NET.board, me=L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
+    const L=obMode==='total'?liveBoard():sortedBoard(obMode), me=L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
+    const val=x=> obMode==='ch'? `${x.chBest||0}회` : obMode==='end'? `${x.endings||0}/10` : fmt(x.total);
     const show=L.slice(0,10).map((x,i)=>[x,i]); if(me>=10) show.push([L[me],me]);
     if(!L.length) h+='<div class="rk"><span></span><span></span><span style="color:#8b8b92">아직 아무도 없어요. 1등을 노려보세요!</span><span></span></div>';
-    h+=show.map(([x,i])=>`<div class="rk${i===me?' me':''}"><span class="n">${i+1}</span><span>${x.route?ROUTES[x.route]?.ic||'🧎':'🧎'}</span><span>${String(x.nick).replace(/</g,'&lt;')}${x.rebirth?` <span class="rb">♻️${x.rebirth}</span>`:''}</span><span class="m">${fmt(x.total)}</span></div>`).join('');
+    h+=show.map(([x,i])=>`<div class="rk${i===me?' me':''}"><span class="n">${i+1}</span><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':(x.route&&ROUTES[x.route]?ROUTES[x.route].ic:'🧎')}</span><span>${String(x.nick).replace(/</g,'&lt;')}${x.rebirth?` <span class="rb">♻️${x.rebirth}</span>`:''}</span><span class="m">${val(x)}</span></div>`).join('');
   }
   return h+'</div>';
 }
@@ -1208,18 +1378,33 @@ netChip();
 
 /* ---------- route choice & rebirth ---------- */
 let routeOpen=false;
+function modalBusy(){ return routeOpen || $('choice').classList.contains('show') || $('lvup').classList.contains('show'); }
 function showRoute(){
-  if(routeOpen || $('choice').classList.contains('show') || $('lvup').classList.contains('show')) return;
+  if(modalBusy()) return;
   routeOpen=true; const R=$('route');
   R.innerHTML=`<div class="k">CAREER ROUTE</div><h3>어떤 길을 걸을까?</h3><div class="sub">한 번 정하면 환생 전까지 바꿀 수 없어요</div>
-    <div class="cards">${Object.entries(ROUTES).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${r.color}">
-      <div class="ci">${r.ic}</div><div class="ct">${r.nm} 루트</div><div class="cr">${r.desc}</div>
-      <div class="co"><b>${r.perk}</b><br><span class="rpath">${r.st.map(x=>x.name).join(' → ')}</span>${(S.routesDone||[]).includes(k)?'<br>✅ 클리어한 루트':''}</div></button>`).join('')}</div>`;
+    <div class="cards c5">${Object.entries(ROUTES).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${r.color}">
+      <div class="ci">${r.ic}</div><div class="ct">${r.nm}</div><div class="cr">${r.desc}</div>
+      <div class="co"><b>${r.perk}</b><span class="rpath">${r.st.map(x=>x.name).join(' → ')} → ${Object.values(r.subs).map(x=>x.ic+x.nm).join(' / ')}</span></div></button>`).join('')}</div>`;
   R.classList.add('show');
   R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{
-    S.route=b.dataset.k; save(); sfx('level');
+    S.route=b.dataset.k; S.sub=null; save(); sfx('level');
     R.querySelectorAll('.rcard').forEach(x=>x.classList.add(x===b?'pick':'dim'));
-    setTimeout(()=>{ R.classList.remove('show'); routeOpen=false; toast(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 루트 선택! ${ROUTES[S.route].perk}`); buildCity(stageIdx()); renderList(); },800);
+    setTimeout(()=>{ R.classList.remove('show'); routeOpen=false; toast(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 루트! ${ROUTES[S.route].perk}`); buildCity(stageIdx()); renderList(); },800);
+  });
+}
+function showSub(){
+  if(modalBusy()) return;
+  routeOpen=true; const R=$('route'), RT=ROUTES[S.route];
+  R.innerHTML=`<div class="k">SECOND CROSSROAD</div><h3>${RT.st[2].name}, 다음 꿈은?</h3><div class="sub">두 번째 갈림길이에요 · 환생 전까지 바꿀 수 없어요</div>
+    <div class="cards">${Object.entries(RT.subs).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${RT.color}">
+      <div class="ci">${r.ic}</div><div class="ct">${r.nm}</div><div class="cr">${r.perk}</div>
+      <div class="co"><span class="rpath">${r.st.map(x=>x.name).join(' → ')}</span>${(S.routesDone||[]).includes(S.route+'.'+k)?'<br>✅ 클리어한 엔딩':''}</div></button>`).join('')}</div>`;
+  R.classList.add('show');
+  R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{
+    S.sub=b.dataset.k; save(); sfx('level');
+    R.querySelectorAll('.rcard').forEach(x=>x.classList.add(x===b?'pick':'dim'));
+    setTimeout(()=>{ R.classList.remove('show'); routeOpen=false; const r=RT.subs[S.sub]; toast(`${r.ic} ${r.nm}의 길! ${r.perk}`); renderList(); },800);
   });
 }
 function rebirthMult(){ return 1+0.5*(S.rebirth||0); }
@@ -1228,8 +1413,8 @@ function doRebirth(){
   showModal(`<h2>♻️ 환생</h2><p>돈, 아이템, 스킬, 루트가 초기화되고<br>처음부터 다시 시작해요.<br><br>영구 보너스: 모든 수입 <b>×${rebirthMult().toFixed(1)} → ×${(rebirthMult()+.5).toFixed(1)}</b><br>업적·기록은 유지돼요.</p>
     <button class="gray" onclick="hideModal()">취소</button><button id="rbYes">환생하기</button>`);
   $('rbYes').onclick=()=>{
-    const keep={ach:S.ach,chBest:S.chBest,maxCombo:S.maxCombo,clicks:S.clicks,golds:S.golds,start:S.start,
-      rebirth:(S.rebirth||0)+1, routesDone:[...new Set([...(S.routesDone||[]), S.route].filter(Boolean))]};
+    const keep={owner:S.owner,ach:S.ach,chBest:S.chBest,maxCombo:S.maxCombo,clicks:S.clicks,golds:S.golds,start:S.start,
+      rebirth:(S.rebirth||0)+1, routesDone:[...new Set([...(S.routesDone||[]), endingKey(), S.route].filter(Boolean))]};
     S=Object.assign(fresh(),keep); S.start=Date.now(); lastStage=-1; cityStage=-1; shownMoney=0; save();
     hideModal(); $('log').innerHTML=''; buildCity(0); renderList(); render();
     toast(`♻️ ${S.rebirth}번째 환생! 모든 수입 ×${rebirthMult().toFixed(1)}`);
@@ -1319,8 +1504,8 @@ function nextChoice(){
   const st=S.pending[0], k=Math.max(0,Math.min(7,st-1)), C=$('choice');
   const opts=[
     {key:'safe',ic:'🛡️',cc:'#86efac',nm:PATHS.safe[k],rate:'안정 · 100%',co:`<b>수입 +10%</b> 확정`},
-    {key:'risk',ic:'💼',cc:'#93c5fd',nm:PATHS.risk[k],rate:'도전 · 성공 65%',co:`성공: <b>수입 +30%</b><br>실패: <s>현금 -40%</s>`},
-    {key:'bet', ic:'🎰',cc:'#fca5a5',nm:PATHS.bet[k], rate:`도박 · 성공 ${S.route==='inv'?45:30}%`,co:`대박: <b>수입 +80% · 현금 ×2</b><br>쪽박: <s>현금 -70% · 2분간 수입 반토막</s>`},
+    {key:'risk',ic:'💼',cc:'#93c5fd',nm:PATHS.risk[k],rate:`도전 · 성공 ${Math.round((.65+perkA('riskP'))*100)}%`,co:`성공: <b>수입 +30%</b><br>실패: <s>현금 -40%</s>`},
+    {key:'bet', ic:'🎰',cc:'#fca5a5',nm:PATHS.bet[k], rate:`도박 · 성공 ${Math.round((.30+perkA('betP'))*100)}%`,co:`대박: <b>수입 +80% · 현금 ×2</b><br>쪽박: <s>현금 -70% · 2분간 수입 반토막</s>`},
   ];
   C.innerHTML=`<div class="k">LIFE CHOICE</div><h3>${getStage(st).name}, 이제 어떻게 살까?</h3><div class="sub">선택은 되돌릴 수 없어요</div>
     <div class="cards">${opts.map(o=>`<button class="card2" data-k="${o.key}" style="--cc:${o.cc}"><div class="ci">${o.ic}</div><div class="ct">${o.nm}</div><div class="cr">${o.rate}</div><div class="co">${o.co}</div></button>`).join('')}</div>
@@ -1335,10 +1520,10 @@ function pickPath(key,o,st){
   setTimeout(()=>{
     let win=true, txt='';
     if(key==='safe'){ S.pathMul*=1.10; txt='꾸준함이 답이다. 모든 수입 +10%'; }
-    else if(key==='risk'){ win=Math.random()<.65;
+    else if(key==='risk'){ win=Math.random()<(.65+perkA('riskP'));
       if(win){ S.pathMul*=1.30; txt='사업이 대박났다! 모든 수입 +30%'; }
       else { const lost=S.money*.4; S.money-=lost; txt=`망했다… 현금 ${fmt(lost)} 증발`; } }
-    else { win=Math.random()<(S.route==='inv'?.45:.30);
+    else { win=Math.random()<(.30+perkA('betP'));
       if(win){ S.pathMul*=1.80; S.money*=2; txt='인생 역전!! 모든 수입 +80%, 현금 2배'; }
       else { const lost=S.money*.7; S.money-=lost; S.debuffEnd=Date.now()+120000; txt=`쪽박… 현금 ${fmt(lost)} 날리고 2분간 빚 독촉`; } }
     S.path=S.path||[]; S.path.push({st,sn:getStage(st).name,key,nm:o.nm,win});
@@ -1382,8 +1567,8 @@ function sfx(kind){
 var feverEnd=0, lastComboFever=0, feverIv=null;
 function startFever(sec){
   feverEnd=Date.now()+sec*1000; sfx('fever');
-  toast(`🔥 FEVER TIME! ${sec}초 동안 모든 수입 ${sk('l5')?5:3}배`);
-  $('scene').classList.add('fever'); $('fever').classList.add('on'); $('fever').firstChild.textContent='FEVER ×'+(sk('l5')?5:3);
+  toast(`🔥 FEVER TIME! ${sec}초 동안 모든 수입 ${(sk('l5')?5:3)+perkA('feverX')}배`);
+  $('scene').classList.add('fever'); $('fever').classList.add('on'); $('fever').firstChild.textContent='FEVER ×'+((sk('l5')?5:3)+perkA('feverX'));
   clearInterval(feverIv);
   feverIv=setInterval(()=>{
     const left=feverEnd-Date.now();
@@ -1494,9 +1679,9 @@ function spawnGold(){
   g.className='golden in'; g.textContent='💰';
   g.style.left=(10+Math.random()*75)+'%'; g.style.top=(8+Math.random()*40)+'%';
   g.onclick=(e)=>{
-    if(Math.random()<.25+.08*sk('l4')+(S.route==='inv'?.15:0) && Date.now()>=feverEnd){ S.golds++; startFever(15+3*sk('l4')); g.remove(); return; }
+    if(Math.random()<.25+.08*sk('l4')+perkA('feverP') && Date.now()>=feverEnd){ S.golds++; startFever(15+3*sk('l4')+perkA('feverS')); g.remove(); return; }
     sfx('gold');
-    const bonus=Math.max(100, cps()*30, cpc()*20)*(1+.5*sk('l2'))*(S.route==='inv'?2:1);
+    const bonus=Math.max(100, cps()*30, cpc()*20)*(1+.5*sk('l2'))*perkM('goldX');
     earn(bonus); S.golds++;
     const r=sc.getBoundingClientRect();
     floatText(e.clientX-r.left-30, e.clientY-r.top-20, '💰 +'+fmt(bonus));
@@ -1506,7 +1691,7 @@ function spawnGold(){
   sc.appendChild(g);
   setTimeout(()=>g.remove(),7000);
 }
-(function goldLoop(){ setTimeout(()=>{ if(!paused) spawnGold(); goldLoop(); }, (25000+Math.random()*35000)/(1+.15*sk('l1'))); })();
+(function goldLoop(){ setTimeout(()=>{ if(!paused) spawnGold(); goldLoop(); }, (25000+Math.random()*35000)/(1+.15*sk('l1')+perkA('goldFreq'))); })();
 
 /* modal */
 function showModal(html){ $('modalBox').innerHTML=html; $('modal').classList.add('show'); }
@@ -1525,7 +1710,7 @@ $('statsBtn').onclick=()=>{
   showModal(`<h2>📊 거지 일지</h2><p style="text-align:left;line-height:1.9">
   누적 수입: <b>${fmt(S.total)}</b><br>구걸 횟수: <b>${S.clicks.toLocaleString()}번</b><br>
   주운 돈주머니: <b>${S.golds}개</b><br>보유 돈벌이: <b>${items}개</b><br>
-  신분 보너스: <b>+${Math.round((stageBonus()-1)*100)}%</b><br>인생 선택 보너스: <b>×${(S.pathMul||1).toFixed(2)}</b><br>루트: <b>${S.route?ROUTES[S.route].ic+' '+ROUTES[S.route].nm:'미정'}</b> · 환생 <b>${S.rebirth||0}회</b> (×${rebirthMult().toFixed(1)})<br>플레이 시간: <b>${Math.floor(mins/60)}시간 ${mins%60}분</b></p>
+  신분 보너스: <b>+${Math.round((stageBonus()-1)*100)}%</b><br>인생 선택 보너스: <b>×${(S.pathMul||1).toFixed(2)}</b><br>루트: <b>${S.route&&ROUTES[S.route]?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+(S.sub?' · '+ROUTES[S.route].subs[S.sub].nm:''):'미정'}</b> · 엔딩 <b>${(S.routesDone||[]).filter(x=>x.includes('.')).length}/10</b> · 환생 <b>${S.rebirth||0}회</b> (×${rebirthMult().toFixed(1)})<br>플레이 시간: <b>${Math.floor(mins/60)}시간 ${mins%60}분</b></p>
   ${(S.path&&S.path.length)?`<div style="text-align:left;font-size:12px;line-height:1.8;border-top:1px solid #eee;padding-top:8px"><b>🛤️ 인생 루트</b><br>${S.path.map(p=>`${p.key==='safe'?'🛡️':p.key==='risk'?'💼':'🎰'} ${p.sn||getStage(p.st).name} · ${p.nm} ${p.win?'✅':'❌'}`).join('<br>')}</div>`:''}
   <button class="gray" onclick="askReset()">🔄 처음부터</button><button onclick="hideModal()">닫기</button>`);
 };
@@ -1574,21 +1759,16 @@ function tick(now){
 }
 
 /* start */
-const GAME_VER='v1.1';
+setTimeout(requireLogin,0);
+const GAME_VER='v1.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'),1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
-fxInit(); sndIcon(); $('face').innerHTML=charSVG(Math.min(stageIdx(), S.route?8:2)); buildCity(stageIdx());
+fxInit(); sndIcon(); $('face').innerHTML=charSVG(Math.min(stageIdx(), !S.route?2:!S.sub?5:8)); buildCity(stageIdx());
 load();
-const away=(Date.now()-(S.last||Date.now()))/1000;
 render(); renderList();
-if(away>60 && cps()>0){
-  const job=S.route==='job'; const secs=Math.min(away, (8+2*sk('m4')+(job?8:0))*3600), gain=cps()*secs*(0.5+.1*sk('m4')+(job?.3:0));
-  earn(gain);
-  const h=Math.floor(secs/3600), m=Math.floor(secs%3600/60);
-  showModal(`<h2>😴 자는 동안…</h2><p>${h?h+'시간 ':''}${m}분 동안 거지가 혼자 일했어요!</p><div class="jua" style="font-size:26px;color:var(--accent2)">+${fmt(gain)}</div><button onclick="hideModal()">받기</button>`);
-  log(`😴 오프라인 수입 +${fmt(gain)}`);
-} else log('오늘도 구걸을 시작해볼까… 🥫');
+log('오늘도 구걸을 시작해볼까… 🥫');
+if(NET.nick && NET.token) afterLogin(true);
 setInterval(save,5000);
 window.addEventListener('beforeunload',save);
 requestAnimationFrame(tick);
