@@ -1834,6 +1834,7 @@ setInterval(rollEvent,45000);
 /* ---------- PvP: 뜯기 / 고소 (내 돈으로) ---------- */
 const ROB_CAP=0.10;   // 뜯기 한도: 공격자 누적 수입의 10%
 function robCap(total){ return Math.max(1e4, (Number(total)||0)*ROB_CAP); }
+const ALLOW_DOWN=false;   // 아래 순위 공격: 서버 업데이트 후 true로
 function isRevenge(nick){ return !!(nick&&(S.grudge||{})[nick]&&Date.now()-S.grudge[nick]<30*60000); }
 function isBully(nick){ if(!nick||isRevenge(nick)) return false; const B=liveBoard(), ti=B.findIndex(x=>String(x.nick)===nick), mi=B.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase()); return ti>mi && mi>=0; }
 function robChance(nick){ return Math.max(.2, Math.min(.9, .60+.04*sk('s3')+perkA('betP')*0+(isRevenge(nick)?.15:0)-(isBully(nick)?.20:0))); }
@@ -1844,7 +1845,7 @@ function pvpSheet(nick){
   const L=liveBoard(), ti=L.findIndex(x=>String(x.nick)===nick), mi=L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
   if(ti<0) return;
   const T=L[ti], revenge=(S.grudge||{})[nick] && Date.now()-S.grudge[nick]<30*60000;
-  const can = true;
+  const can = ALLOW_DOWN || isRevenge(nick) || mi<0 || ti<mi;
   showModal(`<div class="pvp"><h2>🎯 ${nick.replace(/</g,'&lt;')}</h2><div class="who">${ti+1}위 · ${T.stage||''} · 누적 ${fmt(T.total)}${revenge?' · <b style="color:#c0392b">😡 복수 가능</b>':''}</div>
     <button class="pvbtn" id="pvRob" ${can?'':'disabled'}><span class="cost">-${fmt(costFor('rob',nick))}</span><b>🤏 뜯기</b><small><b>성공률 ${Math.round(robChance(nick)*100)}%</b> · 상대 현금의 ${8+2*sk('s3')}% 강탈 (최대 <b>${fmt(robCap(S.total))}</b> = 내 누적 수입의 10%) · 쿨타임 10분 · 경비견 있으면 50% 실패</small></button>
     <button class="pvbtn" id="pvSue" ${can?'':'disabled'}><span class="cost">-${fmt(costFor('sue',nick))}</span><b>🧾 고소</b><small>상대 3분간 수입 -30% · 쿨타임 15분 · 변호사 있으면 1분</small></button>
@@ -1916,13 +1917,13 @@ function renderPvp(){
   if(!NET.nick){ L.innerHTML='<div class="pvempty">로그인하면 맞짱을 뜰 수 있어요</div>'; return; }
   const B=liveBoard(), mi=B.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase());
   const grudge=S.grudge||{}, now=Date.now();
-  const targets=B.map((x,i)=>({x,i})).filter(({x,i})=>i!==mi).sort((a,b)=>(isRevenge(b.x.nick)-isRevenge(a.x.nick))||(a.i-b.i));
+  const targets=B.map((x,i)=>({x,i})).filter(({x,i})=>i!==mi && (ALLOW_DOWN || i<mi || mi<0 || isRevenge(x.nick))).sort((a,b)=>(isRevenge(b.x.nick)-isRevenge(a.x.nick))||(a.i-b.i));
   const rc=cdLeft('rob'), sc=cdLeft('sue');
   let h=`<div class="pvhero"><div class="t">FIGHT CLUB</div><div class="big">⚔️ 맞짱 · 전체 ${mi+1}위</div><div class="st">
     <div>🤏 뜯기 한도<b>${fmt(robCap(S.total))}</b></div>
     <div>⏳ 쿨타임<b class="${rc||sc?'cd':''}">🤏${rc?mmss(rc):'OK'} · 🧾${sc?mmss(sc):'OK'}</b></div></div></div>`;
-  h+=`<div class="sec">🎯 맞짱 상대 (${targets.length}) <span style="font-weight:500;letter-spacing:0">· 아래 순위는 👊괴롭히기 (비용 2배 · 성공률 -20%)</span></div>`;
-  if(!targets.length) h+= mi===0 ? `<div class="pvempty">😎 당신이 1등이에요! 털 사람이 없어요.<br>대신 다들 당신을 노리고 있으니 <b>🛡️ 방어</b>를 챙기세요.</div>` : `<div class="pvempty">아직 다른 플레이어가 없어요.<br>친구를 불러보세요!</div>`;
+  h+=`<div class="sec">🎯 맞짱 상대 (${targets.length})${ALLOW_DOWN?' <span style="font-weight:500;letter-spacing:0">· 아래 순위는 👊괴롭히기 (비용 2배 · 성공률 -20%)</span>':''}</div>`;
+  if(!targets.length) h+= mi===0 ? `<div class="pvempty">😎 당신이 1등이에요! 털 사람이 없어요.<br>대신 다들 당신을 노리고 있으니 <b>🛡️ 방어</b>를 챙기세요.</div>` : (ALLOW_DOWN?`<div class="pvempty">아직 다른 플레이어가 없어요.<br>친구를 불러보세요!</div>`:(mi===0?`<div class="pvempty">😎 당신이 1등이에요! 털 사람이 없어요.<br>대신 다들 당신을 노리고 있으니 <b>🛡️ 방어</b>를 챙기세요.</div>`:`<div class="pvempty">아직 공격할 수 있는 사람이 없어요.<br>나보다 순위가 높은 사람이 생기면 여기에 떠요.</div>`));
   for(const {x,i} of targets.slice(0,15)){
     const rev=grudge[x.nick]&&now-grudge[x.nick]<30*60000, nm=String(x.nick).replace(/</g,'&lt;');
     const bully=isBully(x.nick);
@@ -1933,7 +1934,7 @@ function renderPvp(){
   }
   h+=defShopHtml();
   h+=`<div class="sec">📜 최근 전투</div><div class="plog">${(S.pvpLog||[]).length?(S.pvpLog||[]).slice(0,10).map(e=>`<div class="${e.d}"><span class="tm">${new Date(e.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})}</span><span>${e.t}</span></div>`).join(''):'<div>아직 전투 기록이 없어요</div>'}</div>`;
-  h+=`<div class="pvhelp">• 🤏 뜯기: 성공률 ${Math.round(robChance()*100)}% (복수 +15%) · 내 현금 5%를 써서 상대 현금 ${8+2*sk('s3')}% 강탈 (최대 내 누적 수입의 10%) · 쿨 10분<br>• 🧾 고소: 내 현금 8%를 써서 상대 3분간 수입 -30% · 쿨 15분<br>• 누구든 공격 가능! 단 아래 순위 👊괴롭히기는 비용 2배 · 성공률 -20%<br>• 나를 공격한 사람은 30분간 복수 가능 (성공률 +15%)</div>`;
+  h+=`<div class="pvhelp">• 🤏 뜯기: 성공률 ${Math.round(robChance()*100)}% (복수 +15%) · 내 현금 5%를 써서 상대 현금 ${8+2*sk('s3')}% 강탈 (최대 내 누적 수입의 10%) · 쿨 10분<br>• 🧾 고소: 내 현금 8%를 써서 상대 3분간 수입 -30% · 쿨 15분<br>• ${ALLOW_DOWN?'누구든 공격 가능! 단 아래 순위 👊괴롭히기는 비용 2배 · 성공률 -20%':'나보다 높은 순위만 공격 가능'}<br>• 나를 공격한 사람은 30분간 복수 가능 (성공률 +15%)</div>`;
   L.innerHTML=h;
   L.querySelectorAll('.tg .rob').forEach(b=>b.onclick=()=>pvpDo('rob',b.dataset.n,costFor('rob',b.dataset.n)));
   L.querySelectorAll('.tg .sue').forEach(b=>b.onclick=()=>pvpDo('sue',b.dataset.n,costFor('sue',b.dataset.n)));
@@ -2018,7 +2019,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
-  {v:'v1.7',d:'10/30',items:['⚔️ <b>누구든 맞짱 가능!</b> 아래 순위는 👊괴롭히기 (비용 2배 · 성공률 -20%) — 서버 업데이트 필요','🗺️ 루트마다 <b>세 번째 갈림길</b> 추가 → 엔딩 15개 (🏗️부동산 · 🎓공무원 · 🛢️원자재 · 🎬배우 · 🛍️커머스)','🎭 <b>직업 전용 스킬트리</b>: 진로마다 다른 스킬 4개','🎲 <b>직업별 돌발 이벤트</b>: 맛집 방송/식중독, 성과급/구조조정, 떡상/떡락, 역주행/스캔들, 영상 떡상/노란딱지','👕 새 의상 10종']},
+  {v:'v1.7',d:'10/30',items:['🗺️ 루트마다 <b>세 번째 갈림길</b> 추가 → 엔딩 15개 (🏗️부동산 · 🎓공무원 · 🛢️원자재 · 🎬배우 · 🛍️커머스)','🎭 <b>직업 전용 스킬트리</b>: 진로마다 다른 스킬 4개','🎲 <b>직업별 돌발 이벤트</b>: 맛집 방송/식중독, 성과급/구조조정, 떡상/떡락, 역주행/스캔들, 영상 떡상/노란딱지','👕 새 의상 10종']},
   {v:'v1.6.1',d:'10/30',items:['🎲 뜯기에 <b>성공 확률</b> 추가: 기본 60% (복수할 땐 +15%, 💪조폭 형님 스킬 레벨당 +4%, 최대 90%)','실패하면 비용만 날리고 쿨타임은 그대로 — 버튼에 성공률이 표시돼요']},
   {v:'v1.6',d:'10/30',items:['⚖️ <b>직업 밸런스 패치</b>: 모든 루트에 자동 수입 보너스 기본 장착 (사업가 ×1.4 · 직장인 ×1.3 · 크리에이터 ×1.25 · 투자자/연예인 ×1.2) + 루트별 특기 유지/강화','🛡️ 방어권 가격이 <b>내 보유 현금의 4%</b>로 변경','💰 1경 이상부터는 경·조·억까지만 표시','📱 갤럭시 · 갤럭시 폴드(접었을 때/펼쳤을 때) 화면 최적화','♻️ 환생하면 온라인 랭킹 금액이 바로 0원으로 반영']},
   {v:'v1.5.3',d:'10/30',items:['📱 모바일에서 큰 금액일 때 화면이 옆으로 밀리며 흔들리던 문제 수정 (상단 레이아웃 정리)']},
@@ -2255,7 +2256,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v1.7';
+const GAME_VER='v1.7.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
