@@ -135,7 +135,7 @@ function save_(b) {
   const m = b.meta || {};
   const total = Math.max(0, Number(m.total) || 0);
   upsert_(sheet_('board'), nick, [total, String(m.stage || '').slice(0, 20), String(m.route || '').slice(0, 10), Number(m.rebirth) || 0, new Date(),
-    Math.max(0, Math.min(999, Number(m.chBest) || 0)), Math.max(0, Math.min(10, Number(m.endings) || 0)),
+    Math.max(0, Math.min(999, Number(m.chBest) || 0)), Math.max(0, Math.min(30, Number(m.endings) || 0)),
     JSON.stringify(m).slice(0, 3000)]);   // 앞으로 추가되는 랭킹 정보는 여기 통째로 저장 → 서버 재배포 불필요
   return { ok: true, at: Date.now(), events: inbox_(nick) };
 }
@@ -199,7 +199,7 @@ function attack_(b) {
   }
   const revenge = rows.some(r => String(r[0]).toLowerCase() === me.toLowerCase() && String(r[1]).toLowerCase() === target.toLowerCase()
     && now - new Date(r[4]).getTime() < 30 * 60 * 1000);
-  if (!revenge && M && T.score <= M.score) throw '나보다 순위가 높은 사람만 공격할 수 있어요 (복수는 예외)';
+  // v1.7: 순위 제한 없음 (아래 순위 공격은 게임 쪽에서 비용 2배·성공률 -20% 페널티)
   const vs = saveOf_(target) || {};
   let amount = 0, note = '';
   if (type === 'rob') {
