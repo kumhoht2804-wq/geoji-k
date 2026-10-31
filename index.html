@@ -1020,12 +1020,12 @@
 <script>
 const STAGES = [
   {need:0,    name:'길바닥 거지',   face:'🧎', bowl:'🥫', o:'b0'},
-  {need:6e3,  name:'동냥 전문가',   face:'🧍', bowl:'🥣', o:'b1'},
-  {need:1.2e5,name:'폐지 줍는 사람', face:'🚶', bowl:'📦', o:'b2'},
-  {need:2e6,  name:'고시원 생활자', face:'🧑', bowl:'🍜', o:'b3'},
-  {need:3e7}, {need:4e8}, {need:5e9}, {need:6e10}, {need:8e11},
-  {need:3e13}, {need:1e15},
-  {need:5e16, name:'세계 최고 부자', face:'👑', bowl:'🚀', o:'king'},
+  {need:9600,  name:'동냥 전문가',   face:'🧍', bowl:'🥣', o:'b1'},
+  {need:192000,name:'폐지 줍는 사람', face:'🚶', bowl:'📦', o:'b2'},
+  {need:3.2e+06,  name:'고시원 생활자', face:'🧑', bowl:'🍜', o:'b3'},
+  {need:4.8e+07}, {need:6.4e+08}, {need:8e+09}, {need:9.6e+10}, {need:1.28e+12},
+  {need:4.8e+13}, {need:1.6e+15},
+  {need:8e+16, name:'세계 최고 부자', face:'👑', bowl:'🚀', o:'king'},
 ];
 const RS=4, RE=8, SS=9, LAST=11, NSUB=5;   // 진로 단계 4~8 · 2차 전직 9~10 · 최종 11
 const ROUTES={
@@ -1373,7 +1373,8 @@ function starMult(id){ return Math.pow(2,(S.star||{})[id]||0); }
 function itemRaw(a){ const n=S.auto[a.id]||0; return n*a.cps*msMult(n)*starMult(a.id)*synMult(a); }
 function isMgr(id){ return !!(S.mgr||{})[id]; }
 function manualBoost(){ return tr(3)==='a'?1.5:1; }
-function baseCps(){ let s=0; for(const a of autoList()){ s+=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); } return s*stageBonus()*mgmtMult()*buffM('auto')*((S.fireEnd||0)>Date.now()?0:1); }
+const ECON_A=0.55, ECON_C=0.7;   // v2.3.3 수입 속도 조절
+function baseCps(){ let s=0; for(const a of autoList()){ s+=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); } return s*ECON_A*stageBonus()*mgmtMult()*buffM('auto')*((S.fireEnd||0)>Date.now()?0:1); }
 function buffM(k){ const n=Date.now(); return (S.buffs||[]).filter(b=>b.end>n&&b.k===k).reduce((a,b)=>a*b.m,1); }
 function evMult(){ const n=Date.now(); return buffM('all')*((S.debuffEnd||0)>n?0.5:1)*((S.slumpEnd||0)>n?0.5:1)*((S.sueEnd||0)>n?0.7:1); }
 function onlineMult(){
@@ -1422,7 +1423,7 @@ function synMult(a){
 }
 function cpc(){
   let c=1; for(const k of CLICK){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
-  return c*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
+  return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
 }
 function stageIdx(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }
 function stageBonus(){ return 1+stageIdx()*0.08; }
@@ -1470,7 +1471,7 @@ function renderList(){
     el.className='item'+(!prevOwned?' locked':S.money<price?' no':'');
     el.dataset.id=it.id;
     const mm=msMult(n), nx=msNext(n), pv=msPrev(n);
-    const extra = tab==='auto' ? `초당 +${fmt(it.cps*stageBonus()*mgmtMult()*pathMult()*mm)}` : it.add ? `클릭당 +${fmt(it.add*stageBonus()*pathMult()*mm)}` : `클릭당 +초당 수입의 ${Math.round(it.pct*100*mm)}%`;
+    const extra = tab==='auto' ? `초당 +${fmt(it.cps*ECON_A*stageBonus()*mgmtMult()*pathMult()*mm)}` : it.add ? `클릭당 +${fmt(it.add*ECON_C*stageBonus()*pathMult()*mm)}` : `클릭당 +초당 수입의 ${Math.round(it.pct*100*mm)}%`;
     const msPct = nx ? ((n-pv)/(nx-pv)*100) : 100;
     const flavor = tab==='auto' ? it.ds : '';
     el.innerHTML = prevOwned
@@ -1506,7 +1507,7 @@ function refreshAffordable(){
 }
 function itemSheet(a){
   const m=isMgr(a.id), st=(S.star||{})[a.id]||0, syn=SYN.filter(y=>Array.isArray(y.tgt)?y.tgt.includes(a.id):y.tgt===a.grp);
-  showModal(`<div class="isheet"><div class="ih"><span class="ii">${a.ic}</span><div><b>${a.nm}</b><small>${S.auto[a.id]}개 · 초당 ${fmt(itemRaw(a)*stageBonus()*mgmtMult()*pathMult())}</small></div></div>
+  showModal(`<div class="isheet"><div class="ih"><span class="ii">${a.ic}</span><div><b>${a.nm}</b><small>${S.auto[a.id]}개 · 초당 ${fmt(itemRaw(a)*ECON_A*stageBonus()*mgmtMult()*pathMult())}</small></div></div>
    <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'고용 완료 · 자동 수금':fmt(mgrCost(a))}</em><small>꼬질이를 안 눌러도 자동으로 들어오고, 오프라인에도 벌어요</small></button>
    <button class="ib" id="iStar" ${st>=5?'disabled':''}><span>★ 등급 올리기 (${st}/5)</span><em>${st>=5?'최고 등급':fmt(starCost(a))}</em><small>등급마다 이 돈벌이 수입 ×2</small></button>
    ${syn.length?`<div class="isyn">${syn.map(y=>`<div class="${synOn(y)?'on':''}">${y.ic} ${y.nm} ${synOn(y)?'✓':'· '+Math.round(synProg(y)*100)+'%'}<small>${y.d}</small></div>`).join('')}</div>`:''}
@@ -2740,6 +2741,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.3.3',d:'10/31',items:['🐢 돈 버는 속도 조절: 자동 수입 ×0.55 · 구걸 수입 ×0.7','📈 신분 상승에 필요한 누적 금액 ×1.6 (내 돈·아이템은 그대로)']},
   {v:'v2.3.2',d:'10/31',items:['💰 수금 버튼 없앰: 매니저 없는 돈벌이는 <b>꼬질이를 누를 때(스페이스 포함) 같이</b> 들어와요 · 쌓이면 깡통에 동전이 보여요']},
   {v:'v2.3.1',d:'10/31',items:['👔 매니저 고용비 대폭 인하: 공통 돈벌이 <b>1/5</b>, 진로·전직 돈벌이 <b>1/3</b>','🧺 수금함 기본 한도 2분 → <b>5분</b> (현장형 사장 특성 6분 → 15분)']},
   {v:'v2.3',d:'10/31',items:['🔤 글씨 가독성 개선: 본문은 또렷한 고딕, 제목·버튼만 동글 폰트 · 회색 글씨 더 진하게 · 작은 글씨 크기 UP','🌳 공통 스킬 9개 추가: 🧺큰 수금함 · 🕴️헤드헌터(매니저 할인) · 🧾세무 최적화 · 🎲도박사의 촉 · 🌈럭키 데이 · 🦴펫 간식(펫 효과 UP) · 🧯보험 설계사 · 🏃줄행랑 · ⏰알람 시계','🎭 직업 스킬 진로마다 4개 → 6개 (24개 추가, 돈주머니·콤보·방치·도전 성공 등 효과 다양화)']},
@@ -2989,7 +2991,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.3.2';
+const GAME_VER='v2.3.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
