@@ -925,6 +925,24 @@
   .item .ic.lk{font-family:'Black Han Sans','Jua',sans-serif;color:#c4b29a;background:#f3eadc!important}
   .traits{background:#fffdf8!important;border:2.5px solid #5a4436!important;border-radius:16px!important;box-shadow:0 3px 0 #5a4436}
   .chbtn{border:2.5px solid #5a4436!important;box-shadow:0 3px 0 #5a4436!important;border-radius:14px!important}
+
+  /* 가독성 보정 */
+  :root{--sub:#7a6452}
+  body{font-family:'Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .item .nm,.tabs button,#stChip,#rankChip,#netChip,.igrp,.mgrbar .mt b,.petbtn b,.prow b,.pcard b,.act,.qty button,#pend,.thead,.skd .nm,.tro b,.modal h2,header h1{font-family:'Jua','Noto Sans KR',sans-serif}
+  .rates,#next,.item .ds,.mgrbar small,.qty,.petbtn small,.prow small,.pcard small,.petsheet .pd,.petpick p,.hint,.log,.trl,.tro small,.skd .lv{color:#6e5a49!important}
+  .item .ef{color:#b25f1e!important;font-weight:700!important;font-size:12px}
+  .item .ds{font-size:11.5px}
+  .rates{font-size:13px} #next{font-size:12.5px;font-weight:500}
+  .mgrbar small{font-size:11.5px} .act{font-size:11.5px} .act b{font-size:11.5px}
+  .item .cnt{font-size:12px} .item .cnt span{color:#9c8670}
+  .tabs button{font-size:13px!important}
+  .tro small{font-size:11px!important} .tro b{font-size:13px}
+  #xpTxt{font-size:13px!important}
+  .money .mg u{color:#c9772f}
+  body.mini .item .ef{font-size:10.5px} body.mini .item .ds{font-size:10px} body.mini .act,body.mini .act b{font-size:10px}
+  body.mini .tabs button{font-size:10.5px!important} body.mini .rates{font-size:11px} body.mini #next{font-size:10.5px}
+  body.mini .mgrbar small{font-size:10px}
 </style>
 </head>
 <body>
@@ -1332,7 +1350,7 @@ function renderMoney(v){
   let r=v; const groups=sl(U[top][0]);
   groups.forEach(([d],i)=>{ const q=(i===groups.length-1 && d===1)?Math.floor(r):Math.max(0,Math.floor(r/d+1e-9)); r=Math.max(0,r-q*d); const t=q.toLocaleString('ko-KR'); if(moneyEls[i].textContent!==t) moneyEls[i].textContent=t; });
 }
-const cost = (b,n)=>Math.ceil(b*Math.pow(1.2,n)*(1-perkA('discount')));
+const cost = (b,n)=>Math.ceil(b*Math.pow(1.2,n)*Math.max(.5,1-perkA('discount')));
 
 function sk(id){ return (S.skill&&S.skill[id])||0; }
 function feverMult(){ return (typeof feverEnd!=='undefined' && Date.now()<feverEnd) ? (sk('l5')?5:3)+perkA('feverX') : 1; }
@@ -1370,8 +1388,8 @@ function pathMult(){ return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult(); 
 function cps(){ return baseCps()*feverMult()*pathMult(); }
 function managedShare(){ let m=0,t=0; for(const a of autoList()){ const v=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); t+=v; if(isMgr(a.id)) m+=v; } return t?m/t:0; }
 function managedCps(){ return cps()*managedShare(); }
-function pendCap(){ return Math.max(50, cps()*(1-managedShare())*(tr(3)==='a'?360:120)); }
-function mgrCost(a){ return Math.ceil(a.base*25*(tr(3)==='b'?.4:1)); }
+function pendCap(){ return Math.max(50, cps()*(1-managedShare())*(tr(3)==='a'?360:120)*(1+jsk('pendCap'))); }
+function mgrCost(a){ return Math.ceil(a.base*25*(tr(3)==='b'?.4:1)*Math.max(.4,1-jsk('mgrDisc'))); }
 function starCost(a){ const l=(S.star||{})[a.id]||0; return Math.ceil(a.base*120*Math.pow(9,l)); }
 const SYN=[
   {id:'y1',nm:'동정심 세트',ic:'🥺',need:[['cup',25],['sign',25]],tgt:['cup','sign'],x:2,d:'빈 깡통·팻말 각 25개 → 둘 다 ×2'},
@@ -1953,13 +1971,13 @@ var PETS=[
 ];
 const PET=k=>PETS.find(p=>p.k===k);
 function petLv(k){ return ((S.petLv||{})[k])||0; }   // 0=미보유, 1~5
-function petFx(k){ const p=PET(k), lv=petLv(k); if(!p||!lv) return null; const sc=1+.25*(lv-1), o={};
+function petFx(k){ const p=PET(k), lv=petLv(k); if(!p||!lv) return null; const sc=(1+.25*(lv-1))*(1+jsk('petUp')), o={};
   for(const [x,v] of Object.entries(p.fx)) o[x]= v>=1 && ['auto','click','goldX'].includes(x) ? 1+(v-1)*sc : x==='idleH'||x==='feverS'||x==='comboMax' ? Math.round(v*sc) : +(v*sc).toFixed(3);
   return o; }
 function petSlots(){ return 1+((S.petSlot2)?1:0); }
 function petsOn(){ return (S.petOn||[]).filter(k=>petLv(k)).slice(0,petSlots()); }
 var _pfx={k:null,v:[]};
-function petPerks(){ if(!PETS) return []; const key=(S.petOn||[]).join()+'|'+JSON.stringify(S.petLv||{})+(S.petSlot2?1:0); if(!_pfx||key!==_pfx.k) _pfx={k:key,v:petsOn().map(petFx)}; return _pfx.v; }
+function petPerks(){ if(!PETS) return []; const key=(S.petOn||[]).join()+'|'+JSON.stringify(S.petLv||{})+(S.petSlot2?1:0)+'|'+sk('l9'); if(!_pfx||key!==_pfx.k) _pfx={k:key,v:petsOn().map(petFx)}; return _pfx.v; }
 function petSVG(k){ const p=PET(k); return p?petBase(p.o):''; }
 function petUpCost(k){ const lv=petLv(k); return lv>=5?0:Math.max(2,Math.ceil((PET(k).cost||2)*.6))*lv; }
 
@@ -2288,49 +2306,60 @@ const SKILLS=[
   {id:'m3',br:1,ic:'🏘️',nm:'부동산 감각',max:10,base:2e6,gr:1.8,req:['m2',3],ef:l=>`자동 수입 +${l*25}%`},
   {id:'m5',br:1,ic:'🐙',nm:'문어발 경영',max:1,base:5e9,gr:1,req:['m3',5],ef:l=>l?'자동 수입 ×2':'자동 수입 ×2 (궁극기)'},
   {id:'m6',br:1,ic:'🏭',nm:'자동화 공장',max:5,base:1e11,gr:3,req:['m5',1],ef:l=>`자동 수입 +${l*50}%`},
+  {id:'m9',br:1,ic:'🧺',nm:'큰 수금함',max:5,base:2e4,gr:2.2,req:['m1',3],eff:{pendCap:.5},ef:l=>`수금함 한도 +${l*50}%`},
+  {id:'m8',br:1,ic:'🕴️',nm:'헤드헌터',max:5,base:5e5,gr:2.4,req:['m2',2],eff:{mgrDisc:.1},ef:l=>`매니저 고용비 -${l*10}%`},
+  {id:'m7',br:1,ic:'🧾',nm:'세무 최적화',max:5,base:1e8,gr:2.6,req:['m3',3],eff:{discount:.02},ef:l=>`돈벌이 가격 -${l*2}%`},
   {id:'l1',br:2,ic:'👃',nm:'돈 냄새',max:5,base:500,gr:2,ef:l=>`돈주머니 등장 +${l*15}%`},
   {id:'l2',br:2,ic:'🎁',nm:'대박 주머니',max:5,base:1e4,gr:2.2,req:['l1',2],ef:l=>`돈주머니 보상 +${l*50}%`},
   {id:'l3',br:2,ic:'🔥',nm:'콤보 장인',max:5,base:1e5,gr:2.4,req:['l2',2],ef:l=>`콤보 최대 배율 x${(3+l*.5).toFixed(1)}`},
   {id:'l4',br:2,ic:'⚡',nm:'피버 체질',max:5,base:1e6,gr:2.5,req:['l3',2],ef:l=>`피버 확률 ${25+l*8}% · 지속 +${l*3}초`},
   {id:'l5',br:2,ic:'👑',nm:'황금 피버',max:1,base:1e9,gr:1,req:['l4',5],ef:l=>l?'피버 배율 ×5':'피버 배율 3배 → 5배 (궁극기)'},
   {id:'l6',br:2,ic:'☘️',nm:'네잎클로버',max:5,base:5e10,gr:3,req:['l5',1],ef:l=>`행운 이벤트 확률 +${l*20}% · 보상 +${l*50}%`},
+  {id:'l7',br:2,ic:'🎲',nm:'도박사의 촉',max:5,base:5e5,gr:2.4,req:['l2',2],eff:{betP:.02,riskP:.02},ef:l=>`도박·도전·투자 성공 +${l*2}%`},
+  {id:'l8',br:2,ic:'🌈',nm:'럭키 데이',max:5,base:2e8,gr:2.6,req:['l4',2],eff:{goldX:.2},ef:l=>`돈주머니 보상 ×${(1+l*.2).toFixed(1)}`},
+  {id:'l9',br:2,ic:'🦴',nm:'펫 간식',max:5,base:3e9,gr:2.8,req:['l8',1],eff:{petUp:.1},ef:l=>`함께하는 펫 효과 +${l*10}%`},
   {id:'s1',br:3,ic:'👀',nm:'눈치',max:5,base:2e4,gr:2.2,ef:l=>`악재 확률 -${l*10}%`},
   {id:'s2',br:3,ic:'🦴',nm:'맷집',max:5,base:2e5,gr:2.3,req:['s1',2],ef:l=>`악재·뜯기 피해 -${l*10}%`},
   {id:'s3',br:3,ic:'💪',nm:'조폭 형님',max:5,base:3e6,gr:2.4,req:['s2',2],ef:l=>`뜯기 강탈률 ${8+l*2}% · 성공률 +${l*4}%`},
   {id:'s4',br:3,ic:'⚖️',nm:'전관 변호사',max:5,base:5e7,gr:2.5,req:['s3',2],ef:l=>`뜯기·고소 비용 -${l*10}%`},
   {id:'s5',br:3,ic:'🏰',nm:'철벽',max:1,base:5e10,gr:1,req:['s4',5],ef:l=>l?'뜯기 30% 무효화':'뜯기 30% 무효화 (궁극기)'},
+  {id:'s6',br:3,ic:'🧯',nm:'보험 설계사',max:5,base:1e6,gr:2.3,req:['s2',2],eff:{evRes:.05},ef:l=>`악재 피해 추가 -${l*5}%`},
+  {id:'s7',br:3,ic:'🏃',nm:'줄행랑',max:5,base:1e7,gr:2.4,req:['s3',1],eff:{defDisc:.08},ef:l=>`방어권 가격 -${l*8}%`},
+  {id:'s8',br:3,ic:'⏰',nm:'알람 시계',max:5,base:1e9,gr:2.7,req:['s4',2],eff:{idleH:1,idleEff:.05},ef:l=>`방치 최대 +${l}시간 · 효율 +${l*5}%`},
   ...jobSkills(),
 ];
+var SK_READY=true;
 function jobSkills(){
   const J={
-    biz:[['🧑‍🤝‍🧑','단골 손님',{auto:.10}],['📺','맛집 방송',{goldFreq:.10}],['🛵','배달앱 입점',{idleEff:.10}],['🏢','본사 갑질',{discount:.03}]],
-    job:[['🌙','야근',{click:.15}],['💼','연봉 협상',{auto:.08}],['💳','법인카드',{defDisc:.10}],['🛡️','정년 보장',{evRes:.08}]],
-    inv:[['📊','차트 분석',{betP:.03}],['🎢','레버리지',{feverX:.2}],['✂️','손절의 미학',{evRes:.08}],['💎','존버',{idleEff:.10}]],
-    star:[['💖','팬클럽',{click:.15}],['🧸','굿즈 판매',{auto:.08}],['🔁','역주행',{feverP:.03}],['🧊','악플 내성',{evRes:.08}]],
-    cre:[['🤖','알고리즘의 선택',{goldFreq:.10}],['🤝','협찬',{auto:.08}],['🎁','구독자 이벤트',{feverS:2}],['💸','슈퍼챗',{click:.15}]],
-    gov:[['🕔','칼퇴',{click:.15}],['🍚','철밥통',{evRes:.08}],['🏦','공무원 연금',{idleEff:.10}],['📜','청렴 표창',{auto:.08}]],
-    doc:[['🌙','당직',{click:.15}],['👨‍⚕️','명의 소문',{auto:.08}],['🎤','학회 발표',{feverP:.03}],['🛡️','배상 보험',{evRes:.08}]],
-    ath:[['🏋️','체력 단련',{click:.15}],['🤝','스폰서 계약',{auto:.08}],['🔥','클러치 능력',{feverS:2}],['🧘','멘탈 관리',{evRes:.08}]],
-    dev:[['☕','커피 수혈',{click:.15}],['🔁','자동화 스크립트',{idleEff:.10}],['🐛','버그 헌터',{evRes:.08}],['📦','오픈소스 후원',{auto:.08}]],
-    art:[['💡','영감',{goldFreq:.10}],['🖼️','작품 값 상승',{auto:.08}],['🎲','경매 촉',{betP:.03}],['🌙','밤샘 작업',{click:.15}]],
-    chef:[['🔪','칼질 마스터',{click:.15}],['🔥','불맛',{feverS:2}],['📋','레시피 노트',{auto:.08}],['🧯','위생 관리',{evRes:.08}]],
-    law:[['🗣️','변론술',{click:.15}],['📚','판례 암기',{auto:.08}],['🤝','합의 전문',{riskP:.03}],['🛡️','법률 방패',{evRes:.08}]],
+    biz:[['🧑‍🤝‍🧑','단골 손님',{auto:.10}],['📺','맛집 방송',{goldFreq:.10}],['🛵','배달앱 입점',{idleEff:.10}],['🏢','본사 갑질',{discount:.03}],['💰','박리다매',{discount:.03}],['🎉','오픈 이벤트',{feverS:2,goldX:.1}]],
+    job:[['🌙','야근',{click:.15}],['💼','연봉 협상',{auto:.08}],['💳','법인카드',{defDisc:.10}],['🛡️','정년 보장',{evRes:.08}],['🏆','우수 사원',{auto:.10}],['☕','탕비실 털기',{goldFreq:.10}]],
+    inv:[['📊','차트 분석',{betP:.03}],['🎢','레버리지',{feverX:.2}],['✂️','손절의 미학',{evRes:.08}],['💎','존버',{idleEff:.10}],['🐋','고래 따라가기',{goldX:.15}],['📰','찌라시 입수',{riskP:.03}]],
+    star:[['💖','팬클럽',{click:.15}],['🧸','굿즈 판매',{auto:.08}],['🔁','역주행',{feverP:.03}],['🧊','악플 내성',{evRes:.08}],['🎬','예능 출연',{goldFreq:.10}],['🌟','월드 투어',{auto:.10}]],
+    cre:[['🤖','알고리즘의 선택',{goldFreq:.10}],['🤝','협찬',{auto:.08}],['🎁','구독자 이벤트',{feverS:2}],['💸','슈퍼챗',{click:.15}],['🔥','떡상',{feverP:.03}],['🎮','합방',{comboMax:2}]],
+    gov:[['🕔','칼퇴',{click:.15}],['🍚','철밥통',{evRes:.08}],['🏦','공무원 연금',{idleEff:.10}],['📜','청렴 표창',{auto:.08}],['📈','호봉 승급',{auto:.10}],['🏖️','연차 소진',{idleH:1}]],
+    doc:[['🌙','당직',{click:.15}],['👨‍⚕️','명의 소문',{auto:.08}],['🎤','학회 발표',{feverP:.03}],['🛡️','배상 보험',{evRes:.08}],['💊','특진',{goldX:.15}],['🧬','논문 대박',{riskP:.03}]],
+    ath:[['🏋️','체력 단련',{click:.15}],['🤝','스폰서 계약',{auto:.08}],['🔥','클러치 능력',{feverS:2}],['🧘','멘탈 관리',{evRes:.08}],['🥇','우승 보너스',{goldX:.15}],['⚡','폭발적 스퍼트',{comboMax:2}]],
+    dev:[['☕','커피 수혈',{click:.15}],['🔁','자동화 스크립트',{idleEff:.10}],['🐛','버그 헌터',{evRes:.08}],['📦','오픈소스 후원',{auto:.08}],['🚀','배포 성공',{feverX:.2}],['🧠','리팩토링',{discount:.03}]],
+    art:[['💡','영감',{goldFreq:.10}],['🖼️','작품 값 상승',{auto:.08}],['🎲','경매 촉',{betP:.03}],['🌙','밤샘 작업',{click:.15}],['🎨','개인전 대박',{feverS:2}],['🖌️','붓터치 장인',{click:.15}]],
+    chef:[['🔪','칼질 마스터',{click:.15}],['🔥','불맛',{feverS:2}],['📋','레시피 노트',{auto:.08}],['🧯','위생 관리',{evRes:.08}],['⭐','미슐랭 심사',{goldX:.15}],['🥘','비법 소스',{idleEff:.10}]],
+    law:[['🗣️','변론술',{click:.15}],['📚','판례 암기',{auto:.08}],['🤝','합의 전문',{riskP:.03}],['🛡️','법률 방패',{evRes:.08}],['💼','성공 보수',{goldX:.15}],['🕵️','증거 수집',{betP:.03}]],
   };
   const L={auto:v=>`자동 +${Math.round(v*100)}%`,click:v=>`클릭 +${Math.round(v*100)}%`,goldFreq:v=>`돈주머니 등장 +${Math.round(v*100)}%`,idleEff:v=>`방치 효율 +${Math.round(v*100)}%`,
     discount:v=>`아이템 가격 -${Math.round(v*100)}%`,defDisc:v=>`방어권 -${Math.round(v*100)}%`,evRes:v=>`악재 피해 -${Math.round(v*100)}%`,betP:v=>`도박 성공 +${Math.round(v*100)}%`,
-    feverX:v=>`피버 배율 +${v.toFixed(1)}`,feverP:v=>`피버 확률 +${Math.round(v*100)}%`,feverS:v=>`피버 +${v}초`};
+    feverX:v=>`피버 배율 +${v.toFixed(1)}`,feverP:v=>`피버 확률 +${Math.round(v*100)}%`,feverS:v=>`피버 +${v}초`,
+    goldX:v=>`돈주머니 보상 +${Math.round(v*100)}%`,riskP:v=>`도전 성공 +${Math.round(v*100)}%`,comboMax:v=>`콤보 배율 +${(v/10).toFixed(1)}`,idleH:v=>`방치 최대 +${v}시간`};
   const out=[];
   for(const [r,list] of Object.entries(J)) list.forEach(([ic,nm,eff],i)=>{
     const id=`j_${r}_${i}`;
-    out.push({id,br:4,route:r,ic,nm,max:5,base:[1e5,1e6,1e7,1e8][i],gr:2.3,req:i?[`j_${r}_${i-1}`,2]:null,eff,
+    out.push({id,br:4,route:r,ic,nm,max:5,base:[1e5,1e6,1e7,1e8,1e9,1e10][i],gr:2.3,req:i?[`j_${r}_${i-1}`,2]:null,eff,
       ef:l=>Object.entries(eff).map(([k,v])=>L[k](v*l)).join(' · ')});
   });
   return out;
 }
 let _jskCache=null;
 function jsk(k){
-  if(!S.route) return 0;
-  let t=0; for(const n of SKILLS){ if(n.br!==4||n.route!==S.route) continue; const l=sk(n.id); if(l&&n.eff[k]) t+=n.eff[k]*l; }
+  if(!SK_READY) return 0;
+  let t=0; for(const n of SKILLS){ if(!n.eff) continue; if(n.br===4 && n.route!==S.route) continue; const l=sk(n.id); if(l&&n.eff[k]) t+=n.eff[k]*l; }
   return t;
 }
 function skLv(n){ return n.br===0 ? (S.click[n.id]||0) : sk(n.id); }
@@ -2707,6 +2736,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.3',d:'10/31',items:['🔤 글씨 가독성 개선: 본문은 또렷한 고딕, 제목·버튼만 동글 폰트 · 회색 글씨 더 진하게 · 작은 글씨 크기 UP','🌳 공통 스킬 9개 추가: 🧺큰 수금함 · 🕴️헤드헌터(매니저 할인) · 🧾세무 최적화 · 🎲도박사의 촉 · 🌈럭키 데이 · 🦴펫 간식(펫 효과 UP) · 🧯보험 설계사 · 🏃줄행랑 · ⏰알람 시계','🎭 직업 스킬 진로마다 4개 → 6개 (24개 추가, 돈주머니·콤보·방치·도전 성공 등 효과 다양화)']},
   {v:'v2.2.1',d:'10/31',items:['🧒 새 메인 캐릭터 <b>꼬질이</b>! 진로·신분마다 옷과 소품이 바뀌어요 (12진로 전용 의상)','🐾 <b>펫</b> 8종: 냥거지·곰돌이 중 1마리로 시작 → 나머지는 <b>환생 포인트</b>로 입양·강화(Lv.5) · 2번째 자리 해금','📈 신분 <b>9단계 → 12단계</b> (고시원 생활자, 진로 5단계 등)','🔀 2차 전직 <b>3갈래 → 5갈래</b> · 엔딩 <b>60개</b> · 새 전용 돈벌이 48종','🎲 레벨업 선택지 <b>3개 → 5개</b>: 안정 · 🏦저축 · 도전 · 📈투자 · 도박','👔 매니저 고용·★강화 버튼이 돈벌이마다 바로 보여요 · 한 번에 모두 고용 · 구매 수량 ×1/×10/최대','🎨 화면 전체 새 디자인: 파스텔 카툰 테마 · 손그림 아이콘(탭·기본 돈벌이·돈주머니) · 동글 폰트','🤫 행인은 조용하게: 이름표 제거 · 미니창에선 안 나와요 · 경찰 벌금 없음 (잠깐 ×0.3)','💰 돈 단위 확장: 경 → 해·자·양·구·간·정·재·극']},
   {v:'v2.1',d:'10/31',items:['🚶 <b>행인 시스템</b>: 앞을 지나가는 사람에 따라 구걸 수입이 달라져요 (부자 ×15 · 관광객 ×5 · 직장인 ×2.5) — 아무도 없으면 ×0.4, 👮경찰 있을 때 구걸하면 벌금!','👔 <b>매니저</b>: 매니저 없는 돈벌이는 💰수금을 눌러야 들어와요 (최대 2분치) · 고용하면 자동 + 오프라인 수익','★ <b>등급 올리기</b>: 돈벌이 아이콘을 눌러 ★1~5 (등급마다 ×2)','🔗 <b>시너지</b> 6종: 조합 달성 시 ×1.5~×3','🧬 <b>특성 선택</b>: 신분이 오를 때마다 A/B 중 하나 선택 (총 4단계)','🏆 AI 라이벌 삭제 → <b>전체 유저 랭킹</b>만 표시','📈 난이도 상향: 신분 기준액 ~10배, 가격 상승률 1.2, 오프라인 효율 30%']},
   {v:'v2.0',d:'10/31',items:['🗺️ 1차 진로 <b>8개 → 12개</b>: 💻개발자 · 🎨예술가 · 👨‍🍳셰프 · ⚖️변호사','🏆 엔딩 <b>36개</b> · 새 의상 36종 (베레모 화가, 터틀넥 CTO 등)','💼 새 직업 전용 돈벌이 · 스킬 · 돌발 이벤트']},
@@ -2953,7 +2983,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.2.1';
+const GAME_VER='v2.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
