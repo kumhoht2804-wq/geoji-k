@@ -1151,6 +1151,28 @@
   .sumbar .sb img.e3d{width:13px;height:13px;vertical-align:-2px}
   .sumbar .sb.q{width:24px;padding:1px 0;text-align:center;background:#ffd9a0}
   .sumbar .sb.qb{background:#eef6ff} .sumbar .sb.qb.ok{background:#dcfce7}
+  /* v4.1.1 미니창: 창 크기에 딱 맞게 (페이지 스크롤 없이 목록만 스크롤 · 탭은 아래) */
+  body.mini{height:100vh;height:100dvh;overflow:hidden}
+  body.mini aside .tabs button{overflow:visible!important} body.mini aside .tabs{overflow:visible!important;padding-top:4px} body.mini aside .tabs .tbdg{top:-7px!important;right:-3px!important;left:auto!important;transform:scale(.85);transform-origin:top right}
+  body.mini .wrap{height:100vh;height:100dvh;display:flex!important;flex-direction:column;box-sizing:border-box;align-content:stretch!important;align-items:stretch!important}
+  body.mini .wrap>*{width:auto!important;align-self:stretch!important;margin-left:0!important;margin-right:0!important}
+  body.mini .wrap>header,body.mini .wrap>section{flex:none}
+  body.mini .wrap>aside{flex:1 1 0;min-height:0;display:flex;flex-direction:column;width:100%;box-sizing:border-box;padding-bottom:4px!important}
+  body.mini aside #list{order:1;flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;margin:0 -2px;padding:0 2px}
+  body.mini aside .tabs{order:2;flex:none;margin:5px 0 0!important}
+  body.mini aside .foot{order:3;flex:none;margin-top:4px!important;padding-top:4px!important} body.mini aside .foot button{padding:2px 0!important;min-height:0!important;font-size:12px!important}
+  body.mini aside .credit{display:none}
+  body.mini #rankChip,body.mini #netChip,body.mini #target,body.mini aside .foot{display:none!important}
+  body.mini #stat.empty{display:none}
+  body.mini aside .tabs button{flex-direction:row!important;justify-content:center;gap:2px!important;padding:4px 0 3px!important;font-size:10px!important}
+  body.mini aside .tabs button .ti{width:14px!important;height:14px!important;flex:none}
+  body.mini .igrp{margin:4px 0 3px!important;font-size:10.5px!important} body.mini .igrp b{font-size:10.5px!important}
+  #mmenu{display:none} body.mini #mmenu{display:block;position:absolute;top:6px;right:6px;z-index:5;width:22px;height:22px;border-radius:50%;border:2px solid #5a4436;background:#fffaf2;font-size:11px;line-height:16px;padding:0;cursor:pointer;box-shadow:0 2px 0 #5a4436}
+  body.mini header{position:relative}
+  body.mini #next{display:none} body.mini .progress{margin-top:2px!important}
+  body.mini .scene{height:112px!important}
+  body.mini #stat{min-height:18px;margin-top:3px}
+  .mmn button{display:block;width:100%;margin:0 0 6px!important}
   /* v4.1 전직 시험 · 끝판왕 */
   .rl.jx{max-width:320px;margin:18px auto 0} .rl.jx .rlt{margin-top:10px;font-size:14px;color:#fff}
   .fin{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px} .fin .ff,.fask .ff{width:120px;margin:0 auto} .fin p{color:#fff;font-size:13px;text-align:center;margin:0}
@@ -1363,7 +1385,7 @@
 <body>
 <div class="wrap">
   <header class="card">
-    <h1><span class="dot"></span>거지키우기 <small>BY KSW</small></h1>
+    <h1><span class="dot"></span>거지키우기 <small>BY KSW</small></h1><button id="mmenu" title="메뉴">☰</button>
     <div>
       <div class="money" id="money">0원</div>
       <div class="rates"><span id="cps">초당 0원</span> · <span id="cpc">클릭당 1원</span></div>
@@ -2136,7 +2158,7 @@ function render(){
     $('xpTxt').textContent=Math.floor(Math.min(1,p)*100)+'%';
     const fk=st.name+'>'+nx.name; if($('xpFrom').dataset.k!==fk){ $('xpFrom').dataset.k=fk; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML=(nx.name==='진로 선택'||nx.name==='갈림길')?'<b>?</b>':charSVG(i+1,false,nx); }
     $('next').textContent = nx.need<=S.total ? '🔀 진로를 선택하세요!' : `다음 신분 "${nx.name}"까지 ${fmt(nx.need-S.total)}`;
-  } else { const lf=lvFrac(), bl=bossLv(); $('bar').style.width=(lf*100)+'%'; $('xpTxt').textContent=`끝판왕 Lv.${bl}`; if($('xpFrom').dataset.k!=='boss'+st.name){ $('xpFrom').dataset.k='boss'+st.name; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; } $('next').textContent=`👑 끝판왕 Lv.${bl+1}까지 ${fmt(nextLvNeed())} · Lv마다 수입 +3%`; }
+  } else { const lf=lvFrac(), bl=bossLv(); $('bar').style.width=(lf*100)+'%'; $('xpTxt').textContent=Math.floor(lf*100)+'%'; if($('xpFrom').dataset.k!=='boss'+st.name){ $('xpFrom').dataset.k='boss'+st.name; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; } $('next').textContent=`👑 끝판왕 Lv.${bl+1}까지 ${fmt(nextLvNeed())} · Lv마다 수입 +3%`; }
   if($('stName').textContent!==st.name) $('stName').textContent=st.name;
   { const lf=Math.round(lvFrac()*100); const u=$('lvBar').firstChild; if(u._w!==lf){ u._w=lf; u.style.width=lf+'%'; $('lvBar').title=`다음 레벨(SP +1)까지 ${100-lf}% · ${fmt(nextLvNeed())}`; } }
   const cl=charLv(); if($('stLv').textContent!=='Lv.'+cl){ $('stLv').textContent='Lv.'+cl; if(S.lvSeen && cl>S.lvSeen){ lvFloat(cl, cl-S.lvSeen); sfx('level'); } S.lvSeen=cl; }
@@ -3609,6 +3631,7 @@ function statRender(){
   const bl=bossLv(); if(bl) C.push(['bs','👑',`끝판왕 Lv.${bl} ×${(1+.03*bl).toFixed(2)}`,'']);
   { const sc=getComputedStyle($('scene')), st=$('stat'), ml=sc.marginLeft, mr=sc.marginRight; if(st._m!==ml+mr){ st._m=ml+mr; st.style.marginLeft=ml; st.style.marginRight=mr; } }
   const key=C.map(c=>c.join('|')).join('/'); const el=$('stc'); if(el._k===key) return; el._k=key;
+  $('stat').classList.toggle('empty',!C.length&&!(S.skill&&actSkills().length));
   el.innerHTML=C.length?C.map(([k,i,t,s])=>`<span class="sc ${k}">${emo(i)}<b>${t}</b>${s?`<em>${s}</em>`:''}</span>`).join(''):`<span class="sc0">${S.skill&&actSkills().length?'':'버프·디버프가 여기 떠요'}</span>`;
   $('scene').classList.toggle('buffed', S.buffs.length>0);
 }
@@ -3863,6 +3886,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.1.1',d:'10/31',items:['🪟 <b>미니창이 창 크기에 딱 맞게</b>: 길게 늘리지 않아도 돼요 · 목록만 안에서 스크롤','👇 탭을 <b>아래로</b> (폰 게임처럼) · 소리·신분·기록·계정은 오른쪽 위 ☰ 메뉴로','🧹 미니창에선 랭킹 칩·다음 신분 문구를 숨기고 버프가 없을 땐 상태줄도 숨겨요']},
   {v:'v4.1',d:'10/31',items:['💬 돈벌이·구걸 카드에 <b>한 줄 멘트</b> · 가진 것은 <b>지금 실제로 버는 양</b>(초당/클릭당)을 보여줘요','⚖️ <b>구걸 밸런스</b>: 황금 손 독주 끝! 뒤에 나오는 구걸일수록 더 세져요 (황금 손 5%→3%, 감성 버스킹 5%, TV 사연 12%, 해외 원정 30%, 구걸왕 80%)','📈 Lv 옆에 <b>다음 레벨(SP)까지 경험치 바</b>','🎛️ 캐릭터 화면을 키우고, 피버·버프·디버프·자동 스킬을 <b>화면 아래 한 줄</b>로 정리했어요','🎲 <b>전직 시험</b>: 진로·2차 전직은 확률 룰렛 (70%·55%) · 떨어지면 1분 뒤 +15%로 재도전','👑 <b>최종 끝판왕</b>: 마지막 신분은 2차 전직마다 전용 끝판왕 (왕관·망토) · 등극 시험 45% → 환생할지 계속할지 선택 · 계속하면 끝판왕 Lv마다 모든 수입 +3%']},
   {v:'v4.0.3',d:'10/31',items:['📱↔💻 <b>모바일·PC 저장 꼬임 수정</b>: 다른 기기에서 더 최근에 한 기록이 있으면 덮어쓰지 않고 그 기록을 불러와요','📱 앱 전환·화면 끄기·탭 닫기 때 바로 저장해요 (모바일에서 마지막 진행이 날아가던 문제)','💻 PC 창을 다시 보면 다른 기기 기록이 있는지 바로 확인해요']},
   {v:'v4.0.2',d:'10/31',items:['💎 <b>특화 고르기 창</b>이 안 뜨던 문제 수정: 레벨업 카드·이벤트로 돈벌이를 얻어 10개·50개가 돼도 이제 자동으로 떠요','예전에 놓친 특화도 하나씩 다시 물어봐요 · "나중에"를 누르면 그 특화는 다시 안 물어봐요 (분홍 점으로 언제든 고르기)']},
@@ -4144,12 +4168,15 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.1';
+const GAME_VER='v4.1.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
 try{ $('stat').prepend($('skbar')); }catch(e){}
+$('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
+  showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
+  document.querySelectorAll('.mmn [data-b]').forEach(b=>b.onclick=()=>{ hideModal(); setTimeout(()=>$(b.dataset.b).click(),50); }); };
 fxInit(); sndIcon(); setTimeout(()=>renderPetz(true),50); $('face').innerHTML=charSVG(Math.min(stageIdx(), !S.route?RS-1:!S.sub?SS-1:LAST)); buildCity(stageIdx());
 load();
 render(); renderList();
