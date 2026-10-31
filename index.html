@@ -128,7 +128,7 @@
   .foot button{flex:1;font-family:inherit;font-size:12px;border:1px solid var(--line);border-radius:8px;padding:7px;cursor:pointer;background:#fff;color:#55555c;transition:.12s}
   .foot button:hover{background:var(--soft);color:var(--ink)}
   .credit{margin-top:10px;text-align:center;font-size:10px;color:#b5b5ba;letter-spacing:.14em}
-  .modal{position:fixed;inset:0;background:rgba(20,20,22,.28);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal{position:fixed;inset:0;background:rgba(40,30,22,.55);display:none;align-items:center;justify-content:center;z-index:50}
   .modal.show{display:flex}
   .modal .box{background:#fff;border-radius:16px;padding:24px;max-width:320px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.15);font-size:14px;color:#3f3f46}
   .modal .box h2{margin:0 0 8px;font-size:17px;color:var(--ink)}
@@ -207,7 +207,7 @@
 
   /* level up overlay */
   #lvup{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;
-    background:rgba(14,12,10,.78);-webkit-backdrop-filter:blur(10px) saturate(.8);backdrop-filter:blur(10px) saturate(.8);color:#fff;text-align:center;
+    background:rgba(14,12,10,.78);color:#fff;text-align:center;
     opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s}
   #lvup.show{opacity:1;visibility:visible}
   #lvup .in{display:flex;flex-direction:column;align-items:center}
@@ -284,11 +284,11 @@
   .stage .title-badge{display:none}
   body.mini #combo{font-size:9px;padding:2px 7px;top:5px;right:6px}
   #stChip{position:absolute;left:10px;top:9px;z-index:3;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#fff;
-    background:rgba(20,24,40,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:999px;padding:3px 10px 3px 3px;
+    background:rgba(20,24,40,.55);border-radius:999px;padding:3px 10px 3px 3px;
     box-shadow:0 2px 8px rgba(0,0,0,.15),inset 0 0 0 1px rgba(255,255,255,.18)}
   #stChip b{background:linear-gradient(180deg,#ffd76a,#f0a92e);color:#5a3500;border-radius:999px;padding:1px 7px;font-size:10px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
   #fever{top:36px!important}
-  #combo{background:rgba(20,24,40,.55)!important;color:#ffd76a!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  #combo{background:rgba(20,24,40,.55)!important;color:#ffd76a!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
   #combo.ch{background:#e8590c!important;color:#fff!important}
   .scene .float{color:#fff!important;font-size:15px;font-weight:800;-webkit-text-stroke:3px #9a5b00;paint-order:stroke fill;text-shadow:0 2px 0 #9a5b00}
 
@@ -378,7 +378,7 @@
 
   /* ===== life choice ===== */
   #choice,#route{position:fixed;inset:0;z-index:91;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:14px;
-    background:rgba(14,12,10,.8);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;text-align:center;
+    background:rgba(14,12,10,.8);color:#fff;text-align:center;
     opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
   #choice.show,#route.show{opacity:1;visibility:visible}
   #route .k,#choice .k{font-size:10px;letter-spacing:.4em;color:#cdb27a;margin-bottom:6px}
@@ -444,7 +444,7 @@
 
   /* ===== status tree viewer ===== */
   #stree{position:fixed;inset:0;z-index:89;display:flex;flex-direction:column;align-items:center;
-    background:rgba(14,12,10,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;
+    background:rgba(14,12,10,.86);color:#fff;
     opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s;overflow:auto}
   #stree.show{opacity:1;visibility:visible}
   #stree .hd{position:sticky;top:0;width:100%;text-align:center;padding:14px 10px 8px;background:linear-gradient(rgba(14,12,10,.95),rgba(14,12,10,0));z-index:2}
@@ -636,7 +636,7 @@
   body.mini .pvhero .big{font-size:15px}
 
   #force{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;padding:16px;
-    background:rgba(14,12,10,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+    background:rgba(14,12,10,.82);}
   #force.show{display:flex}
   #force .fbox{width:100%;max-width:320px;background:#fff;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
   #force .fi{font-size:38px}
@@ -1196,6 +1196,26 @@
   /* 성능: 미니창은 장식 애니메이션 끔 */
   body.mini #city *,body.mini #face,body.mini .pet,body.mini .dot,body.mini .tbdg,body.mini .spk,body.mini .aura,body.mini .ch *{animation:none!important}
   #bar{transition:none!important}
+
+  #specov{position:fixed;inset:0;z-index:92;display:none;flex-direction:column;align-items:center;justify-content:center;padding:14px;overflow:auto;background:radial-gradient(circle at 50% 30%,rgba(90,68,54,.94),rgba(30,22,16,.97));color:#fff;text-align:center}
+  #specov.show{display:flex}
+  #specov .k{font-size:10px;letter-spacing:.4em;color:#f9a8d4;margin-bottom:6px}
+  #specov .si{width:56px;height:56px;border:3px solid #fffaf2;border-radius:16px;background:#fff3df;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+  #specov .si img.e3d,#specov .si svg{width:40px;height:40px}
+  #specov h3{margin:0 0 3px;font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;font-size:21px}
+  #specov .sub{font-size:12px;color:#e7d9c6;margin-bottom:14px}
+  #specov .cards{display:flex;gap:10px;width:100%;max-width:560px;justify-content:center}
+  .scard{flex:1;max-width:170px;font-family:inherit;cursor:pointer;border-radius:16px;padding:12px 8px;background:linear-gradient(180deg,#fffaf2,#f3e6d2);border:3px solid #5a4436;box-shadow:0 5px 0 #5a4436,0 0 0 3px var(--cc);color:#5a4436;animation:scIn .4s var(--ease) both;animation-delay:var(--d);display:flex;flex-direction:column;align-items:center;gap:3px}
+  @keyframes scIn{from{opacity:0;transform:translateY(14px) scale(.92)}}
+  .scard .ci img.e3d{width:42px;height:42px} .scard .ct{font-family:'Jua',sans-serif;font-size:14px} .scard .cr{font-size:10.5px;border:1.5px solid var(--cc);border-radius:999px;padding:0 7px;background:#fff}
+  .scard .co{font-size:11px;color:#6e5a49;line-height:1.5} .scard .co b{color:#15803d} .scard .co em{font-style:normal;color:#db2777;font-weight:800} .scard .co small{color:#9c8670}
+  .scard:hover{transform:translateY(-3px)} .scard.pick{transform:scale(1.06)} .scard.dim{opacity:.3}
+  #specov .later{margin-top:14px;border:none;background:none;color:#e7d9c6;font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer}
+  body.mini #specov .cards{flex-direction:column;align-items:stretch;gap:7px}
+  body.mini .scard{max-width:none;flex-direction:row;text-align:left;padding:7px 9px;gap:8px} body.mini .scard .ci img.e3d{width:30px;height:30px}
+  body.mini .scard .ct{font-size:12.5px} body.mini .scard .cr{display:none} body.mini .scard .co{font-size:10px;margin-left:auto;text-align:right}
+  body.mini #specov h3{font-size:16px} body.mini #specov .si{width:40px;height:40px} body.mini #specov .si img.e3d{width:28px;height:28px}
+  body.mini .scard .co small{display:none} body.mini .scard .ct{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1261,6 +1281,7 @@
 <div id="force"></div>
 <div id="gate"></div>
 <div id="lvup"></div>
+<div id="specov"></div>
 <div id="choice"></div>
 <div id="route"></div>
 <div id="stree"></div>
@@ -1849,7 +1870,7 @@ function buy(it,own,ok){
   if(B.none || S.money<B.tot) return;
   S.money-=B.tot; own[it.id]=n+B.k;
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
-  if(own===S.auto && SPEC_AT.some(x=>n<x && n+B.k>=x)) setTimeout(()=>toast(`✨ ${it.nm} Lv.${n+B.k}! 보석 슬롯에서 특화를 골라요`),300);
+  if(own===S.auto) SPEC_AT.forEach((x,j)=>{ if(n<x && n+B.k>=x && !specOf(it.id)[j]){ S.specQ=S.specQ||[]; if(!S.specQ.some(q=>q[0]===it.id&&q[1]===j)) S.specQ.push([it.id,j]); } });
   const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} Lv.${hit[hit.length-1]}! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
@@ -2364,6 +2385,26 @@ setInterval(()=>{ const bd=(t,n)=>{ const b=document.querySelector(`.tabs button
 document.addEventListener('keydown',e=>{ if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)) return; const k=+e.key; if(k>=1&&k<=9){ const A=actSkills(); if(A[k-1]) useAct(A[k-1].id); } });
 
 
+
+/* ---------- 특화 자동 선택 창 (레벨업 카드처럼) ---------- */
+function specOv(){
+  if(!S.specQ||!S.specQ.length||paused) return;
+  const O=$('specov'); if(O.classList.contains('show')||modalBusy()||$('modal').classList.contains('show')||$('choice').classList.contains('show')||$('lvup').classList.contains('show')) return;
+  const [id,slot]=S.specQ[0], a=autoList().find(x=>x.id===id);
+  if(!a||specOf(id)[slot]){ S.specQ.shift(); return; }
+  const opts=specOffer(id,slot), TC=tagCounts();
+  O.innerHTML=`<div class="k">SPECIALIZE · 특화 ${slot+1}</div><div class="si">${icon(a.id,a.ic)}</div><h3>${a.nm} Lv.${S.auto[id]} 달성!</h3><div class="sub">하나를 골라요 · 이 돈벌이 수입 ×1.25 + 태그 1개</div>
+    <div class="cards c3">${opts.map((k,i)=>{ const t=TAGS[k], c=TC[k], nx=TAG_T.find(x=>x>c); return `<button class="scard" data-k="${k}" style="--cc:${t.c};--d:${i*.1}s"><div class="ci">${emo(t.ic)}</div><div class="ct">${t.adj} ${a.nm}</div><div class="cr">${t.ic} ${t.nm} 태그</div><div class="co">${t.d} 시너지<br><b>${c} → ${c+1}개</b>${nx&&c+1>=nx?' <em>단계 UP!</em>':nx?` <small>(${nx}개에 단계 UP)</small>`:''}</div></button>`; }).join('')}</div>
+    <button class="later">나중에 고를게요</button>`;
+  O.classList.add('show'); sfx('gold');
+  O.querySelectorAll('.scard').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; S.spec=S.spec||{}; const arr=(S.spec[id]||[]).slice(); arr[slot]=k; S.spec[id]=arr; _tagC=null; S.specQ.shift(); save();
+    O.querySelectorAll('.scard').forEach(x=>x.classList.add(x===b?'pick':'dim')); sfx('level');
+    const r=b.getBoundingClientRect(); for(let q=0;q<30;q++){ const an=Math.random()*Math.PI*2, sp=60+Math.random()*150; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height/2,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,drag:.95,g:15,r:.9+Math.random()*1.2,life:1+Math.random(),fo:.4}); }
+    setTimeout(()=>{ O.classList.remove('show'); toast(`💎 ${TAGS[k].adj} ${a.nm}! ${TAGS[k].ic}${TAGS[k].nm} ${tagCounts()[k]}개`); renderList(); },650); });
+  O.querySelector('.later').onclick=()=>{ S.specQ.shift(); O.classList.remove('show'); toast('아이콘의 분홍 점을 누르면 나중에 고를 수 있어요'); };
+}
+setInterval(specOv,700);
+
 /* ---------- 첫 플레이 튜토리얼 ---------- */
 const TUT=[
   {t:'꼬질이를 눌러서 구걸해요!<br><small>스페이스바도 돼요</small>',el:()=>$('beggar'),done:()=>S.clicks>=5},
@@ -2632,7 +2673,7 @@ netChip();
 
 /* ---------- route choice & rebirth ---------- */
 let routeOpen=false;
-function modalBusy(){ return routeOpen || $('choice').classList.contains('show') || $('lvup').classList.contains('show'); }
+function modalBusy(){ return routeOpen || $('choice').classList.contains('show') || $('lvup').classList.contains('show') || ($('specov')&&$('specov').classList.contains('show')); }
 function showRoute(){
   if(modalBusy()) return;
   routeOpen=true; const R=$('route');
@@ -3267,6 +3308,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.2',d:'10/31',items:['💎 돈벌이가 10개·50개가 되면 <b>특화 선택 창이 자동으로 떠요</b> (레벨업 카드처럼) · 태그별로 시너지가 몇 개 쌓이는지 바로 보여요 · 나중에 고르기 가능','⚡ 창·팝업을 열 때 버벅이던 문제 수정 (배경 흐림 효과 제거)']},
   {v:'v3.1.1',d:'10/31',items:['⚡ <b>렉 개선</b>: 화면 갱신을 초당 60번 → 11번으로 · 미니창 장식 애니메이션 끔 · 행인·배경 애니메이션 가볍게 · 창을 내리면 애니메이션 정지 (CPU 사용량 약 1/5)']},
   {v:'v3.1',d:'10/31',items:['🧹 돈벌이 카드 정리: 이름 · 초당 수입 · 가격 버튼 · <b>×2까지 N개</b>만 깔끔하게','🟢 할 일이 있으면 아이콘에 작은 점 (초록: 매니저 고용 가능 · 분홍: 특화 가능) → 아이콘을 누르면 관리 창','👔 매니저·🔗시너지는 위쪽 작은 버튼으로 접었어요','❔ 탭마다 ? 도움말','🧭 처음 하는 사람을 위한 말풍선 튜토리얼']},
   {v:'v3.0',d:'10/31',items:['🧸 <b>3D 아이콘</b>: 돈벌이·구걸·스킬·특성·카드·진로 아이콘 180개를 말랑한 3D 아이콘으로 통일 (Microsoft Fluent Emoji · 어떤 기기에서도 똑같이 보여요)']},
@@ -3529,7 +3571,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.1.1';
+const GAME_VER='v3.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
