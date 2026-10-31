@@ -1303,6 +1303,13 @@
   .fc.on{border-color:#5a4436;background:linear-gradient(#ffe2a8,#f5b65c);box-shadow:0 2px 0 #5a4436}
   .fcd{font-size:11.5px;color:#5a4436;margin-top:7px;line-height:1.45} .fcd b{color:#c9772f} .fcd small{color:#8a7560;font-size:10.5px}
   body.mini .fc img.e3d{width:17px;height:17px} body.mini .fc b{font-size:9.5px} body.mini .fcd{font-size:10.5px}
+  .skbar2 .sp2{flex:1;font:inherit;font-family:'Jua',sans-serif;font-size:12.5px;border:2px solid #5a4436;border-radius:11px;background:#fffaf2;color:#8a7560;padding:4px 0;box-shadow:0 2px 0 #5a4436;cursor:pointer;white-space:nowrap}
+  .skbar2 .sp2.on{background:linear-gradient(#ffe2a8,#f5b65c);color:#5a4436}
+  .skbar2 .sp2 i{font-style:normal;color:#fff;background:#ef4444;border-radius:999px;padding:0 5px;font-size:10px}
+  .skbar2 .sb.pet{width:30px;height:28px;padding:0;display:flex;align-items:center;justify-content:center} .skbar2 .sb.pet svg{width:24px;height:auto}
+  .skw .fcs{padding:6px 8px} .skw .fcd{margin-top:5px}
+  .skw .tree2{transform-origin:top center}
+  body.mini .skbar2 .sp2{font-size:10.5px;padding:3px 0;border-width:1.5px} body.mini .skbar2 .sb.pet{width:24px;height:22px} body.mini .skbar2 .sb.pet svg{width:19px}
 </style>
 </head>
 <body>
@@ -2949,7 +2956,7 @@ const SK_TABS=[
 ];
 function tabSkills(T){ return SKILLS.filter(n=>T.br.includes(n.br) && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 const SK_BR=[{k:'g',br:1,ic:'🙏',nm:'구걸술',A:'눈물샘',B:'인정머리'},{k:'b',br:2,ic:'🏪',nm:'장사술',A:'확장',B:'관리'},{k:'n',br:3,ic:'🍀',nm:'눈치',A:'돈주머니',B:'피버'},{k:'v',br:5,ic:'🛡️',nm:'생존',A:'방어',B:'방치'},{k:'j',br:4,ic:'🎭',nm:'1차 직업',A:'',B:''},{k:'x',br:6,ic:'👑',nm:'2차 전직',A:'',B:''}];
-let skMode='learn', skBr='g';
+let skMode='learn', skBr='g', skPane='skill';
 function brSkills(B){ return SKILLS.filter(n=>n.br===B.br && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 function brOpen(B){ return B.br===4?!!S.route:B.br===6?!!S.sub:true; }
 function skRow(n){ const l=skLv(n), st=skState(n), ef=x=>n.ef(x).replace(/^액티브 · /,'');
@@ -2961,7 +2968,7 @@ function treeHtml(B){
   const rows=Math.max(A.length,Bn.length);
   const node=(n,x,y)=>{ if(!n) return ''; const l=skLv(n), st=skState(n);
     return `<button class="tn2 ${st} ${l?'own':''} ${skSel===n.id?'sel':''} ${n.max===1?'ult':''}" data-id="${n.id}" style="left:${x}%;top:${y}px;--p:${(l/n.max*360).toFixed(0)}deg">${emo(n.ic)}<em>${st==='max'?'MAX':l+'/'+n.max}</em></button><div class="tl2" style="left:${x}%;top:${y+30}px">${n.nm}</div>`; };
-  const H=86, top=26, yR=top, yRow=i=>top+H*(i+1), yU=top+H*(rows+1), yX=yU+H;
+  const H=isMiniUI()?66:76, top=26, yR=top, yRow=i=>top+H*(i+1), yU=top+H*(rows+1), yX=yU+H;
   let ln=[], nd='';
   const lit=(a,b)=>skLv(a)>0&&skLv(b)>0?'g':skUnlocked(b)?'c':'';
   nd+=node(R,50,yR);
@@ -3014,14 +3021,16 @@ function renderSkills(){
       <div class="de">${st==='locked'?`🔒 <b>${reqText(n)}</b> 필요`:`${l?`지금: <b>${ef(l)}</b>`:`배우면: <b>${ef(1)}</b>`}${l&&l<n.max?`<br>다음: <u>${ef(l+1)}</u>`:''}`}</div>
       ${man?`<button class="dbtn ${st}" id="skUp2" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'마스터!':st==='locked'?'잠김':`+ 배우기 <i>${spCost(n)}SP</i>`}</button>`:''}</div>`; })() : '';
   const FF=SK_FOCUS.find(x=>x.k===f);
-  L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
-   <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">찍은 SP <b>${spUsed()}</b></span></div>
-    <div class="fcs"><div class="fct">육성 방향을 골라요</div><div class="fcl">${SK_FOCUS.map(x=>`<button class="fc ${x.k===f?'on':''}" data-f="${x.k}">${emo(x.ic)}<b>${x.nm}</b></button>`).join('')}</div>
-      <div class="fcd">${man ? (sp>0?`✋ 남은 <b>${sp}SP</b> · 아래 트리에서 노드를 눌러 직접 찍어요`:`✋ 직접 찍기 모드 · 다음 SP까지 ${fmt(nextLvNeed())}`) : `✅ <b>${FF.nm}</b>: ${FF.d}<br><small>SP가 생기면 알아서 찍혀요 · 다음 SP까지 ${fmt(nextLvNeed())}</small>`}</div></div>
-    <div class="skbcs">${chips}</div>${treeHtml(B)}${det}
-    <div class="rwf"><span>방향을 바꾸면 처음부터 다시 찍혀요</span><button id="skReset">🔁 다시 찍기</button></div></div>
-   <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
-    <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
+  const newTr=traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length;
+  const pane=skPane==='trait'
+    ? `${traitTreeHtml()}<div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div>`
+    : `<div class="fcs"><div class="fcl">${SK_FOCUS.map(x=>`<button class="fc ${x.k===f?'on':''}" data-f="${x.k}">${emo(x.ic)}<b>${x.nm}</b></button>`).join('')}</div>
+      <div class="fcd">${man ? (sp>0?`✋ 남은 <b>${sp}SP</b> · 노드를 눌러 직접 찍어요`:`✋ 직접 찍기 · 다음 SP까지 ${fmt(nextLvNeed())}`) : `✅ <b>${FF.nm}</b> · ${FF.d} <small>(SP 자동 · 다음 SP까지 ${fmt(nextLvNeed())})</small>`}</div></div>
+      <div class="skbcs">${chips}</div>${treeHtml(B)}${det}
+      <div class="rwf"><span>찍은 SP ${spUsed()} · 방향을 바꾸면 무료로 다시 찍혀요</span><button id="skReset">🔁 다시 찍기</button></div>`;
+  L.innerHTML=`<div class="sumbar skbar2"><button class="sp2 ${skPane!=='trait'?'on':''}" data-p="skill">🌳 스킬 트리</button><button class="sp2 ${skPane==='trait'?'on':''}" data-p="trait">🧬 특성 트리${newTr?' <i>!</i>':''}</button><button class="sb pet" onclick="petSheet()" title="펫">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</button><button class="sb q" onclick="helpSheet('skill')">?</button></div>
+   <div class="rwin skw">${pane}</div>`;
+  L.querySelectorAll('.sp2').forEach(b=>b.onclick=()=>{ skPane=b.dataset.p; renderSkills(); });
   const learn=id=>{ const n=SKILLS.find(x=>x.id===id), st=skState(n); if(st==='own') return toast(`SP가 부족해요 · 다음 SP까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
     S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; sfx('gold'); renderSkills(); render(); renderSkbar(true); };
   L.querySelectorAll('.fc').forEach(b=>b.onclick=()=>{ const nf=b.dataset.f; if(nf===f) return;
@@ -3032,7 +3041,7 @@ function renderSkills(){
   L.querySelectorAll('.skbc').forEach(b=>b.onclick=()=>{ skBr=b.dataset.b; skSel=null; renderSkills(); });
   L.querySelectorAll('.tn2').forEach(b=>b.onclick=()=>{ skSel=b.dataset.id; renderSkills(); });
   if($('skUp2')) $('skUp2').onclick=()=>learn(skSel);
-  $('skReset').onclick=()=>{ showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.${man?'':'<br>지금 육성 방향대로 다시 찍혀요.'}</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
+  if($('skReset')) $('skReset').onclick=()=>{ showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.${man?'':'<br>지금 육성 방향대로 다시 찍혀요.'}</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
     $('skrOk').onclick=()=>{ S.skill={}; autoSpend(); hideModal(); sfx('level'); toast('🔁 다시 찍었어요'); renderSkills(); renderSkbar(true); }; };
   L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
 }
@@ -3477,6 +3486,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.7.1',d:'10/31',items:['📐 스킬 탭 정리: 안에서 <b>🌳 스킬 트리 / 🧬 특성 트리</b> 두 탭으로 나눠 한 번에 하나만 · 다른 탭처럼 짧게 · 펫은 작은 버튼으로']},
   {v:'v3.7',d:'10/31',items:['🧭 <b>육성 방향만 고르면 끝!</b> 🙏구걸형 · 🏪자동형 · 🍀행운형 · 🛡️생존형 중 하나를 고르면 SP가 생길 때마다 알아서 찍혀요','✋ 직접 찍고 싶으면 "직접" 모드 → 트리에서 노드를 눌러 배우기','🔁 방향을 바꾸면 무료로 다시 찍어줘요']},
   {v:'v3.6',d:'10/31',items:['🔧 돈벌이·구걸·랭킹 탭에서 화면이 늘어나던 오류 수정','⚔️ 맞짱 탭 이름 → <b>강탈</b>','➕ 스킬창 <b>찍기 / 트리</b> 두 탭: 찍기는 지금 배울 수 있는 것만, 트리는 갈래별 전체 구조','🌳 <b>갈래 트리</b>: 뿌리 → 두 갈래 → 궁극기 (구걸술: 눈물샘/인정머리 · 장사술: 확장/관리 · 눈치: 돈주머니/피버 · 생존: 방어/방치 · 직업도 두 갈래)','🆕 새 스킬: 🧒동네 꼬마 팬클럽 · ⏰대목 장사 · 🧾장부 정리 · 💰주머니 사냥꾼 · 🎉축제 분위기 · 🌙꿀잠 · 🏦비상금','⚖️ 밸런스: 레벨 상한 정리 (전체 트리의 약 60%만 찍을 수 있게) · 궁극기는 두 갈래 중 하나만 키워도 열림']},
   {v:'v3.5',d:'10/31',items:['🌳 스킬을 <b>한 판</b>에: 구걸술 · 장사술 · 눈치 · 생존 · 직업(1·2차) 5줄 트리를 한눈에','🟢 초록 = 지금 배울 수 있음 · 테두리 링 = 레벨 · 금색 = 마스터 · 노드를 누르면 아래에 설명과 배우기 버튼']},
@@ -3746,7 +3756,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.7';
+const GAME_VER='v3.7.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
