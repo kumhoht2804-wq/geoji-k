@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>거지키우기</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Jua&family=Black+Han+Sans&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#f5f4f1; --panel:#ffffff; --ink:#18181b; --sub:#8b8b92; --line:#ececea;
@@ -835,6 +835,96 @@
   body.mini .prow small{display:none} body.mini .modal .box .pb{font-size:9.5px;padding:3px 7px}
   body.mini .petsheet .rp{font-size:10px;padding:1px 7px} body.mini .petsheet h2{font-size:16px}
   body.mini .pcards{gap:6px} body.mini .modal .box .pcard{padding:6px 4px} body.mini .pcard small{display:none}
+
+  /* ===== v2.2 파스텔 카툰 테마 ===== */
+  :root{--ink:#5a4436;--sub:#a08c78;--line:#e8d9c2;--soft:#f6ecdc;--panel:#fffaf2;--accent2:#c9772f;--O:#5a4436}
+  body{background:radial-gradient(circle at 50% 0%,#fff7ea 0%,#f6efe4 55%,#efe2cf 100%) fixed;color:#5a4436;font-family:'Jua','Noto Sans KR',system-ui,sans-serif;letter-spacing:0}
+  body::before{content:'';position:fixed;inset:-50%;background:repeating-conic-gradient(from 0deg at 50% 30%,rgba(255,214,170,.16) 0 9deg,transparent 9deg 18deg);pointer-events:none;z-index:-1}
+  .card{background:#fffaf2;border:3px solid #5a4436;border-radius:22px;box-shadow:0 5px 0 #5a4436}
+  header h1{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;letter-spacing:.01em}
+  header h1 .dot{background:#f2a96b;border:2px solid #5a4436;width:11px;height:11px}
+  .money{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400!important;color:#5a4436;letter-spacing:.01em}
+  .money .mg u{font-weight:400;color:#e0956a;font-size:.62em}
+  .rates{color:#a08c78}
+  #rankChip,#netChip{border:2.5px solid #5a4436!important;background:#fffaf2!important;color:#5a4436!important;box-shadow:0 3px 0 #5a4436;border-radius:999px!important;font-weight:400!important}
+  #netChip.off{opacity:.7}
+  #target{color:#c9772f}
+  .scene{border:3px solid #5a4436;border-radius:18px!important;box-shadow:inset 0 0 0 0 transparent!important;background:#a9dcf0!important}
+  #city .bw{stroke:#5a4436;stroke-width:2.2;stroke-linejoin:round}
+  #city .rf{stroke:#5a4436;stroke-width:1.6}
+  #city .win{stroke:none;rx:1.2}
+  #city .aw{stroke:#5a4436;stroke-width:1.4}
+  #city #curb{fill:#d9bf95} #city .tree circle{stroke:#5a4436;stroke-width:1.8}
+  #city #far{opacity:.55}
+  #city #sun{stroke:#5a4436;stroke-width:2.2}
+  #stChip{background:#fffaf2!important;color:#5a4436!important;border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;font-family:'Jua',sans-serif;font-weight:400}
+  #stChip b{background:linear-gradient(#ffd9a0,#f2a96b)!important;color:#fff!important;border:2px solid #5a4436;font-family:'Black Han Sans',sans-serif;font-weight:400;text-shadow:0 1px 0 #5a4436;box-shadow:none!important}
+  .xi{background:#fff!important;border:2.5px solid #5a4436!important;border-radius:12px!important;box-shadow:0 3px 0 #5a4436!important;width:36px!important;height:36px!important;overflow:visible;padding:1px}
+  .xi svg{width:100%;height:100%;overflow:visible} .xi b{font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400;font-size:16px}
+  .xi.next svg{filter:grayscale(1) opacity(.55)}
+  .progress .bar{height:22px!important;border:3px solid #5a4436;background:#eadfcd!important;box-shadow:0 3px 0 #5a4436}
+  .progress .bar i{background:linear-gradient(#b5e19a,#7fb86a)!important;box-shadow:inset 0 4px 0 rgba(255,255,255,.45),inset 0 -4px 0 rgba(0,0,0,.12)!important;border-radius:0!important}
+  #xpTxt{font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400!important;color:#fff!important;text-shadow:0 2px 0 #5a4436!important;font-size:12px!important}
+  #next{color:#a08c78}
+  .tabs{background:transparent!important;gap:6px!important;padding:0!important}
+  .tabs button{border:2.5px solid #5a4436!important;border-radius:14px!important;background:linear-gradient(#fffaf2,#f3e6d2)!important;box-shadow:0 4px 0 #5a4436!important;color:#5a4436!important;font-family:'Jua',sans-serif!important;font-weight:400!important;display:flex!important;flex-direction:column;align-items:center;gap:1px;padding:5px 1px 4px!important;font-size:12px!important;transition:transform .08s}
+  .tabs button.on{background:linear-gradient(#ffd9a0,#f2a96b)!important;transform:translateY(2px);box-shadow:0 2px 0 #5a4436!important}
+  .tabs button .ti{width:26px;height:26px;display:block} .tabs button .ti svg{width:100%;height:100%;display:block}
+  .item{background:#fffdf8;border:2.5px solid #5a4436;border-radius:16px;box-shadow:0 3px 0 #5a4436;margin-bottom:7px;padding:7px 8px!important}
+  .item:hover{background:#fff6e6}
+  .item.no{opacity:1;cursor:not-allowed}
+  .item.no .pr{background:linear-gradient(#e3d6c4,#c9b9a4)!important}
+  .item.locked{opacity:.55}
+  .item .ic{background:#fff3df!important;border:2.5px solid #5a4436;border-radius:12px!important;width:42px!important;height:42px!important;line-height:37px!important;font-size:22px!important;display:flex;align-items:center;justify-content:center;overflow:visible}
+  .item .ic.g-route{background:#e3f1ff!important} .item .ic.g-sub{background:#fde7f1!important}
+  .item .ic.svg svg{width:32px;height:32px}
+  .item{grid-template-columns:42px 1fr auto!important}
+  .item .nm{font-family:'Jua',sans-serif;font-size:15px;font-weight:400}
+  .item .ef{color:#c9772f;font-weight:400} .item .ds{color:#a08c78}
+  .item .pr{font-family:'Black Han Sans',sans-serif;font-weight:400;color:#fff;background:linear-gradient(#b5e19a,#7fb86a);border:2.5px solid #5a4436;border-radius:11px;box-shadow:0 3px 0 #5a4436,inset 0 3px 0 rgba(255,255,255,.45);padding:3px 8px;text-shadow:0 1.5px 0 #5a4436;white-space:nowrap;font-size:13px}
+  .item .pr em{color:#fff!important;font-style:normal}
+  .item .cnt{margin-top:5px;font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400;color:#5a4436!important}
+  .item .mx{background:#e9927a!important;color:#fff!important;border:2px solid #5a4436;font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400;line-height:13px!important}
+  .msl{left:62px!important;background:#f1e3cc} .msl i{background:linear-gradient(90deg,#ffd9a0,#f2a96b)!important}
+  .igrp{font-family:'Black Han Sans',sans-serif;font-weight:400;color:#5a4436}
+  .igrp b{font-weight:400}
+  .act{border:2px solid #5a4436!important;box-shadow:0 2px 0 #5a4436;font-family:'Jua',sans-serif;font-weight:400}
+  .act.on{box-shadow:none;border-style:dashed!important}
+  .mgrbar,.qty button,.synp,.petbtn{border:2.5px solid #5a4436!important}
+  .mgrbar,.petbtn{box-shadow:0 3px 0 #5a4436;border-radius:16px!important}
+  .qty button{box-shadow:0 2px 0 #5a4436;font-family:'Jua',sans-serif;font-weight:400}
+  .synp{border-radius:14px!important;background:#fffdf8!important;box-shadow:0 3px 0 #5a4436}
+  .golden{width:48px;height:48px;font-size:0!important} .golden svg{width:100%;height:100%;filter:drop-shadow(0 3px 0 rgba(90,68,54,.35))}
+  body.mini .golden{width:30px;height:30px}
+  #pend{border:2.5px solid #5a4436!important;box-shadow:0 3px 0 #5a4436!important;font-family:'Jua',sans-serif;font-weight:400!important}
+  #pend b{font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400}
+  .float{font-family:'Black Han Sans',sans-serif!important;font-weight:400!important;color:#ffb36b!important;-webkit-text-stroke:4px #5a4436;paint-order:stroke fill;text-shadow:none!important}
+  .modal .box{background:#fffaf2!important;border:3px solid #5a4436;border-radius:22px!important;box-shadow:0 6px 0 #5a4436!important;color:#5a4436}
+  .modal .box button:not(.pb):not(.pcard):not(.ib){border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;background:linear-gradient(#ffd9a0,#f2a96b);color:#5a4436;font-family:'Jua',sans-serif}
+  .modal .box button.gray{background:#fffaf2!important;color:#5a4436!important}
+  #toast{border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;background:#fffaf2!important;color:#5a4436!important;font-family:'Jua',sans-serif}
+  .foot button{border:2.5px solid #5a4436!important;border-radius:12px!important;background:#fffaf2!important;box-shadow:0 3px 0 #5a4436;color:#5a4436!important}
+  /* 미니창 */
+  body.mini .card{border-width:2px;border-radius:16px;box-shadow:0 3px 0 #5a4436}
+  body.mini .scene{border-width:2px;border-radius:12px!important}
+  body.mini .tabs button{padding:3px 1px 2px!important;font-size:9.5px!important;border-width:2px!important;box-shadow:0 3px 0 #5a4436!important;border-radius:10px!important}
+  body.mini .tabs button .ti{width:17px;height:17px}
+  body.mini .item{border-width:2px;border-radius:12px;padding:5px 6px!important;grid-template-columns:30px 1fr auto!important;gap:6px!important;margin-bottom:5px;box-shadow:0 2px 0 #5a4436}
+  body.mini .item .ic{width:30px!important;height:30px!important;font-size:16px!important;border-width:2px;border-radius:9px!important}
+  body.mini .item .ic.svg svg{width:22px;height:22px}
+  body.mini .item .nm{font-size:12px} body.mini .item .pr{font-size:10.5px;padding:2px 5px;border-width:2px;border-radius:8px}
+  body.mini .msl{left:42px!important}
+  body.mini .xi{width:22px!important;height:22px!important;border-width:2px!important;border-radius:8px!important;box-shadow:0 2px 0 #5a4436!important}
+  body.mini .progress .bar{height:14px!important;border-width:2px;box-shadow:0 2px 0 #5a4436}
+  body.mini #xpTxt{font-size:9px!important}
+  body.mini #rankChip,body.mini #netChip{border-width:2px!important;box-shadow:0 2px 0 #5a4436}
+  .list>*{flex-shrink:0}
+  .list{padding:2px 4px 6px 2px}
+  #pend{top:8px!important;bottom:auto!important;right:8px!important} body.mini #pend{top:5px!important;right:5px!important}
+  #ztag{top:auto!important;bottom:8px!important;right:8px!important}
+  .item .ic.lk{font-family:'Black Han Sans','Jua',sans-serif;color:#c4b29a;background:#f3eadc!important}
+  .traits{background:#fffdf8!important;border:2.5px solid #5a4436!important;border-radius:16px!important;box-shadow:0 3px 0 #5a4436}
+  .chbtn{border:2.5px solid #5a4436!important;box-shadow:0 3px 0 #5a4436!important;border-radius:14px!important}
 </style>
 </head>
 <body>
@@ -1364,11 +1454,11 @@ function renderList(){
     const msPct = nx ? ((n-pv)/(nx-pv)*100) : 100;
     const flavor = tab==='auto' ? it.ds : '';
     el.innerHTML = prevOwned
-      ? `<div class="ic">${it.ic}</div>
+      ? `<div class="ic ${ICON[it.id]?'svg':''} g-${it.grp||'c'}">${icon(it.id,it.ic)}</div>
          <div class="mid"><div class="nm">${it.nm}${mm>1?`<b class="mx">×${mm}</b>`:''}</div><div class="ef">${extra}</div>${flavor?`<div class="ds">${flavor}</div>`:''}</div>
          <div class="rt"><div class="pr">${B.k>1?`<em>+${B.k}</em> `:''}${fmt(price)}</div><div class="cnt" title="다음 ×2 마일스톤">${n}${nx?`<span>/${nx}</span>`:''}</div></div>
          ${n>0?`<div class="msl" title="${nx?nx+'개 모으면 수입 ×2':'모든 마일스톤 달성'}"><i style="width:${msPct.toFixed(1)}%"></i></div>`:''}`
-      : `<div class="ic">❓</div><div><div class="nm">???</div><div class="ds">이전 항목을 먼저 사세요</div></div><div></div>`;
+      : `<div class="ic lk">?</div><div><div class="nm">???</div><div class="ds">이전 항목을 먼저 사세요</div></div><div></div>`;
     el.onclick=(e)=>{ const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
       if(tab==='auto' && e.target.closest('.ic') && prevOwned && n>0){ itemSheet(it); return; } buy(it,own,prevOwned); };
     if(tab==='auto' && prevOwned && n>0){ const ic=el.querySelector('.ic'); ic.classList.add('mg'); ic.insertAdjacentHTML('beforeend',`${isMgr(it.id)?'<b class="mb">👔</b>':''}${(S.star||{})[it.id]?`<b class="sb">★${S.star[it.id]}</b>`:''}`);
@@ -1440,9 +1530,9 @@ function render(){
     const p=(S.total-st.need)/(nx.need-st.need);
     $('bar').style.width=Math.min(100,p*100)+'%';
     $('xpTxt').textContent=Math.floor(Math.min(1,p)*100)+'%';
-    if($('xpFrom').textContent!==st.face){ $('xpFrom').textContent=st.face; $('xpTo').textContent=nx.face; }
+    const fk=st.name+'>'+nx.name; if($('xpFrom').dataset.k!==fk){ $('xpFrom').dataset.k=fk; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML=(nx.name==='진로 선택'||nx.name==='갈림길')?'<b>?</b>':charSVG(i+1,false,nx); }
     $('next').textContent = nx.need<=S.total ? '🔀 진로를 선택하세요!' : `다음 신분 "${nx.name}"까지 ${fmt(nx.need-S.total)}`;
-  } else { $('bar').style.width='100%'; $('xpTxt').textContent='MAX'; $('xpFrom').textContent=st.face; $('xpTo').textContent='👑'; $('next').textContent='최고 신분 달성! 👑'; }
+  } else { $('bar').style.width='100%'; $('xpTxt').textContent='MAX'; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; $('next').textContent='최고 신분 달성! 👑'; }
   if($('stName').textContent!==st.name){ $('stName').textContent=st.name; $('stLv').textContent='LV.'+(i+1); }
 }
 
@@ -1872,6 +1962,25 @@ var _pfx={k:null,v:[]};
 function petPerks(){ if(!PETS) return []; const key=(S.petOn||[]).join()+'|'+JSON.stringify(S.petLv||{})+(S.petSlot2?1:0); if(!_pfx||key!==_pfx.k) _pfx={k:key,v:petsOn().map(petFx)}; return _pfx.v; }
 function petSVG(k){ const p=PET(k); return p?petBase(p.o):''; }
 function petUpCost(k){ const lv=petLv(k); return lv>=5?0:Math.max(2,Math.ceil((PET(k).cost||2)*.6))*lv; }
+
+
+/* ---------- 손그림 아이콘 ---------- */
+const IO='stroke="#5a4436" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+const ICON={
+  tab_auto:`<svg viewBox="0 0 48 48"><path d="M17 14v-4h14v4" fill="none" ${IO}/><rect x="6" y="14" width="36" height="26" rx="6" fill="#f2a96b" ${IO}/><path d="M6 24h36" ${IO}/><rect x="20" y="21" width="8" height="7" rx="2" fill="#ffd34d" ${IO}/></svg>`,
+  tab_click:`<svg viewBox="0 0 48 48"><path d="M14 26v-12a3 3 0 0 1 6 0v8v-12a3 3 0 0 1 6 0v12v-10a3 3 0 0 1 6 0v12v-6a3 3 0 0 1 6 0v10q0 14 -14 14q-8 0 -12 -6l-6 -9a3 3 0 0 1 5 -3z" fill="#ffd9b8" ${IO}/></svg>`,
+  tab_skill:`<svg viewBox="0 0 48 48"><rect x="21" y="26" width="6" height="16" rx="2" fill="#a0673a" ${IO}/><circle cx="24" cy="18" r="13" fill="#8fd17a" ${IO}/><circle cx="19" cy="15" r="3" fill="#fff" opacity=".6"/></svg>`,
+  tab_rank:`<svg viewBox="0 0 48 48"><path d="M14 8h20v10q0 10 -10 10q-10 0 -10 -10z" fill="#ffd34d" ${IO}/><path d="M14 12h-6q0 8 7 9M34 12h6q0 8 -7 9" fill="none" ${IO}/><path d="M24 28v6" ${IO}/><rect x="15" y="34" width="18" height="7" rx="2" fill="#f2a96b" ${IO}/></svg>`,
+  tab_pvp:`<svg viewBox="0 0 48 48"><path d="M10 8l22 22M38 8l-22 22" stroke="#5a4436" stroke-width="9" stroke-linecap="round"/><path d="M10 8l22 22M38 8l-22 22" stroke="#dfe6ee" stroke-width="4" stroke-linecap="round"/><path d="M28 34l8 -8M20 34l-8 -8" stroke="#5a4436" stroke-width="9" stroke-linecap="round"/><path d="M28 34l8 -8M20 34l-8 -8" stroke="#e9927a" stroke-width="4" stroke-linecap="round"/></svg>`,
+  cup:`<svg viewBox="0 0 48 48"><path d="M12 12h24l-3 28q-9 4 -18 0z" fill="#dfe4ea" ${IO}/><ellipse cx="24" cy="12" rx="12" ry="4" fill="#f4f6f8" ${IO}/><path d="M13 23h22" stroke="#f2a99b" stroke-width="6"/></svg>`,
+  sign:`<svg viewBox="0 0 48 48"><path d="M24 30v14" ${IO}/><rect x="6" y="8" width="36" height="22" rx="4" fill="#f3d7a8" ${IO}/><path d="M13 16h22M13 22h14" ${IO}/></svg>`,
+  guitar:`<svg viewBox="0 0 48 48"><path d="M30 18l10 -10" stroke="#5a4436" stroke-width="7" stroke-linecap="round"/><path d="M30 18l10 -10" stroke="#a0673a" stroke-width="3" stroke-linecap="round"/><path d="M28 16q-8 -2 -12 4q-8 0 -9 8q-1 8 6 12q6 4 12 -2q8 -2 6 -10q6 -6 -3 -12z" fill="#f2a96b" ${IO}/><circle cx="20" cy="28" r="3.5" fill="#5a4436"/></svg>`,
+  paper:`<svg viewBox="0 0 48 48"><rect x="12" y="8" width="22" height="18" rx="2" fill="#d6a76a" ${IO}/><path d="M12 14h22M23 8v6" ${IO}/><path d="M4 22h4l4 12h26l4 -12" fill="none" ${IO}/><circle cx="16" cy="40" r="4" fill="#fff" ${IO}/><circle cx="34" cy="40" r="4" fill="#fff" ${IO}/></svg>`,
+  store:`<svg viewBox="0 0 48 48"><rect x="8" y="18" width="32" height="24" rx="2" fill="#fffaf2" ${IO}/><path d="M6 18l4 -10h28l4 10z" fill="#7fcfa0" ${IO}/><path d="M14 8l-2 10M24 8v10M34 8l2 10" ${IO}/><rect x="14" y="26" width="9" height="16" fill="#9fd3ff" ${IO}/><rect x="27" y="26" width="8" height="7" fill="#9fd3ff" ${IO}/></svg>`,
+  fish:`<svg viewBox="0 0 48 48"><path d="M6 24q8 -14 24 -10l10 -6v32l-10 -6q-16 4 -24 -10z" fill="#e6a35c" ${IO}/><circle cx="14" cy="22" r="2.5" fill="#5a4436"/><path d="M22 18q3 6 0 12M28 17q3 7 0 14" fill="none" stroke="#b9772f" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  gold:`<svg viewBox="0 0 48 48"><path d="M14 16q-12 14 -2 26q12 6 24 0q10 -12 -2 -26z" fill="#f5c451" ${IO}/><path d="M16 16h16l-4 -9h-8z" fill="#f5c451" ${IO}/><path d="M15 16q9 3 18 0" ${IO} fill="none"/><text x="24" y="37" text-anchor="middle" font-size="15" font-weight="900" fill="#5a4436" font-family="sans-serif">₩</text></svg>`,
+};
+const icon=(k,fb)=>ICON[k]||fb;
 
 /* ---------- pets UI ---------- */
 let _petKey='';
@@ -2598,7 +2707,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
-  {v:'v2.2',d:'10/31',items:['🧒 새 메인 캐릭터 <b>꼬질이</b>! 진로·신분마다 옷과 소품이 바뀌어요 (12진로 전용 의상)','🐾 <b>펫</b> 8종: 냥거지·곰돌이 중 1마리로 시작 → 나머지는 <b>환생 포인트</b>로 입양·강화(Lv.5) · 2번째 자리 해금','📈 신분 <b>9단계 → 12단계</b> (고시원 생활자, 진로 5단계 등)','🔀 2차 전직 <b>3갈래 → 5갈래</b> · 엔딩 <b>60개</b> · 새 전용 돈벌이 48종','🎲 레벨업 선택지 <b>3개 → 5개</b>: 안정 · 🏦저축 · 도전 · 📈투자 · 도박','👔 매니저 고용·★강화 버튼이 돈벌이마다 바로 보여요 · 한 번에 모두 고용 · 구매 수량 ×1/×10/최대','🤫 행인은 조용하게: 이름표 제거 · 미니창에선 안 나와요 · 경찰 벌금 없음 (잠깐 ×0.3)','💰 돈 단위 확장: 경 → 해·자·양·구·간·정·재·극']},
+  {v:'v2.2',d:'10/31',items:['🧒 새 메인 캐릭터 <b>꼬질이</b>! 진로·신분마다 옷과 소품이 바뀌어요 (12진로 전용 의상)','🐾 <b>펫</b> 8종: 냥거지·곰돌이 중 1마리로 시작 → 나머지는 <b>환생 포인트</b>로 입양·강화(Lv.5) · 2번째 자리 해금','📈 신분 <b>9단계 → 12단계</b> (고시원 생활자, 진로 5단계 등)','🔀 2차 전직 <b>3갈래 → 5갈래</b> · 엔딩 <b>60개</b> · 새 전용 돈벌이 48종','🎲 레벨업 선택지 <b>3개 → 5개</b>: 안정 · 🏦저축 · 도전 · 📈투자 · 도박','👔 매니저 고용·★강화 버튼이 돈벌이마다 바로 보여요 · 한 번에 모두 고용 · 구매 수량 ×1/×10/최대','🎨 화면 전체 새 디자인: 파스텔 카툰 테마 · 손그림 아이콘(탭·기본 돈벌이·돈주머니) · 동글 폰트','🤫 행인은 조용하게: 이름표 제거 · 미니창에선 안 나와요 · 경찰 벌금 없음 (잠깐 ×0.3)','💰 돈 단위 확장: 경 → 해·자·양·구·간·정·재·극']},
   {v:'v2.1',d:'10/31',items:['🚶 <b>행인 시스템</b>: 앞을 지나가는 사람에 따라 구걸 수입이 달라져요 (부자 ×15 · 관광객 ×5 · 직장인 ×2.5) — 아무도 없으면 ×0.4, 👮경찰 있을 때 구걸하면 벌금!','👔 <b>매니저</b>: 매니저 없는 돈벌이는 💰수금을 눌러야 들어와요 (최대 2분치) · 고용하면 자동 + 오프라인 수익','★ <b>등급 올리기</b>: 돈벌이 아이콘을 눌러 ★1~5 (등급마다 ×2)','🔗 <b>시너지</b> 6종: 조합 달성 시 ×1.5~×3','🧬 <b>특성 선택</b>: 신분이 오를 때마다 A/B 중 하나 선택 (총 4단계)','🏆 AI 라이벌 삭제 → <b>전체 유저 랭킹</b>만 표시','📈 난이도 상향: 신분 기준액 ~10배, 가격 상승률 1.2, 오프라인 효율 30%']},
   {v:'v2.0',d:'10/31',items:['🗺️ 1차 진로 <b>8개 → 12개</b>: 💻개발자 · 🎨예술가 · 👨‍🍳셰프 · ⚖️변호사','🏆 엔딩 <b>36개</b> · 새 의상 36종 (베레모 화가, 터틀넥 CTO 등)','💼 새 직업 전용 돈벌이 · 스킬 · 돌발 이벤트']},
   {v:'v1.9',d:'10/31',items:['💼 <b>돈벌이도 직업마다 달라요!</b> 공통 6개 + 진로 전용 4개 + 2차 갈림길 전용 2개','🏗️ 진로 전용 돈벌이 32종 · 갈림길 전용 48종 (예: 의사 🩺개인 클리닉 → 🏥종합병원 → 💊제약 공장)','🏙️ 내 최상위 돈벌이가 게임 화면 바닥에 소품으로 등장','📊 기록 화면에 <b>자동 수입 구성</b> 그래프 (뭐가 돈을 제일 많이 버는지)','♻️ 기존에 갖고 있던 치킨집·빌딩·대기업·우주사업은 내 진로 전용 돈벌이로 자동 이전']},
@@ -2720,8 +2829,8 @@ function applySky(force){
   const k = (hr>=5&&hr<7)?'dawn':(hr>=7&&hr<17)?'day':(hr>=17&&hr<19.5)?'dusk':'night';
   if(k===skyKey && !force) return; skyKey=k;
   const T={
-    day:  {s1:'#4fb3f2',s2:'#bfe8ff',far:'#9fcbe8',S:62,L:72,win:'#dff3ff',lit:'#dff3ff',side:'#f2e6d2',seam:'#e0cfb2',curb:'#cdb894',tc:'#66bb57',tc2:'#4fa045',sun:'#fff3b0',cl:'#ffffff',clo:.95,stars:0,lamp:0,pole:'#56606f',aw:62},
-    dawn: {s1:'#f59d84',s2:'#ffe1c2',far:'#e8b4a6',S:52,L:74,win:'#fff1e0',lit:'#ffd67a',side:'#f1dcc6',seam:'#e0c6aa',curb:'#c9ad8c',tc:'#79b862',tc2:'#5f9c4f',sun:'#ffc98a',cl:'#fff1ea',clo:.9,stars:0,lamp:.6,pole:'#6b6070',aw:58},
+    day:  {s1:'#a9dcf0',s2:'#e8f7fb',far:'#cfe5ee',S:60,L:82,win:'#7d6a5a',lit:'#7d6a5a',side:'#f3e2c4',seam:'#e3cda6',curb:'#d9bf95',tc:'#8fd17a',tc2:'#74bd62',sun:'#ffe08a',cl:'#ffffff',clo:1,stars:0,lamp:0,pole:'#7d6a5a',aw:70},
+    dawn: {s1:'#f7b8a0',s2:'#ffe8cf',far:'#efc6b8',S:58,L:80,win:'#fff1e0',lit:'#ffd67a',side:'#f1dcc6',seam:'#e0c6aa',curb:'#c9ad8c',tc:'#79b862',tc2:'#5f9c4f',sun:'#ffc98a',cl:'#fff1ea',clo:.9,stars:0,lamp:.6,pole:'#6b6070',aw:58},
     dusk: {s1:'#5b5bb5',s2:'#ff9e7a',far:'#9a6f93',S:46,L:56,win:'#c9a7a0',lit:'#ffd36e',side:'#dcc1a8',seam:'#c7a98c',curb:'#a98c70',tc:'#4f8a4c',tc2:'#3e733e',sun:'#ff8f5e',cl:'#ffd7c4',clo:.75,stars:.3,lamp:1,pole:'#4c4558',aw:50},
     night:{s1:'#0d1430',s2:'#2c3c70',far:'#1d2650',S:32,L:27,win:'#28304f',lit:'#ffd36e',side:'#3a3b4a',seam:'#30313f',curb:'#2a2b37',tc:'#24503a',tc2:'#1c4030',sun:'#f2eedd',cl:'#8590b5',clo:.22,stars:1,lamp:1,pole:'#4a4f63',aw:30}
   }[k];
@@ -2755,7 +2864,7 @@ setInterval(()=>applySky(false),60000);
 /* golden coin */
 function spawnGold(){
   const sc=$('scene'), g=document.createElement('div');
-  g.className='golden in'; g.textContent='💰';
+  g.className='golden in'; g.innerHTML=ICON.gold;
   g.style.left=(10+Math.random()*75)+'%'; g.style.top=(8+Math.random()*40)+'%';
   g.onclick=(e)=>{
     if(Math.random()<.25+.08*sk('l4')+perkA('feverP') && Date.now()>=feverEnd){ S.golds++; startFever(15+3*sk('l4')+perkA('feverS')); g.remove(); return; }
@@ -2848,6 +2957,7 @@ const GAME_VER='v2.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
+document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
 fxInit(); sndIcon(); setTimeout(()=>renderPetz(true),50); $('face').innerHTML=charSVG(Math.min(stageIdx(), !S.route?RS-1:!S.sub?SS-1:LAST)); buildCity(stageIdx());
 load();
 render(); renderList();
