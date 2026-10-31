@@ -900,7 +900,7 @@
   #pend b{font-family:'Black Han Sans','Jua','Noto Sans KR',sans-serif;font-weight:400}
   .float{font-family:'Black Han Sans',sans-serif!important;font-weight:400!important;color:#ffb36b!important;-webkit-text-stroke:4px #5a4436;paint-order:stroke fill;text-shadow:none!important}
   .modal .box{background:#fffaf2!important;border:3px solid #5a4436;border-radius:22px!important;box-shadow:0 6px 0 #5a4436!important;color:#5a4436}
-  .modal .box button:not(.pb):not(.pcard):not(.ib){border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;background:linear-gradient(#ffd9a0,#f2a96b);color:#5a4436;font-family:'Jua',sans-serif}
+  .modal .box button:not(.pb):not(.pcard):not(.ib):not(.spcard){border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;background:linear-gradient(#ffd9a0,#f2a96b);color:#5a4436;font-family:'Jua',sans-serif}
   .modal .box button.gray{background:#fffaf2!important;color:#5a4436!important}
   #toast{border:2.5px solid #5a4436;box-shadow:0 3px 0 #5a4436;background:#fffaf2!important;color:#5a4436!important;font-family:'Jua',sans-serif}
   .foot button{border:2.5px solid #5a4436!important;border-radius:12px!important;background:#fffaf2!important;box-shadow:0 3px 0 #5a4436;color:#5a4436!important}
@@ -1007,6 +1007,30 @@
   .syn small{display:block;color:#6e5a49!important;font-size:11px} .syn small.se{color:#15803d!important} .syn:not(.on) small.se{color:#9c8670!important}
   .syn i{height:6px;background:#f1e3cc} .syn i em{background:linear-gradient(90deg,#ffd9a0,#f2a96b)}
   body.mini .syn small{font-size:9.5px}
+
+  .tch{display:inline-block;font-size:10px;font-weight:400;background:#fff;border:1.5px solid var(--tc);border-radius:7px;padding:0 3px;margin-left:3px;line-height:15px}
+  .spnew{display:inline-block;font-size:10px;font-weight:700;color:#fff;background:linear-gradient(#f9a8d4,#ec4899);border:1.5px solid #5a4436;border-radius:7px;padding:0 5px;margin-left:4px;line-height:15px;cursor:pointer;animation:pendp .9s ease-in-out infinite}
+  .tags{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:6px 0}
+  .tg{border:2px solid #e8d9c2;border-radius:11px;padding:5px 7px;background:#fff;opacity:.75} .tg.on{border-color:var(--tc);opacity:1;box-shadow:0 2px 0 var(--tc)}
+  .tg b{display:flex;align-items:center;gap:4px;font-family:'Jua',sans-serif;font-weight:400;font-size:13px} .tg b em{margin-left:auto;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;color:var(--tc)}
+  .tg .tp{display:flex;gap:3px;margin:3px 0} .tg .tp i{flex:1;text-align:center;font-style:normal;font-size:9px;border-radius:5px;background:#f1e3cc;color:#9c8670} .tg .tp i.f{background:var(--tc);color:#fff}
+  .tg small{display:block;font-size:10px;color:#6e5a49;line-height:1.35}
+  .cbh{font-family:'Jua',sans-serif;font-size:12px;margin:8px 0 4px}
+  .cbs{display:flex;flex-direction:column;gap:4px}
+  .cb{display:grid;grid-template-columns:auto 1fr;gap:0 8px;border:2px dashed #e8d9c2;border-radius:10px;padding:4px 8px;background:#fffdf8;opacity:.7}
+  .cb.on{border-style:solid;border-color:#f2a96b;background:#fff3df;opacity:1}
+  .cb b{font-family:'Jua',sans-serif;font-weight:400;font-size:12.5px} .cb span{font-size:11px;text-align:right;color:#6e5a49} .cb small{grid-column:1/-1;font-size:10.5px;color:#6e5a49}
+  .cbtip{font-size:10.5px;color:#6e5a49;margin-top:6px;text-align:center}
+  .synp summary .tch{font-size:11px}
+  .specs{text-align:center;max-width:460px} .specs p{font-size:12px;color:#6e5a49}
+  .spc{display:flex;gap:8px;margin:8px 0}
+  .modal .box .spcard{flex:1;margin:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;background:#fff;border:2.5px solid var(--tc);border-radius:14px;box-shadow:0 3px 0 #5a4436;color:#5a4436;font-family:'Noto Sans KR',sans-serif}
+  .modal .box .spcard.cur{background:#f2fbf4}
+  .spcard .ti{font-size:28px} .spcard b{font-family:'Jua',sans-serif;font-weight:400;font-size:13px} .spcard small{font-size:10.5px;color:#6e5a49} .spcard em{font-style:normal;font-size:10.5px;color:var(--tc);font-weight:700}
+  body.mini .spc{flex-direction:column} body.mini .tags{grid-template-columns:1fr} body.mini .tg small{font-size:9.5px}
+  .item .nm{flex-wrap:wrap;row-gap:2px} .item .nmt{white-space:nowrap} .spnew,.tch{white-space:nowrap}
+  body.mini .spnew{font-size:0;padding:0 3px} body.mini .spnew::before{content:'✨';font-size:10px}
+  body.mini .item .tch{font-size:8.5px;padding:0 2px;line-height:12px;margin-left:2px}
 </style>
 </head>
 <body>
@@ -1367,7 +1391,7 @@ const PASSERBY = [
 ];
 
 let S = fresh();
-function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,owner:'',route:null,sub:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,slumpEnd:0,fireEnd:0,sueEnd:0,dogEnd:0,lawyerEnd:0,insEnd:0,grudge:{},buffs:[],mgr:{},star:{},pend:0,trait:{},cd:{},pvpLog:[],pvpNew:false,pending:[],ach:{},chBest:0,maxCombo:0,rp:0,petLv:{},petOn:[],petSlot2:false,petPicked:false};}
+function fresh(){return {money:0,total:0,clicks:0,auto:{},click:{},best:0,start:Date.now(),last:Date.now(),golds:0,owner:'',route:null,sub:null,rebirth:0,routesDone:[],skill:{},path:[],pathMul:1,debuffEnd:0,slumpEnd:0,fireEnd:0,sueEnd:0,dogEnd:0,lawyerEnd:0,insEnd:0,grudge:{},buffs:[],mgr:{},star:{},pend:0,trait:{},cd:{},pvpLog:[],pvpNew:false,pending:[],ach:{},chBest:0,maxCombo:0,rp:0,petLv:{},petOn:[],petSlot2:false,petPicked:false,spec:{}};}
 
 function load(){
   try{
@@ -1457,7 +1481,7 @@ const RTRAIT={
   chef:[[['🔥','불맛 장인',{feverS:6,feverX:.5,idleEff:-.2}],['📋','레시피 표준화',{mgrDisc:.4,auto:.1,feverS:-3}]],[['⭐','별 사냥',{goldX:.6,goldFreq:-.15}],['🍱','대량 생산',{auto:.3,discount:.05,goldX:-.2}]]],
   law:[[['🗣️','법정 싸움꾼',{robP:.1,pvpDisc:.2,evRes:-.15}],['🤝','합의 전문',{evRes:.3,pvpDef:.2,robP:-.05}]],[['💼','대형 사건',{riskP:.2,goldX:.3,idleEff:-.15}],['📜','자문 계약',{auto:.25,idleEff:.2,riskP:-.1}]]],
 };
-function effText(o){ const L={auto:'자동 수입',click:'구걸 수입',goldFreq:'돈주머니 등장',goldBonus:'돈주머니 보상',goldX:'돈주머니 보상',feverP:'피버 확률',feverX:'피버 배율',feverS:'피버 시간',comboMax:'콤보 배율',idleEff:'방치 효율',idleH:'방치 시간',mgrDisc:'매니저 할인',discount:'가격 할인',evRes:'악재 피해 감소',evDodge:'악재 회피',betP:'도박 성공',riskP:'도전 성공',pvpDef:'뜯기 방어',pvpDisc:'뜯기·고소 할인',robP:'뜯기 성공'};
+function effText(o){ const L={auto:'자동 수입',click:'구걸 수입',goldFreq:'돈주머니 등장',goldBonus:'돈주머니 보상',goldX:'돈주머니 보상',feverP:'피버 확률',feverX:'피버 배율',feverS:'피버 시간',comboMax:'콤보 배율',idleEff:'방치 효율',idleH:'방치 시간',mgrDisc:'매니저 할인',discount:'가격 할인',evRes:'악재 피해 감소',evDodge:'악재 회피',betP:'도박 성공',riskP:'도전 성공',pvpDef:'뜯기 방어',pvpDisc:'뜯기·고소 할인',robP:'뜯기 성공',mgrUp:'매니저 돈벌이',pvpDef:'뜯기 방어'};
   return Object.entries(o).map(([k,v])=>{ const n=L[k]||k, up=v>0, x= k==='feverX'?(up?'+':'')+v : k==='feverS'?(up?'+':'')+v+'초' : k==='idleH'?(up?'+':'')+v+'시간' : k==='comboMax'?(up?'+':'')+(v/10).toFixed(1) : (up?'+':'')+Math.round(v*100)+'%'; return `${n} ${x}`; }).join(' · '); }
 function traitList(){
   const L=TRAITS.slice(0,2); const R=S.route&&RTRAIT[S.route];
@@ -1492,31 +1516,47 @@ function managedCps(){ return cps()*managedShare(); }
 function pendCap(){ return Math.max(50, cps()*(1-managedShare())*300*(1+perkA('pendCap'))); }
 function mgrCost(a){ return Math.ceil(a.base*(a.grp==='common'?5:8)*Math.max(.3,1-perkA('mgrDisc'))); }
 function starCost(a){ const l=(S.star||{})[a.id]||0; return Math.ceil(a.base*120*Math.pow(9,l)); }
-// 🔗 시너지: 함께 키우면 단계가 오르는 조합 (가장 적게 가진 개수 기준)
-var SYN=[
-  {id:'y1',nm:'동정심 콤보',ic:'🥺',items:['cup','sign'],bonus:{click:.05},bd:'구걸 수입'},
-  {id:'y2',nm:'거리 공연',ic:'🎭',items:['guitar','paper'],bonus:{goldFreq:.05},bd:'돈주머니 등장'},
-  {id:'y3',nm:'골목 상권',ic:'🏮',items:['store','fish'],bonus:{auto:.03},bd:'자동 수입'},
-  {id:'y4',nm:'직업 콤보',ic:'💼',items:'route',bonus:{auto:.04},bd:'자동 수입'},
-  {id:'y5',nm:'정점 콤보',ic:'👑',items:'sub',bonus:{auto:.06},bd:'자동 수입'},
-  {id:'y6',nm:'매니저 팀',ic:'👔',mgr:true},
+// 🔧 돈벌이 특화 + 🔗 태그 시너지
+var TAGS={
+  emo:{ic:'🎭',nm:'감성',adj:'사연 있는',c:'#f472b6',fx:[{click:.15},{click:.35},{click:.6,comboMax:10},{click:1,comboMax:20}],d:'구걸 수입'},
+  sys:{ic:'⚙️',nm:'시스템',adj:'자동화된',c:'#60a5fa',fx:[{mgrUp:.1},{mgrUp:.25,idleEff:.15},{mgrUp:.45,idleEff:.15},{mgrUp:.75,idleEff:.3}],d:'매니저 돈벌이'},
+  luck:{ic:'🍀',nm:'행운',adj:'복 받은',c:'#22c55e',fx:[{goldFreq:.15},{goldFreq:.3},{goldFreq:.5,goldBonus:.5},{goldFreq:.8,goldBonus:1}],d:'돈주머니'},
+  deal:{ic:'💰',nm:'수완',adj:'수완 좋은',c:'#f59e0b',fx:[{discount:.03},{discount:.06},{discount:.1,mgrDisc:.2},{discount:.15,mgrDisc:.4}],d:'가격 할인'},
+  grit:{ic:'🛡️',nm:'뚝심',adj:'든든한',c:'#a78bfa',fx:[{evRes:.1,idleH:2},{evRes:.2,idleH:4},{evRes:.35,idleH:6,pvpDef:.2},{evRes:.5,idleH:8,pvpDef:.4}],d:'피해 감소·방치'},
+};
+var TAG_T=[2,4,6,9], SPEC_AT=[10,50];
+var COMBOS=[
+  {id:'k1',ic:'🥺',nm:'동정의 기적',need:{emo:4,luck:2},fx:{begGold:.01},d:'구걸할 때 1% 확률로 돈주머니'},
+  {id:'k2',ic:'🏭',nm:'무인 공장',need:{sys:4,deal:2},fx:{auto:.3},d:'자동 수입 +30%'},
+  {id:'k3',ic:'🎰',nm:'대박 인생',need:{luck:4,deal:2},fx:{legendX:1},d:'레벨업 전설 카드 확률 2배'},
+  {id:'k4',ic:'🏰',nm:'철옹성',need:{grit:4,sys:2},fx:{idleEff:.3},d:'방치 효율 +30%'},
+  {id:'k5',ic:'🎤',nm:'길거리 스타',need:{emo:4,grit:2},fx:{feverS:5,feverP:.05},d:'피버 +5초 · 확률 +5%'},
 ];
-const SYN_T=[10,25,50,100], SYN_M=[3,6,9,12], SYN_X=[1,1.15,1.3,1.5,1.75];
-function synItems(y){ const L=autoList(); if(y.items==='route'||y.items==='sub') return L.filter(a=>a.grp===y.items); return y.items?L.filter(a=>y.items.includes(a.id)):[]; }
-function synCount(y){ if(y.mgr) return autoList().filter(a=>isMgr(a.id)&&(S.auto[a.id]||0)>0).length; const I=synItems(y); return I.length?Math.min(...I.map(a=>S.auto[a.id]||0)):0; }
-function synLvRaw(y){ const c=synCount(y), T=y.mgr?SYN_M:SYN_T; let l=0; for(const t of T) if(c>=t) l++; return l; }
-var _synCache={t:0,v:{}};
-function synLv(y){ const now=performance.now(); if(now-_synCache.t>500){ _synCache={t:now,v:{}}; for(const z of SYN) _synCache.v[z.id]=synLvRaw(z); } return _synCache.v[y.id]||0; }
-function synOn(y){ return synLv(y)>0; }
-function synNext(y){ const T=y.mgr?SYN_M:SYN_T, l=synLv(y); return T[l]; }
-function synMult(a){ let m=1; for(const y of SYN){ const l=synLv(y); if(!l) continue;
-  if(y.mgr){ if(isMgr(a.id)) m*=1+.1*l; } else if(synItems(y).some(x=>x.id===a.id)) m*=SYN_X[l]; } return m; }
-function synk(k){ if(!SYN||!_synCache) return 0; let t=0; for(const y of SYN){ if(y.bonus&&y.bonus[k]) t+=y.bonus[k]*synLv(y); } return t; }
-function synHtml(y){ const l=synLv(y), nx=synNext(y), c=synCount(y), I=synItems(y);
-  const what = y.mgr ? `고용한 매니저 ${c}명` : I.length ? I.map(a=>a.ic+' '+a.nm).join(' + ') : (y.items==='route'?'진로를 정하면 열려요':'2차 전직 후 열려요');
-  const eff = y.mgr ? `매니저 돈벌이 +${l*10}%` : `수입 ×${SYN_X[l]}${y.bonus&&l?` · ${y.bd} +${Math.round(y.bonus[Object.keys(y.bonus)[0]]*l*100)}%`:''}`;
-  const pr = nx ? Math.min(1,c/nx) : 1;
-  return `<div class="syn ${l?'on':''}"><b>${y.ic} ${y.nm} <span class="sl">${'●'.repeat(l)}${'○'.repeat(4-l)}</span></b><small>${what}</small><small class="se">${l?'✓ '+eff:'아직 없음'}${nx?` · 다음: ${y.mgr?'매니저 '+nx+'명':'각각 '+nx+'개'} (${c}/${nx})`:' · 최고 단계'}</small><i><em style="width:${(pr*100).toFixed(0)}%"></em></i></div>`; }
+function hsh(str){ let h=7; for(const ch of str) h=(h*31+ch.charCodeAt(0))>>>0; return h; }
+function specOffer(id,slot){ const K=Object.keys(TAGS), h=hsh(id+':'+slot), out=[]; let i=h%5; while(out.length<3){ const k=K[i%5]; if(!out.includes(k)) out.push(k); i+= (h>>3)%4+1; } return out; }
+function specOf(id){ return (S.spec||{})[id]||[]; }
+function specOpen(a){ const n=S.auto[a.id]||0, sp=specOf(a.id); for(let j=0;j<SPEC_AT.length;j++) if(n>=SPEC_AT[j] && !sp[j]) return j; return -1; }
+var _tagC=null;
+function tagCounts(){ if(_tagC && performance.now()-_tagC.t<400) return _tagC.v; const v={}; for(const k in TAGS) v[k]=0;
+  for(const [id,arr] of Object.entries(S.spec||{})) for(const t of arr) if(t&&v[t]!=null) v[t]++;
+  _tagC={t:performance.now(),v}; return v; }
+function tagLv(k){ const c=tagCounts()[k]||0; let l=0; for(const t of TAG_T) if(c>=t) l++; return l; }
+function comboOn(c){ const T=tagCounts(); return Object.entries(c.need).every(([k,n])=>(T[k]||0)>=n); }
+function synk(k){ if(typeof TAGS==='undefined'||!TAGS) return 0; let t=0; for(const tk in TAGS){ const l=tagLv(tk); if(l){ const f=TAGS[tk].fx[l-1]; if(f[k]) t+=f[k]; } } for(const c of COMBOS) if(c.fx[k] && comboOn(c)) t+=c.fx[k]; return t; }
+function synMult(a){ const n=specOf(a.id).filter(Boolean).length; let m=Math.pow(1.25,n); if(isMgr(a.id)) m*=1+synk('mgrUp'); return m; }
+function synHtml(){ const T=tagCounts();
+  const tags=Object.entries(TAGS).map(([k,t])=>{ const c=T[k], l=tagLv(k), nx=TAG_T[l];
+    return `<div class="tg ${l?'on':''}" style="--tc:${t.c}"><b>${t.ic} ${t.nm} <em>${c}</em></b><span class="tp">${TAG_T.map(x=>`<i class="${c>=x?'f':''}">${x}</i>`).join('')}</span><small>${l?effText(t.fx[l-1]).replace('mgrUp','매니저 돈벌이'):`${t.d} · ${nx}개부터`}</small></div>`; }).join('');
+  const combos=COMBOS.map(c=>{ const on=comboOn(c); return `<div class="cb ${on?'on':''}"><b>${c.ic} ${c.nm}</b><span>${Object.entries(c.need).map(([k,n])=>`${TAGS[k].ic}${Math.min(T[k],n)}/${n}`).join(' + ')}</span><small>${c.d}</small></div>`; }).join('');
+  return `<div class="tags">${tags}</div><div class="cbh">조합 시너지</div><div class="cbs">${combos}</div><div class="cbtip">돈벌이를 <b>10개·50개</b> 모으면 특화를 골라 태그를 모을 수 있어요</div>`; }
+function specSheet(a,slot){
+  const opts=specOffer(a.id,slot), cur=specOf(a.id)[slot], ch=cur?Math.max(1000,S.money*.1):0;
+  showModal(`<div class="specs"><h2>🔧 ${a.ic} ${a.nm} 특화 ${slot+1}</h2><p>${cur?`바꾸려면 현금 10% (${fmt(ch)})`:'하나를 골라요 · 이 돈벌이 수입 ×1.25 + 태그 1개'}</p>
+    <div class="spc">${opts.map(k=>{ const t=TAGS[k]; return `<button class="spcard ${cur===k?'cur':''}" data-k="${k}" style="--tc:${t.c}"><span class="ti">${t.ic}</span><b>${t.adj} ${a.nm}</b><small>${t.ic} ${t.nm} +1 · ${t.d}</small><em>지금 ${tagCounts()[k]}개 → ${tagCounts()[k]+(cur===k?0:1)}개</em></button>`; }).join('')}</div>
+    <button class="gray" onclick="hideModal()">닫기</button></div>`);
+  document.querySelectorAll('.spcard').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; if(cur===k) return; if(cur){ if(S.money<ch) return toast('💸 돈이 부족해요'); S.money-=ch; }
+    S.spec=S.spec||{}; const arr=(S.spec[a.id]||[]).slice(); arr[slot]=k; S.spec[a.id]=arr; _tagC=null; save(); sfx('level'); toast(`🔧 ${TAGS[k].adj} ${a.nm}! ${TAGS[k].ic}${TAGS[k].nm} ${tagCounts()[k]}개`); hideModal(); renderList(); render(); });
+}
 function cpc(){
   let c=1; for(const k of CLICK){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
   return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
@@ -1540,8 +1580,8 @@ function renderList(){
   const arr = tab==='auto'?autoList():CLICK, own = tab==='auto'?S.auto:S.click;
   const L=$('list'); L.innerHTML='';
   if(tab==='auto'){
-    const tot=SYN.reduce((t,y)=>t+synLv(y),0);
-    L.insertAdjacentHTML('beforeend',`<details class="synp" ${synOpen?'open':''}><summary>🔗 시너지 <b class="sl">●${tot}</b> <span>같이 키우면 단계 UP</span></summary>${SYN.map(synHtml).join('')}</details>`);
+    const TC=tagCounts(), tot=Object.keys(TAGS).reduce((t,k)=>t+tagLv(k),0)+COMBOS.filter(comboOn).length;
+    L.insertAdjacentHTML('beforeend',`<details class="synp" ${synOpen?'open':''}><summary>🔗 시너지 ${Object.entries(TAGS).filter(([k])=>TC[k]).map(([k,t])=>`<b class="tch" style="--tc:${t.c}">${t.ic}${TC[k]}</b>`).join('')||'<span>특화로 태그를 모아요</span>'}</summary>${synHtml()}</details>`);
     L.querySelector('.synp').ontoggle=e=>{ synOpen=e.target.open; };
     const own=autoList().filter(a=>(S.auto[a.id]||0)>0), hired=own.filter(a=>isMgr(a.id)), canH=own.filter(a=>!isMgr(a.id)), sh=managedShare();
     if(own.length){ const cheap=canH.map(mgrCost).sort((a,b)=>a-b);
@@ -1571,11 +1611,11 @@ function renderList(){
     const flavor = tab==='auto' ? it.ds : '';
     el.innerHTML = prevOwned
       ? `<div class="ic ${ICON[it.id]?'svg':''} g-${it.grp||'c'}">${icon(it.id,it.ic)}</div>
-         <div class="mid"><div class="nm">${it.nm}${mm>1?`<b class="mx">×${mm}</b>`:''}</div><div class="ef">${extra}</div>${flavor?`<div class="ds">${flavor}</div>`:''}</div>
+         <div class="mid"><div class="nm"><span class="nmt">${it.nm}</span>${mm>1?`<b class="mx">×${+mm.toFixed(1)}</b>`:''}${tab==='auto'?specOf(it.id).filter(Boolean).map(k=>`<b class="tch" style="--tc:${TAGS[k].c}">${TAGS[k].ic}</b>`).join(''):''}${tab==='auto'&&specOpen(it)>=0?'<b class="spnew">✨특화</b>':''}</div><div class="ef">${extra}</div>${flavor?`<div class="ds">${flavor}</div>`:''}</div>
          <div class="rt"><div class="pr">${B.k>1?`<em>+${B.k}</em> `:''}${fmt(price)}</div><div class="cnt" title="다음 ×2 마일스톤">${n}${nx?`<span>/${nx}</span>`:''}</div></div>
          ${n>0?`<div class="msl" title="${nx?nx+'개 모으면 수입 ×2':'모든 마일스톤 달성'}"><i style="width:${msPct.toFixed(1)}%"></i></div>`:''}`
       : `<div class="ic lk">?</div><div><div class="nm">???</div><div class="ds">이전 항목을 먼저 사세요</div></div><div></div>`;
-    el.onclick=(e)=>{ const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
+    el.onclick=(e)=>{ if(e.target.closest('.spnew')){ e.stopPropagation(); specSheet(it,specOpen(it)); return; } const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
       if(tab==='auto' && e.target.closest('.ic') && prevOwned && n>0){ itemSheet(it); return; } buy(it,own,prevOwned); };
     if(tab==='auto' && prevOwned && n>0){ const ic=el.querySelector('.ic'); ic.classList.add('mg'); ic.insertAdjacentHTML('beforeend',`${isMgr(it.id)?'<b class="mb">👔</b>':'<b class="mb hire">+👔</b>'}${(S.star||{})[it.id]?`<b class="sb">★${S.star[it.id]}</b>`:''}`);
       const stv=(S.star||{})[it.id]||0, m=isMgr(it.id);
@@ -1601,12 +1641,13 @@ function refreshAffordable(){
   $('list').querySelectorAll('button.act[data-c]').forEach(b=>b.classList.toggle('no', S.money < +b.dataset.c));
 }
 function itemSheet(a){
-  const m=isMgr(a.id), st=(S.star||{})[a.id]||0, syn=SYN.filter(y=>y.mgr||synItems(y).some(x=>x.id===a.id));
+  const m=isMgr(a.id), st=(S.star||{})[a.id]||0;
   showModal(`<div class="isheet"><div class="ih"><span class="ii">${a.ic}</span><div><b>${a.nm}</b><small>${S.auto[a.id]}개 · 초당 ${fmt(itemRaw(a)*ECON_A*stageBonus()*mgmtMult()*pathMult())}</small></div></div>
    <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'고용 완료 · 자동 수금':fmt(mgrCost(a))}</em><small>꼬질이를 안 눌러도 자동으로 들어오고, 오프라인에도 벌어요</small></button>
    <button class="ib" id="iStar" ${st>=3?'disabled':''}><span>★ 등급 올리기 (${st}/3)</span><em>${st>=3?'최고 등급':fmt(starCost(a))}</em><small>등급마다 이 돈벌이 수입 ×1.5</small></button>
-   ${syn.length?`<div class="isyn">${syn.map(synHtml).join('')}</div>`:''}
+   <div class="isyn">${SPEC_AT.map((at,j)=>{ const k=specOf(a.id)[j]; return `<button class="ib spb" data-j="${j}" ${(S.auto[a.id]||0)<at?'disabled':''}><span>🔧 특화 ${j+1}</span><em>${k?TAGS[k].ic+' '+TAGS[k].adj:(S.auto[a.id]||0)>=at?'✨ 고르기':at+'개부터'}</em><small>${k?'눌러서 바꾸기 (현금 10%)':'이 돈벌이 ×1.25 + 태그'}</small></button>`; }).join('')}</div>
    <button class="gray" onclick="hideModal()">닫기</button></div>`);
+  document.querySelectorAll('.spb').forEach(b=>b.onclick=()=>specSheet(a,+b.dataset.j));
   $('iMgr').onclick=()=>{ const c=mgrCost(a); if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.mgr=S.mgr||{}; S.mgr[a.id]=1; sfx('level'); toast(`👔 ${a.nm} 매니저 고용!`); hideModal(); renderList(); };
   $('iStar').onclick=()=>{ const c=starCost(a); if(((S.star||{})[a.id]||0)>=3) return; if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.star=S.star||{}; S.star[a.id]=(S.star[a.id]||0)+1; sfx('level'); toast(`★ ${a.nm} ${S.star[a.id]}성! 수입 ×1.5`); itemSheet(a); renderList(); };
 }
@@ -1623,6 +1664,7 @@ function buy(it,own,ok){
   if(B.none || S.money<B.tot) return;
   S.money-=B.tot; own[it.id]=n+B.k;
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
+  if(own===S.auto && SPEC_AT.some(x=>n<x && n+B.k>=x)) setTimeout(()=>toast(`✨ ${it.nm} 특화를 고를 수 있어요! 이름 옆 ✨특화를 눌러요`),300);
   const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} ${hit[hit.length-1]}개 달성! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
@@ -1814,6 +1856,7 @@ function beg(x,y){
   const wm=walkerMult();
   const v=cpc()*comboMult()*wm; earn(v); S.clicks++;
   const pv=S.pend||0; if(pv>=1){ earn(pv); S.pend=0; }
+  if(Math.random()<perkA('begGold')) spawnGold();
   if(Math.random()<perkA('tipP')){ const tip=cps()*30; earn(tip); setTimeout(()=>toast(`👵 단골 할머니 용돈! +${fmt(tip)}`),0); }   // 매니저 없는 돈벌이도 구걸할 때 같이 들어와요
   sfx('click');
   if(combo===100 && Date.now()-lastComboFever>120000){ lastComboFever=Date.now(); startFever(10+perkA('feverS')); }
@@ -2550,7 +2593,7 @@ const CTYPE={
   rush:{ic:'⏱️',nm:'러시',p:1,min:'r'},
   gift:{ic:'🐾',nm:'행운의 선물',p:1,min:'e'},
 };
-function rollRar(){ let t=Math.random()*100; for(const r of RAR){ if((t-=r.w)<0) return r; } return RAR[0]; }
+function rollRar(){ const lx=1+perkA('legendX'); const W=RAR.map(r=>r.k==='l'?r.w*lx:r.w), tot=W.reduce((a,b)=>a+b,0); let t=Math.random()*tot; for(let i=0;i<RAR.length;i++){ if((t-=W[i])<0) return RAR[i]; } return RAR[0]; }
 function cardOf(type,r,k){
   const T=CTYPE[type], m=r.m, half=perkA('safeHalf')>0;
   const pBase={risk:.65+perkA('riskP'),inv:.5+perkA('riskP')/2+perkA('betP')/2,bet:.3+perkA('betP')}[type];
@@ -2885,6 +2928,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.6',d:'10/31',items:['🔧 <b>돈벌이 특화</b>: 10개·50개 모으면 태그 3개 중 하나로 특화 (수입 ×1.25 + 태그) · 현금 10%로 변경 가능','🔗 <b>태그 시너지</b>: 🎭감성 ⚙️시스템 🍀행운 💰수완 🛡️뚝심 — 2/4/6/9개 모을수록 강해져요','✨ <b>조합 시너지</b>: 🥺동정의 기적 · 🏭무인 공장 · 🎰대박 인생 · 🏰철옹성 · 🎤길거리 스타']},
   {v:'v2.5',d:'10/31',items:['🐢 수입 한 번 더 하향 (자동 ×0.12 · 구걸 ×0.28)','🧹 "한 번에 사기" 버튼 제거 (한 개씩 구매)','🎴 <b>레벨업 인생 카드</b>: 4장 뽑기 · 일반/희귀/영웅/전설 등급(높을수록 보상 UP) · ⏱️골든 타임·🐾선물 상자 특수 카드 · 🎡 운명의 룰렛 연출 · 🔄 다시 뽑기(현금 10%)','🔗 <b>시너지 개편</b>: 조합을 같이 키우면 단계(●●●●)가 올라가요 · 10/25/50/100개마다 수입 ×1.15→×1.75 + 보너스 · 👔매니저 팀은 고용 인원 3/6/9/12명','🧬 <b>진로별 특성</b>: 3·4단계 특성이 12진로마다 달라요 (예: 의사 🔪외과 vs 🩺내과, 🚑응급실 에이스 vs 🏥개원의)']},
   {v:'v2.4',d:'10/31',items:['🐢 <b>돈 버는 속도 대폭 하향</b>: 자동 ×0.2 · 구걸 ×0.4 · 가격 상승 1.2→1.25배 · 신분 요구 금액 상향 (최종 300경)','⭐ ★강화 ×2·5단계 → <b>×1.5·3단계</b> · 개수 보너스 ×2는 200개까지, 이후 ×1.5 · 시너지·레벨업 선택 보너스 절반','🌳 <b>스킬 전면 개편</b>: 🙏구걸술 · 🏪장사술 · 🍀눈치 · 🛡️생존 (각 6단계, 이야기 순서) + 🎭직업 · 새 스킬 👵단골 할머니(용돈) 등','🧬 <b>특성 개편</b>: 장점과 단점이 함께 있는 인생관 선택 (연기파/성실파 · 번화가/골목 · 현장형/위임형 · 한방주의/안정주의)','💸 예전 스킬에 쓴 돈은 전액 돌려드려요 · 특성은 다시 골라주세요']},
   {v:'v2.3.4',d:'10/31',items:['📏 미니창 길이 최적화: 돈벌이 목록 약 30% 짧게 · 잠긴 칸은 하나만 표시 · 매니저 현황 한 줄','👔 미니창에선 아이콘의 <b>+👔</b> 표시를 누르면 매니저 고용·★강화 창이 열려요']},
@@ -3138,7 +3182,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.5';
+const GAME_VER='v2.6';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
