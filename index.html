@@ -1310,6 +1310,13 @@
   .skw .fcs{padding:6px 8px} .skw .fcd{margin-top:5px}
   .skw .tree2{transform-origin:top center}
   body.mini .skbar2 .sp2{font-size:10.5px;padding:3px 0;border-width:1.5px} body.mini .skbar2 .sb.pet{width:24px;height:22px} body.mini .skbar2 .sb.pet svg{width:19px}
+
+  .tree2 .tba{border:2px solid #e2d3bd;background:#fff;color:#5a4436;font-size:11.5px;padding:2px 9px;cursor:pointer;top:6px;z-index:3;box-shadow:0 2px 0 #e2d3bd}
+  .tree2 .tba.on{border-color:#5a4436;background:linear-gradient(#ffe2a8,#f5b65c);box-shadow:0 2px 0 #5a4436}
+  .fcd.pth{padding:6px 10px;background:#fff7ea;border-bottom:2px dashed #e8d9c2;margin:0;font-size:11.5px}
+  .skbc i{font-style:normal;font-size:9px;background:#ef4444;color:#fff;border-radius:6px;padding:0 4px}
+  .mnl{cursor:pointer;white-space:nowrap} .mnl input{vertical-align:-2px;margin:0 2px 0 0}
+  body.mini .tree2 .tba{font-size:9.5px;padding:1px 6px}
 </style>
 </head>
 <body>
@@ -1527,7 +1534,8 @@ for(const [k,R] of Object.entries(ROUTES)){ R.perk=perkText(PERKS[k]); for(const
 function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null, ...petPerks()].filter(Boolean); }
 function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1)*Math.max(.1,1+jsk(k)+trk(k)+synk(k)); }
 function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0)+jsk(k)+trk(k)+synk(k)+(k==='evDodge'?-.12*(S.curse||0):0); }
-function migrate38(){ if(S.v38) return; S.v38=1; for(const [id,l] of Object.entries(S.skill||{})){ const n=SKILLS.find(x=>x.id===id); if(!n) delete S.skill[id]; else if(l>n.max) S.skill[id]=n.max; } }
+function migrate40(){ if(S.v40) return; S.v40=1; S.skill={}; S.tpath={}; delete S.skFocus; }
+function migrate38(){ migrate40(); if(S.v38) return; S.v38=1; for(const [id,l] of Object.entries(S.skill||{})){ const n=SKILLS.find(x=>x.id===id); if(!n) delete S.skill[id]; else if(l>n.max) S.skill[id]=n.max; } }
 function migrate27(){ setTimeout(migrate38,0); if(S.v27) return; S.v27=1; let ref=0;
   for(const n of (typeof SKILLS!=='undefined'?SKILLS:[])){ if(n.br>0 && n.base){ const l=(S.skill||{})[n.id]||0; for(let k=0;k<l;k++) ref+=Math.ceil(n.base*Math.pow(n.gr,k)); } }
   S.skill={}; if(ref>0){ S.money+=ref; setTimeout(()=>showModal(`<h2>🌳 스킬이 SP 방식으로 바뀌었어요</h2><p>이제 스킬은 <b>레벨업 SP</b>로 찍어요.<br>예전 스킬에 쓴 <b>${fmt(ref)}</b>을 돌려드렸어요.<br>지금 SP <b>${spAvail()}</b> · 스킬 탭에서 찍어주세요!</p><button onclick="hideModal()">확인</button>`),2200); } }
@@ -1767,7 +1775,7 @@ const RTRAIT={
   chef:[[['🔥','불맛 장인',{feverS:6,feverX:.5,idleEff:-.2}],['📋','레시피 표준화',{mgrDisc:.4,auto:.1,feverS:-3}]],[['⭐','별 사냥',{goldX:.6,goldFreq:-.15}],['🍱','대량 생산',{auto:.3,discount:.05,goldX:-.2}]]],
   law:[[['🗣️','법정 싸움꾼',{robP:.1,pvpDisc:.2,evRes:-.15}],['🤝','합의 전문',{evRes:.3,pvpDef:.2,robP:-.05}]],[['💼','대형 사건',{riskP:.2,goldX:.3,idleEff:-.15}],['📜','자문 계약',{auto:.25,idleEff:.2,riskP:-.1}]]],
 };
-function effText(o){ const L={auto:'자동 수입',click:'구걸 수입',goldFreq:'돈주머니 등장',goldBonus:'돈주머니 보상',goldX:'돈주머니 보상',feverP:'피버 확률',feverX:'피버 배율',feverS:'피버 시간',comboMax:'콤보 배율',idleEff:'방치 효율',idleH:'방치 시간',mgrDisc:'매니저 할인',discount:'가격 할인',evRes:'악재 피해 감소',evDodge:'악재 회피',betP:'도박 성공',riskP:'도전 성공',pvpDef:'뜯기 방어',pvpDisc:'뜯기·고소 할인',robP:'뜯기 성공',mgrUp:'매니저 돈벌이',pvpDef:'뜯기 방어'};
+function effText(o){ const L={auto:'자동 수입',click:'구걸 수입',goldFreq:'돈주머니 등장',goldBonus:'돈주머니 보상',goldX:'돈주머니 보상',feverP:'피버 확률',feverX:'피버 배율',feverS:'피버 시간',comboMax:'콤보 배율',idleEff:'방치 효율',idleH:'방치 시간',mgrDisc:'매니저 할인',discount:'가격 할인',evRes:'악재 피해 감소',evDodge:'악재 회피',betP:'도박 성공',riskP:'도전 성공',pvpDef:'뜯기 방어',pvpDisc:'뜯기·고소 할인',robP:'뜯기 성공',mgrUp:'매니저 돈벌이',pvpDef:'뜯기 방어',tipP:'용돈 확률'};
   return Object.entries(o).map(([k,v])=>{ const n=L[k]||k, up=v>0, x= k==='feverX'?(up?'+':'')+v : k==='feverS'?(up?'+':'')+v+'초' : k==='idleH'?(up?'+':'')+v+'시간' : k==='comboMax'?(up?'+':'')+(v/10).toFixed(1) : (up?'+':'')+Math.round(v*100)+'%'; return `${n} ${x}`; }).join(' · '); }
 function traitList(){
   const L=TRAITS.slice(0,2); const R=S.route&&RTRAIT[S.route];
@@ -1938,7 +1946,7 @@ function mgrSheet(){
 const HELP={
   auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','10개·50개에서 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
-  skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['🧭','육성 방향','구걸형·자동형·행운형·생존형 중 하나를 고르면 SP가 생길 때마다 알아서 찍혀요. 직접 찍고 싶으면 ✋직접'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
+  skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['🧭','길 고르기','전직할 때마다 그 직업의 트리가 열려요. 두 길 중 하나를 누르면 SP가 그 길대로 알아서 찍혀요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
 function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><h2>❔ 도움말</h2>${H.map(([i,n,d])=>`<div class="hr"><span>${i}</span><div><b>${n}</b><small>${d}</small></div></div>`).join('')}<button onclick="hideModal()">알겠어요</button></div>`); }
 function itemSheet(a){
@@ -2477,9 +2485,10 @@ function useAct(id,auto){
 }
 setInterval(()=>renderSkbar(),500);
 setInterval(()=>{ const bd=(t,n)=>{ const b=document.querySelector(`.tabs button[data-tab=${t}]`); if(!b) return; let e=b.querySelector('.tbdg'); if(!n){ if(e) e.remove(); return; } if(!e){ e=document.createElement('b'); e.className='tbdg'; b.appendChild(e); } if(e.textContent!==String(n)) e.textContent=n; };
-  const sp=spAvail(), canSk=(S.skFocus==='manual') && sp>0 && SKILLS.some(n=>n.br>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)) && skState(n)==='can');
+  const sp=spAvail(), canSk=!!S.skManual && sp>0 && SKILLS.some(n=>n.br>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)) && skState(n)==='can');
   const newTr=traitList().some(T=>!T.nojob && stageIdx()>=T.lv && !tr(T.t));
-  bd('skill', canSk? sp : newTr? '!' : 0);
+  const needPath=!S.skManual && !(S.tpath||{})[curTier()] && spAvail()>0;
+  bd('skill', canSk? sp : (newTr||needPath)? '!' : 0);
   bd('auto', autoList().filter(a=>specOpen(a)>=0).length ? '✨' : 0); },1000);
 
 
@@ -2510,7 +2519,7 @@ const TUT=[
   {t:'돈이 모이면 <b>빈 깡통</b>을 사요',el:()=>document.querySelector('.item[data-id=cup] .buyb'),done:()=>(S.auto.cup||0)>=1,tab:'auto'},
   {t:'깡통을 더 모아봐요<br><small>25개면 수입 ×2!</small>',el:()=>document.querySelector('.item[data-id=cup] .buyb'),done:()=>(S.auto.cup||0)>=5,tab:'auto'},
   {t:'아이콘을 눌러 <b>매니저</b>를 고용하면<br>안 눌러도 자동으로 벌어요',el:()=>document.querySelector('.item[data-id=cup] .ic'),done:()=>Object.keys(S.mgr||{}).length>0,tab:'auto',when:()=>S.money>=mgrCost(autoList()[0])},
-  {t:'스킬 탭에서 <b>육성 방향</b>을 골라요<br><small>SP는 알아서 찍혀요</small>',el:()=>document.querySelector('.tabs button[data-tab=skill]'),done:()=>Object.keys(S.skill||{}).length>0||tab==='skill'},
+  {t:'스킬 탭에서 <b>길</b>을 골라요<br><small>SP는 그 길대로 알아서 찍혀요</small>',el:()=>document.querySelector('.tabs button[data-tab=skill]'),done:()=>Object.keys(S.skill||{}).length>0||tab==='skill'},
 ];
 function tutTick(){
   let B=$('tutb'); if(S.tutDone||paused||$('modal').classList.contains('show')||modalBusy()){ if(B) B.style.display='none'; return; }
@@ -2822,6 +2831,58 @@ function doRebirth(){
 const BR=[{nm:'👋 구걸',c:'#f0a92e'},{nm:'🙏 구걸술',c:'#f0a92e'},{nm:'🏪 장사술',c:'#3d8bfd'},{nm:'🍀 눈치',c:'#2fb36a'},{nm:'🎭 직업',c:'#8b5cf6'},{nm:'🛡️ 생존',c:'#e5484d'}];
 const BR_ORDER=[1,2,3,5,4];
 const JOB_ACT={biz:['⏰','타임 세일'],job:['📊','실적 몰아치기'],inv:['📈','풀매수'],star:['🎤','앵콜 무대'],cre:['🔴','라이브 방송'],gov:['📜','예산 집행'],doc:['🚑','응급 출동'],ath:['⚡','폭풍 질주'],dev:['🚀','긴급 배포'],art:['🎨','라이브 드로잉'],chef:['🔥','불쇼'],law:['⚖️','승소 판결']};
+
+// ===== 전직 트리: 0차(거지) · 1차(진로 12종) · 2차(전직 60종) =====
+const STT={ // 스킬 효과 종류 (레벨당)
+  click:{click:.07}, auto:{auto:.06}, combo:{click:.035,comboMax:1}, luck:{goldFreq:.045,goldBonus:.06}, fever:{feverP:.015,feverS:1},
+  idle:{idleEff:.035,idleH:.5}, def:{evRes:.035,pvpDef:.035}, disc:{discount:.012,mgrDisc:.035}, mgr:{mgrUp:.05}, tip:{tipP:.003,click:.025}};
+const SBUF={ clickB:{k:'click',m:l=>3,dur:l=>10+4*l,cd:180,t:'구걸'}, autoB:{k:'auto',m:l=>2.5,dur:l=>20+6*l,cd:480,t:'자동 수입'}, allB:{k:'all',m:l=>2,dur:l=>20+5*l,cd:600,t:'모든 수입'} };
+function mkSk(o){ // o:{id,br,ln,ic,nm,type,max,req,reqAny,route,sub,d,ult}
+  const n=Object.assign({max:SBUF[o.type]?5:10},o); if(o.max==null) delete o.max;
+  if(SBUF[o.type]){ const b=SBUF[o.type]; n.act={k:b.k,m:b.m,dur:b.dur,cd:b.cd}; n.ef=l=>`${b.dur(l)}초간 ${b.t} ×${b.m(l)} · ${Math.round(b.cd/60)}분마다`; }
+  else { const e=o.eff||STT[o.type]; n.eff=e; n.ef=l=>effText(Object.fromEntries(Object.entries(e).map(([k,v])=>[k,+(v*l).toFixed(3)]))); }
+  return n; }
+const TREE0={A:'🙏 구걸 길',B:'🏪 장사 길'};
+function tree0(){ return [
+  mkSk({id:'t0r',br:1,ln:'r',ic:'🥺',nm:'애처로운 눈빛',type:'click',max:10,d:'모든 거지의 시작'}),
+  mkSk({id:'t0a1',br:1,ln:'A',ic:'😢',nm:'눈물 연기',type:'combo',req:['t0r',3],d:'연타할수록 더 서럽게'}),
+  mkSk({id:'t0a2',br:1,ln:'A',ic:'👵',nm:'단골 할머니',type:'tip',req:['t0a1',2],d:'가끔 큰 용돈을 주신다'}),
+  mkSk({id:'t0a3',br:1,ln:'A',ic:'😭',nm:'대성통곡',type:'clickB',req:['t0a2',2],d:'목 놓아 울면 지갑이 열린다'}),
+  mkSk({id:'t0b1',br:1,ln:'B',ic:'🧹',nm:'근면 성실',type:'auto',req:['t0r',3],d:'아침 일찍 자리를 편다'}),
+  mkSk({id:'t0b2',br:1,ln:'B',ic:'💬',nm:'가격 흥정',type:'disc',req:['t0b1',2],d:'깎는 것도 실력'}),
+  mkSk({id:'t0b3',br:1,ln:'B',ic:'⏰',nm:'대목 장사',type:'autoB',req:['t0b2',2],d:'손님 몰리는 시간을 노린다'}),
+  mkSk({id:'t0u',br:1,ln:'U',ic:'👑',nm:'전설의 거지',max:1,reqAny:[['t0a3',3],['t0b3',3]],eff:{click:.4,auto:.4},d:'거지계의 전설 (궁극기)'}),
+]; }
+// 진로 트리: [A길 이름, B길 이름, 뿌리, A1,A2,A3, B1,B2,B3, 궁극기]  각 [아이콘,이름,효과종류]
+const RTREE={
+  biz:['🏪 확장 길','🍗 맛집 길',['🍗','장사 수완','auto'],['🏪','2호점','auto'],['💰','박리다매','disc'],['⏰','타임 세일','autoB'],['📺','맛집 방송','luck'],['🔥','불맛 비법','fever'],['🎉','오픈 이벤트','allB'],['🏢','외식 제국','']],
+  job:['🌙 야근 길','📈 승진 길',['💼','회사 생활','auto'],['☕','커피 수혈','click'],['🔥','야근 버프','fever'],['📊','실적 몰아치기','clickB'],['🤝','사내 정치','auto'],['🏖️','연차 활용','idle'],['📈','연봉 협상','autoB'],['🏆','올해의 사원','']],
+  inv:['📊 단타 길','💎 장투 길',['📈','차트 감각','luck'],['⚡','스캘핑','fever'],['🎢','레버리지','luck'],['🚀','풀매수','allB'],['💎','존버','idle'],['🏦','배당주','auto'],['🛡️','손절의 미학','def'],['🐋','고래','']],
+  star:['🎤 무대 길','📢 광고 길',['🌟','스타성','click'],['💖','팬서비스','combo'],['🔁','역주행','fever'],['🎤','앵콜 무대','clickB'],['📢','CF 촬영','luck'],['🧸','굿즈 판매','auto'],['🎬','예능 출연','allB'],['👑','국민 스타','']],
+  cre:['🔥 떡상 길','🐢 꾸준 길',['🎥','콘텐츠 감각','luck'],['🤖','알고리즘','luck'],['🔥','떡상','fever'],['🔴','라이브 방송','allB'],['📅','꾸준 업로드','auto'],['🤝','협찬','auto'],['💸','슈퍼챗','clickB'],['🌐','갓튜버','']],
+  gov:['📚 승진 길','🍚 철밥통 길',['📁','행정 능력','auto'],['📚','승진 시험','click'],['📈','호봉 승급','auto'],['📜','예산 집행','autoB'],['🍚','철밥통','def'],['🏦','공무원 연금','idle'],['🕔','칼퇴','allB'],['🏛️','고위 공직자','']],
+  doc:['🔪 외과 길','🩺 내과 길',['🩺','의술','auto'],['🔪','수술 집도','click'],['🚑','응급 대응','fever'],['🚑','응급 출동','clickB'],['💊','처방전','auto'],['🌙','당직 수당','idle'],['🏥','외래 진료','autoB'],['👨‍⚕️','명의','']],
+  ath:['⚽ 공격수 길','🧱 수비수 길',['🏃','체력','click'],['⚽','슈팅','click'],['⚡','폭발적 스퍼트','combo'],['⚡','폭풍 질주','clickB'],['🧱','철벽 수비','def'],['🤝','스폰서 계약','auto'],['🏆','우승 보너스','allB'],['🥇','레전드','']],
+  dev:['⌨️ 손코딩 길','⚙️ 자동화 길',['💻','코딩 실력','auto'],['⌨️','손코딩','click'],['🐛','버그 헌터','fever'],['🚀','긴급 배포','clickB'],['⚙️','자동화 스크립트','idle'],['☁️','클라우드','auto'],['📦','오픈소스','autoB'],['🧠','10x 개발자','']],
+  art:['💡 영감 길','🖌️ 노력 길',['🎨','미적 감각','luck'],['💡','영감','luck'],['🎲','경매 촉','fever'],['🎨','라이브 드로잉','allB'],['🖌️','붓터치 장인','click'],['🖼️','작품 값 상승','auto'],['📚','화집 출간','autoB'],['🏛️','거장','']],
+  chef:['🔥 불맛 길','📋 레시피 길',['🔪','칼질','click'],['🔥','불맛','fever'],['🍳','시그니처 메뉴','click'],['🔥','불쇼','clickB'],['📋','레시피 노트','disc'],['🥘','비법 소스','auto'],['🍱','대량 생산','autoB'],['⭐','미슐랭 셰프','']],
+  law:['🗣️ 법정 길','📜 자문 길',['⚖️','법률 지식','auto'],['🗣️','변론술','click'],['🛡️','법률 방패','def'],['⚖️','승소 판결','allB'],['📚','판례 암기','auto'],['🤝','합의 전문','idle'],['📜','자문 계약','autoB'],['🏛️','법조계 거물','']],
+};
+function routeTrees(){ const out=[];
+  for(const [r,T] of Object.entries(RTREE)){ const p=`r_${r}_`; const [A,B,R,a1,a2,a3,b1,b2,b3,U]=T;
+    const mk=(x,id,ln,req,mx)=>mkSk({id:p+id,br:4,route:r,ln,ic:x[0],nm:x[1],type:x[2],req,max:mx||(x[2].endsWith('B')?5:10)});
+    out.push(mk(R,'r','r',null,10), mk(a1,'a1','A',[p+'r',3]), mk(a2,'a2','A',[p+'a1',2]), mk(a3,'a3','A',[p+'a2',2]),
+      mk(b1,'b1','B',[p+'r',3]), mk(b2,'b2','B',[p+'b1',2]), mk(b3,'b3','B',[p+'b2',2]),
+      mkSk({id:p+'u',br:4,route:r,ln:'U',ic:U[0],nm:U[1],max:1,reqAny:[[p+'a3',3],[p+'b3',3]],eff:{click:.5,auto:.5},d:`${ROUTES[r].nm}의 정점 (궁극기)`}));
+  } return out; }
+function subTrees(){ const out=[];
+  for(const [r,R] of Object.entries(ROUTES)) for(const [k,sb] of Object.entries(R.subs)){ const p=`x_${r}_${k}_`, pk=PERKS[r+'.'+k]||{auto:1.1};
+    const noh=Object.fromEntries(Object.entries(pk).map(([kk,v])=>[kk, kk==='auto'||kk==='click'||kk==='goldX' ? +((v-1)/4).toFixed(3) : kk==='idleH'||kk==='feverS'||kk==='comboMax' ? Math.max(1,Math.round(v/4)) : +(v/4).toFixed(3)]));
+    out.push(mkSk({id:p+'r',br:6,route:r,sub:k,ln:'r',ic:sb.ic,nm:`${sb.nm} 마스터리`,max:10,eff:{auto:.05,click:.05},d:`${sb.nm}의 기본기`}));
+    out.push(mkSk({id:p+'a',br:6,route:r,sub:k,ln:'A',ic:'💫',nm:`${sb.nm}의 기세`,type:'allB',req:[p+'r',3],d:'흐름을 탔을 때 몰아친다'}));
+    out.push(mkSk({id:p+'b',br:6,route:r,sub:k,ln:'B',ic:'📘',nm:`${sb.nm} 노하우`,eff:Object.fromEntries(Object.entries(noh).map(([a,v])=>[a,+(v/2).toFixed(3)])),max:10,req:[p+'r',3],d:`${sb.nm}만의 비결`}));
+    out.push(mkSk({id:p+'u',br:6,route:r,sub:k,ln:'U',ic:'👑',nm:`${sb.st[1].name}의 품격`,max:1,reqAny:[[p+'a',3],[p+'b',3]],eff:{auto:.4,click:.4},d:'정점에 선 자의 여유 (궁극기)'}));
+  } return out; }
 const SKILLS=[
   {id:'c1',br:0,ic:'🙏',nm:'애처로운 눈빛',max:50,base:50,gr:1.15,ef:l=>`클릭당 +${fmt(l*1*stageBonus())}`},
   {id:'c2',br:0,ic:'😢',nm:'눈물 연기',max:50,base:600,gr:1.15,req:['c1',5],ef:l=>`클릭당 +${fmt(l*5*stageBonus())}`},
@@ -2829,44 +2890,9 @@ const SKILLS=[
   {id:'c4',br:0,ic:'🐶',nm:'강아지 동료',max:50,base:1.2e5,gr:1.15,req:['c3',5],ef:l=>`클릭당 +${fmt(l*200*stageBonus())}`},
   {id:'c5',br:0,ic:'📱',nm:'구걸 라이브',max:50,base:2e6,gr:1.15,req:['c4',5],ef:l=>`클릭당 +${fmt(l*1500*stageBonus())}`},
   {id:'c6',br:0,ic:'✨',nm:'황금 손',max:10,base:5e7,gr:1.15,req:['c5',3],ef:l=>`클릭당 +초당 수입의 ${l*5}%`},
-  // 🙏 구걸술 — 뿌리: 애처로운 눈빛 · A 눈물샘(콤보·폭발) · B 인정머리(단골·꾸준)
-  {id:'g1',br:1,ln:'r',ic:'🥺',nm:'애처로운 눈빛',max:10,eff:{click:.08},d:'불쌍한 눈빛은 구걸의 기본',ef:l=>`구걸 수입 +${l*8}%`},
-  {id:'g2',br:1,ln:'A',ic:'😢',nm:'눈물 연기',max:5,req:['g1',3],eff:{comboMax:2},d:'연타할수록 더 서럽게 운다',ef:l=>`콤보 최대 배율 +${(l*.2).toFixed(1)}`},
-  {id:'g3',br:1,ln:'A',ic:'📜',nm:'사연 낭독',max:5,req:['g2',3],eff:{click:.15},d:'눈물 없이 못 듣는 인생사',ef:l=>`구걸 수입 +${l*15}%`},
-  {id:'ga',br:1,ln:'A',ic:'😭',nm:'대성통곡',max:5,req:['g3',2],act:{k:'click',m:l=>3,dur:l=>10+4*l,cd:180},d:'목 놓아 울면 지갑이 열린다',ef:l=>`${10+4*l}초간 구걸 ×3 · 3분마다`},
-  {id:'g4',br:1,ln:'B',ic:'👵',nm:'단골 할머니',max:5,req:['g1',3],eff:{tipP:.006},d:'매일 오시는 할머니가 용돈을',ef:l=>`구걸할 때 ${(l*.6).toFixed(1)}% 확률로 용돈(30초치)`},
-  {id:'gb2',br:1,ln:'B',ic:'🧒',nm:'동네 꼬마 팬클럽',max:5,req:['g4',2],eff:{click:.06,goldFreq:.04},d:'꼬마들이 친구를 데려온다',ef:l=>`구걸 수입 +${l*6}% · 돈주머니 등장 +${l*4}%`},
-  {id:'g5',br:1,ln:'B',ic:'📱',nm:'구걸 라이브',max:5,req:['gb2',2],eff:{click:.2},d:'이제 온라인으로도 구걸한다',ef:l=>`구걸 수입 +${l*20}%`},
-  {id:'g6',br:1,ln:'U',ic:'✋',nm:'전설의 손',max:1,reqAny:[['ga',3],['g5',3]],eff:{click:1},d:'구걸의 끝판왕 (궁극기)',ef:l=>`구걸 수입 +100%`},
-  // 🏪 장사술 — 뿌리: 근면 성실 · A 확장(자동 수입) · B 관리(매니저·가격)
-  {id:'b1',br:2,ln:'r',ic:'🧹',nm:'근면 성실',max:10,eff:{auto:.06},d:'아침 일찍 자리를 편다',ef:l=>`자동 수입 +${l*6}%`},
-  {id:'b3',br:2,ln:'A',ic:'🤝',nm:'단골 확보',max:5,req:['b1',3],eff:{auto:.12},d:'아는 얼굴이 늘어난다',ef:l=>`자동 수입 +${l*12}%`},
-  {id:'b5',br:2,ln:'A',ic:'🏪',nm:'프랜차이즈',max:5,req:['b3',3],eff:{auto:.15},d:'간판을 여기저기 건다',ef:l=>`자동 수입 +${l*15}%`},
-  {id:'bA',br:2,ln:'A',ic:'⏰',nm:'대목 장사',max:5,req:['b5',2],act:{k:'auto',m:l=>2.5,dur:l=>20+6*l,cd:480},d:'손님이 몰리는 시간을 노린다',ef:l=>`${20+6*l}초간 자동 수입 ×2.5 · 8분마다`},
-  {id:'b2',br:2,ln:'B',ic:'💬',nm:'가격 흥정',max:5,req:['b1',3],eff:{discount:.02},d:'깎는 것도 실력',ef:l=>`돈벌이 가격 -${l*2}%`},
-  {id:'b4',br:2,ln:'B',ic:'👔',nm:'매니저 교육',max:5,req:['b2',2],eff:{mgrDisc:.1,idleEff:.04},d:'맡겨도 잘 돌아가게',ef:l=>`매니저 고용비 -${l*10}% · 방치 효율 +${l*4}%`},
-  {id:'bB',br:2,ln:'B',ic:'🧾',nm:'장부 정리',max:5,req:['b4',2],eff:{mgrUp:.08},d:'새는 돈을 막는다',ef:l=>`매니저 돈벌이 +${l*8}%`},
-  {id:'b6',br:2,ln:'U',ic:'🐙',nm:'문어발 경영',max:1,reqAny:[['bA',3],['bB',3]],eff:{auto:.6},d:'안 하는 사업이 없다 (궁극기)',ef:l=>`자동 수입 +60%`},
-  // 🍀 눈치 — 뿌리: 돈 냄새 · A 돈주머니 · B 피버
-  {id:'n1',br:3,ln:'r',ic:'👃',nm:'돈 냄새',max:5,eff:{goldFreq:.08},d:'돈주머니가 어디 떨어질지 안다',ef:l=>`돈주머니 등장 +${l*8}%`},
-  {id:'n2',br:3,ln:'A',ic:'🗺️',nm:'길목 선점',max:5,req:['n1',2],eff:{goldBonus:.2},d:'사람 많은 자리를 먼저 잡는다',ef:l=>`돈주머니 보상 +${l*20}%`},
-  {id:'n4',br:3,ln:'A',ic:'🍀',nm:'네잎클로버',max:5,req:['n2',2],eff:{luckEv:.15},d:'좋은 일이 자주 생긴다',ef:l=>`행운 이벤트 확률·보상 +${l*15}%`},
-  {id:'nA',br:3,ln:'A',ic:'💰',nm:'주머니 사냥꾼',max:5,req:['n4',2],eff:{goldX:.12},d:'돈주머니만 보면 눈이 번쩍',ef:l=>`돈주머니 보상 ×${(1+l*.12).toFixed(2).replace(/0$/,'')}`},
-  {id:'n3',br:3,ln:'B',ic:'⚡',nm:'피버 체질',max:5,req:['n1',2],eff:{feverP:.03,feverS:1},d:'흥이 오르면 멈출 수 없다',ef:l=>`피버 확률 +${l*3}% · 지속 +${l}초`},
-  {id:'n5',br:3,ln:'B',ic:'🎯',nm:'타이밍의 신',max:5,req:['n3',2],eff:{feverS:3},d:'기회가 오면 오래 붙잡는다',ef:l=>`피버 지속 +${l*3}초`},
-  {id:'nB',br:3,ln:'B',ic:'🎉',nm:'축제 분위기',max:5,req:['n5',2],act:{k:'all',m:l=>1.8,dur:l=>30+6*l,cd:600},d:'동네가 들썩이면 지갑도 열린다',ef:l=>`${30+6*l}초간 모든 수입 ×1.8 · 10분마다`},
-  {id:'n6',br:3,ln:'U',ic:'👑',nm:'황금 피버',max:1,reqAny:[['nA',3],['nB',3]],eff:{feverX:1},d:'피버가 더 뜨거워진다 (궁극기)',ef:l=>`피버 배율 3배 → 4배`},
-  // 🛡️ 생존 — 뿌리: 맷집 · A 방어(악재·뜯기) · B 방치(오프라인)
-  {id:'v1',br:5,ln:'r',ic:'🦴',nm:'맷집',max:5,eff:{evRes:.05},d:'길바닥에서 단련된 몸',ef:l=>`악재 피해 -${l*5}%`},
-  {id:'v2',br:5,ln:'A',ic:'👀',nm:'눈치 백단',max:5,req:['v1',2],eff:{evDodge:.08},d:'안 좋은 일은 미리 피한다',ef:l=>`악재 확률 -${l*8}%`},
-  {id:'v4',br:5,ln:'A',ic:'🐕',nm:'경비견',max:5,req:['v2',2],eff:{pvpDef:.08},d:'뜯으러 오면 짖는다',ef:l=>`뜯기 피해 -${l*8}%`},
-  {id:'v5',br:5,ln:'A',ic:'⚖️',nm:'전관 변호사',max:5,req:['v4',2],eff:{pvpDisc:.08,robP:.02},d:'싸움에도 법이 있다',ef:l=>`뜯기·고소 비용 -${l*8}% · 뜯기 성공 +${l*2}%`},
-  {id:'v3',br:5,ln:'B',ic:'🛏️',nm:'노숙 내공',max:5,req:['v1',2],eff:{idleH:1,idleEff:.04},d:'어디서든 잘 자고 잘 번다',ef:l=>`방치 최대 +${l}시간 · 효율 +${l*4}%`},
-  {id:'vB1',br:5,ln:'B',ic:'🌙',nm:'꿀잠',max:5,req:['v3',2],eff:{idleEff:.06},d:'자고 일어나면 돈이 불어 있다',ef:l=>`방치 효율 +${l*6}%`},
-  {id:'vB2',br:5,ln:'B',ic:'🏦',nm:'비상금',max:5,req:['vB1',2],eff:{evRes:.04,idleH:1},d:'언제든 버틸 구석이 있다',ef:l=>`악재 피해 -${l*4}% · 방치 최대 +${l}시간`},
-  {id:'v6',br:5,ln:'U',ic:'🏰',nm:'철벽',max:1,reqAny:[['v5',3],['vB2',3]],eff:{wall:.3,evRes:.1},d:'아무도 못 건드린다 (궁극기)',ef:l=>`뜯기 30% 무효화 · 악재 피해 -10%`},
-  ...jobSkills(),
-  ...subSkills(),
+  ...tree0(),
+  ...routeTrees(),
+  ...subTrees(),
 ];
 
 function subSkills(){ const out=[];
@@ -2955,8 +2981,10 @@ const SK_TABS=[
   {k:'sub',ic:'👑',nm:'2차 전직',sub:'전직',br:[6]},
 ];
 function tabSkills(T){ return SKILLS.filter(n=>T.br.includes(n.br) && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
-const SK_BR=[{k:'g',br:1,ic:'🙏',nm:'구걸술',A:'눈물샘',B:'인정머리'},{k:'b',br:2,ic:'🏪',nm:'장사술',A:'확장',B:'관리'},{k:'n',br:3,ic:'🍀',nm:'눈치',A:'돈주머니',B:'피버'},{k:'v',br:5,ic:'🛡️',nm:'생존',A:'방어',B:'방치'},{k:'j',br:4,ic:'🎭',nm:'1차 직업',A:'',B:''},{k:'x',br:6,ic:'👑',nm:'2차 전직',A:'',B:''}];
-let skMode='learn', skBr='g', skPane='skill';
+const SK_BR=[{k:'0',br:1,ic:'🧎',nm:'0차 · 거지'},{k:'1',br:4,ic:'🎭',nm:'1차 전직'},{k:'2',br:6,ic:'👑',nm:'2차 전직'}];
+function brLines(B){ if(B.br===1) return [TREE0.A,TREE0.B]; if(B.br===4&&S.route) return [RTREE[S.route][0],RTREE[S.route][1]]; return ['⚡ 기세 길','📘 노하우 길']; }
+function curTier(){ return S.sub?'2':S.route?'1':'0'; }
+let skMode='learn', skBr=null, skPane='skill';
 function brSkills(B){ return SKILLS.filter(n=>n.br===B.br && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 function brOpen(B){ return B.br===4?!!S.route:B.br===6?!!S.sub:true; }
 function skRow(n){ const l=skLv(n), st=skState(n), ef=x=>n.ef(x).replace(/^액티브 · /,'');
@@ -2968,7 +2996,7 @@ function treeHtml(B){
   const rows=Math.max(A.length,Bn.length);
   const node=(n,x,y)=>{ if(!n) return ''; const l=skLv(n), st=skState(n);
     return `<button class="tn2 ${st} ${l?'own':''} ${skSel===n.id?'sel':''} ${n.max===1?'ult':''}" data-id="${n.id}" style="left:${x}%;top:${y}px;--p:${(l/n.max*360).toFixed(0)}deg">${emo(n.ic)}<em>${st==='max'?'MAX':l+'/'+n.max}</em></button><div class="tl2" style="left:${x}%;top:${y+30}px">${n.nm}</div>`; };
-  const H=isMiniUI()?66:76, top=26, yR=top, yRow=i=>top+H*(i+1), yU=top+H*(rows+1), yX=yU+H;
+  const H=isMiniUI()?66:76, top=40, yR=top, yRow=i=>top+H*(i+1), yU=top+H*(rows+1), yX=yU+H;
   let ln=[], nd='';
   const lit=(a,b)=>skLv(a)>0&&skLv(b)>0?'g':skUnlocked(b)?'c':'';
   nd+=node(R,50,yR);
@@ -2977,71 +3005,52 @@ function treeHtml(B){
   if(U[0]){ nd+=node(U[0],50,yU); if(A.length) ln.push(`<line x1="27" y1="${yRow(A.length-1)}" x2="50" y2="${yU}" class="${lit(A[A.length-1],U[0])}" stroke-dasharray="${A.length?'':'4 6'}"/>`); if(Bn.length) ln.push(`<line x1="73" y1="${yRow(Bn.length-1)}" x2="50" y2="${yU}" class="${lit(Bn[Bn.length-1],U[0])}"/>`); }
   if(X[0]){ nd+=node(X[0],50,yX); ln.push(`<line x1="50" y1="${yU}" x2="50" y2="${yX}" class="${lit(U[0],X[0])}"/>`); }
   const h=(X[0]?yX:U[0]?yU:yRow(rows-1))+60;
-  const lab = B.A?`<div class="tba" style="left:27%">${B.A}</div><div class="tba" style="left:73%">${B.B}</div>`:'';
+  const LN=brLines(B), pth=(S.tpath||{})[B.k]; const lab=`<button class="tba ${pth==='A'?'on':''}" data-ln="A" style="left:27%">${LN[0]}${pth==='A'?' ✓':''}</button><button class="tba ${pth==='B'?'on':''}" data-ln="B" style="left:73%">${LN[1]}${pth==='B'?' ✓':''}</button>`;
   return `<div class="tree2" style="height:${h}px"><svg viewBox="0 0 100 ${h}" preserveAspectRatio="none">${ln.join('')}</svg>${lab}${nd}</div>`;
 }
-// 육성 방향: 고르면 SP가 생길 때마다 자동으로 찍혀요
-const SK_FOCUS=[
-  {k:'click',ic:'🙏',nm:'구걸형',d:'꼬질이를 눌러서 버는 돈 UP',br:'g'},
-  {k:'auto',ic:'🏪',nm:'자동형',d:'가만히 있어도 버는 돈 UP',br:'b'},
-  {k:'luck',ic:'🍀',nm:'행운형',d:'돈주머니·피버 UP',br:'n'},
-  {k:'surv',ic:'🛡️',nm:'생존형',d:'악재·뜯기 방어, 방치 수입 UP',br:'v'},
-  {k:'manual',ic:'✋',nm:'직접',d:'트리에서 내가 골라 찍기',br:null},
-];
-function skOrder(f){
-  const F=SK_FOCUS.find(x=>x.k===f)||SK_FOCUS[1]; const BR={g:1,b:2,n:3,v:5};
-  const br=b=>SKILLS.filter(n=>n.br===b && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)));
-  const line=(b,ln)=>br(b).filter(n=>n.ln===ln);
-  const main=BR[F.br]; const others=[1,2,3,5].filter(x=>x!==main);
-  const P=[];  // [skill, 목표 레벨]
-  const add=(L,c)=>L.forEach(n=>P.push([n,Math.min(c,n.max)]));
-  add(line(main,'r'),5); add(line(main,'A'),5); add(line(main,'U'),1); add(line(main,'r'),10);   // 1단계: 주력 갈래 A 끝까지 + 궁극기
-  add(line(4,'r'),3); add(line(4,'A'),3); add(line(4,'B'),3); add(line(4,'U'),3); add(line(4,'X'),3); add(br(6),3);  // 직업
-  add(line(main,'B'),5);                                                       // 주력 갈래 B
-  add(br(4),5); add(br(6),10);                                                 // 직업 마스터
-  others.forEach(b=>{ add(line(b,'r'),3); }); others.forEach(b=>{ add(line(b,'A'),3); });
-  others.forEach(b=>{ add(br(b),10); });
-  return P;
-}
+// 길 고르기: 트리마다 A/B 길을 고르면 SP가 그 길 → 궁극기 → 반대 길 순서로 자동으로 찍혀요
+function treeOrder(B){ const L=brSkills(B), p=(S.tpath||{})[B.k]||'A', q=p==='A'?'B':'A', by=k=>L.filter(n=>n.ln===k);
+  const P=[]; const add=(a,c)=>a.forEach(n=>P.push([n,Math.min(c,n.max)]));
+  add(by('r'),3); add(by(p),10); add(by('U'),1); add(by('r'),10); add(by(q),10); return P; }
 function autoSpend(){
-  const f=S.skFocus||'auto'; if(f==='manual'||spAvail()<=0) return 0; let k=0;
-  for(const [n,cap] of skOrder(f)){ while(sk(n.id)<cap && skUnlocked(n) && spAvail()>=spCost(n)){ S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; k++; } if(spAvail()<=0) break; }
+  if(S.skManual||spAvail()<=0) return 0; let k=0;
+  const tiers=[curTier(),'0','1','2'].filter((x,i,a)=>a.indexOf(x)===i).map(x=>SK_BR.find(B=>B.k===x)).filter(brOpen);
+  for(const B of tiers){ for(const [n,cap] of treeOrder(B)){ while(sk(n.id)<cap && skUnlocked(n) && spAvail()>=spCost(n)){ S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; k++; } if(spAvail()<=0) break; } if(spAvail()<=0) break; }
   if(k){ renderSkbar(true); if(tab==='skill') renderSkills(); }
   return k;
 }
-setInterval(()=>{ if(!paused && (S.skFocus||'auto')!=='manual') autoSpend(); },1500);
+setInterval(()=>{ if(!paused && !S.skManual) autoSpend(); },1500);
 function renderSkills(){
-  const L=$('list'), sp=spAvail(), f=S.skFocus||'auto', man=f==='manual';
-  if(!SK_BR.find(B=>B.k===skBr&&brOpen(B))) skBr='g';
+  const L=$('list'), sp=spAvail(), man=!!S.skManual;
+  if(!skBr||!SK_BR.find(B=>B.k===skBr&&brOpen(B))) skBr=curTier();
   const B=SK_BR.find(x=>x.k===skBr), list=brSkills(B);
   if(!list.find(n=>n.id===skSel)) skSel=(list.find(n=>skState(n)==='can')||list[0]||{}).id;
-  const chips=SK_BR.map(b=>`<button class="skbc ${b.k===skBr?'on':''}" data-b="${b.k}" ${brOpen(b)?'':'disabled'}>${emo(b.ic)}<span>${b.br===4&&S.route?ROUTES[S.route].nm:b.br===6&&S.sub?ROUTES[S.route].subs[S.sub].nm:b.nm}</span></button>`).join('');
+  const chips=SK_BR.map(b=>`<button class="skbc ${b.k===skBr?'on':''}" data-b="${b.k}" ${brOpen(b)?'':'disabled'}>${emo(b.br===4&&S.route?ROUTES[S.route].ic:b.br===6&&S.sub?ROUTES[S.route].subs[S.sub].ic:b.ic)}<span>${b.br===4&&S.route?'1차 '+ROUTES[S.route].nm:b.br===6&&S.sub?'2차 '+ROUTES[S.route].subs[S.sub].nm:b.nm}</span>${b.k===curTier()?'<i>지금</i>':''}</button>`).join('');
   const n=SKILLS.find(x=>x.id===skSel);
   const det = n ? (()=>{ const l=skLv(n), st=skState(n), ef=x=>n.ef(x).replace(/^액티브 · /,''); return `<div class="skd2"><div class="dh"><span class="di ${n.act?'a':''}">${emo(n.ic)}</span><div><b>${n.nm} <em>Lv.${l}/${n.max}</em></b><small>${n.act?'⏱️ 자동 버프':n.max===1?'⭐ 궁극기':'패시브'}${n.d?' · '+n.d:''}</small></div></div>
       <div class="de">${st==='locked'?`🔒 <b>${reqText(n)}</b> 필요`:`${l?`지금: <b>${ef(l)}</b>`:`배우면: <b>${ef(1)}</b>`}${l&&l<n.max?`<br>다음: <u>${ef(l+1)}</u>`:''}`}</div>
       ${man?`<button class="dbtn ${st}" id="skUp2" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'마스터!':st==='locked'?'잠김':`+ 배우기 <i>${spCost(n)}SP</i>`}</button>`:''}</div>`; })() : '';
-  const FF=SK_FOCUS.find(x=>x.k===f);
+  const pth=(S.tpath||{})[B.k], LN=brLines(B);
   const newTr=traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length;
   const pane=skPane==='trait'
     ? `${traitTreeHtml()}<div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div>`
-    : `<div class="fcs"><div class="fcl">${SK_FOCUS.map(x=>`<button class="fc ${x.k===f?'on':''}" data-f="${x.k}">${emo(x.ic)}<b>${x.nm}</b></button>`).join('')}</div>
-      <div class="fcd">${man ? (sp>0?`✋ 남은 <b>${sp}SP</b> · 노드를 눌러 직접 찍어요`:`✋ 직접 찍기 · 다음 SP까지 ${fmt(nextLvNeed())}`) : `✅ <b>${FF.nm}</b> · ${FF.d} <small>(SP 자동 · 다음 SP까지 ${fmt(nextLvNeed())})</small>`}</div></div>
-      <div class="skbcs">${chips}</div>${treeHtml(B)}${det}
-      <div class="rwf"><span>찍은 SP ${spUsed()} · 방향을 바꾸면 무료로 다시 찍혀요</span><button id="skReset">🔁 다시 찍기</button></div>`;
+    : `<div class="skbcs">${chips}</div>
+      <div class="fcd pth">${!brOpen(B)?'':man?`✋ 직접 찍기 · 남은 <b>${sp}SP</b> · 노드를 눌러 배워요`:pth?`✅ <b>${pth==='A'?LN[0]:LN[1]}</b>로 가는 중 · SP가 생기면 알아서 찍혀요 <small>(다음 SP까지 ${fmt(nextLvNeed())})</small>`:`👇 <b>길을 하나 골라요!</b> 위의 두 길 이름 중 하나를 누르면 그 길대로 쭉 찍혀요`}</div>
+      ${treeHtml(B)}${det}
+      <div class="rwf"><span><label class="mnl"><input type="checkbox" id="skMan" ${man?'checked':''}> ✋ 직접 찍기</label> · 찍은 SP ${spUsed()}</span><button id="skReset">🔁 다시 찍기</button></div>`;
   L.innerHTML=`<div class="sumbar skbar2"><button class="sp2 ${skPane!=='trait'?'on':''}" data-p="skill">🌳 스킬 트리</button><button class="sp2 ${skPane==='trait'?'on':''}" data-p="trait">🧬 특성 트리${newTr?' <i>!</i>':''}</button><button class="sb pet" onclick="petSheet()" title="펫">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</button><button class="sb q" onclick="helpSheet('skill')">?</button></div>
    <div class="rwin skw">${pane}</div>`;
   L.querySelectorAll('.sp2').forEach(b=>b.onclick=()=>{ skPane=b.dataset.p; renderSkills(); });
   const learn=id=>{ const n=SKILLS.find(x=>x.id===id), st=skState(n); if(st==='own') return toast(`SP가 부족해요 · 다음 SP까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
     S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; sfx('gold'); renderSkills(); render(); renderSkbar(true); };
-  L.querySelectorAll('.fc').forEach(b=>b.onclick=()=>{ const nf=b.dataset.f; if(nf===f) return;
-    if(nf==='manual'){ S.skFocus='manual'; renderSkills(); return; }
-    const used=spUsed(); const go=()=>{ S.skFocus=nf; S.skill={}; autoSpend(); hideModal(); sfx('level'); toast(`${SK_FOCUS.find(x=>x.k===nf).ic} ${SK_FOCUS.find(x=>x.k===nf).nm}으로 다시 찍었어요`); renderSkills(); renderSkbar(true); };
-    if(!used) return go();
-    showModal(`<h2>${SK_FOCUS.find(x=>x.k===nf).ic} ${SK_FOCUS.find(x=>x.k===nf).nm}으로 바꿀까요?</h2><p>찍은 SP를 돌려받고 새 방향으로 다시 찍어요.<br>무료예요!</p><button class="gray" onclick="hideModal()">취소</button><button id="fcOk">바꾸기</button>`); $('fcOk').onclick=go; });
+  L.querySelectorAll('.tba[data-ln]').forEach(b=>b.onclick=()=>{ const ln=b.dataset.ln, cur=(S.tpath||{})[B.k]; if(cur===ln) return;
+    const go=()=>{ S.tpath=S.tpath||{}; S.tpath[B.k]=ln; if(cur){ brSkills(B).forEach(n=>{ delete S.skill[n.id]; }); } autoSpend(); hideModal(); sfx('level'); toast(`${ln==='A'?LN[0]:LN[1]}로 가요!`); renderSkills(); renderSkbar(true); };
+    if(!cur) return go(); showModal(`<h2>길을 바꿀까요?</h2><p>이 트리에 찍은 SP를 돌려받고<br><b>${ln==='A'?LN[0]:LN[1]}</b>로 다시 찍어요. 무료예요!</p><button class="gray" onclick="hideModal()">취소</button><button id="pOk">바꾸기</button>`); $('pOk').onclick=go; });
+  if($('skMan')) $('skMan').onchange=e=>{ S.skManual=e.target.checked; if(!S.skManual) autoSpend(); renderSkills(); };
   L.querySelectorAll('.skbc').forEach(b=>b.onclick=()=>{ skBr=b.dataset.b; skSel=null; renderSkills(); });
   L.querySelectorAll('.tn2').forEach(b=>b.onclick=()=>{ skSel=b.dataset.id; renderSkills(); });
   if($('skUp2')) $('skUp2').onclick=()=>learn(skSel);
-  if($('skReset')) $('skReset').onclick=()=>{ showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.${man?'':'<br>지금 육성 방향대로 다시 찍혀요.'}</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
+  if($('skReset')) $('skReset').onclick=()=>{ showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.${man?'':'<br>고른 길대로 다시 찍혀요.'}</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
     $('skrOk').onclick=()=>{ S.skill={}; autoSpend(); hideModal(); sfx('level'); toast('🔁 다시 찍었어요'); renderSkills(); renderSkbar(true); }; };
   L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
 }
@@ -3486,6 +3495,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.8',d:'10/31',items:['🌳 <b>전직 트리</b>: 0차 거지 트리 → 진로를 고르면 <b>그 직업 트리</b>(12종) → 2차 전직하면 <b>전직 트리</b>(60종)','🧭 트리마다 <b>두 길 중 하나</b>만 고르면 SP가 그 길 → 궁극기 → 반대 길 순서로 알아서 찍혀요 (예: 의사 🔪외과 길 / 🩺내과 길)','✋ 직접 찍기는 체크박스로 · 길을 바꾸면 무료로 다시 찍어요','💸 스킬이 새 트리로 바뀌어 SP는 모두 돌려드렸어요']},
   {v:'v3.7.1',d:'10/31',items:['📐 스킬 탭 정리: 안에서 <b>🌳 스킬 트리 / 🧬 특성 트리</b> 두 탭으로 나눠 한 번에 하나만 · 다른 탭처럼 짧게 · 펫은 작은 버튼으로']},
   {v:'v3.7',d:'10/31',items:['🧭 <b>육성 방향만 고르면 끝!</b> 🙏구걸형 · 🏪자동형 · 🍀행운형 · 🛡️생존형 중 하나를 고르면 SP가 생길 때마다 알아서 찍혀요','✋ 직접 찍고 싶으면 "직접" 모드 → 트리에서 노드를 눌러 배우기','🔁 방향을 바꾸면 무료로 다시 찍어줘요']},
   {v:'v3.6',d:'10/31',items:['🔧 돈벌이·구걸·랭킹 탭에서 화면이 늘어나던 오류 수정','⚔️ 맞짱 탭 이름 → <b>강탈</b>','➕ 스킬창 <b>찍기 / 트리</b> 두 탭: 찍기는 지금 배울 수 있는 것만, 트리는 갈래별 전체 구조','🌳 <b>갈래 트리</b>: 뿌리 → 두 갈래 → 궁극기 (구걸술: 눈물샘/인정머리 · 장사술: 확장/관리 · 눈치: 돈주머니/피버 · 생존: 방어/방치 · 직업도 두 갈래)','🆕 새 스킬: 🧒동네 꼬마 팬클럽 · ⏰대목 장사 · 🧾장부 정리 · 💰주머니 사냥꾼 · 🎉축제 분위기 · 🌙꿀잠 · 🏦비상금','⚖️ 밸런스: 레벨 상한 정리 (전체 트리의 약 60%만 찍을 수 있게) · 궁극기는 두 갈래 중 하나만 키워도 열림']},
@@ -3756,7 +3766,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.7.1';
+const GAME_VER='v3.8';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
