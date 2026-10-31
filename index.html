@@ -654,6 +654,26 @@
   body.mini .node .ni{width:26px;height:26px;font-size:13px}
   body.mini .thead{font-size:9px;white-space:nowrap}
 
+  /* ===== item groups / props / breakdown ===== */
+  .igrp{display:flex;align-items:baseline;gap:6px;margin:10px 4px 4px;font-size:11px;color:#6b5a3c}
+  .igrp:first-child{margin-top:2px}
+  .igrp b{font-weight:800;letter-spacing:-.01em}
+  .igrp span{font-size:10px;color:#a8a29e}
+  .ilock{margin:8px 2px 2px;padding:10px;border:1px dashed #e3ded4;border-radius:12px;font-size:11.5px;color:#8b8b92;text-align:center;line-height:1.5}
+  .ilock b{color:#3f3f46}
+  .ilock small{display:block;font-size:10px;color:#a8a29e;margin-top:2px}
+  #props{position:absolute;left:5%;bottom:5%;z-index:1;display:flex;gap:2px;pointer-events:auto}
+  #props span{font-size:26px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.18));animation:propIn .6s var(--ease) both;cursor:default}
+  @keyframes propIn{from{opacity:0;transform:translateY(8px) scale(.7)}}
+  body.mini #props span{font-size:15px}
+  .brkw{text-align:left;margin:4px 0 8px;padding:10px;border-radius:12px;background:#faf8f3}
+  .brkt{font-size:11px;font-weight:700;color:#6b5a3c;margin-bottom:6px}
+  .brk{display:grid;grid-template-columns:1fr 70px 30px;gap:6px;align-items:center;font-size:11px;margin:3px 0}
+  .brk span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brk i{height:6px;border-radius:999px;background:#ece5d8;overflow:hidden}
+  .brk i b{display:block;height:100%;background:linear-gradient(90deg,#ffd76a,#f0a92e);border-radius:999px}
+  .brk em{font-style:normal;text-align:right;color:#8b8b92;font-variant-numeric:tabular-nums}
+
   /* boss key & paused cover */
   #boss{position:fixed;inset:0;background:#fff;z-index:100;display:none;font-family:'Malgun Gothic',sans-serif;color:#333}
   #boss.show{display:block}
@@ -717,6 +737,7 @@
       <div id="fever">FEVER ×3<i></i></div>
       <div id="debuff"></div>
       <div class="mat"></div>
+      <div id="props"></div>
       <div class="beggar" id="beggar"><div id="face"></div></div>
       <div class="bowl" id="bowl">🥫</div>
       <div id="combo"></div>
@@ -842,7 +863,7 @@ for(const [k,R] of Object.entries(ROUTES)){ R.perk=perkText(PERKS[k]); for(const
 function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null].filter(Boolean); }
 function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1)*(1+jsk(k)); }
 function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0)+jsk(k); }
-function fixSub(){ if(S.route && (!ROUTES[S.route])) { S.route=null; S.sub=null; } if(S.route && S.sub && !ROUTES[S.route].subs[S.sub]) S.sub=null; }
+function fixSub(){ migrateItems(); if(S.route && (!ROUTES[S.route])) { S.route=null; S.sub=null; } if(S.route && S.sub && !ROUTES[S.route].subs[S.sub]) S.sub=null; }
 function getStage(i){
   const base=STAGES[i];
   if(i>=3 && i<=7){
@@ -857,18 +878,68 @@ function getStage(i){
 function endingKey(){ return S.route&&S.sub ? S.route+'.'+S.sub : null; }
 function route(){ return S.route; }
 
-const AUTO = [
+const COMMON = [
   {id:'cup',    ic:'🥫', nm:'빈 깡통',        ds:'지나가던 사람이 동전을 던져줘요', base:15,     cps:0.2},
   {id:'sign',   ic:'🪧', nm:'불쌍한 팻말',     ds:'"배고파요 ㅠㅠ" 효과 만점',     base:120,    cps:1.5},
   {id:'guitar', ic:'🎸', nm:'길거리 버스킹',   ds:'음치지만 동정표는 받아요',       base:900,    cps:8},
   {id:'paper',  ic:'📦', nm:'폐지 리어카',     ds:'열심히 주우면 돈이 돼요',       base:7000,   cps:45},
   {id:'store',  ic:'🏪', nm:'편의점 알바',     ds:'폐기 도시락은 덤',             base:6e4,    cps:260},
   {id:'fish',   ic:'🐟', nm:'붕어빵 노점',     ds:'겨울엔 줄이 길어요',           base:5e5,    cps:1400},
-  {id:'chicken',ic:'🍗', nm:'치킨집',         ds:'치킨은 언제나 옳다',           base:5e6,    cps:8000},
-  {id:'build',  ic:'🏢', nm:'꼬마빌딩',        ds:'월세가 따박따박',             base:6e7,    cps:47000},
-  {id:'corp',   ic:'🏭', nm:'대기업',          ds:'문어발 확장 중',               base:8e8,    cps:280000},
-  {id:'space',  ic:'🚀', nm:'우주 사업',        ds:'화성에도 깡통을 놓자',         base:1.2e10, cps:1800000},
 ];
+const GEN_OLD=['chicken','build','corp','space'];   // 예전 공통 아이템 → 진로 아이템으로 이전
+const TIERS_R=[[5e6,8000],[6e7,47000],[8e8,280000],[1.2e10,1.8e6]];
+const TIERS_S=[[2e11,2.4e7],[4e12,3.6e8]];
+const ROUTE_ITEMS={
+  biz:[['🍗','치킨집','치킨은 언제나 옳다'],['🏪','프랜차이즈 가맹점','간판만 걸면 돈이 들어와요'],['🏭','중앙 주방','소스 비법은 극비'],['🚚','물류 센터','전국 당일 배송']],
+  job:[['📊','프로젝트 수당','야근의 결실'],['🧑‍💼','팀 운영비','법카는 사랑입니다'],['🏢','사내 벤처','회사 돈으로 창업'],['📈','스톡옵션','상장하면 대박']],
+  inv:[['💻','트레이딩 PC','모니터 6대는 기본'],['📈','펀드 운용','남의 돈으로 돈 벌기'],['🏦','사모펀드','회사를 통째로 산다'],['🌐','헤지펀드','시장이 떨어져도 번다']],
+  star:[['🎤','공연장 대관','매진 행렬'],['💿','앨범 발매','음원 차트 1위'],['🏟️','월드 투어','전 세계가 떼창'],['🎬','영화 출연','관객 천만 돌파']],
+  cre:[['🎥','편집자 고용','썸네일 장인 영입'],['📸','전용 스튜디오','조명빨이 다르다'],['🏢','MCN 회사','크리에이터를 거느린다'],['🌐','영상 플랫폼','이제 내가 알고리즘']],
+  gov:[['📁','정근수당','근속은 배신하지 않는다'],['🗂️','특별 수당','야근은 수당으로'],['🏛️','관사 임대','관사 월세 수익'],['🎖️','공로 훈장','국가가 인정한 성실함']],
+  doc:[['💉','당직비','밤을 지새운 대가'],['🩺','개인 클리닉','동네 명의'],['🏥','종합병원','진료과가 20개'],['🧬','연구소','논문이 돈이 된다']],
+  ath:[['👟','연봉 계약','실력이 곧 연봉'],['🏅','포상금','메달 따면 보너스'],['📣','광고 모델','얼굴이 곧 브랜드'],['🏫','스포츠 아카데미','꿈나무 육성']],
+};
+const SUB_ITEMS={
+  'biz.food':[['🍽️','파인다이닝','예약은 3달 후'],['🌟','미슐랭 체인','별이 주렁주렁']],
+  'biz.retail':[['🛒','대형 마트','1+1의 마법'],['🛍️','복합 쇼핑몰','주말엔 주차 전쟁']],
+  'biz.estate':[['🏢','꼬마빌딩','월세가 따박따박'],['🏙️','랜드마크 타워','도시의 스카이라인']],
+  'job.exec':[['🚗','임원 차량','기사님이 운전해요'],['🏛️','그룹 지주사','계열사를 거느린다']],
+  'job.startup':[['💡','시드 투자','아이디어 하나로'],['🦄','시리즈 C','기업가치 1조']],
+  'job.global':[['✈️','해외 지사','시차 적응은 덤'],['🌏','글로벌 본사','해가 지지 않는 회사']],
+  'inv.wall':[['🐺','월가 사무실','점심은 스테이크'],['💎','투자 제국','시장을 움직인다']],
+  'inv.coin':[['🪙','채굴장','전기세는 비밀'],['🚀','코인 거래소','수수료가 쏟아진다']],
+  'inv.oil':[['🛢️','유전','땅을 파면 돈이 나온다'],['⛽','정유 공장','기름값은 내가 정한다']],
+  'star.top':[['🌟','글로벌 광고','전 세계 전광판'],['🏆','엔터 레이블','후배를 키운다']],
+  'star.mc':[['📺','고정 예능','주말 황금 시간대'],['📡','방송국','채널을 통째로']],
+  'star.actor':[['🎞️','영화 주연','칸에서 박수갈채'],['🎬','영화사','이제 제작자']],
+  'cre.game':[['🕹️','게임단','우승 상금'],['🏟️','e스포츠 경기장','결승전은 매진']],
+  'cre.infl':[['🤳','광고 협찬','게시물 하나에 억'],['👗','브랜드 런칭','완판 행진']],
+  'cre.comm':[['📦','물류 창고','새벽 배송'],['🛍️','커머스 플랫폼','라방이 곧 매출']],
+  'gov.minister':[['📜','정책 예산','나랏돈을 굴린다'],['🏢','정부 청사','결재 도장 쾅']],
+  'gov.judge':[['⚖️','판결문 인세','명판결은 책이 된다'],['🔨','대법원','최종 판결']],
+  'gov.diplo':[['🛂','영사관','비자 수수료'],['🌐','대사관','외교 만찬']],
+  'doc.dir':[['🏥','병원 증축','병상 1000개'],['🏨','의료 재단','병원 체인']],
+  'doc.bio':[['🧪','신약 특허','로열티가 쏟아진다'],['💊','제약 공장','전 세계 수출']],
+  'doc.tvdoc':[['📺','건강 프로그램','시청률 1위'],['📡','건강 채널','건강식품 완판']],
+  'ath.abroad':[['🌍','빅리그 이적료','이적료 1000억'],['🥇','발롱도르 상금','세계 최고 선수']],
+  'ath.owner':[['📋','선수 영입','슈퍼스타 영입'],['🏟️','홈 구장','5만 관중']],
+  'ath.caster':[['🎙️','중계권','명경기는 내 목소리로'],['📺','스포츠 채널','24시간 스포츠']],
+};
+let _autoKey='', _autoList=null;
+function autoList(){
+  const key=(S.route||'')+'|'+(S.sub||'');
+  if(key===_autoKey && _autoList) return _autoList;
+  const L=COMMON.map(x=>Object.assign({grp:'common'},x));
+  if(S.route && ROUTE_ITEMS[S.route]) ROUTE_ITEMS[S.route].forEach(([ic,nm,ds],i)=>L.push({id:`r_${S.route}_${i}`,ic,nm,ds,base:TIERS_R[i][0],cps:TIERS_R[i][1],grp:'route'}));
+  const sk2=S.route&&S.sub?S.route+'.'+S.sub:null;
+  if(sk2 && SUB_ITEMS[sk2]) SUB_ITEMS[sk2].forEach(([ic,nm,ds],i)=>L.push({id:`s_${sk2}_${i}`,ic,nm,ds,base:TIERS_S[i][0],cps:TIERS_S[i][1],grp:'sub'}));
+  _autoKey=key; _autoList=L; return L;
+}
+function migrateItems(){
+  if(!S.route) return;
+  GEN_OLD.forEach((g,i)=>{ const n=S.auto[g]; if(n){ const id=`r_${S.route}_${i}`; S.auto[id]=(S.auto[id]||0)+n; delete S.auto[g]; } });
+}
+const AUTO = COMMON;   // (구버전 호환용)
 
 const CLICK = [
   {id:'c1', ic:'🙏', nm:'애처로운 눈빛',     ds:'클릭당 +1원',     base:50,    add:1},
@@ -918,6 +989,14 @@ function fmtFull(n){
 /* 돈 표시: 단위 칸을 고정 폭으로 → 숫자가 바뀌어도 흔들리지 않아요 */
 let moneyKey='', moneyEls=null;
 addEventListener('resize',()=>{ moneyKey=''; });
+let propsKey='';
+function renderProps(){
+  const L=autoList().filter(x=>x.grp!=='common' && (S.auto[x.id]||0)>0).slice(-3);
+  const key=L.map(x=>x.id).join(',');
+  if(key===propsKey) return; propsKey=key;
+  $('props').innerHTML=L.map((x,i)=>`<span style="animation-delay:${i*.15}s" title="${x.nm} ${S.auto[x.id]}개">${x.ic}</span>`).join('');
+}
+setInterval(renderProps,1000);
 function renderMoney(v){
   const me=$('money'); v=Math.floor(Math.max(0,v));
   const U=[[1e16,'경'],[1e12,'조'],[1e8,'억'],[1e4,'만'],[1,'원']];
@@ -946,7 +1025,7 @@ function msCount(n){ let k=0; for(const m of MS) if(n>=m) k++; return k; }
 function msMult(n){ return Math.pow(2,msCount(n)); }
 function msNext(n){ return MS.find(m=>m>n); }
 function msPrev(n){ let p=0; for(const m of MS) if(n>=m) p=m; return p; }
-function baseCps(){ let s=0; for(const a of AUTO){ const n=S.auto[a.id]||0; s+=n*a.cps*msMult(n); } return s*stageBonus()*mgmtMult()*buffM('auto')*((S.fireEnd||0)>Date.now()?0:1); }
+function baseCps(){ let s=0; for(const a of autoList()){ const n=S.auto[a.id]||0; s+=n*a.cps*msMult(n); } return s*stageBonus()*mgmtMult()*buffM('auto')*((S.fireEnd||0)>Date.now()?0:1); }
 function buffM(k){ const n=Date.now(); return (S.buffs||[]).filter(b=>b.end>n&&b.k===k).reduce((a,b)=>a*b.m,1); }
 function evMult(){ const n=Date.now(); return buffM('all')*((S.debuffEnd||0)>n?0.5:1)*((S.slumpEnd||0)>n?0.5:1)*((S.sueEnd||0)>n?0.7:1); }
 function onlineMult(){
@@ -981,9 +1060,17 @@ function renderList(){
   if(tab==='pvp') return renderPvp();
   if(tab==='rank') return renderRank();
   if(tab==='skill') return renderSkills();
-  const arr = tab==='auto'?AUTO:CLICK, own = tab==='auto'?S.auto:S.click;
+  const arr = tab==='auto'?autoList():CLICK, own = tab==='auto'?S.auto:S.click;
   const L=$('list'); L.innerHTML='';
+  let lastGrp='';
+  const head=(t,sub)=>{ const h=document.createElement('div'); h.className='igrp'; h.innerHTML=`<b>${t}</b>${sub?`<span>${sub}</span>`:''}`; L.appendChild(h); };
   arr.forEach((it,i)=>{
+    if(tab==='auto' && it.grp!==lastGrp){
+      lastGrp=it.grp;
+      if(it.grp==='common') head('🧰 공통 돈벌이');
+      if(it.grp==='route') head(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 전용`, '진로마다 달라요');
+      if(it.grp==='sub') { const sb=ROUTES[S.route].subs[S.sub]; head(`${sb.ic} ${sb.nm} 전용`, '최상위 돈벌이'); }
+    }
     const n=own[it.id]||0, price=cost(it.base,n);
     const prevOwned = i===0 || (own[arr[i-1].id]||0)>0 || n>0;
     const el=document.createElement('div');
@@ -1002,14 +1089,19 @@ function renderList(){
     el.onclick=()=>buy(it,own,prevOwned);
     L.appendChild(el);
   });
+  if(tab==='auto'){
+    if(!S.route) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 <b>진로를 정하면</b> 직업 전용 돈벌이 4개가 열려요<small>의사는 클리닉·종합병원, 운동선수는 연봉 계약·광고 모델…</small></div>`);
+    else if(!S.sub) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 <b>두 번째 갈림길</b>을 지나면 최상위 돈벌이 2개가 열려요<small>${Object.values(ROUTES[S.route].subs).map(x=>x.ic+' '+x.nm).join(' · ')}</small></div>`);
+  }
 }
 function refreshAffordable(){
   if(tab==='pvp') return;
   if(tab==='rank') return;
   if(tab==='skill') return skillTick();
-  const arr = tab==='auto'?AUTO:CLICK, own = tab==='auto'?S.auto:S.click;
-  [...$('list').children].forEach((el,i)=>{
-    const it=arr[i]; if(el.classList.contains('locked')) return;
+  const arr = tab==='auto'?autoList():CLICK, own = tab==='auto'?S.auto:S.click;
+  $('list').querySelectorAll('.item[data-id]').forEach(el=>{
+    if(el.classList.contains('locked')) return;
+    const it=arr.find(x=>x.id===el.dataset.id); if(!it) return;
     el.classList.toggle('no', S.money < cost(it.base, own[it.id]||0));
   });
 }
@@ -1658,7 +1750,7 @@ function showRoute(){
       <div class="co"><b>${r.perk}</b><span class="rpath">${r.st.map(x=>x.name).join(' → ')} → ${Object.values(r.subs).map(x=>x.ic+x.nm).join(' / ')}</span></div></button>`).join('')}</div>`;
   R.classList.add('show');
   R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{
-    S.route=b.dataset.k; S.sub=null; save(); sfx('level');
+    S.route=b.dataset.k; S.sub=null; migrateItems(); save(); sfx('level');
     R.querySelectorAll('.rcard').forEach(x=>x.classList.add(x===b?'pick':'dim'));
     setTimeout(()=>{ R.classList.remove('show'); routeOpen=false; toast(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 루트! ${ROUTES[S.route].perk}`); buildCity(stageIdx()); renderList(); },800);
   });
@@ -2093,6 +2185,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v1.9',d:'10/31',items:['💼 <b>돈벌이도 직업마다 달라요!</b> 공통 6개 + 진로 전용 4개 + 2차 갈림길 전용 2개','🏗️ 진로 전용 돈벌이 32종 · 갈림길 전용 48종 (예: 의사 🩺개인 클리닉 → 🏥종합병원 → 💊제약 공장)','🏙️ 내 최상위 돈벌이가 게임 화면 바닥에 소품으로 등장','📊 기록 화면에 <b>자동 수입 구성</b> 그래프 (뭐가 돈을 제일 많이 버는지)','♻️ 기존에 갖고 있던 치킨집·빌딩·대기업·우주사업은 내 진로 전용 돈벌이로 자동 이전']},
   {v:'v1.8',d:'10/30',items:['🗺️ 1차 진로 <b>5개 → 8개</b>: 🏛️공무원 · 🩺의사 · ⚽운동선수 추가','👔 직장인 3번째 갈래: 공무원 → 🌏해외 법인장 (팀장님 다음이 공무원인 건 이상하잖아요)','🏆 엔딩 <b>24개</b>, 새 의상 27종, 새 직업 스킬 · 돌발 이벤트']},
   {v:'v1.7',d:'10/30',items:['🗺️ 루트마다 <b>세 번째 갈림길</b> 추가 → 엔딩 15개 (🏗️부동산 · 🎓공무원 · 🛢️원자재 · 🎬배우 · 🛍️커머스)','🎭 <b>직업 전용 스킬트리</b>: 진로마다 다른 스킬 4개','🎲 <b>직업별 돌발 이벤트</b>: 맛집 방송/식중독, 성과급/구조조정, 떡상/떡락, 역주행/스캔들, 영상 떡상/노란딱지','👕 새 의상 10종']},
   {v:'v1.6.1',d:'10/30',items:['🎲 뜯기에 <b>성공 확률</b> 추가: 기본 60% (복수할 땐 +15%, 💪조폭 형님 스킬 레벨당 +4%, 최대 90%)','실패하면 비용만 날리고 쿨타임은 그대로 — 버튼에 성공률이 표시돼요']},
@@ -2277,7 +2370,10 @@ function askReset(){ showModal(`<h2>처음부터?</h2><p>모든 돈과 아이템
 $('statsBtn').onclick=()=>{
   const mins=Math.floor((Date.now()-S.start)/60000);
   const items=Object.values(S.auto).reduce((a,b)=>a+b,0);
-  showModal(`<h2>📊 거지 일지</h2><p style="text-align:left;line-height:1.9">
+  const contrib=autoList().map(a=>{ const n=S.auto[a.id]||0; return {a,v:n*a.cps*msMult(n)}; }).filter(x=>x.v>0).sort((x,y)=>y.v-x.v);
+  const tot=contrib.reduce((t,x)=>t+x.v,0)||1;
+  const brk=contrib.slice(0,5).map(x=>`<div class="brk"><span>${x.a.ic} ${x.a.nm}</span><i><b style="width:${(x.v/tot*100).toFixed(1)}%"></b></i><em>${Math.round(x.v/tot*100)}%</em></div>`).join('');
+  showModal(`<h2>📊 거지 일지</h2>${brk?`<div class="brkw"><div class="brkt">💰 자동 수입 구성 · 초당 ${fmt(cps())}</div>${brk}</div>`:''}<p style="text-align:left;line-height:1.9">
   누적 수입: <b>${fmt(S.total)}</b><br>구걸 횟수: <b>${S.clicks.toLocaleString()}번</b><br>
   주운 돈주머니: <b>${S.golds}개</b><br>보유 돈벌이: <b>${items}개</b><br>
   신분 보너스: <b>+${Math.round((stageBonus()-1)*100)}%</b><br>인생 선택 보너스: <b>×${(S.pathMul||1).toFixed(2)}</b><br>루트: <b>${S.route&&ROUTES[S.route]?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+(S.sub?' · '+ROUTES[S.route].subs[S.sub].nm:''):'미정'}</b> · 엔딩 <b>${(S.routesDone||[]).filter(x=>x.includes('.')).length}/24</b> · 환생 <b>${S.rebirth||0}회</b> (×${rebirthMult().toFixed(1)})<br>플레이 시간: <b>${Math.floor(mins/60)}시간 ${mins%60}분</b></p>
@@ -2331,7 +2427,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v1.8';
+const GAME_VER='v1.9';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
