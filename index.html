@@ -1031,6 +1031,66 @@
   .item .nm{flex-wrap:wrap;row-gap:2px} .item .nmt{white-space:nowrap} .spnew,.tch{white-space:nowrap}
   body.mini .spnew{font-size:0;padding:0 3px} body.mini .spnew::before{content:'✨';font-size:10px}
   body.mini .item .tch{font-size:8.5px;padding:0 2px;line-height:12px;margin-left:2px}
+
+  /* RPG 창 */
+  .rwin{background:#fffaf2;border:2.5px solid #5a4436;border-radius:16px;box-shadow:0 3px 0 #5a4436;overflow:hidden;margin-bottom:10px}
+  .rwh{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(#ffd9a0,#f2a96b);border-bottom:2.5px solid #5a4436;padding:6px 10px;font-family:'Black Han Sans','Jua',sans-serif;font-size:16px;color:#fff;text-shadow:0 2px 0 #5a4436}
+  .spb{font-family:'Jua',sans-serif;font-size:12px;color:#5a4436;text-shadow:none;background:#fffaf2;border:2px solid #5a4436;border-radius:999px;padding:0 9px}
+  .spb b{color:#e0533d;font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;font-size:14px}
+  .skts{display:flex;gap:3px;padding:6px 6px 0}
+  .skt{flex:1;min-width:0;font:inherit;font-family:'Jua',sans-serif;font-size:11.5px;border:2px solid #5a4436;border-bottom:none;border-radius:10px 10px 0 0;padding:4px 1px 3px;background:#f3e6d2;color:#8a7560;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .skt i{display:block;font-style:normal;font-size:9.5px;color:#a08c78;font-family:'Noto Sans KR',sans-serif}
+  .skt.on{background:#fff;color:#5a4436} .skt.lk{opacity:.5;cursor:default}
+  .skl{border-top:2px solid #5a4436;background:#fff;padding:6px;display:flex;flex-direction:column;gap:5px;max-height:none}
+  .skh{font-family:'Jua',sans-serif;font-size:12.5px;margin:4px 2px 0}
+  .skr{display:grid;grid-template-columns:40px 1fr 32px;gap:7px;align-items:center;border:2px solid #efe1cb;border-radius:11px;padding:5px}
+  .skr .ic{width:40px;height:40px;border:2.5px solid #5a4436;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:21px;background:#fff3df;position:relative}
+  .skr .ic.a{background:linear-gradient(#ffe2a8,#f5b65c)} .skr .ic.a::after{content:'ACTIVE';position:absolute;bottom:-7px;font-size:6.5px;font-weight:800;background:#e0533d;color:#fff;border-radius:4px;padding:0 3px;letter-spacing:.02em}
+  .skr b{font-family:'Jua',sans-serif;font-weight:400;font-size:13.5px;display:block} .skr b em{font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:11px;color:#c9772f;margin-left:5px}
+  .skr small{display:block;font-size:10.5px;color:#6e5a49;line-height:1.35} .skr small u{text-decoration:none;color:#15803d} .skr small.dd{color:#a08c78}
+  .skr .pl{position:relative;width:30px;height:30px;border:2.5px solid #5a4436;border-radius:9px;background:linear-gradient(#b5e19a,#7fb86a);color:#fff;font-family:'Black Han Sans','Jua',sans-serif;font-size:19px;line-height:20px;text-align:center;box-shadow:0 2px 0 #5a4436;text-shadow:0 1px 0 #5a4436;cursor:pointer;padding:0}
+  .skr .pl i{position:absolute;top:-7px;right:-7px;font-style:normal;font-size:9px;background:#e0533d;border:1.5px solid #5a4436;border-radius:6px;padding:0 3px;line-height:12px;text-shadow:none}
+  .skr .pl:disabled{background:#e3d6c4;cursor:default} .skr.max .pl{background:linear-gradient(#ffd9a0,#f2a96b);font-size:9px}
+  .skr.locked{opacity:.5} .skr.can{border-color:#bfe3c9}
+  .rwf{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:5px 9px;font-size:10.5px;color:#6e5a49;border-top:2px dashed #e8d9c2}
+  .rwf button{font:inherit;font-size:10.5px;border:2px solid #5a4436;border-radius:8px;background:#fff;padding:1px 7px;cursor:pointer;color:#5a4436}
+  /* 특성 트리 */
+  .ttree{position:relative;height:440px;background:radial-gradient(circle at 50% 40%,#fff7ea,#f6ecdc)}
+  .ttree svg{position:absolute;inset:0;width:100%;height:100%}
+  .ttree line{stroke:#d6c4ab;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-width:4;stroke-linecap:round} .ttree line.g{stroke:#f5b100} .ttree line.d{stroke-dasharray:2 8}
+  .tnode{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid #5a4436;background:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 3px 0 #5a4436;cursor:pointer;z-index:1}
+  .tnode.big{width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:15px;font-size:24px;cursor:default}
+  .tnode.on{background:linear-gradient(#ffe2a8,#f5b65c);box-shadow:0 3px 0 #5a4436,0 0 0 4px #ffd34d}
+  .tnode.can{animation:tnp 1.2s infinite} @keyframes tnp{50%{box-shadow:0 3px 0 #5a4436,0 0 0 7px rgba(242,169,107,.55)}}
+  .tnode.lk{filter:grayscale(1);opacity:.45;cursor:default} .tnode.dim{opacity:.5;filter:grayscale(.6)}
+  .tlab{position:absolute;transform:translate(-50%,24px);text-align:center;font-family:'Jua',sans-serif;font-size:11px;line-height:1.2;width:42%;pointer-events:none}
+  .tlab b{font-weight:400;display:block} .tlab small{display:block;font-family:'Noto Sans KR',sans-serif;font-size:9px;color:#6e5a49}
+  /* 스킬바 */
+  #skbar{position:absolute;right:8px;bottom:8px;z-index:6;display:flex;gap:5px}
+  .skb{position:relative;width:38px;height:38px;border:2.5px solid #5a4436;border-radius:11px;background:linear-gradient(#ffe2a8,#f5b65c);box-shadow:0 3px 0 #5a4436;font-size:20px;cursor:pointer;padding:0;overflow:hidden}
+  .skb span{position:relative;z-index:1} .skb .cdr{position:absolute;inset:0;z-index:2;border-radius:8px}
+  .skb em{position:absolute;right:1px;bottom:0;font-style:normal;font-size:8px;font-weight:800;color:#5a4436;z-index:3}
+  .skb.run{animation:tnp .8s infinite} .skb.cool{filter:grayscale(.5)}
+  body.mini #skbar{right:4px;bottom:4px;gap:3px} body.mini .skb{width:24px;height:24px;font-size:12px;border-width:2px;border-radius:7px;box-shadow:0 2px 0 #5a4436}
+  /* 장비 카드 */
+  .item .ic .lvb{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);font-family:'Black Han Sans','Jua',sans-serif;font-size:9px;color:#fff;background:#5a4436;border-radius:5px;padding:0 4px;white-space:nowrap;line-height:13px;z-index:2}
+  .item .ic{position:relative}
+  .item.rar-route .ic{background:linear-gradient(#e3f1ff,#bfdcff)!important} .item.rar-sub .ic{background:linear-gradient(#faf3ff,#e3ccff)!important}
+  .item.rar-route{border-color:#3b82f6} .item.rar-sub{border-color:#a855f7}
+  .gems{display:flex;align-items:center;gap:3px;margin-top:3px}
+  .gm{width:18px;height:18px;border-radius:50%;border:2px solid var(--tc,#5a4436);font-style:normal;font-size:10px;display:inline-flex;align-items:center;justify-content:center;background:#fff;line-height:1}
+  .gm.e{border:1.5px dashed #c4b29a;color:#c4b29a;font-size:7.5px;font-weight:700}
+  .gm.new{border-color:#ec4899;background:#fdf2f8;cursor:pointer;animation:pendp .9s ease-in-out infinite}
+  .gmt{font-size:10px;color:#db2777;font-weight:700;cursor:pointer;margin-left:2px}
+  .item .cnt{font-size:10px!important} .item .cnt span{color:#c9772f!important}
+  body.mini .gm{width:14px;height:14px;font-size:8px} body.mini .gmt{display:none} body.mini .item .ic .lvb{font-size:7.5px;bottom:-6px;padding:0 3px;line-height:11px}
+  body.mini .ttree{height:400px} body.mini .tlab small{font-size:8px} body.mini .skr{grid-template-columns:32px 1fr 28px;gap:5px} body.mini .skr .ic{width:32px;height:32px;font-size:16px} body.mini .skr b{font-size:12px} body.mini .skr small{font-size:9.5px} body.mini .skt{font-size:10px}
+  #ztag{top:8px!important;bottom:auto!important;right:8px!important}
+  #skbar{right:6px!important;bottom:auto!important;top:46px;flex-direction:column} body.mini #skbar{top:30px}
+  .ttree{height:640px} body.mini .ttree{height:600px}
+  .tlab{width:46%} .tlab small{font-size:9px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tlab.a{transform:translate(-50%,24px)} .tnode.big+.tlab{transform:translate(32px,-8px);text-align:left;width:auto;white-space:nowrap}
+  .item .ds{display:none}
 </style>
 </head>
 <body>
@@ -1055,6 +1115,7 @@
       <div id="props"></div>
       <div class="beggar" id="beggar"><div id="face"></div></div>
       <div id="petz"></div>
+      <div id="skbar"></div>
       <div class="bowl" id="bowl">🥫</div>
       <div id="combo"></div>
       <div id="ztag"></div>
@@ -1245,7 +1306,10 @@ for(const [k,R] of Object.entries(ROUTES)){ R.perk=perkText(PERKS[k]); for(const
 function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null, ...petPerks()].filter(Boolean); }
 function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1)*Math.max(.1,1+jsk(k)+trk(k)+synk(k)); }
 function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0)+jsk(k)+trk(k)+synk(k); }
-function migrate26(){ if(S.v26) return; S.v26=1; if(S.trait){ delete S.trait[3]; delete S.trait[4]; } }
+function migrate27(){ if(S.v27) return; S.v27=1; let ref=0;
+  for(const n of (typeof SKILLS!=='undefined'?SKILLS:[])){ if(n.br>0 && n.base){ const l=(S.skill||{})[n.id]||0; for(let k=0;k<l;k++) ref+=Math.ceil(n.base*Math.pow(n.gr,k)); } }
+  S.skill={}; if(ref>0){ S.money+=ref; setTimeout(()=>showModal(`<h2>🌳 스킬이 SP 방식으로 바뀌었어요</h2><p>이제 스킬은 <b>레벨업 SP</b>로 찍어요.<br>예전 스킬에 쓴 <b>${fmt(ref)}</b>을 돌려드렸어요.<br>지금 SP <b>${spAvail()}</b> · 스킬 탭에서 찍어주세요!</p><button onclick="hideModal()">확인</button>`),2200); } }
+function migrate26(){ migrate27(); if(S.v26) return; S.v26=1; if(S.trait){ delete S.trait[3]; delete S.trait[4]; } }
 function migrate25(){ migrate26();
   if(S.v25) return; S.v25=1;
   const OLD={m1:[300,1.6],m4:[5000,2.2],m2:[2e4,1.7],m3:[2e6,1.8],m5:[5e9,1],m6:[1e11,3],l1:[500,2],l2:[1e4,2.2],l3:[1e5,2.4],l4:[1e6,2.5],l5:[1e9,1],l6:[5e10,3],s1:[2e4,2.2],s2:[2e5,2.3],s3:[3e6,2.4],s4:[5e7,2.5],s5:[5e10,1],m7:[1e8,2.6],m8:[5e5,2.4],m9:[2e4,2.2],l7:[5e5,2.4],l8:[2e8,2.6],l9:[3e9,2.8],s6:[1e6,2.3],s7:[1e7,2.4],s8:[1e9,2.7]}; let ref=0, had=false;
@@ -1603,19 +1667,19 @@ function renderList(){
     const prevOwned = i===0 || (own[arr[i-1].id]||0)>0 || n>0;
     if(!prevOwned){ if(lockShown[it.grp||'c']) return; lockShown[it.grp||'c']=1; }   // 잠긴 칸은 그룹마다 하나만
     const el=document.createElement('div');
-    el.className='item'+(!prevOwned?' locked':S.money<price?' no':'');
+    el.className='item rar-'+(it.grp||'c')+(!prevOwned?' locked':S.money<price?' no':'');
     el.dataset.id=it.id;
     const mm=msMult(n), nx=msNext(n), pv=msPrev(n);
     const extra = tab==='auto' ? `초당 +${fmt(it.cps*ECON_A*stageBonus()*mgmtMult()*pathMult()*mm)}` : it.add ? `클릭당 +${fmt(it.add*ECON_C*stageBonus()*pathMult()*mm)}` : `클릭당 +초당 수입의 ${Math.round(it.pct*100*mm)}%`;
     const msPct = nx ? ((n-pv)/(nx-pv)*100) : 100;
     const flavor = tab==='auto' ? it.ds : '';
     el.innerHTML = prevOwned
-      ? `<div class="ic ${ICON[it.id]?'svg':''} g-${it.grp||'c'}">${icon(it.id,it.ic)}</div>
-         <div class="mid"><div class="nm"><span class="nmt">${it.nm}</span>${mm>1?`<b class="mx">×${+mm.toFixed(1)}</b>`:''}${tab==='auto'?specOf(it.id).filter(Boolean).map(k=>`<b class="tch" style="--tc:${TAGS[k].c}">${TAGS[k].ic}</b>`).join(''):''}${tab==='auto'&&specOpen(it)>=0?'<b class="spnew">✨특화</b>':''}</div><div class="ef">${extra}</div>${flavor?`<div class="ds">${flavor}</div>`:''}</div>
-         <div class="rt"><div class="pr">${B.k>1?`<em>+${B.k}</em> `:''}${fmt(price)}</div><div class="cnt" title="다음 ×2 마일스톤">${n}${nx?`<span>/${nx}</span>`:''}</div></div>
+      ? `<div class="ic ${ICON[it.id]?'svg':''} g-${it.grp||'c'}">${icon(it.id,it.ic)}${n>0?`<span class="lvb">Lv.${n}</span>`:''}</div>
+         <div class="mid"><div class="nm"><span class="nmt">${it.nm}</span>${mm>1?`<b class="mx">×${+mm.toFixed(1)}</b>`:''}</div><div class="ef">${extra}</div>${flavor?`<div class="ds">${flavor}</div>`:''}${tab==='auto'&&n>0?`<div class="gems">${SPEC_AT.map((at,j)=>{ const k=specOf(it.id)[j]; return k?`<i class="gm" style="--tc:${TAGS[k].c}" title="${TAGS[k].adj}">${TAGS[k].ic}</i>`: n>=at?`<i class="gm new" title="특화 고르기">✨</i>`:`<i class="gm e" title="Lv.${at}부터">${at}</i>`; }).join('')}${specOpen(it)>=0?'<span class="gmt spnew">특화 고르기!</span>':''}</div>`:''}</div>
+         <div class="rt"><div class="pr">${n?'▲ ':''}${fmt(price)}</div><div class="cnt" title="다음 보너스">${nx?`Lv.${nx} <span>→ ×${nx<=200?2:1.5}</span>`:'MAX'}</div></div>
          ${n>0?`<div class="msl" title="${nx?nx+'개 모으면 수입 ×2':'모든 마일스톤 달성'}"><i style="width:${msPct.toFixed(1)}%"></i></div>`:''}`
       : `<div class="ic lk">?</div><div><div class="nm">???</div><div class="ds">이전 항목을 먼저 사세요</div></div><div></div>`;
-    el.onclick=(e)=>{ if(e.target.closest('.spnew')){ e.stopPropagation(); specSheet(it,specOpen(it)); return; } const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
+    el.onclick=(e)=>{ if(e.target.closest('.spnew,.gm.new')){ e.stopPropagation(); specSheet(it,specOpen(it)); return; } const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
       if(tab==='auto' && e.target.closest('.ic') && prevOwned && n>0){ itemSheet(it); return; } buy(it,own,prevOwned); };
     if(tab==='auto' && prevOwned && n>0){ const ic=el.querySelector('.ic'); ic.classList.add('mg'); ic.insertAdjacentHTML('beforeend',`${isMgr(it.id)?'<b class="mb">👔</b>':'<b class="mb hire">+👔</b>'}${(S.star||{})[it.id]?`<b class="sb">★${S.star[it.id]}</b>`:''}`);
       const stv=(S.star||{})[it.id]||0, m=isMgr(it.id);
@@ -1664,8 +1728,8 @@ function buy(it,own,ok){
   if(B.none || S.money<B.tot) return;
   S.money-=B.tot; own[it.id]=n+B.k;
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
-  if(own===S.auto && SPEC_AT.some(x=>n<x && n+B.k>=x)) setTimeout(()=>toast(`✨ ${it.nm} 특화를 고를 수 있어요! 이름 옆 ✨특화를 눌러요`),300);
-  const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} ${hit[hit.length-1]}개 달성! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
+  if(own===S.auto && SPEC_AT.some(x=>n<x && n+B.k>=x)) setTimeout(()=>toast(`✨ ${it.nm} Lv.${n+B.k}! 보석 슬롯에서 특화를 골라요`),300);
+  const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} Lv.${hit[hit.length-1]}! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
 }
@@ -1691,7 +1755,8 @@ function render(){
     const fk=st.name+'>'+nx.name; if($('xpFrom').dataset.k!==fk){ $('xpFrom').dataset.k=fk; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML=(nx.name==='진로 선택'||nx.name==='갈림길')?'<b>?</b>':charSVG(i+1,false,nx); }
     $('next').textContent = nx.need<=S.total ? '🔀 진로를 선택하세요!' : `다음 신분 "${nx.name}"까지 ${fmt(nx.need-S.total)}`;
   } else { $('bar').style.width='100%'; $('xpTxt').textContent='MAX'; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; $('next').textContent='최고 신분 달성! 👑'; }
-  if($('stName').textContent!==st.name){ $('stName').textContent=st.name; $('stLv').textContent='LV.'+(i+1); }
+  if($('stName').textContent!==st.name) $('stName').textContent=st.name;
+  const cl=charLv(); if($('stLv').textContent!=='Lv.'+cl){ $('stLv').textContent='Lv.'+cl; if(S.lvSeen && cl>S.lvSeen){ toast(`🆙 Lv.${cl}! SP +${cl-S.lvSeen} · 스킬 탭에서 찍어요`); sfx('level'); } S.lvSeen=cl; }
 }
 
 function earn(v){ S.money+=v; S.total+=v; }
@@ -2144,6 +2209,28 @@ const ICON={
 };
 const icon=(k,fb)=>ICON[k]||fb;
 
+
+/* ---------- 액티브 스킬바 ---------- */
+let _skbKey='';
+function actSkills(){ return SKILLS.filter(n=>n.act && sk(n.id)>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
+function renderSkbar(force){
+  const B=$('skbar'); if(!B) return; const A=actSkills(), key=A.map(n=>n.id+sk(n.id)).join();
+  if(key!==_skbKey||force){ _skbKey=key; B.innerHTML=A.map((n,i)=>`<button class="skb" data-id="${n.id}" title="${n.nm} (${i+1}번 키)"><span>${n.ic}</span><i class="cdr"></i><em>${i+1}</em></button>`).join(''); B.querySelectorAll('.skb').forEach(b=>b.onclick=e=>{ e.stopPropagation(); useAct(b.dataset.id); }); }
+  const now=Date.now(); B.querySelectorAll('.skb').forEach(b=>{ const n=SKILLS.find(x=>x.id===b.dataset.id), until=(S.cd||{})[n.id]||0, left=until-now, run=(S.actEnd||{})[n.id]||0;
+    b.classList.toggle('run', run>now); b.classList.toggle('cool', left>0 && run<=now);
+    const p= left>0 ? left/(n.act.cd*1000) : 0; b.querySelector('.cdr').style.background= left>0?`conic-gradient(rgba(60,40,30,.6) ${p*360}deg, transparent 0)`:'none'; });
+}
+function useAct(id){
+  const n=SKILLS.find(x=>x.id===id), l=sk(id); if(!n||!l) return; S.cd=S.cd||{}; S.actEnd=S.actEnd||{};
+  const now=Date.now(); if((S.cd[id]||0)>now) return toast(`⏳ ${n.nm} 재사용까지 ${Math.ceil((S.cd[id]-now)/1000)}초`);
+  const dur=n.act.dur(l)*1000; S.buffs=S.buffs||[]; S.buffs.push({k:n.act.k,m:n.act.m(l),end:now+dur,label:n.ic+n.nm}); S.cd[id]=now+n.act.cd*1000; S.actEnd[id]=now+dur;
+  sfx('level'); toast(`${n.ic} ${n.nm}! ${n.act.dur(l)}초간 ${n.act.k==='click'?'구걸':'모든 수입'} ×${n.act.m(l)}`);
+  const sc=$('scene').getBoundingClientRect(); for(let q=0;q<30;q++){ const a=Math.random()*Math.PI*2, sp=60+Math.random()*160; fxAdd({type:'spark',x:sc.left+sc.width/2,y:sc.top+sc.height*.6,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:20,r:1+Math.random(),life:1+Math.random(),fo:.4}); }
+  renderSkbar(); render();
+}
+setInterval(()=>renderSkbar(),500);
+document.addEventListener('keydown',e=>{ if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)) return; const k=+e.key; if(k>=1&&k<=9){ const A=actSkills(); if(A[k-1]) useAct(A[k-1].id); } });
+
 /* ---------- pets UI ---------- */
 let _petKey='';
 function renderPetz(force){
@@ -2438,6 +2525,7 @@ function doRebirth(){
 /* ---------- skill tree ---------- */
 const BR=[{nm:'👋 구걸',c:'#f0a92e'},{nm:'🙏 구걸술',c:'#f0a92e'},{nm:'🏪 장사술',c:'#3d8bfd'},{nm:'🍀 눈치',c:'#2fb36a'},{nm:'🎭 직업',c:'#8b5cf6'},{nm:'🛡️ 생존',c:'#e5484d'}];
 const BR_ORDER=[1,2,3,5,4];
+const JOB_ACT={biz:['⏰','타임 세일'],job:['📊','실적 몰아치기'],inv:['📈','풀매수'],star:['🎤','앵콜 무대'],cre:['🔴','라이브 방송'],gov:['📜','예산 집행'],doc:['🚑','응급 출동'],ath:['⚡','폭풍 질주'],dev:['🚀','긴급 배포'],art:['🎨','라이브 드로잉'],chef:['🔥','불쇼'],law:['⚖️','승소 판결']};
 const SKILLS=[
   {id:'c1',br:0,ic:'🙏',nm:'애처로운 눈빛',max:50,base:50,gr:1.15,ef:l=>`클릭당 +${fmt(l*1*stageBonus())}`},
   {id:'c2',br:0,ic:'😢',nm:'눈물 연기',max:50,base:600,gr:1.15,req:['c1',5],ef:l=>`클릭당 +${fmt(l*5*stageBonus())}`},
@@ -2451,6 +2539,7 @@ const SKILLS=[
   {id:'g3',br:1,ic:'📜',nm:'사연 낭독',max:5,base:5e4,gr:2.3,req:['g2',3],eff:{click:.15},d:'눈물 없이 못 듣는 인생사',ef:l=>`구걸 수입 +${l*15}%`},
   {id:'g4',br:1,ic:'👵',nm:'단골 할머니',max:5,base:8e5,gr:2.4,req:['g3',2],eff:{tipP:.006},d:'가끔 큰 용돈을 쥐여주신다',ef:l=>`구걸할 때 ${(l*.6).toFixed(1)}% 확률로 용돈(초당 수입 30초치)`},
   {id:'g5',br:1,ic:'📱',nm:'구걸 라이브',max:5,base:2e7,gr:2.5,req:['g4',2],eff:{click:.25},d:'이제 온라인으로도 구걸한다',ef:l=>`구걸 수입 +${l*25}%`},
+  {id:'ga',br:1,ic:'😭',nm:'대성통곡',max:5,req:['g1',3],act:{k:'click',m:l=>3,dur:l=>10+4*l,cd:180},d:'목 놓아 울면 지갑이 열린다',ef:l=>`액티브 · ${10+4*l}초간 구걸 ×3 · 쿨 3분`},
   {id:'g6',br:1,ic:'✋',nm:'전설의 손',max:1,base:2e9,gr:1,req:['g5',5],eff:{click:1},d:'구걸의 끝판왕 (궁극기)',ef:l=>`구걸 수입 +100%`},
   // 🏪 장사술
   {id:'b1',br:2,ic:'🧹',nm:'근면 성실',max:10,base:300,gr:1.9,eff:{auto:.06},d:'아침 일찍 자리를 편다',ef:l=>`자동 수입 +${l*6}%`},
@@ -2474,7 +2563,16 @@ const SKILLS=[
   {id:'v5',br:5,ic:'⚖️',nm:'전관 변호사',max:5,base:2e8,gr:2.5,req:['v4',2],eff:{pvpDisc:.08,robP:.02},d:'싸움에도 법이 있다',ef:l=>`뜯기·고소 비용 -${l*8}% · 뜯기 성공 +${l*2}%`},
   {id:'v6',br:5,ic:'🏰',nm:'철벽',max:1,base:2e10,gr:1,req:['v5',5],eff:{wall:.3},d:'아무도 못 건드린다 (궁극기)',ef:l=>`뜯기 30% 무효화`},
   ...jobSkills(),
+  ...subSkills(),
 ];
+
+function subSkills(){ const out=[];
+  for(const [r,R] of Object.entries(ROUTES)) for(const [k,sb] of Object.entries(R.subs)){
+    const p=`x_${r}_${k}_`;
+    out.push({id:p+'0',br:6,route:r,sub:k,ic:sb.ic,nm:`${sb.nm} 마스터리`,max:10,eff:{auto:.05,click:.05},d:`${sb.nm}의 기본기`,ef:l=>`자동·구걸 수입 +${l*5}%`});
+    out.push({id:p+'1',br:6,route:r,sub:k,ic:'💫',nm:`${sb.nm}의 기세`,max:5,req:[p+'0',3],act:{k:'all',m:l=>2.5,dur:l=>30+6*l,cd:900},d:'흐름을 탔을 때 몰아친다',ef:l=>`액티브 · ${30+6*l}초간 모든 수입 ×2.5 · 쿨 15분`});
+    out.push({id:p+'2',br:6,route:r,sub:k,ic:'👑',nm:`${sb.st[1].name}의 품격`,max:1,req:[p+'0',10],eff:{auto:.3,click:.3},d:'정점에 선 자의 여유 (궁극기)',ef:l=>`자동·구걸 수입 +30%`});
+  } return out; }
 var SK_READY=true;
 function jobSkills(){
   const J={
@@ -2501,14 +2599,20 @@ function jobSkills(){
     out.push({id,br:4,route:r,ic,nm,max:5,base:[1e5,1e6,1e7,1e8,1e9,1e10][i],gr:2.3,req:i?[`j_${r}_${i-1}`,2]:null,eff,
       ef:l=>Object.entries(eff).map(([k,v])=>L[k](v*l)).join(' · ')});
   });
+  for(const [r,[ic,nm]] of Object.entries(JOB_ACT)) out.push({id:`ja_${r}`,br:4,route:r,ic,nm,max:5,req:[`j_${r}_0`,1],act:{k:'all',m:l=>2,dur:l=>20+5*l,cd:600},d:'진로 필살기',ef:l=>`액티브 · ${20+5*l}초간 모든 수입 ×2 · 쿨 10분`});
   return out;
 }
 let _jskCache=null;
 function jsk(k){
   if(!SK_READY) return 0;
-  let t=0; for(const n of SKILLS){ if(!n.eff) continue; if(n.br===4 && n.route!==S.route) continue; const l=sk(n.id); if(l&&n.eff[k]) t+=n.eff[k]*l; }
+  let t=0; for(const n of SKILLS){ if(!n.eff) continue; if(n.br===4 && n.route!==S.route) continue; if(n.br===6 && (n.route!==S.route||n.sub!==S.sub)) continue; const l=sk(n.id); if(l&&n.eff[k]) t+=n.eff[k]*l; }
   return t;
 }
+function charLv(){ return Math.max(1,1+Math.floor(Math.log(Math.max(1,S.total)/100)/Math.log(2))); }
+function spTotal(){ return (charLv()-1)+3*stageIdx(); }
+function spCost(n){ return n.max===1?3:1; }
+function spUsed(){ let u=0; for(const n of SKILLS){ if(n.br>0){ const l=sk(n.id); if(l) u+=l*spCost(n); } } return u; }
+function spAvail(){ return spTotal()-spUsed(); }
 function skLv(n){ return n.br===0 ? (S.click[n.id]||0) : sk(n.id); }
 function skCost(n){ return Math.ceil(n.base*Math.pow(n.gr,skLv(n))); }
 function skUnlocked(n){ if(!n.req) return true; const r=SKILLS.find(x=>x.id===n.req[0]); return skLv(r)>=n.req[1]; }
@@ -2517,7 +2621,7 @@ function skState(n){
   const l=skLv(n);
   if(!skUnlocked(n)) return 'locked';
   if(l>=n.max) return 'max';
-  return S.money>=skCost(n)?'can':'own';
+  return spAvail()>=spCost(n)?'can':'own';
 }
 function traitsHtml(){
   const si=stageIdx();
@@ -2531,46 +2635,71 @@ function pickTrait(t,k){
     $('trOk').onclick=()=>{ S.money-=c; S.trait[t]=k; hideModal(); sfx('level'); renderSkills(); }; return; }
   S.trait=S.trait||{}; S.trait[t]=k; sfx('level'); const T=traitList().find(x=>x.t==t); toast(`🧬 특성 선택: ${T[k][0]} ${T[k][1]}`); renderSkills();
 }
+let skTab='base';
+const SK_TABS=[
+  {k:'base',ic:'🧎',nm:'기본기',sub:'0차',br:[1,2]},
+  {k:'surv',ic:'🛡️',nm:'생존술',sub:'0차',br:[3,5]},
+  {k:'job',ic:'🎭',nm:'1차 전직',sub:'진로',br:[4]},
+  {k:'sub',ic:'👑',nm:'2차 전직',sub:'전직',br:[6]},
+];
+function tabSkills(T){ return SKILLS.filter(n=>T.br.includes(n.br) && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 function renderSkills(){
-  const L=$('list');
-  let h=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>`+'<div class="tree">';
-  BR_ORDER.forEach(bi=>{ const b=BR[bi];
-    if(bi===4 && !S.route){ h+=`<div class="tcol"><div class="thead">${b.nm}</div><div class="jlock">🔒<br>진로를<br>정하면<br>열려요</div></div>`; return; }
-    h+=`<div class="tcol"><div class="thead">${bi===4?ROUTES[S.route].ic+' '+ROUTES[S.route].nm:b.nm}</div>`;
-    SKILLS.filter(n=>n.br===bi && (bi!==4 || n.route===S.route)).forEach(n=>{
-      const l=skLv(n), st=skState(n);
-      h+=`<button class="node ${st}${l>0?' own':''}${skSel===n.id?' sel':''}" data-id="${n.id}" style="--rc:${b.c};--p:${l/n.max*100}">
-        <span class="ni">${n.ic}</span><span class="lvb">${l>=n.max?'MAX':l+'/'+n.max}</span></button>`;
-    });
-    h+='</div>';
+  const L=$('list'), sp=spAvail();
+  const tabs=SK_TABS.map(T=>{ const lock=(T.k==='job'&&!S.route)||(T.k==='sub'&&!S.sub);
+    const nm=T.k==='job'&&S.route?ROUTES[S.route].ic+' '+ROUTES[S.route].nm : T.k==='sub'&&S.sub?ROUTES[S.route].subs[S.sub].ic+' '+ROUTES[S.route].subs[S.sub].nm : T.ic+' '+T.nm;
+    return `<button class="skt ${skTab===T.k?'on':''} ${lock?'lk':''}" data-k="${T.k}" ${lock?'disabled':''}>${lock?'🔒 ':''}${nm}<i>${T.k==='job'?'1차':T.k==='sub'?'2차':T.sub}</i></button>`; }).join('');
+  const T=SK_TABS.find(x=>x.k===skTab)||SK_TABS[0];
+  let rows=''; let lastBr=-1;
+  tabSkills(T).forEach(n=>{
+    if(n.br!==lastBr){ lastBr=n.br; rows+=`<div class="skh">${n.br===4?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+' 스킬':n.br===6?'2차 전직 스킬':BR[n.br].nm}</div>`; }
+    const l=skLv(n), st=skState(n), req=n.req?SKILLS.find(x=>x.id===n.req[0]):null;
+    const ef=x=>n.ef(x).replace(/^액티브 · /,''); const desc = st==='locked' ? `🔒 ${req.nm} Lv.${n.req[1]} 필요` : `${n.act?'액티브':'패시브'} · ${ef(l||1)}${l&&l<n.max?` <u>→ ${ef(l+1)}</u>`:''}`;
+    rows+=`<div class="skr ${st} ${n.act?'act':''}"><div class="ic ${n.act?'a':''}">${n.ic}</div><div class="tx"><b>${n.nm}<em>Lv.${l}/${n.max}</em></b><small>${desc}</small>${n.d?`<small class="dd">${n.d}</small>`:''}</div>
+      <button class="pl" data-id="${n.id}" ${st==='can'?'':'disabled'} title="SP ${spCost(n)}">${st==='max'?'MAX':'+'}${spCost(n)>1&&st!=='max'?`<i>${spCost(n)}</i>`:''}</button></div>`;
   });
-  h+='</div><div class="skd" id="skd"></div>'+traitsHtml();
-  L.innerHTML=h;
-  L.querySelectorAll('.node').forEach(b=>b.onclick=()=>{ skSel=b.dataset.id; renderSkills(); });
-  L.querySelectorAll('.tro').forEach(b=>b.onclick=()=>pickTrait(+b.dataset.t,b.dataset.k));
-  renderSkDetail();
+  L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
+   <div class="rwin"><div class="rwh">SKILL <span class="spb">Lv.${charLv()} · SP <b>${sp}</b></span></div>
+    <div class="skts">${tabs}</div><div class="skl">${rows||'<div class="skh">스킬이 없어요</div>'}</div>
+    <div class="rwf"><span>레벨업 SP +1 · 신분 상승 SP +3 · 궁극기 3SP</span><button id="skReset">🔁 초기화</button></div></div>
+   <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
+    <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
+  L.querySelectorAll('.skt').forEach(b=>b.onclick=()=>{ skTab=b.dataset.k; renderSkills(); });
+  L.querySelectorAll('.skr .pl').forEach(b=>b.onclick=()=>{ const n=SKILLS.find(x=>x.id===b.dataset.id); if(skState(n)!=='can') return; S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id);
+    if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 장면의 스킬 버튼으로 사용!':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); });
+  $('skReset').onclick=()=>{ const c=Math.max(1000,Math.floor(S.money*.1)); showModal(`<h2>🔁 스킬 초기화</h2><p>찍은 SP를 모두 돌려받아요.<br>비용: 현금 10% (${fmt(c)})</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">초기화</button>`);
+    $('skrOk').onclick=()=>{ if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.skill={}; hideModal(); sfx('level'); toast('🔁 SP를 모두 돌려받았어요'); renderSkills(); renderSkbar(true); }; };
+  L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
 }
-function renderSkDetail(){
-  let n=SKILLS.find(x=>x.id===skSel); if(!n){ skSel='g1'; n=SKILLS.find(x=>x.id==='g1'); } const l=skLv(n), st=skState(n), D=$('skd'); if(!D) return;
-  const req = n.req ? SKILLS.find(x=>x.id===n.req[0]) : null;
-  D.innerHTML=`<div class="top"><div class="bi">${n.ic}</div><div><div class="nm">${n.nm}</div><div class="lv">${BR[n.br].nm} · Lv.${l} / ${n.max}${n.d?` · ${n.d}`:''}</div></div></div>
-    <div class="ef">현재: <b>${l?n.ef(l):'없음'}</b>${l<n.max?`<br>다음: <b>${n.ef(l+1)}</b>`:''}</div>
-    ${st==='locked'?`<div class="rq">🔒 ${req.nm} Lv.${n.req[1]} 필요</div>`:''}
-    <button id="skUp" ${st==='can'?'':'disabled'}>${st==='max'?'최대 레벨':st==='locked'?'잠김':'강화 · '+fmt(skCost(n))}</button>`;
-  $('skUp').onclick=()=>{
-    if(skState(n)!=='can') return;
-    S.money-=skCost(n);
-    if(n.br===0) S.click[n.id]=(S.click[n.id]||0)+1; else { S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; }
-    const nl=skLv(n);
-    if(nl===1) toast(`🌳 새 스킬 습득: ${n.ic} ${n.nm}`);
-    if(nl===n.max) toast(`✨ ${n.nm} 마스터!`);
-    sfx('gold'); renderSkills(); render();
-  };
+function renderSkDetail(){}
+function traitTreeHtml(){
+  const TL=traitList(), si=stageIdx(), Y={s:95,1:82,2:67,r:53,3:38,b:24,4:9}, XA=24, XB=76;
+  const R=S.route&&ROUTES[S.route], SB=R&&S.sub&&R.subs[S.sub];
+  const nodes=[], lines=[];
+  const st=(T,k)=>{ const c=tr(T.t), lock=T.nojob||si<T.lv; return c===k?'on':c?'dim':lock?'lk':'can'; };
+  const center=(key,ic,label,on)=>{ nodes.push(`<div class="tnode big ${on?'on':'lk'}" style="left:50%;top:${Y[key]}%">${ic}</div><div class="tlab" style="left:50%;top:${Y[key]}%">${label}</div>`); };
+  center('s','🧎','시작',true);
+  center('r',R?R.ic:'❔',R?R.nm:'진로',!!R);
+  center('b',SB?SB.ic:'❔',SB?SB.nm:'2차 전직',!!SB);
+  const prevY={1:'s',2:null,3:'r',4:'b'};
+  TL.forEach(T=>{
+    const y=Y[T.t];
+    ['a','b'].forEach(k=>{ const o=T[k], x=k==='a'?XA:XB, c=st(T,k);
+      nodes.push(`<div class="tnode ${c}" data-t="${T.t}" data-k="${k}" style="left:${x}%;top:${y}%">${o[0]}</div><div class="tlab ${k}" style="left:${x}%;top:${y}%"><b>${o[1]}</b><small>${T.nojob?'진로 후 열림':si<T.lv?'신분 '+(T.lv+1)+'단계부터':o[2]}</small></div>`);
+      // incoming line
+      const from = T.t===2 ? (tr(1)? (tr(1)==='a'?XA:XB) : 50) : 50, fy = T.t===2 ? Y[1] : Y[prevY[T.t]];
+      const gold = c==='on' && (T.t!==2 || tr(1));
+      lines.push(`<line x1="${from}" y1="${fy}" x2="${x}" y2="${y}" class="${gold?'g':c==='lk'?'d':''}"/>`);
+      // outgoing to next center
+      const nx = T.t===2?'r':T.t===3?'b':null;
+      if(nx) lines.push(`<line x1="${x}" y1="${y}" x2="50" y2="${Y[nx]}" class="${c==='on'&&(nx==='r'?R:SB)?'g':c==='lk'?'d':''}"/>`);
+    });
+  });
+  return `<div class="ttree"><svg viewBox="0 0 100 100" preserveAspectRatio="none">${lines.join('')}</svg>${nodes.join('')}</div>`;
 }
 let skLastMoneyBucket=-1;
 function skillTick(){
   // refresh node affordability only when needed
-  const sig=(S.route||'')+stageIdx()+(S.rp||0)+(S.petOn||[]).join()+JSON.stringify(S.trait||{})+SKILLS.filter(n=>n.br>0).map(skState).join('');
+  const sig=(S.route||'')+(S.sub||'')+stageIdx()+charLv()+(S.rp||0)+(S.petOn||[]).join()+JSON.stringify(S.trait||{})+JSON.stringify(S.skill||{});
   if(sig!==skillTick.sig){ skillTick.sig=sig; renderSkills(); }
 }
 
@@ -2647,7 +2776,7 @@ function pickCard(i,st){
       if(o.type==='risk') txt=`도전 성공! 모든 수입 +${Math.round((o.mul-1)*100)}%`;
       if(o.type==='inv') txt=`투자 대성공! 모든 수입 +${Math.round((o.mul-1)*100)}%`;
       if(o.type==='bet'){ S.money*=o.cashX; txt=`인생 역전!! 모든 수입 +${Math.round((o.mul-1)*100)}% · 현금 ×${o.cashX.toFixed(2).replace(/0$/,'')}`; }
-      if(o.type==='rush'){ S.buffs=S.buffs||[]; S.buffs.push({k:'all',m:o.bx,end:Date.now()+o.bm*60000}); txt=`⏱️ ${o.bm}분간 모든 수입 ×${o.bx}!`; }
+      if(o.type==='rush'){ S.buffs=S.buffs||[]; S.buffs.push({k:'all',m:o.bx,end:Date.now()+o.bm*60000,label:'⏱️골든타임'}); txt=`⏱️ ${o.bm}분간 모든 수입 ×${o.bx}!`; }
       if(o.type==='gift'){ S.rp=(S.rp||0)+o.rp; txt=`🐾 환생 포인트 +${o.rp} · 수입 +${Math.round((o.mul-1)*100)}%`; }
     } else {
       const lost=S.money*o.lose; S.money-=lost; if(o.type==='bet') S.debuffEnd=Date.now()+120000;
@@ -2676,7 +2805,7 @@ setInterval(()=>{
   const d=$('debuff'), n=Date.now(), L=[];
   const add=(end,t)=>{ const l=(end||0)-n; if(l>0) L.push(`${t} ${Math.ceil(l/1000)}s`); };
   add(S.debuffEnd,'💸빚독촉'); add(S.slumpEnd,'📉침체'); add(S.fireEnd,'🔥화재'); add(S.sueEnd,'🧾고소');
-  (S.buffs||[]).forEach(b=>add(b.end,b.label));
+  (S.buffs||[]).forEach(b=>add(b.end,b.label||'✨버프'));
   if(L.length){ d.classList.add('on'); d.textContent=L.join(' · '); } else d.classList.remove('on');
 },500);
 
@@ -2928,6 +3057,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.7',d:'10/31',items:['🆙 <b>캐릭터 레벨 & SP</b>: 돈을 벌면 Lv이 올라요 · 레벨업 SP +1, 신분 상승 SP +3','📖 <b>메이플식 스킬창</b>: 기본기 · 생존술 · 1차 전직 · 2차 전직 탭 · + 버튼으로 찍기 · 초기화(현금 10%)','⚡ <b>액티브 스킬</b>: 😭대성통곡 · 진로 필살기(🚑응급 출동 등) · 2차 전직 기세 — 장면 오른쪽 아래 버튼 또는 숫자키 1~3','🌳 <b>특성 트리</b>: 노드가 이어진 트리에서 빛나는 칸을 눌러 선택','🎒 <b>돈벌이 장비 카드</b>: 개수 → Lv · 특화 = 보석 슬롯 · 진로(파랑)·전직(보라) 테두리','💸 예전 스킬에 쓴 돈은 환불']},
   {v:'v2.6',d:'10/31',items:['🔧 <b>돈벌이 특화</b>: 10개·50개 모으면 태그 3개 중 하나로 특화 (수입 ×1.25 + 태그) · 현금 10%로 변경 가능','🔗 <b>태그 시너지</b>: 🎭감성 ⚙️시스템 🍀행운 💰수완 🛡️뚝심 — 2/4/6/9개 모을수록 강해져요','✨ <b>조합 시너지</b>: 🥺동정의 기적 · 🏭무인 공장 · 🎰대박 인생 · 🏰철옹성 · 🎤길거리 스타']},
   {v:'v2.5',d:'10/31',items:['🐢 수입 한 번 더 하향 (자동 ×0.12 · 구걸 ×0.28)','🧹 "한 번에 사기" 버튼 제거 (한 개씩 구매)','🎴 <b>레벨업 인생 카드</b>: 4장 뽑기 · 일반/희귀/영웅/전설 등급(높을수록 보상 UP) · ⏱️골든 타임·🐾선물 상자 특수 카드 · 🎡 운명의 룰렛 연출 · 🔄 다시 뽑기(현금 10%)','🔗 <b>시너지 개편</b>: 조합을 같이 키우면 단계(●●●●)가 올라가요 · 10/25/50/100개마다 수입 ×1.15→×1.75 + 보너스 · 👔매니저 팀은 고용 인원 3/6/9/12명','🧬 <b>진로별 특성</b>: 3·4단계 특성이 12진로마다 달라요 (예: 의사 🔪외과 vs 🩺내과, 🚑응급실 에이스 vs 🏥개원의)']},
   {v:'v2.4',d:'10/31',items:['🐢 <b>돈 버는 속도 대폭 하향</b>: 자동 ×0.2 · 구걸 ×0.4 · 가격 상승 1.2→1.25배 · 신분 요구 금액 상향 (최종 300경)','⭐ ★강화 ×2·5단계 → <b>×1.5·3단계</b> · 개수 보너스 ×2는 200개까지, 이후 ×1.5 · 시너지·레벨업 선택 보너스 절반','🌳 <b>스킬 전면 개편</b>: 🙏구걸술 · 🏪장사술 · 🍀눈치 · 🛡️생존 (각 6단계, 이야기 순서) + 🎭직업 · 새 스킬 👵단골 할머니(용돈) 등','🧬 <b>특성 개편</b>: 장점과 단점이 함께 있는 인생관 선택 (연기파/성실파 · 번화가/골목 · 현장형/위임형 · 한방주의/안정주의)','💸 예전 스킬에 쓴 돈은 전액 돌려드려요 · 특성은 다시 골라주세요']},
@@ -3182,7 +3312,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.6';
+const GAME_VER='v2.7';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
