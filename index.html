@@ -1363,7 +1363,7 @@ function msPrev(n){ let p=0; for(const m of MS) if(n>=m) p=m; return p; }
 const TRAITS=[
   {t:1,lv:1,a:['⚡','손이 빠른 거지','클릭 수입 ×2'],b:['😴','게으른 천재','자동 수입 ×1.5']},
   {t:2,lv:3,a:['👀','행인 관찰력','행인 배율 +50%'],b:['👮','경찰과 친구','경찰 무시 · 빈 거리도 ×1.3']},
-  {t:3,lv:6,a:['🧾','현장형 사장','수금 한도 2분→6분 · 수동 돈벌이 ×1.5'],b:['🤝','위임의 달인','매니저 고용비 -60%']},
+  {t:3,lv:6,a:['🧾','현장형 사장','수금 한도 5분→15분 · 수동 돈벌이 ×1.5'],b:['🤝','위임의 달인','매니저 고용비 -60%']},
   {t:4,lv:9,a:['🎰','올인','피버 배율 +2 · 도박 성공 +10%'],b:['🏰','철벽 수비','뜯기 피해 -50% · 악재 피해 -30%']},
 ];
 function tr(t){ return (S.trait||{})[t]||null; }
@@ -1388,8 +1388,8 @@ function pathMult(){ return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult(); 
 function cps(){ return baseCps()*feverMult()*pathMult(); }
 function managedShare(){ let m=0,t=0; for(const a of autoList()){ const v=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); t+=v; if(isMgr(a.id)) m+=v; } return t?m/t:0; }
 function managedCps(){ return cps()*managedShare(); }
-function pendCap(){ return Math.max(50, cps()*(1-managedShare())*(tr(3)==='a'?360:120)*(1+jsk('pendCap'))); }
-function mgrCost(a){ return Math.ceil(a.base*25*(tr(3)==='b'?.4:1)*Math.max(.4,1-jsk('mgrDisc'))); }
+function pendCap(){ return Math.max(50, cps()*(1-managedShare())*(tr(3)==='a'?900:300)*(1+jsk('pendCap'))); }
+function mgrCost(a){ return Math.ceil(a.base*(a.grp==='common'?5:8)*(tr(3)==='b'?.4:1)*Math.max(.4,1-jsk('mgrDisc'))); }
 function starCost(a){ const l=(S.star||{})[a.id]||0; return Math.ceil(a.base*120*Math.pow(9,l)); }
 const SYN=[
   {id:'y1',nm:'동정심 세트',ic:'🥺',need:[['cup',25],['sign',25]],tgt:['cup','sign'],x:2,d:'빈 깡통·팻말 각 25개 → 둘 다 ×2'},
@@ -1447,7 +1447,7 @@ function renderList(){
     const own=autoList().filter(a=>(S.auto[a.id]||0)>0), hired=own.filter(a=>isMgr(a.id)), canH=own.filter(a=>!isMgr(a.id)), sh=managedShare();
     if(own.length){ const cheap=canH.map(mgrCost).sort((a,b)=>a-b);
       L.insertAdjacentHTML('beforeend',`<div class="mgrbar"><div class="mt"><b>👔 매니저 ${hired.length}/${own.length}</b><span>자동 수입 <b>${Math.round(sh*100)}%</b></span></div><i><em style="width:${(sh*100).toFixed(0)}%"></em></i>
-        <small>${hired.length<own.length?`매니저 없는 돈벌이는 장면의 <b>💰 수금</b>을 눌러야 들어와요 (최대 ${tr(3)==='a'?6:2}분치)`:'모든 돈벌이가 자동으로 들어와요 · 오프라인에도 벌어요'}</small>
+        <small>${hired.length<own.length?`매니저 없는 돈벌이는 장면의 <b>💰 수금</b>을 눌러야 들어와요 (최대 ${tr(3)==='a'?15:5}분치)`:'모든 돈벌이가 자동으로 들어와요 · 오프라인에도 벌어요'}</small>
         ${canH.length?`<button class="act mg hireall" id="hireAll" data-c="${cheap[0]}">👔 고용 가능한 매니저 모두 고용</button>`:''}</div>`); }
     L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
   } else L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
@@ -2736,6 +2736,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.3.1',d:'10/31',items:['👔 매니저 고용비 대폭 인하: 공통 돈벌이 <b>1/5</b>, 진로·전직 돈벌이 <b>1/3</b>','🧺 수금함 기본 한도 2분 → <b>5분</b> (현장형 사장 특성 6분 → 15분)']},
   {v:'v2.3',d:'10/31',items:['🔤 글씨 가독성 개선: 본문은 또렷한 고딕, 제목·버튼만 동글 폰트 · 회색 글씨 더 진하게 · 작은 글씨 크기 UP','🌳 공통 스킬 9개 추가: 🧺큰 수금함 · 🕴️헤드헌터(매니저 할인) · 🧾세무 최적화 · 🎲도박사의 촉 · 🌈럭키 데이 · 🦴펫 간식(펫 효과 UP) · 🧯보험 설계사 · 🏃줄행랑 · ⏰알람 시계','🎭 직업 스킬 진로마다 4개 → 6개 (24개 추가, 돈주머니·콤보·방치·도전 성공 등 효과 다양화)']},
   {v:'v2.2.1',d:'10/31',items:['🧒 새 메인 캐릭터 <b>꼬질이</b>! 진로·신분마다 옷과 소품이 바뀌어요 (12진로 전용 의상)','🐾 <b>펫</b> 8종: 냥거지·곰돌이 중 1마리로 시작 → 나머지는 <b>환생 포인트</b>로 입양·강화(Lv.5) · 2번째 자리 해금','📈 신분 <b>9단계 → 12단계</b> (고시원 생활자, 진로 5단계 등)','🔀 2차 전직 <b>3갈래 → 5갈래</b> · 엔딩 <b>60개</b> · 새 전용 돈벌이 48종','🎲 레벨업 선택지 <b>3개 → 5개</b>: 안정 · 🏦저축 · 도전 · 📈투자 · 도박','👔 매니저 고용·★강화 버튼이 돈벌이마다 바로 보여요 · 한 번에 모두 고용 · 구매 수량 ×1/×10/최대','🎨 화면 전체 새 디자인: 파스텔 카툰 테마 · 손그림 아이콘(탭·기본 돈벌이·돈주머니) · 동글 폰트','🤫 행인은 조용하게: 이름표 제거 · 미니창에선 안 나와요 · 경찰 벌금 없음 (잠깐 ×0.3)','💰 돈 단위 확장: 경 → 해·자·양·구·간·정·재·극']},
   {v:'v2.1',d:'10/31',items:['🚶 <b>행인 시스템</b>: 앞을 지나가는 사람에 따라 구걸 수입이 달라져요 (부자 ×15 · 관광객 ×5 · 직장인 ×2.5) — 아무도 없으면 ×0.4, 👮경찰 있을 때 구걸하면 벌금!','👔 <b>매니저</b>: 매니저 없는 돈벌이는 💰수금을 눌러야 들어와요 (최대 2분치) · 고용하면 자동 + 오프라인 수익','★ <b>등급 올리기</b>: 돈벌이 아이콘을 눌러 ★1~5 (등급마다 ×2)','🔗 <b>시너지</b> 6종: 조합 달성 시 ×1.5~×3','🧬 <b>특성 선택</b>: 신분이 오를 때마다 A/B 중 하나 선택 (총 4단계)','🏆 AI 라이벌 삭제 → <b>전체 유저 랭킹</b>만 표시','📈 난이도 상향: 신분 기준액 ~10배, 가격 상승률 1.2, 오프라인 효율 30%']},
@@ -2983,7 +2984,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.3';
+const GAME_VER='v2.3.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
