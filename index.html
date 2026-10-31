@@ -943,6 +943,8 @@
   body.mini .item .ef{font-size:10.5px} body.mini .item .ds{font-size:10px} body.mini .act,body.mini .act b{font-size:10px}
   body.mini .tabs button{font-size:10.5px!important} body.mini .rates{font-size:11px} body.mini #next{font-size:10.5px}
   body.mini .mgrbar small{font-size:10px}
+  #pend{display:none!important}
+  .beggar.pendOn .ch .coins{opacity:1}
 </style>
 </head>
 <body>
@@ -1447,7 +1449,7 @@ function renderList(){
     const own=autoList().filter(a=>(S.auto[a.id]||0)>0), hired=own.filter(a=>isMgr(a.id)), canH=own.filter(a=>!isMgr(a.id)), sh=managedShare();
     if(own.length){ const cheap=canH.map(mgrCost).sort((a,b)=>a-b);
       L.insertAdjacentHTML('beforeend',`<div class="mgrbar"><div class="mt"><b>👔 매니저 ${hired.length}/${own.length}</b><span>자동 수입 <b>${Math.round(sh*100)}%</b></span></div><i><em style="width:${(sh*100).toFixed(0)}%"></em></i>
-        <small>${hired.length<own.length?`매니저 없는 돈벌이는 장면의 <b>💰 수금</b>을 눌러야 들어와요 (최대 ${tr(3)==='a'?15:5}분치)`:'모든 돈벌이가 자동으로 들어와요 · 오프라인에도 벌어요'}</small>
+        <small>${hired.length<own.length?`매니저 없는 돈벌이는 <b>꼬질이를 누를 때</b> 같이 들어와요 (최대 ${tr(3)==='a'?15:5}분치)`:'모든 돈벌이가 자동으로 들어와요 · 오프라인에도 벌어요'}</small>
         ${canH.length?`<button class="act mg hireall" id="hireAll" data-c="${cheap[0]}">👔 고용 가능한 매니저 모두 고용</button>`:''}</div>`); }
     L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
   } else L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
@@ -1505,7 +1507,7 @@ function refreshAffordable(){
 function itemSheet(a){
   const m=isMgr(a.id), st=(S.star||{})[a.id]||0, syn=SYN.filter(y=>Array.isArray(y.tgt)?y.tgt.includes(a.id):y.tgt===a.grp);
   showModal(`<div class="isheet"><div class="ih"><span class="ii">${a.ic}</span><div><b>${a.nm}</b><small>${S.auto[a.id]}개 · 초당 ${fmt(itemRaw(a)*stageBonus()*mgmtMult()*pathMult())}</small></div></div>
-   <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'고용 완료 · 자동 수금':fmt(mgrCost(a))}</em><small>수금 버튼 없이 자동으로 들어오고, 오프라인에도 벌어요</small></button>
+   <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'고용 완료 · 자동 수금':fmt(mgrCost(a))}</em><small>꼬질이를 안 눌러도 자동으로 들어오고, 오프라인에도 벌어요</small></button>
    <button class="ib" id="iStar" ${st>=5?'disabled':''}><span>★ 등급 올리기 (${st}/5)</span><em>${st>=5?'최고 등급':fmt(starCost(a))}</em><small>등급마다 이 돈벌이 수입 ×2</small></button>
    ${syn.length?`<div class="isyn">${syn.map(y=>`<div class="${synOn(y)?'on':''}">${y.ic} ${y.nm} ${synOn(y)?'✓':'· '+Math.round(synProg(y)*100)+'%'}<small>${y.d}</small></div>`).join('')}</div>`:''}
    <button class="gray" onclick="hideModal()">닫기</button></div>`);
@@ -1663,7 +1665,8 @@ function walkerMult(){
 }
 function updPend(){
   const b=$('pend'); if(!b) return; const v=S.pend||0, cap=pendCap();
-  if(v<1 || managedShare()>=1){ b.className=''; return; }
+  $('beggar').classList.toggle('pendOn', v>=1 && managedShare()<1);
+  b.className=''; return;
   const full=v>=cap*.999; b.className='show'+(full?' full':'');
   b.innerHTML=`💰 수금 <b>${fmt(v)}</b>${full?'<small>가득 참!</small>':''}`;
 }
@@ -1714,13 +1717,14 @@ function beg(x,y){
   updateCombo();
   const wm=walkerMult();
   const v=cpc()*comboMult()*wm; earn(v); S.clicks++;
+  const pv=S.pend||0; if(pv>=1){ earn(pv); S.pend=0; }   // 매니저 없는 돈벌이도 구걸할 때 같이 들어와요
   sfx('click');
   if(combo===100 && Date.now()-lastComboFever>120000){ lastComboFever=Date.now(); startFever(10+3*sk('l4')+perkA('feverS')); }
   const bg=$('beggar'); bg.classList.add('hit'); clearTimeout(bg._t); bg._t=setTimeout(()=>bg.classList.remove('hit'),160);
   tiltBowl(); ripple(x,y);
   const bb=$('bowl').getBoundingClientRect(); coinBurst(bb.left+bb.width/2, bb.top+4, combo>=30?3:combo>=10?2:1);
   const r=$('scene').getBoundingClientRect();
-  floatText(x-r.left-20+(Math.random()*30-15), y-r.top-30, '+'+fmt(v));
+  floatText(x-r.left-20+(Math.random()*30-15), y-r.top-30, '+'+fmt(v+(pv>=1?pv:0)));
   if(Math.random()<0.004) log(PASSERBY[Math.floor(Math.random()*PASSERBY.length)]);
   render(); refreshAffordable();
 }
@@ -2736,6 +2740,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.3.2',d:'10/31',items:['💰 수금 버튼 없앰: 매니저 없는 돈벌이는 <b>꼬질이를 누를 때(스페이스 포함) 같이</b> 들어와요 · 쌓이면 깡통에 동전이 보여요']},
   {v:'v2.3.1',d:'10/31',items:['👔 매니저 고용비 대폭 인하: 공통 돈벌이 <b>1/5</b>, 진로·전직 돈벌이 <b>1/3</b>','🧺 수금함 기본 한도 2분 → <b>5분</b> (현장형 사장 특성 6분 → 15분)']},
   {v:'v2.3',d:'10/31',items:['🔤 글씨 가독성 개선: 본문은 또렷한 고딕, 제목·버튼만 동글 폰트 · 회색 글씨 더 진하게 · 작은 글씨 크기 UP','🌳 공통 스킬 9개 추가: 🧺큰 수금함 · 🕴️헤드헌터(매니저 할인) · 🧾세무 최적화 · 🎲도박사의 촉 · 🌈럭키 데이 · 🦴펫 간식(펫 효과 UP) · 🧯보험 설계사 · 🏃줄행랑 · ⏰알람 시계','🎭 직업 스킬 진로마다 4개 → 6개 (24개 추가, 돈주머니·콤보·방치·도전 성공 등 효과 다양화)']},
   {v:'v2.2.1',d:'10/31',items:['🧒 새 메인 캐릭터 <b>꼬질이</b>! 진로·신분마다 옷과 소품이 바뀌어요 (12진로 전용 의상)','🐾 <b>펫</b> 8종: 냥거지·곰돌이 중 1마리로 시작 → 나머지는 <b>환생 포인트</b>로 입양·강화(Lv.5) · 2번째 자리 해금','📈 신분 <b>9단계 → 12단계</b> (고시원 생활자, 진로 5단계 등)','🔀 2차 전직 <b>3갈래 → 5갈래</b> · 엔딩 <b>60개</b> · 새 전용 돈벌이 48종','🎲 레벨업 선택지 <b>3개 → 5개</b>: 안정 · 🏦저축 · 도전 · 📈투자 · 도박','👔 매니저 고용·★강화 버튼이 돈벌이마다 바로 보여요 · 한 번에 모두 고용 · 구매 수량 ×1/×10/최대','🎨 화면 전체 새 디자인: 파스텔 카툰 테마 · 손그림 아이콘(탭·기본 돈벌이·돈주머니) · 동글 폰트','🤫 행인은 조용하게: 이름표 제거 · 미니창에선 안 나와요 · 경찰 벌금 없음 (잠깐 ×0.3)','💰 돈 단위 확장: 경 → 해·자·양·구·간·정·재·극']},
@@ -2984,7 +2989,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.3.1';
+const GAME_VER='v2.3.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
