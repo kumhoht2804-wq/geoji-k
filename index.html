@@ -1045,7 +1045,7 @@
   .skh{font-family:'Jua',sans-serif;font-size:12.5px;margin:4px 2px 0}
   .skr{display:grid;grid-template-columns:40px 1fr 32px;gap:7px;align-items:center;border:2px solid #efe1cb;border-radius:11px;padding:5px}
   .skr .ic{width:40px;height:40px;border:2.5px solid #5a4436;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:21px;background:#fff3df;position:relative}
-  .skr .ic.a{background:linear-gradient(#ffe2a8,#f5b65c)} .skr .ic.a::after{content:'ACTIVE';position:absolute;bottom:-7px;font-size:6.5px;font-weight:800;background:#e0533d;color:#fff;border-radius:4px;padding:0 3px;letter-spacing:.02em}
+  .skr .ic.a{background:linear-gradient(#ffe2a8,#f5b65c)} .skr .ic.a::after{content:'AUTO';position:absolute;bottom:-7px;font-size:6.5px;font-weight:800;background:#e0533d;color:#fff;border-radius:4px;padding:0 3px;letter-spacing:.02em}
   .skr b{font-family:'Jua',sans-serif;font-weight:400;font-size:13.5px;display:block} .skr b em{font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:11px;color:#c9772f;margin-left:5px}
   .skr small{display:block;font-size:10.5px;color:#6e5a49;line-height:1.35} .skr small u{text-decoration:none;color:#15803d} .skr small.dd{color:#a08c78}
   .skr .pl{position:relative;width:30px;height:30px;border:2.5px solid #5a4436;border-radius:9px;background:linear-gradient(#b5e19a,#7fb86a);color:#fff;font-family:'Black Han Sans','Jua',sans-serif;font-size:19px;line-height:20px;text-align:center;box-shadow:0 2px 0 #5a4436;text-shadow:0 1px 0 #5a4436;cursor:pointer;padding:0}
@@ -1216,6 +1216,25 @@
   body.mini .scard .ct{font-size:12.5px} body.mini .scard .cr{display:none} body.mini .scard .co{font-size:10px;margin-left:auto;text-align:right}
   body.mini #specov h3{font-size:16px} body.mini #specov .si{width:40px;height:40px} body.mini #specov .si img.e3d{width:28px;height:28px}
   body.mini .scard .co small{display:none} body.mini .scard .ct{white-space:nowrap}
+
+  /* SP 예산 */
+  .spbud{padding:7px 10px 6px;background:#fff7ea;border-bottom:2px dashed #e8d9c2}
+  .spr{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#6e5a49} .spr b{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;color:#5a4436;font-size:13px} .spr .sm{flex:1;text-align:center;font-size:10px;color:#a08c78}
+  .spg{display:block;height:8px;border-radius:9px;background:#efe1cb;margin:4px 0;overflow:hidden;border:1.5px solid #5a4436} .spg em{display:block;height:100%;background:linear-gradient(90deg,#ffd9a0,#f2a96b)}
+  .spn{font-size:10.5px;color:#6e5a49} .spn b{color:#e0533d} .spn .w{color:#9c8670}
+  .skr .pl{width:40px!important;height:36px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1!important}
+  .skr .pl span{font-size:17px;line-height:16px} .skr .pl i{position:static!important;background:none!important;border:none!important;font-size:8.5px!important;padding:0!important;line-height:10px!important;text-shadow:0 1px 0 #5a4436}
+  .skr .pl.own{background:linear-gradient(#e3d6c4,#c9b9a4)!important;cursor:pointer} .skr .pl:disabled{cursor:default}
+  .skr{grid-template-columns:40px 1fr 42px}
+  body.mini .skr{grid-template-columns:32px 1fr 36px} body.mini .skr .pl{width:34px!important;height:30px!important} body.mini .spr .sm{display:none} body.mini .spn .w{display:block}
+  /* 자동 버프 아이콘 */
+  #skbar{position:absolute;top:44px!important;right:8px!important;bottom:auto!important;flex-direction:row!important;gap:4px;z-index:6;pointer-events:none}
+  .skb{position:relative;width:26px!important;height:26px!important;border:2px solid #5a4436!important;border-radius:8px!important;background:#fffaf2!important;box-shadow:0 2px 0 #5a4436!important;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:.75}
+  .skb img.e3d{width:18px!important;height:18px!important}
+  .skb .cdr{position:absolute;inset:0;border-radius:5px}
+  .skb em{position:absolute;right:1px;bottom:0;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:8.5px;color:#fff;-webkit-text-stroke:2px #5a4436;paint-order:stroke fill;z-index:2}
+  .skb.run{opacity:1;background:linear-gradient(#ffe2a8,#f5b65c)!important;animation:none!important;box-shadow:0 2px 0 #5a4436,0 0 0 2px #ffd34d!important}
+  body.mini #skbar{top:26px!important;right:4px!important;gap:2px} body.mini .skb{width:18px!important;height:18px!important;border-width:1.5px!important;border-radius:6px!important} body.mini .skb img.e3d{width:12px!important;height:12px!important} body.mini .skb em{font-size:7px}
 </style>
 </head>
 <body>
@@ -1843,7 +1862,7 @@ function mgrSheet(){
 const HELP={
   auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','10개·50개에서 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
-  skill:[['🆙','레벨 · SP','돈을 벌면 레벨이 오르고 SP를 받아요. 신분이 오르면 SP +3'],['➕','스킬','+ 를 눌러 배워요. 앞 스킬을 일정 레벨까지 올려야 다음 스킬이 열려요'],['⚡','액티브','배우면 장면 오른쪽에 버튼이 생겨요. 눌러서 잠깐 큰 효과 (숫자키 1~3)'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
+  skill:[['🆙','레벨 · SP','돈을 벌면 레벨이 오르고 SP +1, 신분이 오르면 SP +3. SP는 한정이라 전부 배울 순 없어요!'],['➕','스킬','+ 를 눌러 배워요. 앞 스킬을 일정 레벨까지 올려야 다음 스킬이 열려요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
 function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><h2>❔ 도움말</h2>${H.map(([i,n,d])=>`<div class="hr"><span>${i}</span><div><b>${n}</b><small>${d}</small></div></div>`).join('')}<button onclick="hideModal()">알겠어요</button></div>`); }
 function itemSheet(a){
@@ -2363,16 +2382,19 @@ let _skbKey='';
 function actSkills(){ return SKILLS.filter(n=>n.act && sk(n.id)>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 function renderSkbar(force){
   const B=$('skbar'); if(!B) return; const A=actSkills(), key=A.map(n=>n.id+sk(n.id)).join();
-  if(key!==_skbKey||force){ _skbKey=key; B.innerHTML=A.map((n,i)=>`<button class="skb" data-id="${n.id}" title="${n.nm} (${i+1}번 키)"><span>${emo(n.ic)}</span><i class="cdr"></i><em>${i+1}</em></button>`).join(''); B.querySelectorAll('.skb').forEach(b=>b.onclick=e=>{ e.stopPropagation(); useAct(b.dataset.id); }); }
-  const now=Date.now(); B.querySelectorAll('.skb').forEach(b=>{ const n=SKILLS.find(x=>x.id===b.dataset.id), until=(S.cd||{})[n.id]||0, left=until-now, run=(S.actEnd||{})[n.id]||0;
-    b.classList.toggle('run', run>now); b.classList.toggle('cool', left>0 && run<=now);
-    const p= left>0 ? left/(n.act.cd*1000) : 0; b.querySelector('.cdr').style.background= left>0?`conic-gradient(rgba(60,40,30,.6) ${p*360}deg, transparent 0)`:'none'; });
+  if(key!==_skbKey||force){ _skbKey=key; B.innerHTML=A.map(n=>`<span class="skb" data-id="${n.id}" title="${n.nm} · 쿨타임마다 자동 발동">${emo(n.ic)}<i class="cdr"></i><em></em></span>`).join(''); }
+  const now=Date.now();
+  if(!paused) for(const n of A){ if(((S.cd||{})[n.id]||0)<=now) useAct(n.id,true); }
+  B.querySelectorAll('.skb').forEach(b=>{ const n=SKILLS.find(x=>x.id===b.dataset.id); if(!n) return; const until=(S.cd||{})[n.id]||0, left=until-now, run=(S.actEnd||{})[n.id]||0;
+    const on=run>now; if(b._on!==on){ b._on=on; b.classList.toggle('run',on); }
+    const t= on ? Math.ceil((run-now)/1000)+'' : ''; const em=b.querySelector('em'); if(em.textContent!==t) em.textContent=t;
+    const p= !on&&left>0 ? left/(n.act.cd*1000) : 0; const bg= p>0?`conic-gradient(rgba(60,40,30,.55) ${(p*360).toFixed(0)}deg, transparent 0)`:'none'; if(b._bg!==bg){ b._bg=bg; b.querySelector('.cdr').style.background=bg; } });
 }
-function useAct(id){
+function useAct(id,auto){
   const n=SKILLS.find(x=>x.id===id), l=sk(id); if(!n||!l) return; S.cd=S.cd||{}; S.actEnd=S.actEnd||{};
-  const now=Date.now(); if((S.cd[id]||0)>now) return toast(`⏳ ${n.nm} 재사용까지 ${Math.ceil((S.cd[id]-now)/1000)}초`);
-  const dur=n.act.dur(l)*1000; S.buffs=S.buffs||[]; S.buffs.push({k:n.act.k,m:n.act.m(l),end:now+dur,label:n.ic+n.nm}); S.cd[id]=now+n.act.cd*1000; S.actEnd[id]=now+dur;
-  sfx('level'); toast(`${n.ic} ${n.nm}! ${n.act.dur(l)}초간 ${n.act.k==='click'?'구걸':'모든 수입'} ×${n.act.m(l)}`);
+  const now=Date.now(); if((S.cd[id]||0)>now) return;
+  const dur=n.act.dur(l)*1000; S.buffs=S.buffs||[]; S.buffs.push({k:n.act.k,m:n.act.m(l),end:now+dur,label:n.ic,auto:1}); S.cd[id]=now+n.act.cd*1000; S.actEnd[id]=now+dur;
+  if(auto){ renderSkbar(); return; }
   const sc=$('scene').getBoundingClientRect(); for(let q=0;q<30;q++){ const a=Math.random()*Math.PI*2, sp=60+Math.random()*160; fxAdd({type:'spark',x:sc.left+sc.width/2,y:sc.top+sc.height*.6,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:20,r:1+Math.random(),life:1+Math.random(),fo:.4}); }
   renderSkbar(); render();
 }
@@ -2382,7 +2404,7 @@ setInterval(()=>{ const bd=(t,n)=>{ const b=document.querySelector(`.tabs button
   const newTr=traitList().some(T=>!T.nojob && stageIdx()>=T.lv && !tr(T.t));
   bd('skill', canSk? sp : newTr? '!' : 0);
   bd('auto', autoList().filter(a=>specOpen(a)>=0).length ? '✨' : 0); },1000);
-document.addEventListener('keydown',e=>{ if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)) return; const k=+e.key; if(k>=1&&k<=9){ const A=actSkills(); if(A[k-1]) useAct(A[k-1].id); } });
+
 
 
 
@@ -2810,6 +2832,9 @@ function spTotal(){ return (charLv()-1)+3*stageIdx()+(S.spBonus||0); }
 function spCost(n){ return n.max===1?3:1; }
 function spUsed(){ let u=0; for(const n of SKILLS){ if(n.br>0){ const l=sk(n.id); if(l) u+=l*spCost(n); } } return u; }
 function spAvail(){ return spTotal()-spUsed(); }
+function nextLvNeed(){ const l=charLv(); return Math.max(0,100*Math.pow(2,l)-S.total); }
+function tabSpUsed(T){ return tabSkills(T).reduce((u,n)=>u+sk(n.id)*spCost(n),0); }
+function tabSpMax(T){ return tabSkills(T).reduce((u,n)=>u+n.max*spCost(n),0); }
 function skLv(n){ return n.br===0 ? (S.click[n.id]||0) : sk(n.id); }
 function skCost(n){ return Math.ceil(n.base*Math.pow(n.gr,skLv(n))); }
 function skUnlocked(n){ if(!n.req) return true; const r=SKILLS.find(x=>x.id===n.req[0]); return skLv(r)>=n.req[1]; }
@@ -2844,25 +2869,28 @@ function renderSkills(){
   const L=$('list'), sp=spAvail();
   const tabs=SK_TABS.map(T=>{ const lock=(T.k==='job'&&!S.route)||(T.k==='sub'&&!S.sub);
     const nm=T.k==='job'&&S.route?ROUTES[S.route].ic+' '+ROUTES[S.route].nm : T.k==='sub'&&S.sub?ROUTES[S.route].subs[S.sub].ic+' '+ROUTES[S.route].subs[S.sub].nm : T.ic+' '+T.nm;
-    return `<button class="skt ${skTab===T.k?'on':''} ${lock?'lk':''}" data-k="${T.k}" ${lock?'disabled':''}>${lock?'🔒 ':''}${nm}<i>${T.k==='job'?'1차':T.k==='sub'?'2차':T.sub}</i></button>`; }).join('');
+    return `<button class="skt ${skTab===T.k?'on':''} ${lock?'lk':''}" data-k="${T.k}" ${lock?'disabled':''}>${lock?'🔒 ':''}${nm}<i>${lock?(T.k==='job'?'진로 후':'전직 후'):`${tabSpUsed(T)}/${tabSpMax(T)} SP`}</i></button>`; }).join('');
   const T=SK_TABS.find(x=>x.k===skTab)||SK_TABS[0];
   let rows=''; let lastBr=-1;
   tabSkills(T).forEach(n=>{
     if(n.br!==lastBr){ lastBr=n.br; rows+=`<div class="skh">${n.br===4?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+' 스킬':n.br===6?'2차 전직 스킬':BR[n.br].nm}</div>`; }
     const l=skLv(n), st=skState(n), req=n.req?SKILLS.find(x=>x.id===n.req[0]):null;
-    const ef=x=>n.ef(x).replace(/^액티브 · /,''); const desc = st==='locked' ? `🔒 ${req.nm} Lv.${n.req[1]} 필요` : `${n.act?'액티브':'패시브'} · ${ef(l||1)}${l&&l<n.max?` <u>→ ${ef(l+1)}</u>`:''}`;
+    const ef=x=>n.ef(x).replace(/^액티브 · /,''); const desc = st==='locked' ? `🔒 ${req.nm} Lv.${n.req[1]} 필요` : `${n.act?'⏱️ 자동 버프':'패시브'} · ${ef(l||1)}${l&&l<n.max?` <u>→ ${ef(l+1)}</u>`:''}`;
     rows+=`<div class="skr ${st} ${n.act?'act':''}"><div class="ic ${n.act?'a':''}">${emo(n.ic)}</div><div class="tx"><b>${n.nm}<em>Lv.${l}/${n.max}</em></b><small>${desc}</small>${n.d?`<small class="dd">${n.d}</small>`:''}</div>
-      <button class="pl" data-id="${n.id}" ${st==='can'?'':'disabled'} title="SP ${spCost(n)}">${st==='max'?'MAX':'+'}${spCost(n)>1&&st!=='max'?`<i>${spCost(n)}</i>`:''}</button></div>`;
+      <button class="pl ${st}" data-id="${n.id}" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'MAX':`<span>+</span><i>${spCost(n)}SP</i>`}</button></div>`;
   });
   L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
-   <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">Lv.${charLv()} · SP <b>${sp}</b></span></div>
+   <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">남은 SP <b>${sp}</b></span></div>
+    <div class="spbud"><div class="spr"><span>받은 SP <b>${spTotal()}</b></span><span class="sm">레벨 ${charLv()-1} + 신분 ${3*stageIdx()}${S.spBonus?` + 카드 ${S.spBonus}`:''}</span><span>사용 <b>${spUsed()}</b></span></div>
+      <i class="spg"><em style="width:${Math.min(100,spUsed()/Math.max(1,spTotal())*100).toFixed(0)}%"></em></i>
+      <div class="spn">${sp>0?`✨ <b>${sp}SP</b>를 찍을 수 있어요`:`다음 SP: <b>Lv.${charLv()+1}</b>까지 ${fmt(nextLvNeed())}`} · <span class="w">전부 배울 순 없어요! 고르고 집중하기</span></div></div>
     <div class="skts">${tabs}</div><div class="skl">${rows||'<div class="skh">스킬이 없어요</div>'}</div>
-    <div class="rwf"><span>레벨업 SP +1 · 신분 상승 SP +3 · 궁극기 3SP</span><button id="skReset">🔁 초기화</button></div></div>
+    <div class="rwf"><span>레벨업 +1 · 신분 상승 +3 · 궁극기는 3SP</span><button id="skReset">🔁 다시 찍기</button></div></div>
    <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
     <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
   L.querySelectorAll('.skt').forEach(b=>b.onclick=()=>{ skTab=b.dataset.k; renderSkills(); });
-  L.querySelectorAll('.skr .pl').forEach(b=>b.onclick=()=>{ const n=SKILLS.find(x=>x.id===b.dataset.id); if(skState(n)!=='can') return; S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id);
-    if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 장면의 스킬 버튼으로 사용!':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); });
+  L.querySelectorAll('.skr .pl').forEach(b=>b.onclick=()=>{ const n=SKILLS.find(x=>x.id===b.dataset.id); const st=skState(n); if(st==='own') return toast(`SP가 부족해요 (필요 ${spCost(n)} · 남음 ${spAvail()}) · Lv.${charLv()+1}까지 ${fmt(nextLvNeed())}`); if(st!=='can') return; S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id);
+    if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 쿨타임마다 자동으로 발동해요':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); });
   $('skReset').onclick=()=>{ const c=Math.max(1000,Math.floor(S.money*.1)); showModal(`<h2>🔁 스킬 초기화</h2><p>찍은 SP를 모두 돌려받아요.<br>비용: 현금 10% (${fmt(c)})</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">초기화</button>`);
     $('skrOk').onclick=()=>{ if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.skill={}; hideModal(); sfx('level'); toast('🔁 SP를 모두 돌려받았어요'); renderSkills(); renderSkbar(true); }; };
   L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
@@ -3055,9 +3083,9 @@ setInterval(()=>{
   const add=(end,t)=>{ const l=(end||0)-n; if(l>0) L.push(`${t} ${Math.ceil(l/1000)}s`); };
   add(S.debuffEnd,'💸빚독촉'); add(S.slumpEnd,'📉침체'); add(S.fireEnd,'🔥화재'); add(S.sueEnd,'🧾고소');
   if(L.length){ d.classList.add('on'); d.textContent=L.join(' · '); } else d.classList.remove('on');
-  const P=[]; S.buffs=(S.buffs||[]).filter(b=>b.end>n); S.buffs.forEach(b=>P.push(`${b.label||'✨버프'} ×${b.m} ${Math.ceil((b.end-n)/1000)}s`));
+  const P=[]; S.buffs=(S.buffs||[]).filter(b=>b.end>n); S.buffs.filter(b=>!b.auto).forEach(b=>P.push(`${b.label||'✨버프'} ×${b.m} ${Math.ceil((b.end-n)/1000)}s`));
   const bp=$('buffp'); if(bp){ bp.classList.toggle('on',P.length>0); if(P.length) bp.textContent=P.join(' · '); }
-  $('scene').classList.toggle('buffed', P.length>0);
+  $('scene').classList.toggle('buffed', S.buffs.length>0);
 },500);
 
 /* ---------- random events (악재 / 행운) ---------- */
@@ -3308,6 +3336,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.3',d:'10/31',items:['📊 <b>SP 한눈에</b>: 받은 SP(레벨+신분) · 사용 · 남은 SP 게이지 · 탭마다 사용/최대 SP · 다음 SP까지 남은 돈','➕ 버튼에 필요한 SP 표시 · SP가 모자라면 이유와 다음 레벨까지 남은 돈 안내','⏱️ 액티브 스킬 → <b>자동 버프</b>: 누를 필요 없이 쿨타임마다 저절로 발동 · 장면 위 작은 아이콘에 남은 시간 표시']},
   {v:'v3.2.1',d:'10/31',items:['🛠️ 일부 돈벌이(폐지 리어카 등)에서 특화를 고르려 하면 게임이 멈추던 버그 수정']},
   {v:'v3.2',d:'10/31',items:['💎 돈벌이가 10개·50개가 되면 <b>특화 선택 창이 자동으로 떠요</b> (레벨업 카드처럼) · 태그별로 시너지가 몇 개 쌓이는지 바로 보여요 · 나중에 고르기 가능','⚡ 창·팝업을 열 때 버벅이던 문제 수정 (배경 흐림 효과 제거)']},
   {v:'v3.1.1',d:'10/31',items:['⚡ <b>렉 개선</b>: 화면 갱신을 초당 60번 → 11번으로 · 미니창 장식 애니메이션 끔 · 행인·배경 애니메이션 가볍게 · 창을 내리면 애니메이션 정지 (CPU 사용량 약 1/5)']},
@@ -3572,7 +3601,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.2.1';
+const GAME_VER='v3.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
