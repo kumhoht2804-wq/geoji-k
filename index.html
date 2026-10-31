@@ -1294,6 +1294,15 @@
   .wrap{align-content:start;align-items:start;align-self:flex-start}
   body{align-items:flex-start}
   .tl2{margin-top:24px!important;font-size:10px;background:rgba(255,255,255,.85);border-radius:5px;padding:0 3px} body.mini .tl2{margin-top:20px!important;font-size:8.5px}
+
+  .fcs{padding:8px 10px;background:#fff7ea;border-bottom:2px dashed #e8d9c2}
+  .fct{font-family:'Jua',sans-serif;font-size:12.5px;margin-bottom:5px}
+  .fcl{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+  .fc{display:flex;flex-direction:column;align-items:center;gap:1px;font:inherit;border:2px solid #e2d3bd;border-radius:11px;background:#fff;padding:5px 0 3px;cursor:pointer;color:#5a4436}
+  .fc img.e3d{width:22px;height:22px} .fc b{font-family:'Jua',sans-serif;font-weight:400;font-size:11px}
+  .fc.on{border-color:#5a4436;background:linear-gradient(#ffe2a8,#f5b65c);box-shadow:0 2px 0 #5a4436}
+  .fcd{font-size:11.5px;color:#5a4436;margin-top:7px;line-height:1.45} .fcd b{color:#c9772f} .fcd small{color:#8a7560;font-size:10.5px}
+  body.mini .fc img.e3d{width:17px;height:17px} body.mini .fc b{font-size:9.5px} body.mini .fcd{font-size:10.5px}
 </style>
 </head>
 <body>
@@ -1922,7 +1931,7 @@ function mgrSheet(){
 const HELP={
   auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','10개·50개에서 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
-  skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['➕','스킬','+ 를 눌러 배워요. 앞 스킬을 일정 레벨까지 올려야 다음 스킬이 열려요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
+  skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['🧭','육성 방향','구걸형·자동형·행운형·생존형 중 하나를 고르면 SP가 생길 때마다 알아서 찍혀요. 직접 찍고 싶으면 ✋직접'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
 function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><h2>❔ 도움말</h2>${H.map(([i,n,d])=>`<div class="hr"><span>${i}</span><div><b>${n}</b><small>${d}</small></div></div>`).join('')}<button onclick="hideModal()">알겠어요</button></div>`); }
 function itemSheet(a){
@@ -2461,7 +2470,7 @@ function useAct(id,auto){
 }
 setInterval(()=>renderSkbar(),500);
 setInterval(()=>{ const bd=(t,n)=>{ const b=document.querySelector(`.tabs button[data-tab=${t}]`); if(!b) return; let e=b.querySelector('.tbdg'); if(!n){ if(e) e.remove(); return; } if(!e){ e=document.createElement('b'); e.className='tbdg'; b.appendChild(e); } if(e.textContent!==String(n)) e.textContent=n; };
-  const sp=spAvail(), canSk=sp>0 && SKILLS.some(n=>n.br>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)) && skState(n)==='can');
+  const sp=spAvail(), canSk=(S.skFocus==='manual') && sp>0 && SKILLS.some(n=>n.br>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)) && skState(n)==='can');
   const newTr=traitList().some(T=>!T.nojob && stageIdx()>=T.lv && !tr(T.t));
   bd('skill', canSk? sp : newTr? '!' : 0);
   bd('auto', autoList().filter(a=>specOpen(a)>=0).length ? '✨' : 0); },1000);
@@ -2494,7 +2503,7 @@ const TUT=[
   {t:'돈이 모이면 <b>빈 깡통</b>을 사요',el:()=>document.querySelector('.item[data-id=cup] .buyb'),done:()=>(S.auto.cup||0)>=1,tab:'auto'},
   {t:'깡통을 더 모아봐요<br><small>25개면 수입 ×2!</small>',el:()=>document.querySelector('.item[data-id=cup] .buyb'),done:()=>(S.auto.cup||0)>=5,tab:'auto'},
   {t:'아이콘을 눌러 <b>매니저</b>를 고용하면<br>안 눌러도 자동으로 벌어요',el:()=>document.querySelector('.item[data-id=cup] .ic'),done:()=>Object.keys(S.mgr||{}).length>0,tab:'auto',when:()=>S.money>=mgrCost(autoList()[0])},
-  {t:'레벨이 오르면 <b>SP</b>가 생겨요<br><small>스킬 탭에서 + 로 배워요</small>',el:()=>document.querySelector('.tabs button[data-tab=skill]'),done:()=>Object.keys(S.skill||{}).length>0||tab==='skill'},
+  {t:'스킬 탭에서 <b>육성 방향</b>을 골라요<br><small>SP는 알아서 찍혀요</small>',el:()=>document.querySelector('.tabs button[data-tab=skill]'),done:()=>Object.keys(S.skill||{}).length>0||tab==='skill'},
 ];
 function tutTick(){
   let B=$('tutb'); if(S.tutDone||paused||$('modal').classList.contains('show')||modalBusy()){ if(B) B.style.display='none'; return; }
@@ -2964,42 +2973,67 @@ function treeHtml(B){
   const lab = B.A?`<div class="tba" style="left:27%">${B.A}</div><div class="tba" style="left:73%">${B.B}</div>`:'';
   return `<div class="tree2" style="height:${h}px"><svg viewBox="0 0 100 ${h}" preserveAspectRatio="none">${ln.join('')}</svg>${lab}${nd}</div>`;
 }
+// 육성 방향: 고르면 SP가 생길 때마다 자동으로 찍혀요
+const SK_FOCUS=[
+  {k:'click',ic:'🙏',nm:'구걸형',d:'꼬질이를 눌러서 버는 돈 UP',br:'g'},
+  {k:'auto',ic:'🏪',nm:'자동형',d:'가만히 있어도 버는 돈 UP',br:'b'},
+  {k:'luck',ic:'🍀',nm:'행운형',d:'돈주머니·피버 UP',br:'n'},
+  {k:'surv',ic:'🛡️',nm:'생존형',d:'악재·뜯기 방어, 방치 수입 UP',br:'v'},
+  {k:'manual',ic:'✋',nm:'직접',d:'트리에서 내가 골라 찍기',br:null},
+];
+function skOrder(f){
+  const F=SK_FOCUS.find(x=>x.k===f)||SK_FOCUS[1]; const BR={g:1,b:2,n:3,v:5};
+  const br=b=>SKILLS.filter(n=>n.br===b && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)));
+  const line=(b,ln)=>br(b).filter(n=>n.ln===ln);
+  const main=BR[F.br]; const others=[1,2,3,5].filter(x=>x!==main);
+  const P=[];  // [skill, 목표 레벨]
+  const add=(L,c)=>L.forEach(n=>P.push([n,Math.min(c,n.max)]));
+  add(line(main,'r'),5); add(line(main,'A'),5); add(line(main,'U'),1); add(line(main,'r'),10);   // 1단계: 주력 갈래 A 끝까지 + 궁극기
+  add(line(4,'r'),3); add(line(4,'A'),3); add(line(4,'B'),3); add(line(4,'U'),3); add(line(4,'X'),3); add(br(6),3);  // 직업
+  add(line(main,'B'),5);                                                       // 주력 갈래 B
+  add(br(4),5); add(br(6),10);                                                 // 직업 마스터
+  others.forEach(b=>{ add(line(b,'r'),3); }); others.forEach(b=>{ add(line(b,'A'),3); });
+  others.forEach(b=>{ add(br(b),10); });
+  return P;
+}
+function autoSpend(){
+  const f=S.skFocus||'auto'; if(f==='manual'||spAvail()<=0) return 0; let k=0;
+  for(const [n,cap] of skOrder(f)){ while(sk(n.id)<cap && skUnlocked(n) && spAvail()>=spCost(n)){ S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; k++; } if(spAvail()<=0) break; }
+  if(k){ renderSkbar(true); if(tab==='skill') renderSkills(); }
+  return k;
+}
+setInterval(()=>{ if(!paused && (S.skFocus||'auto')!=='manual') autoSpend(); },1500);
 function renderSkills(){
-  const L=$('list'), sp=spAvail();
-  const head=`<div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">남은 SP <b>${sp}</b></span></div>
-    <div class="spbud"><div class="spr"><span>받은 SP <b>${spTotal()}</b></span><span class="sm">레벨 ${charLv()-1} + 신분 ${3*stageIdx()}${achSP()?` + 업적 ${achSP()}`:''}${itemSP()?` + 돈벌이 ${itemSP()}`:''}${S.rebirth?` + 환생 ${5*S.rebirth}`:''}${S.spBonus?` + 카드 ${S.spBonus}`:''}</span><span>사용 <b>${spUsed()}</b></span></div>
-      <i class="spg"><em style="width:${Math.min(100,spUsed()/Math.max(1,spTotal())*100).toFixed(0)}%"></em></i>
-      <div class="spn">${sp>0?`✨ <b>${sp}SP</b>를 찍을 수 있어요`:`다음 SP: <b>Lv.${charLv()+1}</b>까지 ${fmt(nextLvNeed())}`} · <span class="w">갈래마다 둘 중 하나를 골라 키워요</span></div></div>
-    <div class="skm"><button class="${skMode==='learn'?'on':''}" data-m="learn">➕ 찍기</button><button class="${skMode==='tree'?'on':''}" data-m="tree">🌳 트리</button></div>`;
-  let body='';
-  if(skMode==='learn'){
-    const groups=SK_BR.filter(brOpen).map(B=>{ const can=brSkills(B).filter(n=>skUnlocked(n)&&skLv(n)<n.max); return can.length?`<div class="skh">${emo(B.ic)} ${B.br===4?ROUTES[S.route].nm:B.br===6?ROUTES[S.route].subs[S.sub].nm:B.nm}</div>`+can.map(skRow).join(''):''; }).join('');
-    const soon=SKILLS.filter(n=>n.br>0&&n.br!==0&&!skUnlocked(n)&&(n.br!==4||n.route===S.route)&&(n.br!==6||(n.route===S.route&&n.sub===S.sub))&&((n.req&&sk(n.req[0])>0)||(n.reqAny&&n.reqAny.some(([id])=>sk(id)>0))));
-    body=`<div class="skl">${groups||'<div class="skh">다 배웠어요!</div>'}${soon.length?`<div class="skh soon">🔒 곧 열려요</div>`+soon.map(n=>`<div class="skr locked"><div class="ic">${emo(n.ic)}</div><div class="tx"><b>${n.nm}</b><small>${reqText(n)} 필요</small></div><span></span></div>`).join(''):''}</div>`;
-  } else {
-    if(!SK_BR.find(B=>B.k===skBr&&brOpen(B))) skBr='g';
-    const B=SK_BR.find(x=>x.k===skBr), list=brSkills(B);
-    if(!list.find(n=>n.id===skSel)) skSel=(list.find(n=>skState(n)==='can')||list[0]||{}).id;
-    const chips=SK_BR.map(b=>`<button class="skbc ${b.k===skBr?'on':''}" data-b="${b.k}" ${brOpen(b)?'':'disabled'}>${emo(b.ic)}<span>${b.br===4&&S.route?ROUTES[S.route].nm:b.br===6&&S.sub?ROUTES[S.route].subs[S.sub].nm:b.nm}</span><i>${brSkills(b).reduce((u,n)=>u+sk(n.id)*spCost(n),0)}</i></button>`).join('');
-    const n=SKILLS.find(x=>x.id===skSel);
-    const det = n ? (()=>{ const l=skLv(n), st=skState(n), ef=x=>n.ef(x).replace(/^액티브 · /,''); return `<div class="skd2"><div class="dh"><span class="di ${n.act?'a':''}">${emo(n.ic)}</span><div><b>${n.nm} <em>Lv.${l}/${n.max}</em></b><small>${n.act?'⏱️ 자동 버프':n.max===1?'⭐ 궁극기 (3SP)':'패시브'}${n.d?' · '+n.d:''}</small></div></div>
+  const L=$('list'), sp=spAvail(), f=S.skFocus||'auto', man=f==='manual';
+  if(!SK_BR.find(B=>B.k===skBr&&brOpen(B))) skBr='g';
+  const B=SK_BR.find(x=>x.k===skBr), list=brSkills(B);
+  if(!list.find(n=>n.id===skSel)) skSel=(list.find(n=>skState(n)==='can')||list[0]||{}).id;
+  const chips=SK_BR.map(b=>`<button class="skbc ${b.k===skBr?'on':''}" data-b="${b.k}" ${brOpen(b)?'':'disabled'}>${emo(b.ic)}<span>${b.br===4&&S.route?ROUTES[S.route].nm:b.br===6&&S.sub?ROUTES[S.route].subs[S.sub].nm:b.nm}</span></button>`).join('');
+  const n=SKILLS.find(x=>x.id===skSel);
+  const det = n ? (()=>{ const l=skLv(n), st=skState(n), ef=x=>n.ef(x).replace(/^액티브 · /,''); return `<div class="skd2"><div class="dh"><span class="di ${n.act?'a':''}">${emo(n.ic)}</span><div><b>${n.nm} <em>Lv.${l}/${n.max}</em></b><small>${n.act?'⏱️ 자동 버프':n.max===1?'⭐ 궁극기':'패시브'}${n.d?' · '+n.d:''}</small></div></div>
       <div class="de">${st==='locked'?`🔒 <b>${reqText(n)}</b> 필요`:`${l?`지금: <b>${ef(l)}</b>`:`배우면: <b>${ef(1)}</b>`}${l&&l<n.max?`<br>다음: <u>${ef(l+1)}</u>`:''}`}</div>
-      <button class="dbtn ${st}" id="skUp2" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'마스터!':st==='locked'?'잠김':`+ 배우기 <i>${spCost(n)}SP</i>`}</button></div>`; })() : '';
-    body=`<div class="skbcs">${chips}</div>${treeHtml(B)}${det}`;
-  }
+      ${man?`<button class="dbtn ${st}" id="skUp2" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'마스터!':st==='locked'?'잠김':`+ 배우기 <i>${spCost(n)}SP</i>`}</button>`:''}</div>`; })() : '';
+  const FF=SK_FOCUS.find(x=>x.k===f);
   L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
-   <div class="rwin">${head}${body}<div class="rwf"><span>SP는 레벨·신분·업적·돈벌이·환생으로 받아요</span><button id="skReset">🔁 다시 찍기</button></div></div>
+   <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">찍은 SP <b>${spUsed()}</b></span></div>
+    <div class="fcs"><div class="fct">육성 방향을 골라요</div><div class="fcl">${SK_FOCUS.map(x=>`<button class="fc ${x.k===f?'on':''}" data-f="${x.k}">${emo(x.ic)}<b>${x.nm}</b></button>`).join('')}</div>
+      <div class="fcd">${man ? (sp>0?`✋ 남은 <b>${sp}SP</b> · 아래 트리에서 노드를 눌러 직접 찍어요`:`✋ 직접 찍기 모드 · 다음 SP까지 ${fmt(nextLvNeed())}`) : `✅ <b>${FF.nm}</b>: ${FF.d}<br><small>SP가 생기면 알아서 찍혀요 · 다음 SP까지 ${fmt(nextLvNeed())}</small>`}</div></div>
+    <div class="skbcs">${chips}</div>${treeHtml(B)}${det}
+    <div class="rwf"><span>방향을 바꾸면 처음부터 다시 찍혀요</span><button id="skReset">🔁 다시 찍기</button></div></div>
    <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
     <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
-  const learn=id=>{ const n=SKILLS.find(x=>x.id===id), st=skState(n); if(st==='own') return toast(`SP가 부족해요 (필요 ${spCost(n)} · 남음 ${spAvail()}) · Lv.${charLv()+1}까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
-    S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id); if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 쿨타임마다 자동으로 발동해요':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); };
-  L.querySelectorAll('.skm button').forEach(b=>b.onclick=()=>{ skMode=b.dataset.m; renderSkills(); });
+  const learn=id=>{ const n=SKILLS.find(x=>x.id===id), st=skState(n); if(st==='own') return toast(`SP가 부족해요 · 다음 SP까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
+    S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; sfx('gold'); renderSkills(); render(); renderSkbar(true); };
+  L.querySelectorAll('.fc').forEach(b=>b.onclick=()=>{ const nf=b.dataset.f; if(nf===f) return;
+    if(nf==='manual'){ S.skFocus='manual'; renderSkills(); return; }
+    const used=spUsed(); const go=()=>{ S.skFocus=nf; S.skill={}; autoSpend(); hideModal(); sfx('level'); toast(`${SK_FOCUS.find(x=>x.k===nf).ic} ${SK_FOCUS.find(x=>x.k===nf).nm}으로 다시 찍었어요`); renderSkills(); renderSkbar(true); };
+    if(!used) return go();
+    showModal(`<h2>${SK_FOCUS.find(x=>x.k===nf).ic} ${SK_FOCUS.find(x=>x.k===nf).nm}으로 바꿀까요?</h2><p>찍은 SP를 돌려받고 새 방향으로 다시 찍어요.<br>무료예요!</p><button class="gray" onclick="hideModal()">취소</button><button id="fcOk">바꾸기</button>`); $('fcOk').onclick=go; });
   L.querySelectorAll('.skbc').forEach(b=>b.onclick=()=>{ skBr=b.dataset.b; skSel=null; renderSkills(); });
-  L.querySelectorAll('.skr .pl').forEach(b=>b.onclick=()=>learn(b.dataset.id));
   L.querySelectorAll('.tn2').forEach(b=>b.onclick=()=>{ skSel=b.dataset.id; renderSkills(); });
   if($('skUp2')) $('skUp2').onclick=()=>learn(skSel);
-  $('skReset').onclick=()=>{ const c=Math.max(1000,Math.floor(S.money*.1)); showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.<br>비용: 현금 10% (${fmt(c)})</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
-    $('skrOk').onclick=()=>{ if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.skill={}; hideModal(); sfx('level'); toast('🔁 SP를 모두 돌려받았어요'); renderSkills(); renderSkbar(true); }; };
+  $('skReset').onclick=()=>{ showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.${man?'':'<br>지금 육성 방향대로 다시 찍혀요.'}</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
+    $('skrOk').onclick=()=>{ S.skill={}; autoSpend(); hideModal(); sfx('level'); toast('🔁 다시 찍었어요'); renderSkills(); renderSkbar(true); }; };
   L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
 }
 function renderSkDetail(){}
@@ -3443,6 +3477,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.7',d:'10/31',items:['🧭 <b>육성 방향만 고르면 끝!</b> 🙏구걸형 · 🏪자동형 · 🍀행운형 · 🛡️생존형 중 하나를 고르면 SP가 생길 때마다 알아서 찍혀요','✋ 직접 찍고 싶으면 "직접" 모드 → 트리에서 노드를 눌러 배우기','🔁 방향을 바꾸면 무료로 다시 찍어줘요']},
   {v:'v3.6',d:'10/31',items:['🔧 돈벌이·구걸·랭킹 탭에서 화면이 늘어나던 오류 수정','⚔️ 맞짱 탭 이름 → <b>강탈</b>','➕ 스킬창 <b>찍기 / 트리</b> 두 탭: 찍기는 지금 배울 수 있는 것만, 트리는 갈래별 전체 구조','🌳 <b>갈래 트리</b>: 뿌리 → 두 갈래 → 궁극기 (구걸술: 눈물샘/인정머리 · 장사술: 확장/관리 · 눈치: 돈주머니/피버 · 생존: 방어/방치 · 직업도 두 갈래)','🆕 새 스킬: 🧒동네 꼬마 팬클럽 · ⏰대목 장사 · 🧾장부 정리 · 💰주머니 사냥꾼 · 🎉축제 분위기 · 🌙꿀잠 · 🏦비상금','⚖️ 밸런스: 레벨 상한 정리 (전체 트리의 약 60%만 찍을 수 있게) · 궁극기는 두 갈래 중 하나만 키워도 열림']},
   {v:'v3.5',d:'10/31',items:['🌳 스킬을 <b>한 판</b>에: 구걸술 · 장사술 · 눈치 · 생존 · 직업(1·2차) 5줄 트리를 한눈에','🟢 초록 = 지금 배울 수 있음 · 테두리 링 = 레벨 · 금색 = 마스터 · 노드를 누르면 아래에 설명과 배우기 버튼']},
   {v:'v3.4',d:'10/31',items:['🆙 레벨이 <b>신분마다 5번씩 고르게</b> 올라요','✨ SP 받는 곳 추가: <b>업적 달성 +1</b> · <b>돈벌이 50/100/200개 +1</b> · <b>환생할 때마다 +5</b>(영구)']},
@@ -3711,7 +3746,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.6';
+const GAME_VER='v3.7';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
