@@ -945,6 +945,36 @@
   body.mini .mgrbar small{font-size:10px}
   #pend{display:none!important}
   .beggar.pendOn .ch .coins{opacity:1}
+
+  /* 미니창 컴팩트 */
+  body.mini .wrap{gap:5px!important;padding:5px!important}
+  body.mini .card{padding:7px!important}
+  body.mini #target{font-size:10px}
+  body.mini .synp{padding:3px 8px!important;margin:4px 0!important;box-shadow:0 2px 0 #5a4436} body.mini .synp summary{font-size:11px} body.mini .synp summary span{display:none}
+  body.mini .mgrbar{padding:5px 7px;margin:4px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:0 2px 0 #5a4436}
+  body.mini .mgrbar .mt{flex:1;font-size:11px} body.mini .mgrbar .mt span{font-size:10px}
+  body.mini .mgrbar i,body.mini .mgrbar small{display:none}
+  body.mini .mgrbar .hireall{width:auto;margin:0;padding:2px 7px;font-size:9.5px;flex:none}
+  body.mini .qty{margin:2px 0 4px;font-size:10px} body.mini .qty button{padding:0 7px;font-size:10px}
+  body.mini .igrp{margin:4px 0 3px!important;font-size:11px} body.mini .igrp span{display:none}
+  body.mini .item{padding:4px 5px!important;margin-bottom:4px;gap:5px!important;grid-template-columns:26px 1fr auto!important}
+  body.mini .item .ic{width:26px!important;height:26px!important;font-size:14px!important}
+  body.mini .item .ic.svg svg{width:19px;height:19px}
+  body.mini .item .nm{font-size:11.5px;line-height:1.2} body.mini .item .ef{font-size:10px;margin-top:0}
+  body.mini .item .ds{display:none}
+  body.mini .item .pr{font-size:10px;padding:1px 5px} body.mini .item .cnt{font-size:9.5px;margin-top:2px}
+  body.mini .item .acts{margin:0 0 1px;gap:3px} body.mini .act{padding:1px 5px;font-size:9px!important;border-width:1.5px!important;box-shadow:0 1.5px 0 #5a4436;border-radius:7px}
+  body.mini .act b{font-size:9px!important}
+  body.mini .item.has-acts{padding-bottom:5px!important}
+  body.mini .ilock{padding:6px!important;font-size:10px!important} body.mini .ilock small{display:none}
+  body.mini .item .mb,body.mini .item .sb{transform:scale(.8)}
+  .item .mb.hire{display:none}
+  body.mini .item .acts{display:none} body.mini .item.has-acts{padding-bottom:4px!important}
+  body.mini .item .mb.hire{display:block;font-size:7.5px!important;background:#dcfce7;border:1.5px solid #5a4436;border-radius:6px;padding:0 2px;line-height:11px;color:#15803d;font-style:normal;right:-6px!important;bottom:-5px!important;width:auto!important;height:auto!important}
+  body.mini .msl{display:none}
+  body.mini .mgrbar .mt{white-space:nowrap;gap:6px;justify-content:flex-start} body.mini .mgrbar .mt b{font-size:11px}
+  body.mini .item.locked{padding:2px 5px!important} body.mini .item.locked .ic{width:20px!important;height:20px!important;font-size:11px!important}
+  body.mini .ilock{margin:4px 0!important}
 </style>
 </head>
 <body>
@@ -1451,12 +1481,12 @@ function renderList(){
     if(own.length){ const cheap=canH.map(mgrCost).sort((a,b)=>a-b);
       L.insertAdjacentHTML('beforeend',`<div class="mgrbar"><div class="mt"><b>👔 매니저 ${hired.length}/${own.length}</b><span>자동 수입 <b>${Math.round(sh*100)}%</b></span></div><i><em style="width:${(sh*100).toFixed(0)}%"></em></i>
         <small>${hired.length<own.length?`매니저 없는 돈벌이는 <b>꼬질이를 누를 때</b> 같이 들어와요 (최대 ${tr(3)==='a'?15:5}분치)`:'모든 돈벌이가 자동으로 들어와요 · 오프라인에도 벌어요'}</small>
-        ${canH.length?`<button class="act mg hireall" id="hireAll" data-c="${cheap[0]}">👔 고용 가능한 매니저 모두 고용</button>`:''}</div>`); }
+        ${canH.length?`<button class="act mg hireall" id="hireAll" data-c="${cheap[0]}">👔 매니저 모두 고용</button>`:''}</div>`); }
     L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
   } else L.insertAdjacentHTML('beforeend',`<div class="qty"><span>한 번에 사기</span>${[[1,'×1'],[10,'×10'],[0,'최대']].map(([q,t])=>`<button data-q="${q}" class="${buyQ===q?'on':''}">${t}</button>`).join('')}</div>`);
   L.querySelectorAll('.qty button').forEach(b=>b.onclick=()=>{ buyQ=+b.dataset.q; renderList(); });
   if($('hireAll')) $('hireAll').onclick=()=>{ let k=0; autoList().filter(a=>(S.auto[a.id]||0)>0&&!isMgr(a.id)).sort((a,b)=>mgrCost(a)-mgrCost(b)).forEach(a=>{ if(hireMgr(a,true)) k++; }); if(k){ sfx('level'); toast(`👔 매니저 ${k}명 고용!`); } else toast('💸 돈이 부족해요'); renderList(); render(); };
-  let lastGrp='';
+  let lastGrp=''; const lockShown={};
   const head=(t,sub)=>{ const h=document.createElement('div'); h.className='igrp'; h.innerHTML=`<b>${t}</b>${sub?`<span>${sub}</span>`:''}`; L.appendChild(h); };
   arr.forEach((it,i)=>{
     if(tab==='auto' && it.grp!==lastGrp){
@@ -1467,6 +1497,7 @@ function renderList(){
     }
     const n=own[it.id]||0, B=bulk(it,own), price=B.tot;
     const prevOwned = i===0 || (own[arr[i-1].id]||0)>0 || n>0;
+    if(!prevOwned){ if(lockShown[it.grp||'c']) return; lockShown[it.grp||'c']=1; }   // 잠긴 칸은 그룹마다 하나만
     const el=document.createElement('div');
     el.className='item'+(!prevOwned?' locked':S.money<price?' no':'');
     el.dataset.id=it.id;
@@ -1482,7 +1513,7 @@ function renderList(){
       : `<div class="ic lk">?</div><div><div class="nm">???</div><div class="ds">이전 항목을 먼저 사세요</div></div><div></div>`;
     el.onclick=(e)=>{ const ab=e.target.closest('.act'); if(ab){ e.stopPropagation(); if(ab.dataset.a==='mg'){ if(!hireMgr(it)) toast(isMgr(it.id)?'이미 고용했어요':'💸 돈이 부족해요'); } else if(ab.dataset.a==='st'){ if(!upStar(it)) toast('💸 돈이 부족해요'); } else itemSheet(it); renderList(); render(); return; }
       if(tab==='auto' && e.target.closest('.ic') && prevOwned && n>0){ itemSheet(it); return; } buy(it,own,prevOwned); };
-    if(tab==='auto' && prevOwned && n>0){ const ic=el.querySelector('.ic'); ic.classList.add('mg'); ic.insertAdjacentHTML('beforeend',`${isMgr(it.id)?'<b class="mb">👔</b>':''}${(S.star||{})[it.id]?`<b class="sb">★${S.star[it.id]}</b>`:''}`);
+    if(tab==='auto' && prevOwned && n>0){ const ic=el.querySelector('.ic'); ic.classList.add('mg'); ic.insertAdjacentHTML('beforeend',`${isMgr(it.id)?'<b class="mb">👔</b>':'<b class="mb hire">+👔</b>'}${(S.star||{})[it.id]?`<b class="sb">★${S.star[it.id]}</b>`:''}`);
       const stv=(S.star||{})[it.id]||0, m=isMgr(it.id);
       el.insertAdjacentHTML('beforeend',`<div class="acts">${m?`<span class="act mg on">👔 자동</span>`:`<button class="act mg" data-a="mg" data-c="${mgrCost(it)}" title="고용하면 수금 없이 자동으로 들어와요">👔 매니저 <b>${fmt(mgrCost(it))}</b></button>`}${stv<5?`<button class="act st" data-a="st" data-c="${starCost(it)}" title="등급마다 이 돈벌이 수입 ×2">★${stv+1} 강화 <b>${fmt(starCost(it))}</b></button>`:`<span class="act st on">★5 최고 등급</span>`}</div>`); el.classList.add('has-acts'); }
     L.appendChild(el);
@@ -2741,6 +2772,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.3.4',d:'10/31',items:['📏 미니창 길이 최적화: 돈벌이 목록 약 30% 짧게 · 잠긴 칸은 하나만 표시 · 매니저 현황 한 줄','👔 미니창에선 아이콘의 <b>+👔</b> 표시를 누르면 매니저 고용·★강화 창이 열려요']},
   {v:'v2.3.3',d:'10/31',items:['🐢 돈 버는 속도 조절: 자동 수입 ×0.55 · 구걸 수입 ×0.7','📈 신분 상승에 필요한 누적 금액 ×1.6 (내 돈·아이템은 그대로)']},
   {v:'v2.3.2',d:'10/31',items:['💰 수금 버튼 없앰: 매니저 없는 돈벌이는 <b>꼬질이를 누를 때(스페이스 포함) 같이</b> 들어와요 · 쌓이면 깡통에 동전이 보여요']},
   {v:'v2.3.1',d:'10/31',items:['👔 매니저 고용비 대폭 인하: 공통 돈벌이 <b>1/5</b>, 진로·전직 돈벌이 <b>1/3</b>','🧺 수금함 기본 한도 2분 → <b>5분</b> (현장형 사장 특성 6분 → 15분)']},
@@ -2991,7 +3023,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.3.3';
+const GAME_VER='v2.3.4';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
