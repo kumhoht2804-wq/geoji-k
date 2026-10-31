@@ -1150,6 +1150,17 @@
   .sumbar .sb{flex:none;font:inherit;font-family:'Jua',sans-serif;font-size:11.5px;border:2px solid #5a4436;border-radius:999px;background:#fffaf2;color:#5a4436;padding:1px 8px;box-shadow:0 2px 0 #5a4436;cursor:pointer;white-space:nowrap}
   .sumbar .sb img.e3d{width:13px;height:13px;vertical-align:-2px}
   .sumbar .sb.q{width:24px;padding:1px 0;text-align:center;background:#ffd9a0}
+  .sumbar .sb.qb{background:#eef6ff} .sumbar .sb.qb.ok{background:#dcfce7}
+  .spn{flex:none;margin-left:auto;font-family:'Jua',sans-serif;font-size:12px;color:#5a4436;background:#f6ecdc;border-radius:999px;padding:1px 8px;white-space:nowrap} .spn small{font-size:9.5px;color:#9a8670} .spn.has{background:linear-gradient(#e0f2fe,#bae6fd);color:#075985}
+  body.mini .spn{font-size:10.5px;padding:0 6px} body.mini .sp2 .lf{display:none}
+  .item .ic.g1{box-shadow:0 0 0 2px #cbd5e1,0 0 0 3.5px #fff!important} .item .ic.g2{box-shadow:0 0 0 2px #f5c451,0 0 0 3.5px #fff!important;background:linear-gradient(#fff8dc,#ffe9a8)!important}
+  .item .ic.g3{box-shadow:0 0 0 2px #7dd3fc,0 0 0 3.5px #fff!important;background:linear-gradient(#f0f9ff,#c7ecff)!important} .item .ic.g4{box-shadow:0 0 0 2px #c084fc,0 0 0 3.5px #fff!important;background:linear-gradient(#fdf4ff,#f0d6ff)!important}
+  .gdn{font-style:normal;font-size:9px;border-radius:4px;padding:0 3px;margin-right:3px;vertical-align:1px;color:#fff;font-family:'Jua',sans-serif}
+  .gdn.g1{background:#94a3b8} .gdn.g2{background:#e0a82e} .gdn.g3{background:#38bdf8} .gdn.g4{background:#a855f7} body.mini .gdn{font-size:8px;padding:0 2px}
+  .qsh p{font-size:11.5px;color:#8a7560;margin:0 0 8px} .qr{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;text-align:left;background:#fbf5ea;border-radius:10px;padding:7px 9px;margin-bottom:5px}
+  .qr span img.e3d{width:24px;height:24px} .qr b{font-size:12.5px;display:block} .qr i{display:block;height:6px;border-radius:9px;background:#efe1cb;margin-top:4px;overflow:hidden} .qr i u{display:block;height:100%;background:linear-gradient(90deg,#f5b65c,#f08c3a)}
+  .qr em{font-style:normal;font-family:'Jua',sans-serif;font-size:11px;color:#8a7560} .qr.on{background:#ecfdf3} .qr.on em{color:#16a34a;font-size:15px} .qr.on i u{background:#4ade80}
+  .qall{font-size:12px;margin:6px 0 4px;color:#7a4b00;background:#fff3d6;border-radius:9px;padding:5px} .qall.on{background:#dcfce7;color:#166534}
   .item{grid-template-columns:42px 1fr auto!important;align-items:center}
   .item .ic{position:relative}
   .item .ic .lvb{font-size:9px}
@@ -1585,83 +1596,83 @@ const COMMON = [
   {id:'fish',   ic:'🐟', nm:'붕어빵 노점',     ds:'겨울엔 줄이 길어요',           base:5e5,    cps:1400},
 ];
 const GEN_OLD=['chicken','build','corp','space'];   // 예전 공통 아이템 → 진로 아이템으로 이전
-const TIERS_R=[[5e6,8000],[6e7,47000],[8e8,280000],[1.2e10,1.8e6]];
-const TIERS_S=[[3e12,3.2e8],[6e13,5e9]];
+const TIERS_R=[[5e6,8000],[6e7,47000],[8e8,280000],[1.2e10,1.8e6],[2e11,1.1e7]];
+const TIERS_S=[[3e12,3.2e8],[6e13,5e9],[1.5e15,8e10],[4e16,1.3e12]];
 const ROUTE_ITEMS={
-  biz:[['🍗','치킨집','치킨은 언제나 옳다'],['🏪','프랜차이즈 가맹점','간판만 걸면 돈이 들어와요'],['🏭','중앙 주방','소스 비법은 극비'],['🚚','물류 센터','전국 당일 배송']],
-  job:[['📊','프로젝트 수당','야근의 결실'],['🧑‍💼','팀 운영비','법카는 사랑입니다'],['🏢','사내 벤처','회사 돈으로 창업'],['📈','스톡옵션','상장하면 대박']],
-  inv:[['💻','트레이딩 PC','모니터 6대는 기본'],['📈','펀드 운용','남의 돈으로 돈 벌기'],['🏦','사모펀드','회사를 통째로 산다'],['🌐','헤지펀드','시장이 떨어져도 번다']],
-  star:[['🎤','공연장 대관','매진 행렬'],['💿','앨범 발매','음원 차트 1위'],['🏟️','월드 투어','전 세계가 떼창'],['🎬','영화 출연','관객 천만 돌파']],
-  cre:[['🎥','편집자 고용','썸네일 장인 영입'],['📸','전용 스튜디오','조명빨이 다르다'],['🏢','MCN 회사','크리에이터를 거느린다'],['🌐','영상 플랫폼','이제 내가 알고리즘']],
-  gov:[['📁','정근수당','근속은 배신하지 않는다'],['🗂️','특별 수당','야근은 수당으로'],['🏛️','관사 임대','관사 월세 수익'],['🎖️','공로 훈장','국가가 인정한 성실함']],
-  doc:[['💉','당직비','밤을 지새운 대가'],['🩺','개인 클리닉','동네 명의'],['🏥','종합병원','진료과가 20개'],['🧬','연구소','논문이 돈이 된다']],
-  ath:[['👟','연봉 계약','실력이 곧 연봉'],['🏅','포상금','메달 따면 보너스'],['📣','광고 모델','얼굴이 곧 브랜드'],['🏫','스포츠 아카데미','꿈나무 육성']],
-  dev:[['💻','외주 프로젝트','주말 코딩의 대가'],['📈','연봉 점프','이직이 답이다'],['📱','앱 출시','다운로드 100만'],['☁️','SaaS 구독','자는 동안 결제가 들어와요']],
-  art:[['🖌️','초상화 의뢰','한 장에 한 끼'],['🖼️','개인전','관람객 줄이 길어요'],['📚','화집 출간','베스트셀러 등극'],['🏛️','작품 판매','작품 한 점에 집 한 채']],
-  chef:[['🍳','주방 보조','칼질은 기본'],['🔪','시그니처 메뉴','이 맛에 온다'],['🍷','와인 페어링','객단가 상승'],['🍽️','코스 요리','예약 전쟁']],
-  law:[['📝','법률 상담','30분에 10만 원'],['⚖️','수임료','이기면 두 배'],['🏢','기업 자문','고문 계약'],['📜','성공 보수','대형 사건 승소']],
+  biz:[['🍗','치킨집','치킨은 언제나 옳다'],['🏪','프랜차이즈 가맹점','간판만 걸면 돈이 들어와요'],['🏭','중앙 주방','소스 비법은 극비'],['🚚','물류 센터','전국 당일 배송'],['🏬','대형 쇼핑몰','주말엔 주차 전쟁']],
+  job:[['📊','프로젝트 수당','야근의 결실'],['🧑‍💼','팀 운영비','법카는 사랑입니다'],['🏢','사내 벤처','회사 돈으로 창업'],['📈','스톡옵션','상장하면 대박'],['🏢','계열사 대표','드디어 내 회사']],
+  inv:[['💻','트레이딩 PC','모니터 6대는 기본'],['📈','펀드 운용','남의 돈으로 돈 벌기'],['🏦','사모펀드','회사를 통째로 산다'],['🌐','헤지펀드','시장이 떨어져도 번다'],['🏦','자산운용사','남의 돈 1조 굴리기']],
+  star:[['🎤','공연장 대관','매진 행렬'],['💿','앨범 발매','음원 차트 1위'],['🏟️','월드 투어','전 세계가 떼창'],['🎬','영화 출연','관객 천만 돌파'],['🎪','콘서트 기획사','공연이 곧 사업']],
+  cre:[['🎥','편집자 고용','썸네일 장인 영입'],['📸','전용 스튜디오','조명빨이 다르다'],['🏢','MCN 회사','크리에이터를 거느린다'],['🌐','영상 플랫폼','이제 내가 알고리즘'],['📡','콘텐츠 스튜디오','채널 50개 운영']],
+  gov:[['📁','정근수당','근속은 배신하지 않는다'],['🗂️','특별 수당','야근은 수당으로'],['🏛️','관사 임대','관사 월세 수익'],['🎖️','공로 훈장','국가가 인정한 성실함'],['🏛️','공공기관장','기관 예산 운용']],
+  doc:[['💉','당직비','밤을 지새운 대가'],['🩺','개인 클리닉','동네 명의'],['🏥','종합병원','진료과가 20개'],['🧬','연구소','논문이 돈이 된다'],['🧪','의료기기 회사','특허가 줄줄이']],
+  ath:[['👟','연봉 계약','실력이 곧 연봉'],['🏅','포상금','메달 따면 보너스'],['📣','광고 모델','얼굴이 곧 브랜드'],['🏫','스포츠 아카데미','꿈나무 육성'],['👟','스포츠 브랜드','운동화 완판']],
+  dev:[['💻','외주 프로젝트','주말 코딩의 대가'],['📈','연봉 점프','이직이 답이다'],['📱','앱 출시','다운로드 100만'],['☁️','SaaS 구독','자는 동안 결제가 들어와요'],['🖥️','데이터 센터','서버가 곧 돈']],
+  art:[['🖌️','초상화 의뢰','한 장에 한 끼'],['🖼️','개인전','관람객 줄이 길어요'],['📚','화집 출간','베스트셀러 등극'],['🏛️','작품 판매','작품 한 점에 집 한 채'],['🎨','아트 갤러리','작가 30명 전속']],
+  chef:[['🍳','주방 보조','칼질은 기본'],['🔪','시그니처 메뉴','이 맛에 온다'],['🍷','와인 페어링','객단가 상승'],['🍽️','코스 요리','예약 전쟁'],['🏪','레스토랑 체인','전국 50호점']],
+  law:[['📝','법률 상담','30분에 10만 원'],['⚖️','수임료','이기면 두 배'],['🏢','기업 자문','고문 계약'],['📜','성공 보수','대형 사건 승소'],['🏢','법무법인 설립','간판에 내 이름']],
 };
 const SUB_ITEMS={
-  'biz.food':[['🍽️','파인다이닝','예약은 3달 후'],['🌟','미슐랭 체인','별이 주렁주렁']],
-  'biz.retail':[['🛒','대형 마트','1+1의 마법'],['🛍️','복합 쇼핑몰','주말엔 주차 전쟁']],
-  'biz.estate':[['🏢','꼬마빌딩','월세가 따박따박'],['🏙️','랜드마크 타워','도시의 스카이라인']],
-  'job.exec':[['🚗','임원 차량','기사님이 운전해요'],['🏛️','그룹 지주사','계열사를 거느린다']],
-  'job.startup':[['💡','시드 투자','아이디어 하나로'],['🦄','시리즈 C','기업가치 1조']],
-  'job.global':[['✈️','해외 지사','시차 적응은 덤'],['🌏','글로벌 본사','해가 지지 않는 회사']],
-  'inv.wall':[['🐺','월가 사무실','점심은 스테이크'],['💎','투자 제국','시장을 움직인다']],
-  'inv.coin':[['🪙','채굴장','전기세는 비밀'],['🚀','코인 거래소','수수료가 쏟아진다']],
-  'inv.oil':[['🛢️','유전','땅을 파면 돈이 나온다'],['⛽','정유 공장','기름값은 내가 정한다']],
-  'star.top':[['🌟','글로벌 광고','전 세계 전광판'],['🏆','엔터 레이블','후배를 키운다']],
-  'star.mc':[['📺','고정 예능','주말 황금 시간대'],['📡','방송국','채널을 통째로']],
-  'star.actor':[['🎞️','영화 주연','칸에서 박수갈채'],['🎬','영화사','이제 제작자']],
-  'cre.game':[['🕹️','게임단','우승 상금'],['🏟️','e스포츠 경기장','결승전은 매진']],
-  'cre.infl':[['🤳','광고 협찬','게시물 하나에 억'],['👗','브랜드 런칭','완판 행진']],
-  'cre.comm':[['📦','물류 창고','새벽 배송'],['🛍️','커머스 플랫폼','라방이 곧 매출']],
-  'gov.minister':[['📜','정책 예산','나랏돈을 굴린다'],['🏢','정부 청사','결재 도장 쾅']],
-  'gov.judge':[['⚖️','판결문 인세','명판결은 책이 된다'],['🔨','대법원','최종 판결']],
-  'gov.diplo':[['🛂','영사관','비자 수수료'],['🌐','대사관','외교 만찬']],
-  'doc.dir':[['🏥','병원 증축','병상 1000개'],['🏨','의료 재단','병원 체인']],
-  'doc.bio':[['🧪','신약 특허','로열티가 쏟아진다'],['💊','제약 공장','전 세계 수출']],
-  'doc.tvdoc':[['📺','건강 프로그램','시청률 1위'],['📡','건강 채널','건강식품 완판']],
-  'ath.abroad':[['🌍','빅리그 이적료','이적료 1000억'],['🥇','발롱도르 상금','세계 최고 선수']],
-  'ath.owner':[['📋','선수 영입','슈퍼스타 영입'],['🏟️','홈 구장','5만 관중']],
-  'ath.caster':[['🎙️','중계권','명경기는 내 목소리로'],['📺','스포츠 채널','24시간 스포츠']],
-  'dev.cto':[['🚀','시리즈 A','투자 유치 성공'],['🏢','빅테크 인수','엑싯 대박']],
-  'dev.ai':[['🤖','AI 모델','API가 돈을 번다'],['🧠','AGI 연구소','인류의 미래']],
-  'dev.gamedev':[['🎮','인디 게임 대박','스팀 1위'],['🕹️','게임 제국','IP가 곧 돈']],
-  'art.museum':[['🏛️','특별 기획전','티켓 매진'],['🖼️','국립 미술관','국보급 소장품']],
-  'art.auction':[['🔨','경매 낙찰','신기록 경신'],['💎','걸작 컬렉션','값을 매길 수 없다']],
-  'art.design':[['✏️','브랜드 의뢰','로고 하나에 억'],['👜','명품 콜라보','오픈런 행렬']],
-  'chef.star':[['⭐','미슐랭 1스타','별이 떴다'],['🌟','미슐랭 3스타','요리계의 정상']],
-  'chef.tv':[['📺','쿡방 출연','레시피 대유행'],['🎙️','요리 예능','시청률 1위']],
-  'chef.food':[['📦','밀키트','집에서도 셰프의 맛'],['🏭','식품 공장','전국 마트 입점']],
-  'law.firm':[['🏢','로펌 확장','변호사 300명'],['🏙️','로펌 타워','건물 통째로']],
-  'law.tvlaw':[['📺','법률 예능','사이다 판결'],['📡','법률 채널','구독자 천만']],
-  'biz.hotel':[['🏨','부티크 호텔','오션뷰 만실'],['🏝️','리조트 체인','섬 하나를 통째로']],
-  'biz.deliv':[['🛵','배달 플랫폼','수수료가 쌓인다'],['🚁','드론 배송','하늘길도 내 것']],
-  'job.consult':[['📋','컨설팅 계약','PPT 한 장에 천만 원'],['🏢','컨설팅 펌','대기업이 줄을 선다']],
-  'job.fire':[['🏦','배당주 포트폴리오','배당이 월급보다 많다'],['🏝️','파이어 라이프','일 안 해도 돈이 들어와요']],
-  'inv.vc':[['🦄','시드 투자','100개 중 하나만 터지면 된다'],['🌱','벤처 펀드','유니콘 농장']],
-  'inv.gold':[['🥇','금괴 금고','안전자산의 왕'],['⛏️','금광','땅에서 금이 나온다']],
-  'star.musical':[['🎭','뮤지컬 주연','커튼콜만 10분'],['🏛️','전용 극장','장기 공연 매진']],
-  'star.ad':[['📢','CF 계약','15초에 10억'],['🛍️','개인 브랜드','이름이 곧 브랜드']],
-  'cre.vtuber':[['🎀','버추얼 아바타','얼굴 없이도 인기'],['🌐','버추얼 기획사','가상 아이돌 군단']],
-  'cre.edu':[['📚','온라인 강의','한 번 찍고 평생 판다'],['🏫','교육 플랫폼','수강생 100만']],
-  'gov.police':[['🚔','치안 예산','안전이 곧 경제'],['🏢','경찰청','전국 치안 총괄']],
-  'gov.mayor':[['🏙️','도시 개발','재개발 승인 도장'],['🌆','메가시티','도시 하나를 설계']],
-  'doc.plastic':[['💉','강남 클리닉','예약 6개월 대기'],['✨','뷰티 메디컬 타워','해외 환자 전용층']],
-  'doc.mission':[['🌍','의료 봉사','감사의 기부금'],['🕊️','국제 의료재단','전 세계가 후원']],
-  'ath.golf':[['⛳','투어 상금','홀인원 보너스'],['🏌️','골프장','회원권 완판']],
-  'ath.trainer':[['💪','PT 스튜디오','회원이 줄을 선다'],['🏋️','피트니스 체인','전국 200호점']],
-  'dev.security':[['🛡️','버그 바운티','취약점 하나에 억'],['🔐','보안 기업','전 세계 서버 수호']],
-  'dev.block':[['⛓️','스마트 컨트랙트','코드가 곧 계약'],['🌐','메인넷 런칭','생태계의 주인']],
-  'art.webtoon':[['📖','웹툰 연재','매주 화요일 1위'],['🎬','드라마화 판권','원작자 대박']],
-  'art.photo':[['📷','화보 촬영','셔터 한 번에 수백'],['🖼️','사진 미술관','작품이 곧 역사']],
-  'chef.bakery':[['🥐','오픈런 빵집','소금빵 완판'],['🍰','디저트 체인','전국 디저트 지도']],
-  'chef.truck':[['🚚','푸드트럭 군단','축제마다 출동'],['🌮','글로벌 스트리트푸드','세계 야시장 점령']],
-  'law.ip':[['💡','특허 소송','특허 하나에 조 단위'],['📜','특허 포트폴리오','로열티가 흘러든다']],
-  'law.pros':[['🔍','특수 수사','거물들이 떨고 있다'],['🏛️','대검찰청','법의 칼날']],
-  'law.intl':[['🌐','국제 중재','분쟁 하나에 조 단위'],['🏛️','국제 재판소','세계가 주목']],
+  'biz.food':[['🍽️','파인다이닝','예약은 3달 후'],['🌟','미슐랭 체인','별이 주렁주렁'],['🏯','외식 그룹 본사','브랜드만 30개'],['🌏','글로벌 외식 제국','전 세계 입맛 점령']],
+  'biz.retail':[['🛒','대형 마트','1+1의 마법'],['🛍️','복합 쇼핑몰','주말엔 주차 전쟁'],['🏬','백화점 체인','명품관 오픈런'],['🛰️','유통 위성망','지구 어디든 배송']],
+  'biz.estate':[['🏢','꼬마빌딩','월세가 따박따박'],['🏙️','랜드마크 타워','도시의 스카이라인'],['🏘️','신도시 개발','도시를 짓는다'],['🌆','스마트 시티','도시 하나가 내 것']],
+  'job.exec':[['🚗','임원 차량','기사님이 운전해요'],['🏛️','그룹 지주사','계열사를 거느린다'],['🏦','금융 계열사','그룹의 돈줄'],['🌐','글로벌 그룹','재계 순위 1위']],
+  'job.startup':[['💡','시드 투자','아이디어 하나로'],['🦄','시리즈 C','기업가치 1조'],['🔔','IPO 상장','종이 부자 탈출'],['🚀','데카콘','기업가치 10조']],
+  'job.global':[['✈️','해외 지사','시차 적응은 덤'],['🌏','글로벌 본사','해가 지지 않는 회사'],['🏙️','아시아 본부','10개국 총괄'],['🌐','다국적 기업','국경 없는 회사']],
+  'inv.wall':[['🐺','월가 사무실','점심은 스테이크'],['💎','투자 제국','시장을 움직인다'],['🏦','투자 은행','딜 하나에 조 단위'],['🌐','글로벌 자산운용','운용자산 1000조']],
+  'inv.coin':[['🪙','채굴장','전기세는 비밀'],['🚀','코인 거래소','수수료가 쏟아진다'],['🏦','코인 은행','디파이의 왕'],['🌕','달 채굴 기지','진짜 투 더 문']],
+  'inv.oil':[['🛢️','유전','땅을 파면 돈이 나온다'],['⛽','정유 공장','기름값은 내가 정한다'],['🚢','유조선 선단','바다 위 기름 창고'],['🌍','에너지 메이저','세계 에너지의 절반']],
+  'star.top':[['🌟','글로벌 광고','전 세계 전광판'],['🏆','엔터 레이블','후배를 키운다'],['🎬','글로벌 엔터','K-콘텐츠 제국'],['🌍','월드 스타디움 투어','100만 관객']],
+  'star.mc':[['📺','고정 예능','주말 황금 시간대'],['📡','방송국','채널을 통째로'],['📡','방송 그룹','채널 20개'],['🌐','글로벌 OTT','전 세계 구독자']],
+  'star.actor':[['🎞️','영화 주연','칸에서 박수갈채'],['🎬','영화사','이제 제작자'],['🏆','영화제 그랜드슬램','트로피가 넘쳐요'],['🎞️','스튜디오 시티','영화 도시']],
+  'cre.game':[['🕹️','게임단','우승 상금'],['🏟️','e스포츠 경기장','결승전은 매진'],['🏆','국제 대회 주최','세계 결승전'],['🎮','게임 리그 제국','e스포츠의 주인']],
+  'cre.infl':[['🤳','광고 협찬','게시물 하나에 억'],['👗','브랜드 런칭','완판 행진'],['📱','소셜 플랫폼','팔로워 1억'],['🌐','미디어 그룹','뉴스도 내가 만든다']],
+  'cre.comm':[['📦','물류 창고','새벽 배송'],['🛍️','커머스 플랫폼','라방이 곧 매출'],['🏭','PB 브랜드 공장','자체 상품 완판'],['🛰️','글로벌 직구몰','전 세계 배송']],
+  'gov.minister':[['📜','정책 예산','나랏돈을 굴린다'],['🏢','정부 청사','결재 도장 쾅'],['🏛️','부처 통합','예산 100조'],['🌐','국제기구 수장','세계 정책을 정한다']],
+  'gov.judge':[['⚖️','판결문 인세','명판결은 책이 된다'],['🔨','대법원','최종 판결'],['📚','법학 전집','법대생 필독서'],['🌐','국제 사법재판소','세계의 판결']],
+  'gov.diplo':[['🛂','영사관','비자 수수료'],['🌐','대사관','외교 만찬'],['🤝','정상회담','악수 한 번에 협정'],['🌐','국제기구 사무총장','세계 평화']],
+  'doc.dir':[['🏥','병원 증축','병상 1000개'],['🏨','의료 재단','병원 체인'],['🏥','병원 그룹','전국 30개 병원'],['🌍','글로벌 메디컬','해외 병원 체인']],
+  'doc.bio':[['🧪','신약 특허','로열티가 쏟아진다'],['💊','제약 공장','전 세계 수출'],['🧬','유전자 치료제','난치병 정복'],['🏭','바이오 클러스터','신약 공장 단지']],
+  'doc.tvdoc':[['📺','건강 프로그램','시청률 1위'],['📡','건강 채널','건강식품 완판'],['📡','건강 미디어','건강 채널 5개'],['💊','헬스케어 브랜드','전국 약국 입점']],
+  'ath.abroad':[['🌍','빅리그 이적료','이적료 1000억'],['🥇','발롱도르 상금','세계 최고 선수'],['👟','시그니처 신발','내 이름 운동화'],['🌍','글로벌 아이콘','전 세계 광고']],
+  'ath.owner':[['📋','선수 영입','슈퍼스타 영입'],['🏟️','홈 구장','5만 관중'],['🏆','멀티 구단','구단 5개 소유'],['🌐','글로벌 스포츠 그룹','리그를 사버렸다']],
+  'ath.caster':[['🎙️','중계권','명경기는 내 목소리로'],['📺','스포츠 채널','24시간 스포츠'],['🎙️','중계 제국','모든 경기를 내 목소리로'],['🌐','스포츠 OTT','24시간 생중계']],
+  'dev.cto':[['🚀','시리즈 A','투자 유치 성공'],['🏢','빅테크 인수','엑싯 대박'],['☁️','클라우드 제국','서버가 지구를 덮는다'],['🌐','빅테크','시가총액 1위']],
+  'dev.ai':[['🤖','AI 모델','API가 돈을 번다'],['🧠','AGI 연구소','인류의 미래'],['🧠','AI 플랫폼','전 세계가 쓰는 AI'],['🌌','초지능 연구소','인류의 다음 단계']],
+  'dev.gamedev':[['🎮','인디 게임 대박','스팀 1위'],['🕹️','게임 제국','IP가 곧 돈'],['🌐','글로벌 게임 IP','영화·굿즈까지'],['🎮','게임 플랫폼','게임 스토어의 주인']],
+  'art.museum':[['🏛️','특별 기획전','티켓 매진'],['🖼️','국립 미술관','국보급 소장품'],['🏛️','미술관 체인','세계 5대 도시'],['🌍','세계 문화유산 재단','인류의 보물']],
+  'art.auction':[['🔨','경매 낙찰','신기록 경신'],['💎','걸작 컬렉션','값을 매길 수 없다'],['🏛️','경매 하우스','세계 3대 경매장'],['💎','세기의 컬렉션','값을 매길 수 없다']],
+  'art.design':[['✏️','브랜드 의뢰','로고 하나에 억'],['👜','명품 콜라보','오픈런 행렬'],['🏭','디자인 그룹','브랜드 100개'],['🌍','글로벌 디자인 제국','세상의 모든 로고']],
+  'chef.star':[['⭐','미슐랭 1스타','별이 떴다'],['🌟','미슐랭 3스타','요리계의 정상'],['🍽️','레스토랑 그룹','미슐랭 7곳'],['🌍','글로벌 다이닝','세계 미식 지도']],
+  'chef.tv':[['📺','쿡방 출연','레시피 대유행'],['🎙️','요리 예능','시청률 1위'],['📺','요리 채널','24시간 쿡방'],['🌐','글로벌 쿡방','전 세계 시청자']],
+  'chef.food':[['📦','밀키트','집에서도 셰프의 맛'],['🏭','식품 공장','전국 마트 입점'],['🏭','식품 그룹','라면부터 냉동식품까지'],['🌍','글로벌 식품 기업','세계인의 식탁']],
+  'law.firm':[['🏢','로펌 확장','변호사 300명'],['🏙️','로펌 타워','건물 통째로'],['🌐','국제 로펌','해외 사무소 20곳'],['🏛️','법률 그룹','법조계 제국']],
+  'law.tvlaw':[['📺','법률 예능','사이다 판결'],['📡','법률 채널','구독자 천만'],['🎬','법정 드라마 제작','원작은 내 사건'],['🌐','법률 미디어 그룹','법 이야기의 주인']],
+  'biz.hotel':[['🏨','부티크 호텔','오션뷰 만실'],['🏝️','리조트 체인','섬 하나를 통째로'],['🛳️','크루즈 호텔','바다 위 호텔'],['🌙','우주 호텔','무중력 스위트룸']],
+  'biz.deliv':[['🛵','배달 플랫폼','수수료가 쌓인다'],['🚁','드론 배송','하늘길도 내 것'],['🤖','로봇 배달','24시간 무인 배송'],['🛰️','위성 물류망','전 세계 30분 배송']],
+  'job.consult':[['📋','컨설팅 계약','PPT 한 장에 천만 원'],['🏢','컨설팅 펌','대기업이 줄을 선다'],['🧠','싱크탱크','정부도 자문을 구한다'],['🏛️','글로벌 컨설팅 그룹','세계 경제를 설계']],
+  'job.fire':[['🏦','배당주 포트폴리오','배당이 월급보다 많다'],['🏝️','파이어 라이프','일 안 해도 돈이 들어와요'],['🏘️','빌라 건물주','월세가 월급 10배'],['🌴','섬 소유주','섬 하나가 내 집']],
+  'inv.vc':[['🦄','시드 투자','100개 중 하나만 터지면 된다'],['🌱','벤처 펀드','유니콘 농장'],['🦄','유니콘 포트폴리오','유니콘만 10마리'],['🌳','글로벌 VC','실리콘밸리의 큰손']],
+  'inv.gold':[['🥇','금괴 금고','안전자산의 왕'],['⛏️','금광','땅에서 금이 나온다'],['🏦','금 거래소','금값은 내가 정한다'],['💎','보석 광산','다이아도 캔다']],
+  'star.musical':[['🎭','뮤지컬 주연','커튼콜만 10분'],['🏛️','전용 극장','장기 공연 매진'],['🎪','월드 투어 뮤지컬','브로드웨이 진출'],['🏛️','공연 예술 재단','극장 50개']],
+  'star.ad':[['📢','CF 계약','15초에 10억'],['🛍️','개인 브랜드','이름이 곧 브랜드'],['📺','전광판 독점','도시의 얼굴'],['🛍️','라이프스타일 브랜드','이름이 곧 명품']],
+  'cre.vtuber':[['🎀','버추얼 아바타','얼굴 없이도 인기'],['🌐','버추얼 기획사','가상 아이돌 군단'],['🎤','버추얼 콘서트','가상 공연장 매진'],['🌐','메타버스 왕국','가상 세계의 주인']],
+  'cre.edu':[['📚','온라인 강의','한 번 찍고 평생 판다'],['🏫','교육 플랫폼','수강생 100만'],['🏫','온라인 대학','학위도 준다'],['🌍','글로벌 교육 제국','전 세계 수강생']],
+  'gov.police':[['🚔','치안 예산','안전이 곧 경제'],['🏢','경찰청','전국 치안 총괄'],['🚁','항공 경찰대','하늘에서 순찰'],['🌐','국제 경찰 총재','전 세계 치안']],
+  'gov.mayor':[['🏙️','도시 개발','재개발 승인 도장'],['🌆','메가시티','도시 하나를 설계'],['🚄','광역 교통망','출퇴근 30분'],['🏙️','메가 수도권','도시가 곧 국가']],
+  'doc.plastic':[['💉','강남 클리닉','예약 6개월 대기'],['✨','뷰티 메디컬 타워','해외 환자 전용층'],['🏨','뷰티 리조트','시술 후 휴양'],['🌏','K-뷰티 메디컬','전 세계 지점']],
+  'doc.mission':[['🌍','의료 봉사','감사의 기부금'],['🕊️','국제 의료재단','전 세계가 후원'],['🚑','국제 의료선','바다 위 병원'],['🌍','세계 보건 재단','지구를 치료한다']],
+  'ath.golf':[['⛳','투어 상금','홀인원 보너스'],['🏌️','골프장','회원권 완판'],['🏌️','골프 리조트','명문 코스'],['🏆','골프 투어 주최','세계 투어 개최']],
+  'ath.trainer':[['💪','PT 스튜디오','회원이 줄을 선다'],['🏋️','피트니스 체인','전국 200호점'],['🥤','건강식품 라인','프로틴 완판'],['🌍','글로벌 피트니스','전 세계 2000호점']],
+  'dev.security':[['🛡️','버그 바운티','취약점 하나에 억'],['🔐','보안 기업','전 세계 서버 수호'],['🏦','금융 보안망','은행들이 의지한다'],['🛰️','우주 보안','위성까지 지킨다']],
+  'dev.block':[['⛓️','스마트 컨트랙트','코드가 곧 계약'],['🌐','메인넷 런칭','생태계의 주인'],['🏦','디지털 화폐','국가가 채택'],['🌐','웹3 생태계','인터넷의 새 주인']],
+  'art.webtoon':[['📖','웹툰 연재','매주 화요일 1위'],['🎬','드라마화 판권','원작자 대박'],['🎬','웹툰 유니버스','영화 시리즈화'],['🌍','글로벌 웹툰 플랫폼','전 세계 독자']],
+  'art.photo':[['📷','화보 촬영','셔터 한 번에 수백'],['🖼️','사진 미술관','작품이 곧 역사'],['📚','사진 아카이브','역사의 순간들'],['🌍','글로벌 포토 에이전시','세계의 눈']],
+  'chef.bakery':[['🥐','오픈런 빵집','소금빵 완판'],['🍰','디저트 체인','전국 디저트 지도'],['🏭','베이커리 공장','전국 새벽 배송'],['🌍','글로벌 베이커리','파리에도 진출']],
+  'chef.truck':[['🚚','푸드트럭 군단','축제마다 출동'],['🌮','글로벌 스트리트푸드','세계 야시장 점령'],['🎪','푸드 페스티벌','내가 만든 축제'],['🌍','글로벌 야시장','세계 야시장 체인']],
+  'law.ip':[['💡','특허 소송','특허 하나에 조 단위'],['📜','특허 포트폴리오','로열티가 흘러든다'],['🏭','특허 펀드','특허로 돈을 굴린다'],['🌍','글로벌 IP 제국','세상의 모든 발명']],
+  'law.pros':[['🔍','특수 수사','거물들이 떨고 있다'],['🏛️','대검찰청','법의 칼날'],['⚖️','특별검사팀','성역 없는 수사'],['🏛️','법무부','법의 정점']],
+  'law.intl':[['🌐','국제 중재','분쟁 하나에 조 단위'],['🏛️','국제 재판소','세계가 주목'],['🌐','국제 중재 센터','분쟁은 여기서'],['🏛️','세계 법률 기구','국제법을 쓴다']],
 };
 let _autoKey='', _autoList=null;
 function autoList(){
@@ -1686,7 +1697,47 @@ const CLICK = [
   {id:'c4', ic:'🐶', nm:'귀여운 강아지 동료', ds:'클릭당 +200원',   base:1.2e5, add:200},
   {id:'c5', ic:'📱', nm:'구걸 라이브 방송',   ds:'클릭당 +1500원',  base:2e6,   add:1500},
   {id:'c6', ic:'✨', nm:'황금 손',          ds:'클릭당 +초당 수입의 5%', base:5e7, pct:0.05},
+  {id:'c7', ic:'🎻', nm:'감성 버스킹 무대',  base:2e9,  pct:0.01},
+  {id:'c8', ic:'📺', nm:'TV 사연 출연',     base:8e10, pct:0.012},
+  {id:'c9', ic:'🌍', nm:'해외 원정 구걸',    base:3e12, pct:0.015},
+  {id:'c10',ic:'👑', nm:'구걸왕의 품격',     base:1e14, pct:0.02},
 ];
+// 진로별 구걸 기술 3개 · 2차 전직 구걸 1개
+var CLICK_R={
+  biz:[['📣','호객 행위'],['🍗','시식 코너'],['🎁','덤 얹어주기']],
+  job:[['🙇','상사에게 굽신'],['🍱','점심값 빌리기'],['🧧','명절 떡값']],
+  inv:[['📞','리딩방 홍보'],['💸','손절 하소연'],['📈','수익 인증샷']],
+  star:[['✍️','사인회'],['💖','팬 조공'],['📸','하이터치 팬미팅']],
+  cre:[['🔔','구독 좋아요 알림'],['💸','슈퍼챗 리액션'],['🎁','후원 룰렛']],
+  gov:[['📮','민원 해결 감사'],['🍚','구내식당 밥'],['🎖️','표창 상금']],
+  doc:[['🩺','왕진 가방'],['💊','친절한 처방 상담'],['🙏','감사 과일 바구니']],
+  ath:[['✍️','팬 사인'],['🏅','메달 인증'],['📣','응원 구걸']],
+  dev:[['🐛','급한 버그 수정'],['☕','커피 쿠폰'],['⭐','후원 버튼']],
+  art:[['🖌️','3분 캐리커처'],['🎨','즉석 초상화'],['🖼️','사인 포스터']],
+  chef:[['🍢','시식 한 입'],['🔥','불쇼 팁'],['🍱','도시락 나눔']],
+  law:[['📝','무료 법률 상담'],['⚖️','억울함 대변'],['🤝','합의 중재']],
+};
+var CLICK_S={
+  'biz.food':['🍽️','미식가 시식회'],'biz.retail':['🛍️','사은품 이벤트'],'biz.estate':['🔑','집들이 초대'],'biz.hotel':['🛎️','VIP 팁'],'biz.deliv':['🛵','배달 팁'],
+  'job.exec':['🍷','법카 회식'],'job.startup':['🎤','IR 피칭'],'job.global':['✈️','마일리지 대방출'],'job.consult':['📋','PPT 한 장'],'job.fire':['🏝️','파이어 썰 강연'],
+  'inv.wall':['🐺','월가 강연'],'inv.coin':['🪂','에어드랍 구걸'],'inv.oil':['⛽','주유 쿠폰'],'inv.vc':['🦄','데모데이 심사'],'inv.gold':['🥇','금니 감정'],
+  'star.top':['🌟','월드 팬사인회'],'star.mc':['🎙️','행사 MC'],'star.actor':['🎬','레드카펫'],'star.musical':['🌹','커튼콜 꽃다발'],'star.ad':['📢','브랜드 포토월'],
+  'cre.game':['🕹️','팬과 한 판'],'cre.infl':['🤳','공구 라이브'],'cre.comm':['🔴','라방 깜짝 할인'],'cre.vtuber':['🎀','후원 감사 노래'],'cre.edu':['✍️','족집게 특강'],
+  'gov.minister':['📜','국정 연설'],'gov.judge':['⚖️','명판결 강연'],'gov.diplo':['🥂','외교 만찬'],'gov.police':['🚨','치안 감사장'],'gov.mayor':['🙋','시장님 악수'],
+  'doc.dir':['🏥','후원의 밤'],'doc.bio':['🧪','신약 설명회'],'doc.tvdoc':['📺','건강 강연'],'doc.plastic':['✨','상담 실장'],'doc.mission':['🕊️','모금 캠페인'],
+  'ath.abroad':['⚽','유니폼 교환'],'ath.owner':['🏟️','시즌권 사인'],'ath.caster':['🎙️','명대사 굿즈'],'ath.golf':['⛳','프로암 라운딩'],'ath.trainer':['💪','바디프로필 공개'],
+  'dev.cto':['💻','테크 컨퍼런스'],'dev.ai':['🤖','AI 특강'],'dev.gamedev':['🎮','게임쇼 시연'],'dev.security':['🛡️','해킹 방어 시연'],'dev.block':['⛓️','한정판 민팅'],
+  'art.museum':['🖼️','도슨트 투어'],'art.auction':['🔨','경매 진행'],'art.design':['✏️','디자인 특강'],'art.webtoon':['📖','사인 북 투어'],'art.photo':['📷','출사 클래스'],
+  'chef.star':['⭐','셰프 테이블'],'chef.tv':['🍳','요리 시연'],'chef.food':['🥟','마트 시식 행사'],'chef.bakery':['🥐','갓 구운 빵 냄새'],'chef.truck':['🌭','축제 시식'],
+  'law.firm':['🏢','로펌 세미나'],'law.tvlaw':['📺','사이다 해설'],'law.intl':['🌐','국제 포럼'],'law.ip':['💡','특허 상담'],'law.pros':['🔍','정의 구현'],
+};
+var TIERS_CR=[[3e7,.008],[1.5e9,.01],[6e10,.012]], TIERS_CS=[[8e12,.02]];
+var _clkKey='', _clkList=null;
+function clickList(){ const key=(S.route||'')+'|'+(S.sub||''); if(key===_clkKey&&_clkList) return _clkList;
+  const L=CLICK.map(x=>Object.assign({grp:'common'},x));
+  if(S.route&&CLICK_R[S.route]) CLICK_R[S.route].forEach(([ic,nm],i)=>L.push({id:`cr_${S.route}_${i}`,ic,nm,base:TIERS_CR[i][0],pct:TIERS_CR[i][1],grp:'route'}));
+  const k2=S.route&&S.sub?S.route+'.'+S.sub:null; if(k2&&CLICK_S[k2]){ const [ic,nm]=CLICK_S[k2]; L.push({id:`cs_${k2}_0`,ic,nm,base:TIERS_CS[0][0],pct:TIERS_CS[0][1],grp:'sub'}); }
+  _clkKey=key; _clkList=L; return L; }
 
 const PASSERBY = [
   '지나가던 할머니가 사탕을 주셨다 🍬','비둘기가 빵 부스러기를 노린다 🐦','누가 "힘내세요!" 하고 지나갔다',
@@ -1759,6 +1810,8 @@ function feverMult(){ return (typeof feverEnd!=='undefined' && Date.now()<feverE
 function mgmtMult(){ return perkM('auto'); }
 const MS=[25,50,100,200,300,400,500,600,700,800,900,1000];
 function msCount(n){ let k=0; for(const m of MS) if(n>=m) k++; return k; }
+var GRADE=[[200,'👑','전설','g4'],[100,'💎','다이아','g3'],[50,'🥇','골드','g2'],[25,'🥈','실버','g1']];
+function gradeOf(n){ return GRADE.find(g=>n>=g[0])||null; }
 function msMult(n){ let m=1; for(const x of MS) if(n>=x) m*= x<=200?2:1.5; return m; }
 function msNext(n){ return MS.find(m=>m>n); }
 function msPrev(n){ let p=0; for(const m of MS) if(n>=m) p=m; return p; }
@@ -1865,7 +1918,7 @@ function specSheet(a,slot){
     S.spec=S.spec||{}; const arr=(S.spec[a.id]||[]).slice(); arr[slot]=k; S.spec[a.id]=arr; _tagC=null; save(); sfx('level'); toast(`🔧 ${TAGS[k].adj} ${a.nm}! ${TAGS[k].ic}${TAGS[k].nm} ${tagCounts()[k]}개`); hideModal(); renderList(); render(); });
 }
 function cpc(){
-  let c=1; for(const k of CLICK){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
+  let c=1; for(const k of clickList()){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
   return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
 }
 function stageIdx(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }
@@ -1884,7 +1937,7 @@ function renderList(){
   if(tab==='pvp') return renderPvp();
   if(tab==='rank') return renderRank();
   if(tab==='skill') return renderSkills();
-  const arr = tab==='auto'?autoList():CLICK, own = tab==='auto'?S.auto:S.click;
+  const arr = tab==='auto'?autoList():clickList(), own = tab==='auto'?S.auto:S.click;
   const L=$('list'); L.innerHTML='';
   { const TC=tagCounts(), O=autoList().filter(a=>(S.auto[a.id]||0)>0), hired=O.filter(a=>isMgr(a.id)).length;
     const showSyn = Object.values(TC).some(x=>x) || O.some(a=>(S.auto[a.id]||0)>=8);
@@ -1893,18 +1946,19 @@ function renderList(){
     L.insertAdjacentHTML('beforeend',`<div class="sumbar"><span class="sg">${guide}</span>
       ${tab==='auto'&&O.length?`<button class="sb" id="sbMgr">👔 ${hired}/${O.length}</button>`:''}
       ${tab==='auto'&&showSyn?`<button class="sb" id="sbSyn">🔗 ${tags||'시너지'}</button>`:''}
-      <button class="sb q" id="sbHelp">?</button></div>`);
+      ${S.daily?`<button class="sb qb ${S.daily.all?'ok':''}" id="sbQ">📋 ${S.daily.q.filter(o=>o.done).length}/3</button>`:''}<button class="sb q" id="sbHelp">?</button></div>`);
+    if($('sbQ')) $('sbQ').onclick=questSheet;
     if($('sbMgr')) $('sbMgr').onclick=mgrSheet; if($('sbSyn')) $('sbSyn').onclick=()=>showModal(`<div class="synm"><h2>🔗 시너지</h2>${synHtml()}<button class="gray" onclick="hideModal()">닫기</button></div>`);
     $('sbHelp').onclick=()=>helpSheet(tab); }
   if(false) $('hireAll').onclick=()=>{ let k=0; autoList().filter(a=>(S.auto[a.id]||0)>0&&!isMgr(a.id)).sort((a,b)=>mgrCost(a)-mgrCost(b)).forEach(a=>{ if(hireMgr(a,true)) k++; }); if(k){ sfx('level'); toast(`👔 매니저 ${k}명 고용!`); } else toast('💸 돈이 부족해요'); renderList(); render(); };
   let lastGrp=''; const lockShown={};
   const head=(t,sub)=>{ const h=document.createElement('div'); h.className='igrp'; h.innerHTML=`<b>${t}</b>${sub?`<span>${sub}</span>`:''}`; L.appendChild(h); };
   arr.forEach((it,i)=>{
-    if(tab==='auto' && it.grp!==lastGrp){
+    if(it.grp && it.grp!==lastGrp){
       lastGrp=it.grp;
-      if(it.grp==='common') head('🧰 공통 돈벌이');
+      if(it.grp==='common') head(tab==='auto'?'🧰 공통 돈벌이':'👋 기본 구걸');
       if(it.grp==='route') head(`${emo(ROUTES[S.route].ic)} ${ROUTES[S.route].nm} 전용`, '진로마다 달라요');
-      if(it.grp==='sub') { const sb=ROUTES[S.route].subs[S.sub]; head(`${emo(sb.ic)} ${sb.nm} 전용`, '최상위 돈벌이'); }
+      if(it.grp==='sub') { const sb=ROUTES[S.route].subs[S.sub]; head(`${emo(sb.ic)} ${sb.nm} 전용`, tab==='auto'?'최상위 돈벌이':'최상위 구걸'); }
     }
     const n=own[it.id]||0, B=bulk(it,own), price=B.tot;
     const prevOwned = i===0 || (own[arr[i-1].id]||0)>0 || n>0;
@@ -1917,9 +1971,10 @@ function renderList(){
     const msPct = nx ? ((n-pv)/(nx-pv)*100) : 100;
     const isA=tab==='auto', m=isA&&isMgr(it.id), stv=(S.star||{})[it.id]||0, so=isA?specOpen(it):-1, sp=isA?specOf(it.id).filter(Boolean):[];
     const dot = !isA||!n ? '' : so>=0 ? 'sp' : (!m && S.money>=mgrCost(it)) ? 'mg' : '';
+    const gd=gradeOf(n);
     el.innerHTML = prevOwned
-      ? `<div class="ic ${ICON[it.id]?'svg':''}">${icon(it.id,it.ic)}${n>0?`<span class="lvb">${n}</span>`:''}${dot?`<i class="dot ${dot}"></i>`:''}${m?'<i class="mgk">👔</i>':''}</div>
-         <div class="mid"><div class="nm"><span class="nmt">${it.nm}</span>${stv?`<b class="stv">${'★'.repeat(stv)}</b>`:''}${sp.map(k=>`<b class="tgi">${emo(TAGS[k].ic)}</b>`).join('')}</div><div class="ef">${extra}${mm>1?` <u>×${+mm.toFixed(1)}</u>`:''}</div></div>
+      ? `<div class="ic ${ICON[it.id]?'svg':''} ${gd?gd[3]:''}">${icon(it.id,it.ic)}${n>0?`<span class="lvb">${n}</span>`:''}${dot?`<i class="dot ${dot}"></i>`:''}${m?'<i class="mgk">👔</i>':''}</div>
+         <div class="mid"><div class="nm"><span class="nmt">${gd?`<i class="gdn ${gd[3]}">${gd[2]}</i>`:''}${it.nm}</span>${stv?`<b class="stv">${'★'.repeat(stv)}</b>`:''}${sp.map(k=>`<b class="tgi">${emo(TAGS[k].ic)}</b>`).join('')}</div><div class="ef">${extra}${mm>1?` <u>×${+mm.toFixed(1)}</u>`:''}</div></div>
          <div class="rt"><button class="buyb"><b>${fmt(price)}</b></button><div class="nxt">${n?(nx?`×2까지 ${nx-n}개`:'최대'):'첫 구매'}</div></div>
          ${n>0&&nx?`<div class="msl"><i style="width:${msPct.toFixed(1)}%"></i></div>`:''}
          ${isA&&n>0?`<div class="acts">${m?`<span class="act mg on">👔 자동</span>`:`<button class="act mg" data-a="mg" data-c="${mgrCost(it)}">👔 매니저 <b>${fmt(mgrCost(it))}</b></button>`}${n>=10?(stv<3?`<button class="act st" data-a="st" data-c="${starCost(it)}">⭐ 강화 <b>${fmt(starCost(it))}</b></button>`:`<span class="act st on">★★★</span>`):''}${so>=0?`<button class="act sp" data-a="sp">💎 특화 고르기</button>`:''}</div>`:''}`
@@ -1929,16 +1984,15 @@ function renderList(){
     if(isA && n>0) el.classList.add('has-acts');
     L.appendChild(el);
   });
-  if(tab==='auto'){
-    if(!S.route) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 진로를 정하면 전용 돈벌이가 열려요</div>`);
-    else if(!S.sub) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 2차 전직하면 최상위 돈벌이가 열려요</div>`);
-  }
+  { const w=tab==='auto'?'돈벌이':'구걸';
+    if(!S.route) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 진로를 정하면 전용 ${w}가 열려요</div>`);
+    else if(!S.sub) L.insertAdjacentHTML('beforeend',`<div class="ilock">🔒 2차 전직하면 최상위 ${w}가 열려요</div>`); }
 }
 function refreshAffordable(){
   if(tab==='pvp') return;
   if(tab==='rank') return;
   if(tab==='skill') return skillTick();
-  const arr = tab==='auto'?autoList():CLICK, own = tab==='auto'?S.auto:S.click;
+  const arr = tab==='auto'?autoList():clickList(), own = tab==='auto'?S.auto:S.click;
   $('list').querySelectorAll('.item[data-id]').forEach(el=>{
     if(el.classList.contains('locked')) return;
     const it=arr.find(x=>x.id===el.dataset.id); if(!it) return;
@@ -1961,6 +2015,40 @@ const HELP={
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
   skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['🧭','길 고르기','전직할 때마다 그 직업의 트리가 열려요. 두 길 중 하나를 누르면 SP가 그 길대로 알아서 찍혀요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
+// 📋 오늘의 의뢰: 하루 3개 · 깨면 보상 · 다 깨면 +1SP
+function dayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+var QT={
+  clicks:{ic:'👋',t:q=>`구걸 ${q.need}번 하기`,cur:()=>S.clicks},
+  golds:{ic:'💰',t:q=>`돈주머니 ${q.need}개 줍기`,cur:()=>S.golds},
+  combo:{ic:'🔥',t:q=>`콤보 ${q.need} 찍기`,cur:()=>S.dayCombo||0,abs:1},
+  earn:{ic:'💵',t:q=>`${fmt(q.need)} 벌기`,cur:()=>S.total},
+  buy:{ic:'🛒',t:q=>`${q.nm} ${q.need}개 더 사기`,cur:q=>S.auto[q.id]||0},
+  beg:{ic:'🙏',t:q=>`${q.nm} ${q.need}개 더 배우기`,cur:q=>S.click[q.id]||0},
+  fever:{ic:'🎉',t:q=>`피버 ${q.need}번 터뜨리기`,cur:()=>S.fevers||0},
+};
+function questInit(){ const dk=dayKey(); if(S.daily&&S.daily.d===dk) return;
+  S.dayCombo=0; const h0=hsh(dk+(NET.nick||'')); const pool=['clicks','golds','combo','earn','fever'];
+  const own=autoList().filter(a=>(S.auto[a.id]||0)>0), ownC=clickList().filter(a=>(S.click[a.id]||0)>0);
+  if(own.length) pool.push('buy','buy'); if(ownC.length) pool.push('beg');
+  const R=rng(h0%2147483646+1), pick=[]; for(let j=0;pick.length<3&&j<60;j++){ const k=pool[Math.floor(R()*pool.length)]; if(!pick.includes(k)) pick.push(k); }
+  const q=pick.map(k=>{ const o={k,done:0};
+    if(k==='clicks') o.need=200+100*(h0%4); if(k==='golds') o.need=3+(h0%3); if(k==='combo') o.need=[50,80,100][h0%3]; if(k==='fever') o.need=2;
+    if(k==='earn') o.need=Math.max(5e3,Math.round(cps()*1500));
+    if(k==='buy'){ const a=own[own.length-1]; o.id=a.id; o.nm=a.nm; o.need=5; }
+    if(k==='beg'){ const a=ownC[ownC.length-1]; o.id=a.id; o.nm=a.nm; o.need=3; }
+    o.base=QT[k].abs?0:QT[k].cur(o); return o; });
+  S.daily={d:dk,q,all:0}; }
+function qProg(o){ return Math.max(0,Math.min(o.need,QT[o.k].cur(o)-o.base)); }
+function questTick(){ if(!S.daily) return; let ch=0;
+  for(const o of S.daily.q){ if(o.done||qProg(o)<o.need) continue; o.done=1; ch=1; const g=Math.max(500,cps()*300); earn(g); toast(`📋 의뢰 완료! ${QT[o.k].ic} ${QT[o.k].t(o)} · +${fmt(g)}`); sfx('gold'); }
+  if(!S.daily.all && S.daily.q.every(o=>o.done)){ S.daily.all=1; S.spBonus=(S.spBonus||0)+1; setTimeout(()=>{ toast('🎉 오늘의 의뢰 모두 완료! +1 SP'); lvFloat(charLv(),1,'의뢰 완료!'); },1200); ch=1; }
+  if(ch && (tab==='auto'||tab==='click')) renderList(); }
+setInterval(()=>{ if(paused||!S) return; try{ questInit(); questTick(); }catch(e){} },1000);
+function questSheet(){ questInit(); const D=S.daily;
+  showModal(`<div class="qsh"><h2>📋 오늘의 의뢰</h2><p>매일 자정에 새로 바뀌어요 · 하나 깰 때마다 보상, <b>셋 다 깨면 +1 SP</b></p>
+    ${D.q.map(o=>{ const p=qProg(o); return `<div class="qr ${o.done?'on':''}"><span>${emo(QT[o.k].ic)}</span><div><b>${QT[o.k].t(o)}</b><i><u style="width:${(p/o.need*100).toFixed(0)}%"></u></i></div><em>${o.done?'✓':(QT[o.k].k==='earn'||o.k==='earn'?fmt(p):p)+'/'+(o.k==='earn'?fmt(o.need):o.need)}</em></div>`; }).join('')}
+    <div class="qall ${D.all?'on':''}">${D.all?'🎉 오늘 의뢰 끝! +1 SP 받았어요':'🎁 셋 다 깨면 <b>+1 SP</b>'}</div>
+    <button onclick="hideModal()">확인</button></div>`); }
 function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><h2>❔ 도움말</h2>${H.map(([i,n,d])=>`<div class="hr"><span>${i}</span><div><b>${n}</b><small>${d}</small></div></div>`).join('')}<button onclick="hideModal()">알겠어요</button></div>`); }
 function itemSheet(a){
   const m=isMgr(a.id), st=(S.star||{})[a.id]||0;
@@ -1988,6 +2076,7 @@ function buy(it,own,ok){
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
   if(own===S.auto) SPEC_AT.forEach((x,j)=>{ if(n<x && n+B.k>=x && !specOf(it.id)[j]){ S.specQ=S.specQ||[]; if(!S.specQ.some(q=>q[0]===it.id&&q[1]===j)) S.specQ.push([it.id,j]); } });
   if(own===S.auto && [50,100,200].some(x=>n<x&&n+B.k>=x)) setTimeout(()=>lvFloat(charLv(),1,'돈벌이 달성!'),200);
+  const g0=gradeOf(n), g1=gradeOf(n+B.k); if(g1&&g1!==g0){ setTimeout(()=>{ toast(`${g1[1]} ${it.nm} → ${g1[2]} 등급으로 진화!`); sfx('level'); },250); }
   const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} Lv.${hit[hit.length-1]}! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
@@ -2178,7 +2267,7 @@ function beg(x,y){
   const now=performance.now();
   const cw=700*(1+perkA('comboKeep'));
   combo = (now-lastBeg<cw) ? combo+1 : 1; lastBeg=now; _lastBegT=now;
-  if(combo>S.maxCombo) S.maxCombo=combo;
+  if(combo>S.maxCombo) S.maxCombo=combo; if(combo>(S.dayCombo||0)) S.dayCombo=combo;
   if(ch.on) ch.count++;
   clearTimeout(comboTimer); comboTimer=setTimeout(()=>{combo=0;updateCombo();},cw);
   updateCombo();
@@ -3212,10 +3301,10 @@ function renderSkills(){
   const pane=skPane==='trait'
     ? `${traitTreeHtml()}<div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div>`
     : `<div class="skbcs">${chips}</div>
-      <div class="fcd pth">${!brOpen(B)?'':man?`✋ 직접 찍기 · 남은 <b>${sp}SP</b> · 노드를 눌러 배워요`:pth?`✅ <b>${lnName(B,pth)}</b>로 가는 중 · SP는 알아서 찍혀요 <small>(다음 SP까지 ${fmt(nextLvNeed())})</small>${B.br===4&&pathSpec()?`<span class="psp">🌟 ${pathSpecText()}</span>`:B.br===4?`<span class="psp off">🌟 길 첫 스킬을 배우면 전용 효과가 켜져요</span>`:''}`:`👇 <b>길을 하나 골라요!</b> 위의 길 이름을 누르면 어떤 길인지 보여줘요${B.br===4?' · 길마다 <b>전용 효과</b>가 있어요':''}`}</div>
+      <div class="fcd pth">${!brOpen(B)?'':man?`✋ 직접 찍기 · 남은 <b>${sp}SP</b> · 노드를 눌러 배워요`:pth?`✅ <b>${lnName(B,pth)}</b>로 가는 중 · ${sp>0?`남은 <b>${sp}SP</b> 찍는 중`:'SP는 알아서 찍혀요'} <small>(다음 SP까지 ${fmt(nextLvNeed())})</small>${B.br===4&&pathSpec()?`<span class="psp">🌟 ${pathSpecText()}</span>`:B.br===4?`<span class="psp off">🌟 길 첫 스킬을 배우면 전용 효과가 켜져요</span>`:''}`:`👇 <b>길을 하나 골라요!</b> 위의 길 이름을 누르면 어떤 길인지 보여줘요${B.br===4?' · 길마다 <b>전용 효과</b>가 있어요':''}`}</div>
       ${treeHtml(B)}${det}
-      <div class="rwf"><span><label class="mnl"><input type="checkbox" id="skMan" ${man?'checked':''}> ✋ 직접 찍기</label> · 찍은 SP ${spUsed()}</span><button id="skReset">🔁 다시 찍기</button></div>`;
-  L.innerHTML=`<div class="sumbar skbar2"><button class="sp2 ${skPane!=='trait'?'on':''}" data-p="skill">🌳 스킬 트리</button><button class="sp2 ${skPane==='trait'?'on':''}" data-p="trait">🧬 특성 트리${newTr?' <i>!</i>':''}</button><button class="sb pet" onclick="petSheet()" title="펫">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</button><button class="sb q" onclick="helpSheet('skill')">?</button></div>
+      <div class="rwf"><span><label class="mnl"><input type="checkbox" id="skMan" ${man?'checked':''}> ✋ 직접 찍기</label> · 찍은 SP ${spUsed()}/${spTotal()}</span><button id="skReset">🔁 다시 찍기</button></div>`;
+  L.innerHTML=`<div class="sumbar skbar2"><button class="sp2 ${skPane!=='trait'?'on':''}" data-p="skill">🌳 스킬<span class="lf"> 트리</span></button><button class="sp2 ${skPane==='trait'?'on':''}" data-p="trait">🧬 특성<span class="lf"> 트리</span>${newTr?' <i>!</i>':''}</button><span class="spn ${sp>0?'has':''}" title="남은 SP / 받은 SP">💎 ${sp}<small>/${spTotal()}</small></span><button class="sb pet" onclick="petSheet()" title="펫">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</button><button class="sb q" onclick="helpSheet('skill')">?</button></div>
    <div class="rwin skw">${pane}</div>`;
   L.querySelectorAll('.sp2').forEach(b=>b.onclick=()=>{ skPane=b.dataset.p; renderSkills(); });
   const learn=id=>{ const n=SKILLS.find(x=>x.id===id), st=skState(n); if(st==='own') return toast(`SP가 부족해요 · 다음 SP까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
@@ -3673,6 +3762,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.0',d:'10/31',items:['💎 스킬 탭 위에 <b>남은 SP / 받은 SP</b>가 항상 보여요','👋 <b>구걸 확장</b>: 기본 구걸 10개 + 진로별 구걸 3개 + 2차 전직 구걸 1개 (예: 의사 🩺 왕진 가방, 코인 🪂 에어드랍 구걸)','🏪 <b>돈벌이 후반 보강</b>: 진로 돈벌이 5개, 2차 전직 돈벌이 4개 · 끝까지 살 게 있어요','🥈 <b>등급 진화</b>: 25·50·100·200개마다 실버 → 골드 → 다이아 → 전설 (아이콘 테두리와 이름표가 바뀌어요)','📋 <b>오늘의 의뢰</b>: 매일 3개 · 깰 때마다 보상, 셋 다 깨면 +1 SP']},
   {v:'v3.9',d:'10/31',items:['🛤️ 1차 진로 트리에 <b>세 번째 길</b> 추가 (12종 모두 · 예: 연예인 🎭 연기 길, 의사 🚑 응급 길, 투자자 🎰 몰빵 길)','🌟 길마다 <b>전용 효과</b> 36종: 🔪 외과 길은 연타 50번마다 돈주머니, 💎 장투 길은 자는 동안 번 돈 ×1.5, 🍗 맛집 길은 손님 2배, 🌃 야근 길은 밤 9시~새벽 6시 수입 ×1.5 …','👑 2차 전직 트리 <b>60종을 직업마다 다르게</b>: 예) 바이오 🧪 임상 길 / 💊 특허 길, 코인 ⛏️ 채굴 길 / 🚀 펌핑 길','👕 고른 길에 따라 <b>꼬질이 소품</b>이 바뀌어요 (외과 길 → 메스, 장투 길 → 금화, 배달 길 → 모자와 상자)','📋 길 이름을 누르면 그 길의 스킬과 전용 효과를 먼저 보여줘요','🧸 새 3D 아이콘 63개 추가']},
   {v:'v3.8',d:'10/31',items:['🌳 <b>전직 트리</b>: 0차 거지 트리 → 진로를 고르면 <b>그 직업 트리</b>(12종) → 2차 전직하면 <b>전직 트리</b>(60종)','🧭 트리마다 <b>두 길 중 하나</b>만 고르면 SP가 그 길 → 궁극기 → 반대 길 순서로 알아서 찍혀요 (예: 의사 🔪외과 길 / 🩺내과 길)','✋ 직접 찍기는 체크박스로 · 길을 바꾸면 무료로 다시 찍어요','💸 스킬이 새 트리로 바뀌어 SP는 모두 돌려드렸어요']},
   {v:'v3.7.1',d:'10/31',items:['📐 스킬 탭 정리: 안에서 <b>🌳 스킬 트리 / 🧬 특성 트리</b> 두 탭으로 나눠 한 번에 하나만 · 다른 탭처럼 짧게 · 펫은 작은 버튼으로']},
@@ -3744,7 +3834,7 @@ function sfx(kind){
 /* ---------- fever ---------- */
 var feverEnd=0, lastComboFever=0, feverIv=null;
 function startFever(sec){
-  sec=Math.round(sec*(1+perkA('feverLong')));
+  sec=Math.round(sec*(1+perkA('feverLong'))); S.fevers=(S.fevers||0)+1;
   feverEnd=Date.now()+sec*1000; sfx('fever');
   for(let i=0;i<perkA('feverBag');i++) setTimeout(spawnGold,300+i*400);
   toast(`🔥 FEVER TIME! ${sec}초 동안 모든 수입 ${3+perkA('feverX')}배`);
@@ -3949,7 +4039,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.9';
+const GAME_VER='v4.0';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
