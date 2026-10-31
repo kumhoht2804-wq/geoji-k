@@ -1091,6 +1091,49 @@
   .tlab{width:46%} .tlab small{font-size:9px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .tlab.a{transform:translate(-50%,24px)} .tnode.big+.tlab{transform:translate(32px,-8px);text-align:left;width:auto;white-space:nowrap}
   .item .ds{display:none}
+
+  /* 카드 뒤집기 */
+  .lcard .back{position:absolute;inset:0;border-radius:11px;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,#f2a96b 0 10px,#eb9a58 10px 20px);border:3px solid #fffaf2;box-shadow:inset 0 0 0 2px var(--cc);transition:opacity .2s .12s}
+  .lcard .back b{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;font-size:34px;color:#fff;text-shadow:0 3px 0 #5a4436}
+  .lcard .back i{font-style:normal;color:var(--cc);font-size:16px;text-shadow:0 0 6px #fff}
+  .lcard.rar-l .back{box-shadow:inset 0 0 0 3px #fbbf24,0 0 18px #fbbf24} .lcard.rar-e .back{box-shadow:inset 0 0 0 3px #c084fc}
+  .lcard:not(.fd) .back{opacity:0;pointer-events:none}
+  #choice.show .lcard.fd{transform:rotateY(0)!important}
+  #choice.show .lcard:not(.fd){animation:flipIn .38s var(--ease)}
+  @keyframes flipIn{0%{transform:rotateY(90deg) scale(.95)}100%{transform:none}}
+  .lcard.pop{animation:flipIn .38s var(--ease),rarPop .5s .38s var(--ease)!important}
+  @keyframes rarPop{40%{transform:scale(1.08)}100%{transform:none}}
+  #choice.shake{animation:shk .42s}
+  @keyframes shk{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+  .res .rb{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400}
+  .res button{font-family:'Jua',sans-serif;border:2.5px solid #fffaf2!important;background:linear-gradient(#ffd9a0,#f2a96b)!important;color:#5a4436!important;border-radius:12px!important;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+  /* 진로/전직 선택 */
+  #route{background:radial-gradient(circle at 50% 30%,rgba(90,68,54,.92),rgba(30,22,16,.96))!important}
+  #route h3{font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;font-size:22px}
+  #route .rcard{background:linear-gradient(180deg,#fffaf2,#f3e6d2)!important;border:3px solid #5a4436!important;box-shadow:0 5px 0 #5a4436,0 0 0 3px var(--cc)!important;color:#5a4436!important}
+  #route .rcard .ct{color:#5a4436;font-family:'Jua',sans-serif;font-size:15px} #route .rcard .cr{color:#5a4436!important;border-color:var(--cc)!important;background:#fff}
+  #route .rcard .co{color:#6e5a49!important} #route .rcard .co b{color:#15803d!important} #route .rcard .rpath{color:#8a7560!important}
+  #route .rcard:hover{transform:translateY(-3px)}
+  /* 버프 */
+  #buffp{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:5;display:none;font-family:'Jua',sans-serif;font-size:11px;color:#14532d;background:#dcfce7;border:2px solid #5a4436;border-radius:999px;padding:1px 9px;box-shadow:0 2px 0 #5a4436;white-space:nowrap}
+  #buffp.on{display:block}
+  body.mini #buffp{font-size:9px;top:26px;padding:0 6px}
+  #scene.buffed::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;box-shadow:inset 0 0 30px 6px rgba(255,211,77,.55);animation:bglow 1.4s ease-in-out infinite;border-radius:inherit}
+  @keyframes bglow{50%{box-shadow:inset 0 0 44px 12px rgba(255,211,77,.8)}}
+  /* LEVEL UP */
+  .lvf{position:absolute;left:50%;top:18%;transform:translateX(-50%);z-index:7;font-family:'Black Han Sans','Jua',sans-serif;font-size:26px;color:#ffd34d;-webkit-text-stroke:5px #5a4436;paint-order:stroke fill;text-align:center;pointer-events:none;animation:lvfa 1.9s var(--ease) forwards;white-space:nowrap}
+  .lvf small{display:block;font-size:13px;color:#fff;-webkit-text-stroke:3.5px #5a4436}
+  @keyframes lvfa{0%{opacity:0;transform:translate(-50%,20px) scale(.6)}18%{opacity:1;transform:translate(-50%,0) scale(1.12)}30%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-26px)}}
+  body.mini .lvf{font-size:16px} body.mini .lvf small{font-size:9px}
+  /* 탭 배지 */
+  .tabs button{position:relative;overflow:visible!important}
+  .tbdg{position:absolute;top:-6px;right:-4px;min-width:18px;height:18px;border-radius:999px;background:#ef4444;color:#fff;border:2px solid #5a4436;font-family:'Black Han Sans','Jua',sans-serif;font-weight:400;font-size:10px;line-height:14px;padding:0 4px;z-index:2;animation:pendp 1s ease-in-out infinite}
+  body.mini .tbdg{min-width:14px;height:14px;font-size:8px;line-height:10px;top:-5px;right:-3px}
+  /* 신분 상승 */
+  #lvup .unl{display:flex;flex-direction:column;gap:5px;align-items:center;margin-top:12px}
+  #lvup .unl span{font-size:12px;color:#fff3df;background:rgba(255,255,255,.1);border:1px solid rgba(255,214,150,.4);border-radius:999px;padding:2px 12px}
+  .lvf{top:34%} body.mini .lvf{top:30%}
+  #buffp{top:auto!important;bottom:6px} body.mini #buffp{bottom:4px}
 </style>
 </head>
 <body>
@@ -1111,6 +1154,7 @@
       <div id="stChip"><b id="stLv">LV.1</b><span id="stName">길바닥 거지</span></div>
       <div id="fever">FEVER ×3<i></i></div>
       <div id="debuff"></div>
+      <div id="buffp"></div>
       <div class="mat"></div>
       <div id="props"></div>
       <div class="beggar" id="beggar"><div id="face"></div></div>
@@ -1756,7 +1800,7 @@ function render(){
     $('next').textContent = nx.need<=S.total ? '🔀 진로를 선택하세요!' : `다음 신분 "${nx.name}"까지 ${fmt(nx.need-S.total)}`;
   } else { $('bar').style.width='100%'; $('xpTxt').textContent='MAX'; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; $('next').textContent='최고 신분 달성! 👑'; }
   if($('stName').textContent!==st.name) $('stName').textContent=st.name;
-  const cl=charLv(); if($('stLv').textContent!=='Lv.'+cl){ $('stLv').textContent='Lv.'+cl; if(S.lvSeen && cl>S.lvSeen){ toast(`🆙 Lv.${cl}! SP +${cl-S.lvSeen} · 스킬 탭에서 찍어요`); sfx('level'); } S.lvSeen=cl; }
+  const cl=charLv(); if($('stLv').textContent!=='Lv.'+cl){ $('stLv').textContent='Lv.'+cl; if(S.lvSeen && cl>S.lvSeen){ lvFloat(cl, cl-S.lvSeen); sfx('level'); } S.lvSeen=cl; }
 }
 
 function earn(v){ S.money+=v; S.total+=v; }
@@ -1828,8 +1872,9 @@ function levelUp(from, st, i){
   L.innerHTML=`<div class="in"><div class="k">RANK UP</div>
     <div class="halo"><svg viewBox="0 0 100 100"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e3a1"/><stop offset="1" stop-color="#b8892f"/></linearGradient></defs>
       <circle class="bg" cx="50" cy="50" r="48"/><circle class="fg" cx="50" cy="50" r="48"/></svg><div class="f">${charSVG(i,true)}</div></div>
-    <div class="lv">LV.${i} &nbsp;·&nbsp; ${from.name}</div><div class="n">${name}</div>
-    <div class="line"></div><div class="b">모든 수입 <b>+${i*10}%</b></div></div><div class="skip">CLICK TO CONTINUE</div>`;
+    <div class="lv">신분 ${i}단계 → ${i+1}단계 &nbsp;·&nbsp; ${from.name}</div><div class="n">${name}</div>
+    <div class="line"></div><div class="b">모든 수입 <b>+${Math.round(i*8)}%</b> · <b>SP +3</b></div>
+    <div class="unl">${[i===RS-1?'🔀 다음 신분에서 진로를 골라요':'', i===SS-1?'🔀 다음 신분에서 2차 전직!':'', i>=RS&&i<SS&&i===RS?'🎭 1차 전직 스킬 탭이 열렸어요':'', traitList().some(T=>T.lv===i&&!T.nojob)?'🌳 새 특성을 고를 수 있어요':'', i>=LAST?'♻️ 환생할 수 있어요':''].filter(Boolean).map(x=>`<span>${x}</span>`).join('')}</div></div><div class="skip">CLICK TO CONTINUE</div>`;
   L.classList.add('show'); requestAnimationFrame(()=>requestAnimationFrame(()=>L.classList.add('go')));
   // sparkles
   const cx=innerWidth/2, cy=L.querySelector('.halo').getBoundingClientRect(); const hy=cy.top+cy.height/2;
@@ -2210,6 +2255,8 @@ const ICON={
 const icon=(k,fb)=>ICON[k]||fb;
 
 
+function lvFloat(cl,d){ const sc=$('scene'); if(!sc) return; const f=document.createElement('div'); f.className='lvf'; f.innerHTML=`LEVEL UP!<small>Lv.${cl} · SP +${d}</small>`; sc.appendChild(f); setTimeout(()=>f.remove(),1900);
+  const r=$('beggar').getBoundingClientRect(); for(let q=0;q<22;q++){ const a=-Math.PI/2+(Math.random()-.5)*2.2, sp=80+Math.random()*120; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height*.3,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:30,r:.9+Math.random(),life:.9+Math.random()*.6,fo:.4}); } }
 /* ---------- 액티브 스킬바 ---------- */
 let _skbKey='';
 function actSkills(){ return SKILLS.filter(n=>n.act && sk(n.id)>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
@@ -2229,6 +2276,11 @@ function useAct(id){
   renderSkbar(); render();
 }
 setInterval(()=>renderSkbar(),500);
+setInterval(()=>{ const bd=(t,n)=>{ const b=document.querySelector(`.tabs button[data-tab=${t}]`); if(!b) return; let e=b.querySelector('.tbdg'); if(!n){ if(e) e.remove(); return; } if(!e){ e=document.createElement('b'); e.className='tbdg'; b.appendChild(e); } if(e.textContent!==String(n)) e.textContent=n; };
+  const sp=spAvail(), canSk=sp>0 && SKILLS.some(n=>n.br>0 && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub)) && skState(n)==='can');
+  const newTr=traitList().some(T=>!T.nojob && stageIdx()>=T.lv && !tr(T.t));
+  bd('skill', canSk? sp : newTr? '!' : 0);
+  bd('auto', autoList().filter(a=>specOpen(a)>=0).length ? '✨' : 0); },1000);
 document.addEventListener('keydown',e=>{ if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)) return; const k=+e.key; if(k>=1&&k<=9){ const A=actSkills(); if(A[k-1]) useAct(A[k-1].id); } });
 
 /* ---------- pets UI ---------- */
@@ -2754,12 +2806,15 @@ function nextChoice(){
   const st=S.pending[0], C=$('choice'); if(!CH_CARDS){ CH_CARDS=drawCards(st); CH_REROLL=0; }
   const rr=Math.max(1000,S.money*.1);
   C.innerHTML=`<div class="k">LEVEL UP · 인생 카드</div><h3>${getStage(st).name}, 한 장 골라요!</h3><div class="sub">등급이 높을수록 보상이 커요 · 선택은 되돌릴 수 없어요</div>
-    <div class="cards c4 lc">${CH_CARDS.map((o,i)=>`<button class="card2 lcard rar-${o.r.k}" data-i="${i}" style="--cc:${o.r.c};--d:${i*.12}s"><span class="rr">${o.r.nm}</span><div class="ci">${o.ic}</div><div class="ct">${o.nm}</div><div class="cr">${o.tn}${o.p<1?` · 성공 ${Math.round(o.p*100)}%`:''}</div><div class="co">${o.co}</div></button>`).join('')}</div>
+    <div class="cards c4 lc">${CH_CARDS.map((o,i)=>`<button class="card2 lcard fd rar-${o.r.k}" data-i="${i}" style="--cc:${o.r.c};--d:${i*.12}s"><span class="back"><b>?</b><i>${o.r.k==='n'?'':'✦'}</i></span><span class="rr">${o.r.nm}</span><div class="ci">${o.ic}</div><div class="ct">${o.nm}</div><div class="cr">${o.tn}${o.p<1?` · 성공 ${Math.round(o.p*100)}%`:''}</div><div class="co">${o.co}</div></button>`).join('')}</div>
     <button class="reroll" id="reroll" ${CH_REROLL||S.money<rr?'disabled':''}>🔄 다시 뽑기 ${CH_REROLL?'(이번엔 끝)':'· 현금 10% ('+fmt(rr)+')'}</button>
     <div class="res" id="res"></div>`;
   C.classList.add('show');
-  const big=CH_CARDS.find(o=>o.r.k==='l'||o.r.k==='e'); if(big) setTimeout(()=>{ sfx(big.r.k==='l'?'level':'gold'); if(big.r.k==='l') toast('✨ 전설 카드 등장!'); },500);
-  C.querySelectorAll('.lcard').forEach(b=>b.onclick=()=>pickCard(+b.dataset.i, st));
+  C.dataset.flip=1;
+  C.querySelectorAll('.lcard').forEach((b,j)=>{ const o=CH_CARDS[j]; setTimeout(()=>{ b.classList.remove('fd'); sfx(o.r.k==='l'?'level':o.r.k==='e'?'gold':'click');
+      if(o.r.k==='l'||o.r.k==='e'){ b.classList.add('pop'); const r=b.getBoundingClientRect(); for(let q=0;q<(o.r.k==='l'?60:25);q++){ const a=Math.random()*Math.PI*2, sp=50+Math.random()*170; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height/2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:10,r:.9+Math.random()*1.3,life:1+Math.random(),fo:.4}); } if(o.r.k==='l'){ C.classList.add('shake'); setTimeout(()=>C.classList.remove('shake'),450); toast('✨ 전설 카드 등장!'); } }
+      if(j===CH_CARDS.length-1) setTimeout(()=>delete C.dataset.flip,150); }, 450+j*380); });
+  C.querySelectorAll('.lcard').forEach(b=>b.onclick=()=>{ if(C.dataset.flip){ C.querySelectorAll('.lcard.fd').forEach(x=>x.classList.remove('fd')); delete C.dataset.flip; return; } pickCard(+b.dataset.i, st); });
   $('reroll').onclick=()=>{ if(CH_REROLL||S.money<rr) return; S.money-=rr; CH_REROLL=1; CH_CARDS=drawCards(st); C.classList.remove('show'); sfx('click'); setTimeout(()=>{ nextChoice(); const x=$('reroll'); if(x) x.disabled=true; },120); };
 }
 function pickCard(i,st){
@@ -2805,8 +2860,10 @@ setInterval(()=>{
   const d=$('debuff'), n=Date.now(), L=[];
   const add=(end,t)=>{ const l=(end||0)-n; if(l>0) L.push(`${t} ${Math.ceil(l/1000)}s`); };
   add(S.debuffEnd,'💸빚독촉'); add(S.slumpEnd,'📉침체'); add(S.fireEnd,'🔥화재'); add(S.sueEnd,'🧾고소');
-  (S.buffs||[]).forEach(b=>add(b.end,b.label||'✨버프'));
   if(L.length){ d.classList.add('on'); d.textContent=L.join(' · '); } else d.classList.remove('on');
+  const P=[]; S.buffs=(S.buffs||[]).filter(b=>b.end>n); S.buffs.forEach(b=>P.push(`${b.label||'✨버프'} ×${b.m} ${Math.ceil((b.end-n)/1000)}s`));
+  const bp=$('buffp'); if(bp){ bp.classList.toggle('on',P.length>0); if(P.length) bp.textContent=P.join(' · '); }
+  $('scene').classList.toggle('buffed', P.length>0);
 },500);
 
 /* ---------- random events (악재 / 행운) ---------- */
@@ -3057,6 +3114,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v2.8',d:'10/31',items:['🎴 레벨업 카드가 <b>뒷면부터 한 장씩 뒤집혀요</b> · 영웅·전설은 터지고 흔들려요 (탭하면 바로 공개)','🔀 진로·전직 선택 화면 새 디자인','✨ 버프는 초록 알약으로 따로 표시 · 버프 중엔 장면이 반짝','🆙 레벨업하면 꼬질이 위로 <b>LEVEL UP!</b>','🔴 SP가 남거나 특화를 고를 수 있으면 탭에 배지','👑 신분 상승 화면에 SP +3과 새로 열린 것 안내']},
   {v:'v2.7',d:'10/31',items:['🆙 <b>캐릭터 레벨 & SP</b>: 돈을 벌면 Lv이 올라요 · 레벨업 SP +1, 신분 상승 SP +3','📖 <b>메이플식 스킬창</b>: 기본기 · 생존술 · 1차 전직 · 2차 전직 탭 · + 버튼으로 찍기 · 초기화(현금 10%)','⚡ <b>액티브 스킬</b>: 😭대성통곡 · 진로 필살기(🚑응급 출동 등) · 2차 전직 기세 — 장면 오른쪽 아래 버튼 또는 숫자키 1~3','🌳 <b>특성 트리</b>: 노드가 이어진 트리에서 빛나는 칸을 눌러 선택','🎒 <b>돈벌이 장비 카드</b>: 개수 → Lv · 특화 = 보석 슬롯 · 진로(파랑)·전직(보라) 테두리','💸 예전 스킬에 쓴 돈은 환불']},
   {v:'v2.6',d:'10/31',items:['🔧 <b>돈벌이 특화</b>: 10개·50개 모으면 태그 3개 중 하나로 특화 (수입 ×1.25 + 태그) · 현금 10%로 변경 가능','🔗 <b>태그 시너지</b>: 🎭감성 ⚙️시스템 🍀행운 💰수완 🛡️뚝심 — 2/4/6/9개 모을수록 강해져요','✨ <b>조합 시너지</b>: 🥺동정의 기적 · 🏭무인 공장 · 🎰대박 인생 · 🏰철옹성 · 🎤길거리 스타']},
   {v:'v2.5',d:'10/31',items:['🐢 수입 한 번 더 하향 (자동 ×0.12 · 구걸 ×0.28)','🧹 "한 번에 사기" 버튼 제거 (한 개씩 구매)','🎴 <b>레벨업 인생 카드</b>: 4장 뽑기 · 일반/희귀/영웅/전설 등급(높을수록 보상 UP) · ⏱️골든 타임·🐾선물 상자 특수 카드 · 🎡 운명의 룰렛 연출 · 🔄 다시 뽑기(현금 10%)','🔗 <b>시너지 개편</b>: 조합을 같이 키우면 단계(●●●●)가 올라가요 · 10/25/50/100개마다 수입 ×1.15→×1.75 + 보너스 · 👔매니저 팀은 고용 인원 3/6/9/12명','🧬 <b>진로별 특성</b>: 3·4단계 특성이 12진로마다 달라요 (예: 의사 🔪외과 vs 🩺내과, 🚑응급실 에이스 vs 🏥개원의)']},
@@ -3312,7 +3370,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v2.7';
+const GAME_VER='v2.8';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
