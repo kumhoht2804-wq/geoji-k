@@ -1862,7 +1862,7 @@ function mgrSheet(){
 const HELP={
   auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','10개·50개에서 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
-  skill:[['🆙','레벨 · SP','돈을 벌면 레벨이 오르고 SP +1, 신분이 오르면 SP +3. SP는 한정이라 전부 배울 순 없어요!'],['➕','스킬','+ 를 눌러 배워요. 앞 스킬을 일정 레벨까지 올려야 다음 스킬이 열려요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
+  skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['➕','스킬','+ 를 눌러 배워요. 앞 스킬을 일정 레벨까지 올려야 다음 스킬이 열려요'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
 function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><h2>❔ 도움말</h2>${H.map(([i,n,d])=>`<div class="hr"><span>${i}</span><div><b>${n}</b><small>${d}</small></div></div>`).join('')}<button onclick="hideModal()">알겠어요</button></div>`); }
 function itemSheet(a){
@@ -1890,6 +1890,7 @@ function buy(it,own,ok){
   S.money-=B.tot; own[it.id]=n+B.k;
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
   if(own===S.auto) SPEC_AT.forEach((x,j)=>{ if(n<x && n+B.k>=x && !specOf(it.id)[j]){ S.specQ=S.specQ||[]; if(!S.specQ.some(q=>q[0]===it.id&&q[1]===j)) S.specQ.push([it.id,j]); } });
+  if(own===S.auto && [50,100,200].some(x=>n<x&&n+B.k>=x)) setTimeout(()=>lvFloat(charLv(),1,'돈벌이 달성!'),200);
   const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} Lv.${hit[hit.length-1]}! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
@@ -2375,7 +2376,7 @@ function emo(e){ if(!e) return ''; const u=E3D[e]||E3N[String(e).replace(/\uFE0F
 const icon=(k,fb)=>{ const e=emo(fb); return (e&&e.startsWith('<img'))?e:(ICON[k]||e); };
 
 
-function lvFloat(cl,d){ const sc=$('scene'); if(!sc) return; const f=document.createElement('div'); f.className='lvf'; f.innerHTML=`LEVEL UP!<small>Lv.${cl} · SP +${d}</small>`; sc.appendChild(f); setTimeout(()=>f.remove(),1900);
+function lvFloat(cl,d,t){ const sc=$('scene'); if(!sc) return; const f=document.createElement('div'); f.className='lvf'; f.innerHTML=`${t||'LEVEL UP!'}<small>${t?'':'Lv.'+cl+' · '}SP +${d}</small>`; sc.appendChild(f); setTimeout(()=>f.remove(),1900);
   const r=$('beggar').getBoundingClientRect(); for(let q=0;q<22;q++){ const a=-Math.PI/2+(Math.random()-.5)*2.2, sp=80+Math.random()*120; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height*.3,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:30,r:.9+Math.random(),life:.9+Math.random()*.6,fo:.4}); } }
 /* ---------- 액티브 스킬바 ---------- */
 let _skbKey='';
@@ -2827,12 +2828,16 @@ function jsk(k){
   let t=0; for(const n of SKILLS){ if(!n.eff) continue; if(n.br===4 && n.route!==S.route) continue; if(n.br===6 && (n.route!==S.route||n.sub!==S.sub)) continue; const l=sk(n.id); if(l&&n.eff[k]) t+=n.eff[k]*l; }
   return t;
 }
-function charLv(){ return Math.max(1,1+Math.floor(Math.log(Math.max(1,S.total)/100)/Math.log(2))); }
-function spTotal(){ return (charLv()-1)+3*stageIdx()+(S.spBonus||0); }
+// 캐릭터 레벨: 신분 1단계마다 5레벨 (신분 안에서 고르게 오름)
+function lvSeg(){ const i=stageIdx(), a=Math.max(10,STAGES[i].need), b=STAGES[i+1]?STAGES[i+1].need:a*20; return {i,a,b}; }
+function charLv(){ const {i,a,b}=lvSeg(); const p=Math.max(0,Math.log(Math.max(1,S.total)/a)/Math.log(b/a)); return 1+i*5+Math.min(i>=LAST?20:4,Math.floor(p*5)); }
+function spTotal(){ return (charLv()-1)+3*stageIdx()+(S.spBonus||0)+achSP()+itemSP()+5*(S.rebirth||0); }
+function itemSP(){ let k=0; for(const a of autoList()){ const n=S.auto[a.id]||0; if(n>=50)k++; if(n>=100)k++; if(n>=200)k++; } return k; }
+function achSP(){ return Object.values(S.ach||{}).filter(Boolean).length; }
 function spCost(n){ return n.max===1?3:1; }
 function spUsed(){ let u=0; for(const n of SKILLS){ if(n.br>0){ const l=sk(n.id); if(l) u+=l*spCost(n); } } return u; }
 function spAvail(){ return spTotal()-spUsed(); }
-function nextLvNeed(){ const l=charLv(); return Math.max(0,100*Math.pow(2,l)-S.total); }
+function nextLvNeed(){ const {i,a,b}=lvSeg(), k=charLv()-1-i*5; const t=k>=4&&i<LAST?b:a*Math.pow(b/a,(k+1)/5); return Math.max(0,t-S.total); }
 function tabSpUsed(T){ return tabSkills(T).reduce((u,n)=>u+sk(n.id)*spCost(n),0); }
 function tabSpMax(T){ return tabSkills(T).reduce((u,n)=>u+n.max*spCost(n),0); }
 function skLv(n){ return n.br===0 ? (S.click[n.id]||0) : sk(n.id); }
@@ -2881,11 +2886,11 @@ function renderSkills(){
   });
   L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
    <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">남은 SP <b>${sp}</b></span></div>
-    <div class="spbud"><div class="spr"><span>받은 SP <b>${spTotal()}</b></span><span class="sm">레벨 ${charLv()-1} + 신분 ${3*stageIdx()}${S.spBonus?` + 카드 ${S.spBonus}`:''}</span><span>사용 <b>${spUsed()}</b></span></div>
+    <div class="spbud"><div class="spr"><span>받은 SP <b>${spTotal()}</b></span><span class="sm">레벨 ${charLv()-1} + 신분 ${3*stageIdx()}${achSP()?` + 업적 ${achSP()}`:''}${itemSP()?` + 돈벌이 ${itemSP()}`:''}${S.rebirth?` + 환생 ${5*S.rebirth}`:''}${S.spBonus?` + 카드 ${S.spBonus}`:''}</span><span>사용 <b>${spUsed()}</b></span></div>
       <i class="spg"><em style="width:${Math.min(100,spUsed()/Math.max(1,spTotal())*100).toFixed(0)}%"></em></i>
       <div class="spn">${sp>0?`✨ <b>${sp}SP</b>를 찍을 수 있어요`:`다음 SP: <b>Lv.${charLv()+1}</b>까지 ${fmt(nextLvNeed())}`} · <span class="w">전부 배울 순 없어요! 고르고 집중하기</span></div></div>
     <div class="skts">${tabs}</div><div class="skl">${rows||'<div class="skh">스킬이 없어요</div>'}</div>
-    <div class="rwf"><span>레벨업 +1 · 신분 상승 +3 · 궁극기는 3SP</span><button id="skReset">🔁 다시 찍기</button></div></div>
+    <div class="rwf"><span>레벨 +1 · 신분 +3 · 업적 +1 · 돈벌이 50/100/200개 +1 · 환생 +5</span><button id="skReset">🔁 다시 찍기</button></div></div>
    <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
     <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
   L.querySelectorAll('.skt').forEach(b=>b.onclick=()=>{ skTab=b.dataset.k; renderSkills(); });
@@ -3336,6 +3341,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.4',d:'10/31',items:['🆙 레벨이 <b>신분마다 5번씩 고르게</b> 올라요','✨ SP 받는 곳 추가: <b>업적 달성 +1</b> · <b>돈벌이 50/100/200개 +1</b> · <b>환생할 때마다 +5</b>(영구)']},
   {v:'v3.3',d:'10/31',items:['📊 <b>SP 한눈에</b>: 받은 SP(레벨+신분) · 사용 · 남은 SP 게이지 · 탭마다 사용/최대 SP · 다음 SP까지 남은 돈','➕ 버튼에 필요한 SP 표시 · SP가 모자라면 이유와 다음 레벨까지 남은 돈 안내','⏱️ 액티브 스킬 → <b>자동 버프</b>: 누를 필요 없이 쿨타임마다 저절로 발동 · 장면 위 작은 아이콘에 남은 시간 표시']},
   {v:'v3.2.1',d:'10/31',items:['🛠️ 일부 돈벌이(폐지 리어카 등)에서 특화를 고르려 하면 게임이 멈추던 버그 수정']},
   {v:'v3.2',d:'10/31',items:['💎 돈벌이가 10개·50개가 되면 <b>특화 선택 창이 자동으로 떠요</b> (레벨업 카드처럼) · 태그별로 시너지가 몇 개 쌓이는지 바로 보여요 · 나중에 고르기 가능','⚡ 창·팝업을 열 때 버벅이던 문제 수정 (배경 흐림 효과 제거)']},
@@ -3601,7 +3607,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.3';
+const GAME_VER='v3.4';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
