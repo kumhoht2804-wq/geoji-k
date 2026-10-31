@@ -1158,8 +1158,8 @@
   body.mini .wrap>*{width:auto!important;align-self:stretch!important;margin-left:0!important;margin-right:0!important}
   body.mini .wrap>header,body.mini .wrap>section{flex:none}
   body.mini .wrap>aside{flex:1 1 0;min-height:0;display:flex;flex-direction:column;width:100%;box-sizing:border-box;padding-bottom:4px!important}
-  body.mini aside #list{order:1;flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;margin:0 -2px;padding:0 2px}
-  body.mini aside .tabs{order:2;flex:none;margin:5px 0 0!important}
+  body.mini aside #list{order:2;flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;margin:0 -2px;padding:0 2px}
+  body.mini aside .tabs{order:1;flex:none;margin:0 0 5px!important}
   body.mini aside .foot{order:3;flex:none;margin-top:4px!important;padding-top:4px!important} body.mini aside .foot button{padding:2px 0!important;min-height:0!important;font-size:12px!important}
   body.mini aside .credit{display:none}
   body.mini #rankChip,body.mini #netChip,body.mini #target,body.mini aside .foot{display:none!important}
@@ -3886,6 +3886,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.1.2',d:'10/31',items:['👆 탭을 다시 <b>위로</b> 올렸어요 (창 맞춤은 그대로)']},
   {v:'v4.1.1',d:'10/31',items:['🪟 <b>미니창이 창 크기에 딱 맞게</b>: 길게 늘리지 않아도 돼요 · 목록만 안에서 스크롤','👇 탭을 <b>아래로</b> (폰 게임처럼) · 소리·신분·기록·계정은 오른쪽 위 ☰ 메뉴로','🧹 미니창에선 랭킹 칩·다음 신분 문구를 숨기고 버프가 없을 땐 상태줄도 숨겨요']},
   {v:'v4.1',d:'10/31',items:['💬 돈벌이·구걸 카드에 <b>한 줄 멘트</b> · 가진 것은 <b>지금 실제로 버는 양</b>(초당/클릭당)을 보여줘요','⚖️ <b>구걸 밸런스</b>: 황금 손 독주 끝! 뒤에 나오는 구걸일수록 더 세져요 (황금 손 5%→3%, 감성 버스킹 5%, TV 사연 12%, 해외 원정 30%, 구걸왕 80%)','📈 Lv 옆에 <b>다음 레벨(SP)까지 경험치 바</b>','🎛️ 캐릭터 화면을 키우고, 피버·버프·디버프·자동 스킬을 <b>화면 아래 한 줄</b>로 정리했어요','🎲 <b>전직 시험</b>: 진로·2차 전직은 확률 룰렛 (70%·55%) · 떨어지면 1분 뒤 +15%로 재도전','👑 <b>최종 끝판왕</b>: 마지막 신분은 2차 전직마다 전용 끝판왕 (왕관·망토) · 등극 시험 45% → 환생할지 계속할지 선택 · 계속하면 끝판왕 Lv마다 모든 수입 +3%']},
   {v:'v4.0.3',d:'10/31',items:['📱↔💻 <b>모바일·PC 저장 꼬임 수정</b>: 다른 기기에서 더 최근에 한 기록이 있으면 덮어쓰지 않고 그 기록을 불러와요','📱 앱 전환·화면 끄기·탭 닫기 때 바로 저장해요 (모바일에서 마지막 진행이 날아가던 문제)','💻 PC 창을 다시 보면 다른 기기 기록이 있는지 바로 확인해요']},
@@ -4168,7 +4169,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.1.1';
+const GAME_VER='v4.1.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
