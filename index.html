@@ -1235,6 +1235,37 @@
   .skb em{position:absolute;right:1px;bottom:0;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:8.5px;color:#fff;-webkit-text-stroke:2px #5a4436;paint-order:stroke fill;z-index:2}
   .skb.run{opacity:1;background:linear-gradient(#ffe2a8,#f5b65c)!important;animation:none!important;box-shadow:0 2px 0 #5a4436,0 0 0 2px #ffd34d!important}
   body.mini #skbar{top:26px!important;right:4px!important;gap:2px} body.mini .skb{width:18px!important;height:18px!important;border-width:1.5px!important;border-radius:6px!important} body.mini .skb img.e3d{width:12px!important;height:12px!important} body.mini .skb em{font-size:7px}
+
+  /* 스킬 한 판 */
+  .skboard{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:8px 4px 4px;background:#fff}
+  .skcol{display:flex;flex-direction:column;align-items:center}
+  .skch{display:flex;flex-direction:column;align-items:center;font-size:10.5px;margin-bottom:4px;line-height:1.1;text-align:center;min-height:34px}
+  .skch img.e3d{width:18px;height:18px} .skch b{font-family:'Jua',sans-serif;font-weight:400;white-space:nowrap}
+  .skn{position:relative;width:42px;height:42px;border-radius:50%;border:none;padding:0;cursor:pointer;background:conic-gradient(#f2a96b var(--p),#efe1cb 0);display:flex;align-items:center;justify-content:center}
+  .skn::before{content:'';position:absolute;inset:4px;border-radius:50%;background:#fff;border:2px solid #5a4436}
+  .skn img.e3d{position:relative;width:24px;height:24px;z-index:1}
+  .skn.sa::before{background:#fff3df}
+  .skn em{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);z-index:2;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:8.5px;color:#fff;background:#5a4436;border-radius:5px;padding:0 3px;white-space:nowrap;line-height:12px}
+  .skn u{position:absolute;top:-4px;right:-3px;z-index:2;text-decoration:none;font-size:10px;color:#f5b100;text-shadow:0 0 2px #fff}
+  .skn.locked{filter:grayscale(1);opacity:.4}
+  .skn.can{background:conic-gradient(#22c55e var(--p),#bbf7d0 0);animation:tnp 1.4s ease-in-out infinite}
+  .skn.max{background:conic-gradient(#f5b100 360deg,#f5b100 0)} .skn.max em{background:#f5b100;color:#5a4436}
+  .skn.sel::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2.5px dashed #e0533d}
+  .skc{display:block;width:3px;height:10px;background:#e3d6c4;margin:6px 0 2px;border-radius:2px} .skc.lit{background:#f2a96b}
+  .sksep{font-size:9px;color:#fff;background:#a855f7;border-radius:6px;padding:0 5px;margin:8px 0 3px}
+  .sklock{font-size:10px;color:#a08c78;text-align:center;line-height:1.4;margin-top:6px}
+  .skd2{border-top:2px dashed #e8d9c2;padding:8px 10px;background:#fffdf8}
+  .skd2 .dh{display:flex;gap:8px;align-items:center}
+  .skd2 .di{width:40px;height:40px;flex:none;border:2.5px solid #5a4436;border-radius:11px;background:#fff3df;display:flex;align-items:center;justify-content:center} .skd2 .di img.e3d{width:28px;height:28px} .skd2 .di.a{background:linear-gradient(#ffe2a8,#f5b65c)}
+  .skd2 b{font-family:'Jua',sans-serif;font-weight:400;font-size:14px} .skd2 b em{font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:11px;color:#c9772f}
+  .skd2 small{display:block;font-size:10.5px;color:#8a7560}
+  .skd2 .de{font-size:12px;color:#6e5a49;margin:6px 0;line-height:1.5} .skd2 .de b{font-family:inherit;font-size:12px;color:#15803d;font-weight:700} .skd2 .de u{text-decoration:none;color:#c9772f;font-weight:700}
+  .dbtn{width:100%;font-family:'Black Han Sans','Jua',sans-serif;font-size:15px;color:#fff;border:2.5px solid #5a4436;border-radius:12px;background:linear-gradient(#b5e19a,#7fb86a);box-shadow:0 3px 0 #5a4436;padding:6px;text-shadow:0 1.5px 0 #5a4436;cursor:pointer}
+  .dbtn i{font-style:normal;font-size:11px;background:#e0533d;border:1.5px solid #5a4436;border-radius:7px;padding:0 5px;margin-left:4px}
+  .dbtn.own{background:linear-gradient(#e3d6c4,#c9b9a4)} .dbtn.max{background:linear-gradient(#ffd9a0,#f2a96b)} .dbtn:disabled{cursor:default;opacity:.7}
+  body.mini .skboard{padding:6px 2px 2px} body.mini .skn{width:34px;height:34px} body.mini .skn img.e3d{width:18px;height:18px} body.mini .skn::before{inset:3px}
+  body.mini .skch{font-size:9px;min-height:28px} body.mini .skch img.e3d{width:14px;height:14px} body.mini .skc{height:7px;margin:5px 0 1px}
+  body.mini .skd2 .de{font-size:10.5px} body.mini .dbtn{font-size:13px;padding:4px}
 </style>
 </head>
 <body>
@@ -2870,33 +2901,36 @@ const SK_TABS=[
   {k:'sub',ic:'👑',nm:'2차 전직',sub:'전직',br:[6]},
 ];
 function tabSkills(T){ return SKILLS.filter(n=>T.br.includes(n.br) && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
+const SK_COLS=[{br:[1],ic:'🙏',nm:'구걸술'},{br:[2],ic:'🏪',nm:'장사술'},{br:[3],ic:'🍀',nm:'눈치'},{br:[5],ic:'🛡️',nm:'생존'},{br:[4,6],ic:'🎭',nm:'직업'}];
+function colSkills(C){ return SKILLS.filter(n=>C.br.includes(n.br) && (n.br!==4||n.route===S.route) && (n.br!==6||(n.route===S.route&&n.sub===S.sub))); }
 function renderSkills(){
   const L=$('list'), sp=spAvail();
-  const tabs=SK_TABS.map(T=>{ const lock=(T.k==='job'&&!S.route)||(T.k==='sub'&&!S.sub);
-    const nm=T.k==='job'&&S.route?ROUTES[S.route].ic+' '+ROUTES[S.route].nm : T.k==='sub'&&S.sub?ROUTES[S.route].subs[S.sub].ic+' '+ROUTES[S.route].subs[S.sub].nm : T.ic+' '+T.nm;
-    return `<button class="skt ${skTab===T.k?'on':''} ${lock?'lk':''}" data-k="${T.k}" ${lock?'disabled':''}>${lock?'🔒 ':''}${nm}<i>${lock?(T.k==='job'?'진로 후':'전직 후'):`${tabSpUsed(T)}/${tabSpMax(T)} SP`}</i></button>`; }).join('');
-  const T=SK_TABS.find(x=>x.k===skTab)||SK_TABS[0];
-  let rows=''; let lastBr=-1;
-  tabSkills(T).forEach(n=>{
-    if(n.br!==lastBr){ lastBr=n.br; rows+=`<div class="skh">${n.br===4?ROUTES[S.route].ic+' '+ROUTES[S.route].nm+' 스킬':n.br===6?'2차 전직 스킬':BR[n.br].nm}</div>`; }
-    const l=skLv(n), st=skState(n), req=n.req?SKILLS.find(x=>x.id===n.req[0]):null;
-    const ef=x=>n.ef(x).replace(/^액티브 · /,''); const desc = st==='locked' ? `🔒 ${req.nm} Lv.${n.req[1]} 필요` : `${n.act?'⏱️ 자동 버프':'패시브'} · ${ef(l||1)}${l&&l<n.max?` <u>→ ${ef(l+1)}</u>`:''}`;
-    rows+=`<div class="skr ${st} ${n.act?'act':''}"><div class="ic ${n.act?'a':''}">${emo(n.ic)}</div><div class="tx"><b>${n.nm}<em>Lv.${l}/${n.max}</em></b><small>${desc}</small>${n.d?`<small class="dd">${n.d}</small>`:''}</div>
-      <button class="pl ${st}" data-id="${n.id}" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'MAX':`<span>+</span><i>${spCost(n)}SP</i>`}</button></div>`;
-  });
+  const all=SK_COLS.flatMap(colSkills);
+  if(!all.find(n=>n.id===skSel)) skSel=(all.find(n=>skState(n)==='can')||all[0]).id;
+  const cols=SK_COLS.map(C=>{ const list=colSkills(C);
+    const head=C.br.includes(4)&&S.route?emo(ROUTES[S.route].ic)+'<b>'+ROUTES[S.route].nm+'</b>':emo(C.ic)+'<b>'+C.nm+'</b>';
+    const body=!list.length?`<div class="sklock">🔒<br>진로를<br>정하면</div>`:list.map((n,j)=>{ const l=skLv(n), st=skState(n), p=l/n.max;
+      const sep = j>0 && n.br===6 && list[j-1].br!==6 ? '<div class="sksep">2차</div>' : j>0?'<i class="skc '+(skLv(list[j-1])>=((n.req||[])[1]||1)?'lit':'')+'"></i>':'';
+      return sep+`<button class="skn ${st} ${n.act?'sa':''} ${skSel===n.id?'sel':''} ${l?'own':''}" data-id="${n.id}" style="--p:${(p*360).toFixed(0)}deg">${emo(n.ic)}<em>${st==='max'?'MAX':l+'/'+n.max}</em>${n.max===1?'<u>★</u>':''}</button>`; }).join('');
+    return `<div class="skcol"><div class="skch">${head}</div>${body}</div>`; }).join('');
+  const n=SKILLS.find(x=>x.id===skSel), l=skLv(n), st=skState(n), req=n.req?SKILLS.find(x=>x.id===n.req[0]):null, ef=x=>n.ef(x).replace(/^액티브 · /,'');
+  const det=`<div class="skd2"><div class="dh"><span class="di ${n.act?'a':''}">${emo(n.ic)}</span><div><b>${n.nm} <em>Lv.${l}/${n.max}</em></b><small>${n.act?'⏱️ 자동 버프':n.max===1?'⭐ 궁극기':'패시브'}${n.d?' · '+n.d:''}</small></div></div>
+    <div class="de">${st==='locked'?`🔒 <b>${req.nm} Lv.${n.req[1]}</b> 필요`:`${l?`지금: <b>${ef(l)}</b>`:`배우면: <b>${ef(1)}</b>`}${l&&l<n.max?`<br>다음: <u>${ef(l+1)}</u>`:''}`}</div>
+    <button class="dbtn ${st}" id="skUp2" ${st==='max'||st==='locked'?'disabled':''}>${st==='max'?'마스터!':st==='locked'?'잠김':`+ 배우기 <i>${spCost(n)}SP</i>`}</button></div>`;
   L.innerHTML=`<button class="petbtn" onclick="petSheet()"><span class="pv">${petsOn()[0]?petSVG(petsOn()[0]):'🐾'}</span><span><b>🐾 펫 · ${petsOn().map(k=>PET(k).nm).join(' + ')||'없음'}</b><small>환생 포인트 ${S.rp||0} · 입양·강화·교체</small></span><em>›</em></button>
    <div class="rwin"><div class="rwh">SKILL <button class="rwq" onclick="helpSheet('skill')">?</button><span class="spb" style="margin-left:auto">남은 SP <b>${sp}</b></span></div>
     <div class="spbud"><div class="spr"><span>받은 SP <b>${spTotal()}</b></span><span class="sm">레벨 ${charLv()-1} + 신분 ${3*stageIdx()}${achSP()?` + 업적 ${achSP()}`:''}${itemSP()?` + 돈벌이 ${itemSP()}`:''}${S.rebirth?` + 환생 ${5*S.rebirth}`:''}${S.spBonus?` + 카드 ${S.spBonus}`:''}</span><span>사용 <b>${spUsed()}</b></span></div>
       <i class="spg"><em style="width:${Math.min(100,spUsed()/Math.max(1,spTotal())*100).toFixed(0)}%"></em></i>
-      <div class="spn">${sp>0?`✨ <b>${sp}SP</b>를 찍을 수 있어요`:`다음 SP: <b>Lv.${charLv()+1}</b>까지 ${fmt(nextLvNeed())}`} · <span class="w">전부 배울 순 없어요! 고르고 집중하기</span></div></div>
-    <div class="skts">${tabs}</div><div class="skl">${rows||'<div class="skh">스킬이 없어요</div>'}</div>
-    <div class="rwf"><span>레벨 +1 · 신분 +3 · 업적 +1 · 돈벌이 50/100/200개 +1 · 환생 +5</span><button id="skReset">🔁 다시 찍기</button></div></div>
+      <div class="spn">${sp>0?`✨ <b>${sp}SP</b>를 찍을 수 있어요`:`다음 SP: <b>Lv.${charLv()+1}</b>까지 ${fmt(nextLvNeed())}`} · <span class="w">전부 배울 순 없어요! 골라서 집중</span></div></div>
+    <div class="skboard">${cols}</div>${det}
+    <div class="rwf"><span>초록 = 지금 배울 수 있어요 · ★ = 궁극기(3SP)</span><button id="skReset">🔁 다시 찍기</button></div></div>
    <div class="rwin"><div class="rwh">특성 트리 <span class="spb">${traitList().filter(T=>!T.nojob&&stageIdx()>=T.lv&&!tr(T.t)).length?'<b>새 특성!</b>':'인생관'}</span></div>${traitTreeHtml()}
     <div class="rwf"><span>빛나는 노드를 눌러 선택 · 장점과 단점이 함께</span><span>바꾸기: 현금 10%</span></div></div>`;
-  L.querySelectorAll('.skt').forEach(b=>b.onclick=()=>{ skTab=b.dataset.k; renderSkills(); });
-  L.querySelectorAll('.skr .pl').forEach(b=>b.onclick=()=>{ const n=SKILLS.find(x=>x.id===b.dataset.id); const st=skState(n); if(st==='own') return toast(`SP가 부족해요 (필요 ${spCost(n)} · 남음 ${spAvail()}) · Lv.${charLv()+1}까지 ${fmt(nextLvNeed())}`); if(st!=='can') return; S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id);
-    if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 쿨타임마다 자동으로 발동해요':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); });
-  $('skReset').onclick=()=>{ const c=Math.max(1000,Math.floor(S.money*.1)); showModal(`<h2>🔁 스킬 초기화</h2><p>찍은 SP를 모두 돌려받아요.<br>비용: 현금 10% (${fmt(c)})</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">초기화</button>`);
+  L.querySelectorAll('.skn').forEach(b=>b.onclick=()=>{ skSel=b.dataset.id; renderSkills(); });
+  $('skUp2').onclick=()=>{ const st=skState(n); if(st==='own') return toast(`SP가 부족해요 (필요 ${spCost(n)} · 남음 ${spAvail()}) · Lv.${charLv()+1}까지 ${fmt(nextLvNeed())}`); if(st!=='can') return;
+    S.skill=S.skill||{}; S.skill[n.id]=sk(n.id)+1; const nl=sk(n.id);
+    if(nl===1) toast(`🌳 새 스킬: ${n.ic} ${n.nm}${n.act?' · 쿨타임마다 자동으로 발동해요':''}`); else if(nl===n.max) toast(`✨ ${n.nm} 마스터!`); sfx('gold'); renderSkills(); render(); renderSkbar(true); };
+  $('skReset').onclick=()=>{ const c=Math.max(1000,Math.floor(S.money*.1)); showModal(`<h2>🔁 다시 찍기</h2><p>찍은 SP를 모두 돌려받아요.<br>비용: 현금 10% (${fmt(c)})</p><button class="gray" onclick="hideModal()">취소</button><button id="skrOk">다시 찍기</button>`);
     $('skrOk').onclick=()=>{ if(S.money<c) return toast('💸 돈이 부족해요'); S.money-=c; S.skill={}; hideModal(); sfx('level'); toast('🔁 SP를 모두 돌려받았어요'); renderSkills(); renderSkbar(true); }; };
   L.querySelectorAll('.tnode[data-t]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('lk')) return; pickTrait(+b.dataset.t,b.dataset.k); });
 }
@@ -3341,6 +3375,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.5',d:'10/31',items:['🌳 스킬을 <b>한 판</b>에: 구걸술 · 장사술 · 눈치 · 생존 · 직업(1·2차) 5줄 트리를 한눈에','🟢 초록 = 지금 배울 수 있음 · 테두리 링 = 레벨 · 금색 = 마스터 · 노드를 누르면 아래에 설명과 배우기 버튼']},
   {v:'v3.4',d:'10/31',items:['🆙 레벨이 <b>신분마다 5번씩 고르게</b> 올라요','✨ SP 받는 곳 추가: <b>업적 달성 +1</b> · <b>돈벌이 50/100/200개 +1</b> · <b>환생할 때마다 +5</b>(영구)']},
   {v:'v3.3',d:'10/31',items:['📊 <b>SP 한눈에</b>: 받은 SP(레벨+신분) · 사용 · 남은 SP 게이지 · 탭마다 사용/최대 SP · 다음 SP까지 남은 돈','➕ 버튼에 필요한 SP 표시 · SP가 모자라면 이유와 다음 레벨까지 남은 돈 안내','⏱️ 액티브 스킬 → <b>자동 버프</b>: 누를 필요 없이 쿨타임마다 저절로 발동 · 장면 위 작은 아이콘에 남은 시간 표시']},
   {v:'v3.2.1',d:'10/31',items:['🛠️ 일부 돈벌이(폐지 리어카 등)에서 특화를 고르려 하면 게임이 멈추던 버그 수정']},
@@ -3607,7 +3642,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.4';
+const GAME_VER='v3.5';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
