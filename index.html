@@ -1724,7 +1724,7 @@ var COMBOS=[
   {id:'k5',ic:'🎤',nm:'길거리 스타',need:{emo:4,grit:2},fx:{feverS:5,feverP:.05},d:'피버 +5초 · 확률 +5%'},
 ];
 function hsh(str){ let h=7; for(const ch of str) h=(h*31+ch.charCodeAt(0))>>>0; return h; }
-function specOffer(id,slot){ const K=Object.keys(TAGS), h=hsh(id+':'+slot), out=[]; let i=h%5; while(out.length<3){ const k=K[i%5]; if(!out.includes(k)) out.push(k); i+= (h>>3)%4+1; } return out; }
+function specOffer(id,slot){ const K=Object.keys(TAGS), h=hsh(id+':'+slot), st=h%5, step=((h>>>3)%4)+1, out=[]; for(let j=0;j<10&&out.length<3;j++){ const k=K[(st+j*step)%5]; if(k&&!out.includes(k)) out.push(k); } return out; }
 function specOf(id){ return (S.spec||{})[id]||[]; }
 function specOpen(a){ const n=S.auto[a.id]||0, sp=specOf(a.id); for(let j=0;j<SPEC_AT.length;j++) if(n>=SPEC_AT[j] && !sp[j]) return j; return -1; }
 var _tagC=null;
@@ -1849,7 +1849,7 @@ function helpSheet(t){ const H=HELP[t]||HELP.auto; showModal(`<div class="hlp"><
 function itemSheet(a){
   const m=isMgr(a.id), st=(S.star||{})[a.id]||0;
   showModal(`<div class="isheet"><div class="ih"><span class="ii">${icon(a.id,a.ic)}</span><div><b>${a.nm}</b><small>${S.auto[a.id]}개 · 초당 ${fmt(itemRaw(a)*ECON_A*stageBonus()*mgmtMult()*pathMult())}</small></div></div>
-   <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'고용 완료 · 자동 수금':fmt(mgrCost(a))}</em><small>꼬질이를 안 눌러도 자동으로 들어오고, 오프라인에도 벌어요</small></button>
+   <button class="ib" id="iMgr" ${m?'disabled':''}><span>👔 매니저 고용</span><em>${m?'자동 ✓':fmt(mgrCost(a))}</em><small>꼬질이를 안 눌러도 자동으로 들어오고, 오프라인에도 벌어요</small></button>
    <button class="ib" id="iStar" ${st>=3?'disabled':''}><span>★ 등급 올리기 (${st}/3)</span><em>${st>=3?'최고 등급':fmt(starCost(a))}</em><small>등급마다 이 돈벌이 수입 ×1.5</small></button>
    <div class="isyn">${SPEC_AT.map((at,j)=>{ const k=specOf(a.id)[j]; return `<button class="ib spb" data-j="${j}" ${(S.auto[a.id]||0)<at?'disabled':''}><span>🔧 특화 ${j+1}</span><em>${k?TAGS[k].ic+' '+TAGS[k].adj:(S.auto[a.id]||0)>=at?'✨ 고르기':at+'개부터'}</em><small>${k?'눌러서 바꾸기 (현금 10%)':'이 돈벌이 ×1.25 + 태그'}</small></button>`; }).join('')}</div>
    <button class="gray" onclick="hideModal()">닫기</button></div>`);
@@ -3308,6 +3308,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v3.2.1',d:'10/31',items:['🛠️ 일부 돈벌이(폐지 리어카 등)에서 특화를 고르려 하면 게임이 멈추던 버그 수정']},
   {v:'v3.2',d:'10/31',items:['💎 돈벌이가 10개·50개가 되면 <b>특화 선택 창이 자동으로 떠요</b> (레벨업 카드처럼) · 태그별로 시너지가 몇 개 쌓이는지 바로 보여요 · 나중에 고르기 가능','⚡ 창·팝업을 열 때 버벅이던 문제 수정 (배경 흐림 효과 제거)']},
   {v:'v3.1.1',d:'10/31',items:['⚡ <b>렉 개선</b>: 화면 갱신을 초당 60번 → 11번으로 · 미니창 장식 애니메이션 끔 · 행인·배경 애니메이션 가볍게 · 창을 내리면 애니메이션 정지 (CPU 사용량 약 1/5)']},
   {v:'v3.1',d:'10/31',items:['🧹 돈벌이 카드 정리: 이름 · 초당 수입 · 가격 버튼 · <b>×2까지 N개</b>만 깔끔하게','🟢 할 일이 있으면 아이콘에 작은 점 (초록: 매니저 고용 가능 · 분홍: 특화 가능) → 아이콘을 누르면 관리 창','👔 매니저·🔗시너지는 위쪽 작은 버튼으로 접었어요','❔ 탭마다 ? 도움말','🧭 처음 하는 사람을 위한 말풍선 튜토리얼']},
@@ -3571,7 +3572,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v3.2';
+const GAME_VER='v3.2.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
