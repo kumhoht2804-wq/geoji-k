@@ -2762,11 +2762,29 @@ function netChip(){
   else { c.className='off'; c.textContent='🌐 오프라인'; }
 }
 function meta(){ const i=Math.min(stageIdx(), !S.route?RS-1:!S.sub?SS-1:LAST); const ch=Math.min(999,S.chBest||0), en=(S.routesDone||[]).filter(x=>x.includes('.')).length; return {total:S.total,stage:(getStage(i).name.slice(0,11)+'|'+ch+'|'+en),route:S.route||'',rebirth:S.rebirth||0,chBest:ch,endings:en}; }
-async function cloudSave(force){
+// 📱↔💻 여러 기기: 저장 전에 다른 기기가 더 최근에 저장했는지 확인하고, 그렇다면 그 기록을 불러와요
+NET.sid=Math.random().toString(36).slice(2,10); NET.mySaveLast=0; NET.checkAt=0;
+async function cloudCheck(){
+  if(!NET.nick||!NET.token||!NET.mySaveLast) return false;
+  NET.checkAt=Date.now();
+  const r=await api('load',{nick:NET.nick,token:NET.token}); if(!r.data) return false;
+  const c=JSON.parse(r.data);
+  if(c.sid && c.sid!==NET.sid && c.last!==NET.seenLast){   // 내가 저장한 뒤에 다른 기기가 저장했어요
+    NET.seenLast=c.last; NET.mySaveLast=Date.now(); applyData(c); S.owner=NET.nick; grantOffline(true);
+    toast('📱 다른 기기에서 한 기록을 불러왔어요'); return true; }
+  return false; }
+function saveBeacon(){ // 탭을 숨기거나 닫을 때 (모바일은 이게 마지막 기회예요)
+  if(!NET.nick||!NET.token||!NET.url||!NET.mySaveLast||paused) return; if(Date.now()-(NET.beaconAt||0)<2000) return; NET.beaconAt=Date.now();
+  S.sid=NET.sid; S.last=Date.now(); NET.mySaveLast=S.last; save();
+  try{ fetch(NET.url,{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()})}); }catch(e){} }
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) saveBeacon(); else if(NET.mySaveLast && Date.now()-NET.checkAt>5000) cloudCheck().catch(()=>{}); });
+window.addEventListener('pagehide',saveBeacon);
+async function cloudSave(force,noCheck){
   if(!NET.nick||!NET.token||NET.saving) return;
   if(!force && Date.now()-NET.lastSave<55000) return;
   NET.saving=true; netChip();
-  try{ S.last=Date.now(); const sr=await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); if(sr.events&&sr.events.length) handleEvents(sr.events); NET.lastSave=Date.now(); NET.boardAt=0; fetchBoard(true); }
+  try{ if(!noCheck && await cloudCheck()){ NET.lastSave=Date.now(); NET.saving=false; netChip(); return; }
+    S.sid=NET.sid; S.last=Date.now(); NET.mySaveLast=S.last; const sr=await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); if(sr.events&&sr.events.length) handleEvents(sr.events); NET.lastSave=Date.now(); NET.boardAt=0; fetchBoard(true); }
   catch(e){ if(String(e).includes('로그인')){ NET.token=''; NET.nick=''; netStore(); showGate(String(e)); } }
   NET.saving=false; netChip();
 }
@@ -2783,11 +2801,11 @@ async function afterLogin(silent){
       const cloud=JSON.parse(r.data);
       const sc=x=>(x.rebirth||0)*1e18+(x.total||0);
       const useLocal = mine && (S.last||0) > (cloud.last||0) && sc(S) >= sc(cloud)*0.5;
-      if(useLocal){ await cloudSave(true); }
-      else { applyData(cloud); if(!silent) toast(`🌐 ${NET.nick}님 환영해요! 기록을 불러왔어요`); }
+      if(useLocal){ await cloudSave(true,true); }
+      else { applyData(cloud); NET.seenLast=cloud.last; NET.mySaveLast=Date.now(); if(!silent) toast(`🌐 ${NET.nick}님 환영해요! 기록을 불러왔어요`); }
     } else {
       if(!mine && S.owner) applyData(fresh());     // 다른 사람이 쓰던 기기 기록은 가져오지 않음
-      await cloudSave(true); if(!silent) toast(`🌐 ${NET.nick}님 환영해요!`);
+      await cloudSave(true,true); if(!silent) toast(`🌐 ${NET.nick}님 환영해요!`);
     }
     S.owner=NET.nick;
   }catch(e){ if(String(e).includes('로그인')){ NET.token=''; NET.nick=''; netStore(); return showGate(String(e)); } toast('🌐 서버 연결이 불안정해요. 이 기기 기록으로 계속해요'); S.owner=NET.nick; }
@@ -2916,7 +2934,7 @@ function onlineBoardHtml(){
 }
 $('accBtn').onclick=openAccount; $('netChip').onclick=openAccount;
 setInterval(()=>cloudSave(false),15000);
-window.addEventListener('beforeunload',()=>{ if(NET.nick&&NET.token&&NET.url){ try{ fetch(NET.url,{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()})}); }catch(e){} } });
+window.addEventListener('beforeunload',saveBeacon);
 netChip();
 
 /* ---------- route choice & rebirth ---------- */
@@ -3767,6 +3785,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.0.3',d:'10/31',items:['📱↔💻 <b>모바일·PC 저장 꼬임 수정</b>: 다른 기기에서 더 최근에 한 기록이 있으면 덮어쓰지 않고 그 기록을 불러와요','📱 앱 전환·화면 끄기·탭 닫기 때 바로 저장해요 (모바일에서 마지막 진행이 날아가던 문제)','💻 PC 창을 다시 보면 다른 기기 기록이 있는지 바로 확인해요']},
   {v:'v4.0.2',d:'10/31',items:['💎 <b>특화 고르기 창</b>이 안 뜨던 문제 수정: 레벨업 카드·이벤트로 돈벌이를 얻어 10개·50개가 돼도 이제 자동으로 떠요','예전에 놓친 특화도 하나씩 다시 물어봐요 · "나중에"를 누르면 그 특화는 다시 안 물어봐요 (분홍 점으로 언제든 고르기)']},
   {v:'v4.0.1',d:'10/31',items:['✋ <b>SP는 이제 전부 직접 찍어요</b> (자동 찍기 없앰) · 자동으로 찍혔던 SP는 모두 돌려드렸어요','👆 노드를 누르면 설명이 보이고, 한 번 더 누르면 바로 배워요','🧭 길 이름을 누르면 <b>내 길</b>로 정해져요 (전용 효과·꼬질이 소품) · 스킬은 어느 길이든 자유롭게 찍을 수 있어요']},
   {v:'v4.0',d:'10/31',items:['💎 스킬 탭 위에 <b>남은 SP / 받은 SP</b>가 항상 보여요','👋 <b>구걸 확장</b>: 기본 구걸 10개 + 진로별 구걸 3개 + 2차 전직 구걸 1개 (예: 의사 🩺 왕진 가방, 코인 🪂 에어드랍 구걸)','🏪 <b>돈벌이 후반 보강</b>: 진로 돈벌이 5개, 2차 전직 돈벌이 4개 · 끝까지 살 게 있어요','🥈 <b>등급 진화</b>: 25·50·100·200개마다 실버 → 골드 → 다이아 → 전설 (아이콘 테두리와 이름표가 바뀌어요)','📋 <b>오늘의 의뢰</b>: 매일 3개 · 깰 때마다 보상, 셋 다 깨면 +1 SP']},
@@ -4046,7 +4065,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.0.2';
+const GAME_VER='v4.0.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
