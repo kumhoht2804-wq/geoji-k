@@ -1203,6 +1203,20 @@
   header>div:last-child{display:flex;flex-direction:column;align-items:center}
   body.mini header #stChip{margin-top:3px;padding:1px 7px 1px 2px!important}
   .sc.it{background:#fffaf2} .sc.it.g1{border-color:#94a3b8} .sc.it.g2{background:#fff8dc;border-color:#d4a017} .sc.it.g3{background:#f0f9ff;border-color:#38bdf8} .sc.it.g4{background:#fdf4ff;border-color:#a855f7}
+  /* v4.6 위 줄: Lv + 버프·돈벌이 아이콘 */
+  #topRow{display:flex;align-items:flex-start;gap:6px;margin:0 0 6px}
+  #topRow #stChip{position:static!important;flex:none;margin:0!important;transform:none!important;cursor:pointer}
+  #topRow #stat{flex:1;min-width:0;margin:0!important;padding:0!important;min-height:0!important;display:flex!important;align-items:center;gap:4px;justify-content:flex-end}
+  #topRow #stat.empty{display:flex!important}
+  #topRow #stc{display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-end}
+  .bi{position:relative;flex:none;width:24px;height:24px;border-radius:7px;border:2px solid #5a4436;background:#fff;display:inline-flex;align-items:center;justify-content:center}
+  .bi img.e3d{width:16px;height:16px} .bi em{position:absolute;right:-3px;bottom:-5px;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:8.5px;line-height:1;color:#fff;background:#5a4436;border-radius:5px;padding:1px 2px;font-variant-numeric:tabular-nums}
+  .bi .mg{position:absolute;left:-4px;top:-5px;font-style:normal;font-size:8px}
+  .bi.fv{background:linear-gradient(#ffe2a8,#f5b65c)} .bi.bf{background:#dcfce7;border-color:#15803d} .bi.bf em{background:#15803d} .bi.db{background:#fee2e2;border-color:#b91c1c} .bi.db em{background:#b91c1c} .bi.ok{background:#e0f2fe;border-color:#0369a1} .bi.ok em{background:#0369a1} .bi.bs{background:#f5e1ff;border-color:#7c3aed} .bi.bs em{background:#7c3aed}
+  .bi.it{opacity:.55} .bi.it.on{opacity:1} .bi.it.g1{border-color:#94a3b8;box-shadow:0 0 0 1px #cbd5e1} .bi.it.g2{border-color:#d4a017;background:#fff8dc} .bi.it.g3{border-color:#0ea5e9;background:#f0f9ff} .bi.it.g4{border-color:#a855f7;background:#fdf4ff}
+  body.mini .bi{width:19px;height:19px;border-width:1.5px;border-radius:6px} body.mini .bi img.e3d{width:13px;height:13px} body.mini .bi em{font-size:7px;right:-3px;bottom:-4px}
+  body.mini #topRow{margin-bottom:5px;gap:4px} body.mini #topRow #stChip{padding:1px 6px 1px 2px!important}
+  #topRow #skbar .skb{width:24px!important;height:24px!important;border-width:2px!important;border-radius:7px!important;box-shadow:none!important} body.mini #topRow #skbar .skb{width:19px!important;height:19px!important;border-width:1.5px!important}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -2354,6 +2368,7 @@ function updZoneTag(){
 setInterval(updZoneTag,300);
 function spawnWalker(){
   if(paused || isMiniUI() || document.hidden) return;
+  if(S.route && stageIdx()>=RS) return;   // 방 안에선 행인 없음
   const sc=$('scene'), w=document.createElement('div'), right=Math.random()<.5;
   const P=pickType(); w.dataset.k=P.k;
   w.className='walker '+(right?'r':'l')+' wk-'+P.k;
@@ -3755,11 +3770,11 @@ function statRender(){
   if((S.insEnd||0)>n) C.push(['ok','🛡️','보험',sec(S.insEnd)]);
   const cm=clockMult(); if(cm>1.001) C.push(['ok',perkA('nightX')&&(new Date().getHours()>=21||new Date().getHours()<6)?'🌃':'🏢',`길 효과 ×${+cm.toFixed(2)}`,'']);
   const bl=bossLv(); if(bl) C.push(['bs','👑',`끝판왕 Lv.${bl} ×${(1+.03*bl).toFixed(2)}`,'']);
-  autoList().filter(x=>x.grp!=='common'&&(S.auto[x.id]||0)>0).slice(-3).reverse().forEach(x=>{ const g=gradeOf(S.auto[x.id]); C.push(['it '+(g?g[3]:''),x.ic,`${S.auto[x.id]}`,isMgr(x.id)?'👔':'']); });
+  autoList().filter(x=>(S.auto[x.id]||0)>0).reverse().forEach(x=>{ const g=gradeOf(S.auto[x.id]); C.push(['it '+(g?g[3]:'')+(isMgr(x.id)?' on':''),x.ic,`${S.auto[x.id]}`,isMgr(x.id)?'👔':'']); });
   { const sc=getComputedStyle($('scene')), st=$('stat'), ml=sc.marginLeft, mr=sc.marginRight; if(st._m!==ml+mr){ st._m=ml+mr; st.style.marginLeft=ml; st.style.marginRight=mr; } }
   const key=C.map(c=>c.join('|')).join('/'); const el=$('stc'); if(el._k===key) return; el._k=key;
   $('stat').classList.toggle('empty',!C.length&&!(S.skill&&actSkills().length));
-  el.innerHTML=C.length?C.map(([k,i,t,s])=>`<span class="sc ${k}">${emo(i)}<b>${t}</b>${s?`<em>${s}</em>`:''}</span>`).join(''):`<span class="sc0">${S.skill&&actSkills().length?'':'버프·디버프가 여기 떠요'}</span>`;
+  el.innerHTML=C.map(([k,i,t,s])=>`<span class="bi ${k}" title="${t}${s&&s!=='👔'?' · '+s:''}">${emo(i)}${s==='👔'?'<i class="mg">👔</i>':''}<em>${k.startsWith('it')?t:s||t.replace(/^.*×/,'×')}</em></span>`).join('');
   $('scene').classList.toggle('buffed', S.buffs.length>0);
 }
 setInterval(statRender,500);
@@ -4013,6 +4028,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.6',d:'11/1',items:['🧭 캐릭터 화면 <b>위 줄</b>: 왼쪽 Lv·경험치, 오른쪽 버프·디버프·돈벌이를 <b>버프 아이콘</b>처럼 (숫자 = 남은 초 · 개수)','💼 가진 돈벌이 전부 아이콘으로 · 테두리 = 등급 · 매니저 있는 건 진하게(👔), 없는 건 흐리게','🚪 방 안에선 행인이 안 돌아다녀요']},
   {v:'v4.5',d:'11/1',items:['⬆️ <b>Lv은 위로</b>: 돈 아래에 Lv·경험치·신분 이름 · 캐릭터 화면엔 캐릭터와 이벤트만','💼 바닥에 놓여 있던 돈벌이 이모지 대신 <b>상태줄에 칩</b>으로 (아이콘·개수·등급 테두리·👔 매니저)']},
   {v:'v4.4',d:'11/1',items:['📜 미션 말풍선 → <b>캐릭터 화면 아래 한 줄</b> (진행 바 · 누르면 미션 목록)','🏠 <b>진로마다 방 배경</b>: 치킨집·사무실·트레이딩룸·무대·방송 스튜디오·구청·병실·라커룸·개발실·아틀리에·주방·법정 · 2차 전직하면 방이 좋아지고 끝판왕이면 레드카펫과 왕관','⚡ <b>직업 이벤트</b>: 의사 🚑응급 호출 · 개발자 🐛버그 잡기 · 연예인 ✍️팬 사인회 · 셰프 🧾주문 들어옴 등 직업마다 다른 일이 가끔 터져요 · 성공하면 큰 보상','📜 직업 미션 4번째 단계가 그 직업 이벤트 3번 성공으로 바뀌었어요']},
   {v:'v4.3',d:'11/1',items:['🛑 <b>연타하다 잘못 눌림 방지</b>: 전직·레벨업 카드·특화 창이 뜨면 1초 동안은 안 눌려요 · 진로는 고른 뒤 <b>시험 보기</b> 버튼을 한 번 더','🏙️ <b>전직하면 배경도 바뀌어요</b>: 진로마다 랜드마크 (치킨집·병원·증권가·공연장·시청·경기장…) · 끝판왕이면 꼭대기에 왕관','📜 <b>직업 미션</b>: 꼬질이 머리 위 말풍선 · 거지 4단계 → 진로 6단계 → 2차 전직 3단계 · 깰 때마다 SP +1 (마지막 +2)','🥈 <b>등급과 특화를 하나로</b>: 실버(25개)·다이아(100개) 등급이 될 때 특화를 골라요']},
@@ -4378,12 +4394,12 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.5';
+const GAME_VER='v4.6';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
-try{ $('stat').prepend($('skbar')); const hr=document.querySelector('header .rates'); if(hr) hr.after($('stChip')); }catch(e){}
+try{ $('stat').prepend($('skbar')); const tr=document.createElement('div'); tr.id='topRow'; $('scene').before(tr); tr.append($('stChip'),$('stat')); }catch(e){}
 $('misB').onclick=e=>{ e.stopPropagation(); misSheet(); };
 $('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
   showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
