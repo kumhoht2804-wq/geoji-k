@@ -1180,6 +1180,22 @@
   .wsvg .wa{transform-origin:40px 46px;animation:warm .55s ease-in-out infinite alternate}
   @keyframes wleg{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}} @keyframes warm{from{transform:rotate(12deg)}to{transform:rotate(-12deg)}}
   body.hid .wsvg *{animation-play-state:paused!important}
+  /* v4.3 연타 방지 */
+  .guard .rcard,.guard .lcard,.guard .scard,.guard .finb,.guard .later,.guard .reroll,.guard #rcGo{pointer-events:none!important}
+  .guard .cards{opacity:.55;transition:opacity .25s} .cards{transition:opacity .25s}
+  .gdh{display:block;text-align:center;font-size:11px;color:#ffe08a;margin:4px 0 0;font-family:'Jua',sans-serif;height:14px}
+  #rcGo{position:sticky;bottom:10px;z-index:6;display:block;margin:12px auto 0;font-family:'Jua',sans-serif;font-size:15px;padding:8px 20px;border-radius:999px;border:3px solid #5a4436;background:linear-gradient(#ffe08a,#f0a92e);color:#5a3500;box-shadow:0 4px 0 #5a4436;cursor:pointer}
+  #rcGo[disabled]{opacity:.45;cursor:default}
+  /* v4.3 미션 말풍선 · 랜드마크 */
+  #misB{position:absolute;left:50%;top:4px;transform:translateX(-12%);z-index:5;max-width:62%;font-family:'Jua',sans-serif;font-size:11px;line-height:1.25;color:#5a4436;background:#fffaf2;border:2px solid #5a4436;border-radius:10px;padding:3px 8px;box-shadow:0 2px 0 #5a4436;cursor:pointer;display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+  #misB.on{display:block} #misB:after{content:'';position:absolute;left:12%;bottom:-7px;border:5px solid transparent;border-top-color:#5a4436} #misB b{color:#c2410c;font-weight:400} #misB em{font-style:normal;color:#8a7560;font-size:10px}
+  #misB.done{background:linear-gradient(#dcfce7,#bbf7d0);animation:misPop .5s}
+  @keyframes misPop{50%{transform:translateX(-12%) scale(1.12)}}
+  body.mini #misB{font-size:9.5px;top:26px;left:40%;padding:1px 6px;border-width:1.5px;max-width:58%} body.mini #misB em{font-size:8.5px}
+  .scene.night .lm{filter:brightness(.62) saturate(.85)}
+  .mss h2{margin-bottom:4px} .mss .ml{display:flex;flex-direction:column;gap:5px;margin:8px 0} .mss .mr{display:grid;grid-template-columns:22px 1fr auto;gap:7px;align-items:center;text-align:left;background:#fbf5ea;border-radius:10px;padding:6px 9px}
+  .mss .mr.on{background:#fff3d6;border:2px solid #f5b65c} .mss .mr.ok{background:#ecfdf3;opacity:.8} .mss .mr b{font-size:12.5px;display:block} .mss .mr small{font-size:10.5px;color:#8a7560} .mss .mr em{font-style:normal;font-family:'Jua',sans-serif;font-size:11px;color:#8a7560}
+  .mss .mr i{display:block;height:5px;border-radius:9px;background:#efe1cb;margin-top:3px;overflow:hidden} .mss .mr i u{display:block;height:100%;background:linear-gradient(90deg,#f5b65c,#f08c3a)}
   /* v4.1 전직 시험 · 끝판왕 */
   .rl.jx{max-width:320px;margin:18px auto 0} .rl.jx .rlt{margin-top:10px;font-size:14px;color:#fff}
   .fin{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px} .fin .ff,.fask .ff{width:120px;margin:0 auto} .fin p{color:#fff;font-size:13px;text-align:center;margin:0}
@@ -1411,6 +1427,7 @@
       <div class="mat"></div>
       <div id="props"></div>
       <div class="beggar" id="beggar"><div id="face"></div></div>
+      <div id="misB"></div>
       <div id="petz"></div>
       <div id="skbar"></div>
       <div class="bowl" id="bowl">🥫</div>
@@ -1939,7 +1956,7 @@ var TAGS={
   deal:{ic:'💰',nm:'수완',adj:'수완 좋은',c:'#f59e0b',fx:[{discount:.03},{discount:.06},{discount:.1,mgrDisc:.2},{discount:.15,mgrDisc:.4}],d:'가격 할인'},
   grit:{ic:'🛡️',nm:'뚝심',adj:'든든한',c:'#a78bfa',fx:[{evRes:.1,idleH:2},{evRes:.2,idleH:4},{evRes:.35,idleH:6,pvpDef:.2},{evRes:.5,idleH:8,pvpDef:.4}],d:'피해 감소·방치'},
 };
-var TAG_T=[2,4,6,9], SPEC_AT=[10,50];
+var TAG_T=[2,4,6,9], SPEC_AT=[25,100];
 var COMBOS=[
   {id:'k1',ic:'🥺',nm:'동정의 기적',need:{emo:4,luck:2},fx:{begGold:.01},d:'구걸할 때 1% 확률로 돈주머니'},
   {id:'k2',ic:'🏭',nm:'무인 공장',need:{sys:4,deal:2},fx:{auto:.3},d:'자동 수입 +30%'},
@@ -1963,7 +1980,7 @@ function synHtml(){ const T=tagCounts();
   const tags=Object.entries(TAGS).map(([k,t])=>{ const c=T[k], l=tagLv(k), nx=TAG_T[l];
     return `<div class="tg ${l?'on':''}" style="--tc:${t.c}"><b>${emo(t.ic)} ${t.nm} <em>${c}</em></b><span class="tp">${TAG_T.map(x=>`<i class="${c>=x?'f':''}">${x}</i>`).join('')}</span><small>${l?effText(t.fx[l-1]).replace('mgrUp','매니저 돈벌이'):`${t.d} · ${nx}개부터`}</small></div>`; }).join('');
   const combos=COMBOS.map(c=>{ const on=comboOn(c); return `<div class="cb ${on?'on':''}"><b>${emo(c.ic)} ${c.nm}</b><span>${Object.entries(c.need).map(([k,n])=>`${TAGS[k].ic}${Math.min(T[k],n)}/${n}`).join(' + ')}</span><small>${c.d}</small></div>`; }).join('');
-  return `<div class="tags">${tags}</div><div class="cbh">조합 시너지</div><div class="cbs">${combos}</div><div class="cbtip">돈벌이를 <b>10개·50개</b> 모으면 특화를 골라 태그를 모을 수 있어요</div>`; }
+  return `<div class="tags">${tags}</div><div class="cbh">조합 시너지</div><div class="cbs">${combos}</div><div class="cbtip">돈벌이가 <b>실버(25개)·다이아(100개)</b> 등급이 되면 특화를 골라 태그를 모을 수 있어요</div>`; }
 function specSheet(a,slot){
   const opts=specOffer(a.id,slot), cur=specOf(a.id)[slot], ch=cur?Math.max(1000,S.money*.1):0;
   showModal(`<div class="specs"><h2>🔧 ${emo(a.ic)} ${a.nm} 특화 ${slot+1}</h2><p>${cur?`바꾸려면 현금 10% (${fmt(ch)})`:'하나를 골라요 · 이 돈벌이 수입 ×1.25 + 태그 1개'}</p>
@@ -2073,7 +2090,7 @@ function mgrSheet(){
   if($('mgAll')) $('mgAll').onclick=()=>{ let k=0; canH.sort((a,b)=>mgrCost(a)-mgrCost(b)).forEach(a=>{ if(hireMgr(a,true)) k++; }); if(k){ sfx('level'); toast(`👔 매니저 ${k}명 고용!`); } else toast('💸 돈이 부족해요'); mgrSheet(); renderList(); };
 }
 const HELP={
-  auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','10개·50개에서 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
+  auto:[['🏪','돈벌이','사두면 1초마다 돈이 들어와요. 많이 살수록 많이 벌어요.'],['📈','Lv · ×2','같은 걸 25·50·100·200개 모으면 그 돈벌이 수입이 ×2!'],['👔','매니저','고용하면 꼬질이를 안 눌러도 자동으로, 꺼놔도 벌어요. 아이콘을 눌러 고용'],['⭐','강화','10개부터. 등급마다 그 돈벌이 ×1.5 (최대 ★3)'],['💎','특화','실버(25개)·다이아(100개) 등급이 되면 태그를 골라요. 같은 태그를 모으면 시너지!'],['🟢','작은 점','아이콘에 점이 뜨면 매니저 고용이나 특화를 할 수 있다는 뜻']],
   click:[['👋','구걸','꼬질이를 누르거나 스페이스바를 누를 때 버는 돈이에요.'],['🔥','콤보','빠르게 연타하면 배율이 올라가요. 100콤보면 피버!'],['📈','Lv · ×2','같은 걸 많이 모으면 효과가 ×2']],
   skill:[['🆙','레벨 · SP','신분 1단계마다 레벨 5번 · 레벨 +1SP, 신분 +3SP, 업적 +1SP, 돈벌이 50/100/200개 +1SP, 환생 +5SP. 전부 배울 순 없어요!'],['🧭','길 고르기','전직할 때마다 그 직업의 트리가 열려요. 길 이름을 눌러 내 길을 정하고, 노드를 눌러 SP를 직접 찍어요 (선택한 노드를 한 번 더 누르면 바로 배워요)'],['⏱️','자동 버프','배우면 쿨타임마다 저절로 발동해요. 장면 위 작은 아이콘에 남은 시간이 보여요'],['🌳','특성','신분이 오르면 둘 중 하나를 골라요. 장점과 단점이 함께 있어요'],['🔁','초기화','현금 10%로 SP를 모두 돌려받아요']],
 };
@@ -2138,7 +2155,7 @@ function buy(it,own,ok){
   if(n===0) log(`${it.ic} ${it.nm}을(를) 처음 얻었다!`);
   if(own===S.auto) SPEC_AT.forEach((x,j)=>{ if(n<x && n+B.k>=x && !specOf(it.id)[j]){ S.specQ=S.specQ||[]; if(!S.specQ.some(q=>q[0]===it.id&&q[1]===j)) S.specQ.push([it.id,j]); } });
   if(own===S.auto && [50,100,200].some(x=>n<x&&n+B.k>=x)) setTimeout(()=>lvFloat(charLv(),1,'돈벌이 달성!'),200);
-  const g0=gradeOf(n), g1=gradeOf(n+B.k); if(g1&&g1!==g0){ setTimeout(()=>{ toast(`${g1[1]} ${it.nm} → ${g1[2]} 등급으로 진화!`); sfx('level'); },250); }
+  const g0=gradeOf(n), g1=gradeOf(n+B.k); if(g1&&g1!==g0&&!(own===S.auto&&SPEC_AT.includes(g1[0]))){ setTimeout(()=>{ toast(`${g1[1]} ${it.nm} → ${g1[2]} 등급으로 진화!`); sfx('level'); },250); }
   const hit=MS.filter(m=>m>n && m<=n+B.k); if(hit.length){ toast(`🎉 ${it.ic} ${it.nm} Lv.${hit[hit.length-1]}! 수입 UP (총 ×${+msMult(n+B.k).toFixed(1)})`); sfx('level'); }
   renderList(); render();
   const el=document.querySelector(`.item[data-id="${it.id}"]`); if(el) el.classList.add('pop');
@@ -2153,6 +2170,7 @@ function render(){
   if(i>=RS && (!S.route||!ROUTES[S.route])){ i=RS-1; showRoute(); }
   else if(i>=SS && !S.sub){ i=SS-1; showSub(); }
   else if(i>=LAST && !S.finalOK){ i=LAST-1; showFinal(); }
+  buildCity(stageIdx());
   const st=getStage(i), nx=STAGES[i+1]?getStage(i+1):null;
   if(i!==lastStage){
     $('title').textContent=st.name; $('face').innerHTML=charSVG(i); $('bowl').textContent=st.bowl;
@@ -2356,7 +2374,7 @@ function beg(x,y){
   const now=performance.now();
   const cw=700*(1+perkA('comboKeep'));
   combo = (now-lastBeg<cw) ? combo+1 : 1; lastBeg=now; _lastBegT=now;
-  if(combo>S.maxCombo) S.maxCombo=combo; if(combo>(S.dayCombo||0)) S.dayCombo=combo;
+  if(combo>S.maxCombo) S.maxCombo=combo; if(combo>(S.misCombo||0)) S.misCombo=combo; if(combo>(S.dayCombo||0)) S.dayCombo=combo;
   if(ch.on) ch.count++;
   clearTimeout(comboTimer); comboTimer=setTimeout(()=>{combo=0;updateCombo();},cw);
   updateCombo();
@@ -2730,10 +2748,10 @@ function specOv(){
   const [id,slot]=S.specQ[0], a=autoList().find(x=>x.id===id);
   if(!a||specOf(id)[slot]){ S.specQ.shift(); return; }
   const opts=specOffer(id,slot), TC=tagCounts();
-  O.innerHTML=`<div class="k">SPECIALIZE · 특화 ${slot+1}</div><div class="si">${icon(a.id,a.ic)}</div><h3>${a.nm} Lv.${S.auto[id]} 달성!</h3><div class="sub">하나를 골라요 · 이 돈벌이 수입 ×1.25 + 태그 1개</div>
+  const gd=gradeOf(SPEC_AT[slot])||['','✨','']; O.innerHTML=`<div class="k">GRADE UP · ${gd[2]} 등급</div><div class="si">${icon(a.id,a.ic)}</div><h3>${gd[1]} ${gd[2]} ${a.nm} 달성!</h3><div class="sub">하나를 골라요 · 이 돈벌이 수입 ×1.25 + 태그 1개</div>
     <div class="cards c3">${opts.map((k,i)=>{ const t=TAGS[k], c=TC[k], nx=TAG_T.find(x=>x>c); return `<button class="scard" data-k="${k}" style="--cc:${t.c};--d:${i*.1}s"><div class="ci">${emo(t.ic)}</div><div class="ct">${t.adj} ${a.nm}</div><div class="cr">${t.ic} ${t.nm} 태그</div><div class="co">${t.d} 시너지<br><b>${c} → ${c+1}개</b>${nx&&c+1>=nx?' <em>단계 UP!</em>':nx?` <small>(${nx}개에 단계 UP)</small>`:''}</div></button>`; }).join('')}</div>
     <button class="later">나중에 고를게요</button>`;
-  O.classList.add('show'); sfx('gold');
+  O.classList.add('show'); guardOv(O); sfx('gold');
   O.querySelectorAll('.scard').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; S.spec=S.spec||{}; const arr=(S.spec[id]||[]).slice(); arr[slot]=k; S.spec[id]=arr; _tagC=null; S.specQ.shift(); save();
     O.querySelectorAll('.scard').forEach(x=>x.classList.add(x===b?'pick':'dim')); sfx('level');
     const r=b.getBoundingClientRect(); for(let q=0;q<30;q++){ const an=Math.random()*Math.PI*2, sp=60+Math.random()*150; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height/2,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,drag:.95,g:15,r:.9+Math.random()*1.2,life:1+Math.random(),fo:.4}); }
@@ -3028,6 +3046,41 @@ netChip();
 
 /* ---------- route choice & rebirth ---------- */
 let routeOpen=false;
+// 📜 직업 미션: 거지 → 진로 6단계 → 2차 전직 3단계 · 꼬질이 머리 위 말풍선
+var MIS_RT={biz:['첫 장사','손님 끌기','장사 대박','단골 만들기','체인 확장','오픈 대목'],job:['첫 출근','야근 전쟁','실적 압박','보너스 시즌','승진 심사','연말 성과급'],
+  inv:['첫 매수','손가락 운동','풀매수 타이밍','배당의 맛','포트폴리오','상한가 행진'],star:['첫 무대','팬 사인회','앵콜 요청','팬 선물','월드 투어 준비','역주행 신화'],
+  cre:['첫 영상','라이브 방송','떡상 기원','슈퍼챗 세례','채널 확장','알고리즘 폭발'],gov:['첫 발령','민원 폭주','야근 결재','표창 받기','예산 편성','감사 통과'],
+  doc:['인턴 첫날','회진 돌기','첫 수술','감사 편지','병동 확장','응급실 당직'],ath:['첫 경기','강훈련','해트트릭','MVP 보너스','스폰서 계약','결승전'],
+  dev:['첫 커밋','버그 잡기','밤샘 코딩','오픈소스 후원','서비스 확장','긴급 배포'],art:['첫 작품','거리 드로잉','영감 폭발','작품 판매','전시 준비','개인전 대박'],
+  chef:['첫 주방','칼질 연습','불맛 연타','팁 받기','메뉴 확장','불쇼 타임'],law:['첫 상담','변론 연습','명변론','성공 보수','사무소 확장','승소 판결']};
+var MIS_T={ buy:{ic:'🛒',t:o=>`${o.nm} ${o.need}개`,cur:o=>S.auto[o.id]||0,abs:1}, clicks:{ic:'👋',t:o=>`구걸 ${o.need}번`,cur:()=>S.clicks},
+  combo:{ic:'🔥',t:o=>`콤보 ${o.need}`,cur:()=>S.misCombo||0,abs:1}, golds:{ic:'💰',t:o=>`돈주머니 ${o.need}개`,cur:()=>S.golds}, fever:{ic:'🎉',t:o=>`피버 ${o.need}번`,cur:()=>S.fevers||0} };
+function misChain(){
+  const nm=id=>{ const a=autoList().find(x=>x.id===id); return a?a.nm:'돈벌이'; };
+  if(!S.route) return {key:'base',ttl:'🧎 거지의 하루',L:[{ti:'첫 구걸',k:'clicks',need:100},{ti:'깡통 모으기',k:'buy',id:'cup',nm:nm('cup'),need:10},{ti:'행운의 돈주머니',k:'golds',need:2},{ti:'연타 연습',k:'combo',need:50}]};
+  const R=ROUTES[S.route], T=MIS_RT[S.route]||MIS_RT.biz, ri=i=>`r_${S.route}_${i}`;
+  const rc={key:'r_'+S.route,ttl:`${R.ic} ${R.nm} 이야기`,L:[{ti:T[0],k:'buy',id:ri(0),nm:nm(ri(0)),need:10},{ti:T[1],k:'clicks',need:400},{ti:T[2],k:'combo',need:100},{ti:T[3],k:'golds',need:4},{ti:T[4],k:'buy',id:ri(2),nm:nm(ri(2)),need:10},{ti:T[5],k:'fever',need:2}]};
+  if(((S.misDone||{})[rc.key]||0)<rc.L.length || !S.sub) return rc;
+  const sb=R.subs[S.sub], k2=S.route+'.'+S.sub, si=i=>`s_${k2}_${i}`;
+  return {key:'s_'+k2,ttl:`${sb.ic} ${sb.nm} 이야기`,L:[{ti:`${sb.nm} 첫걸음`,k:'buy',id:si(0),nm:nm(si(0)),need:10},{ti:`${sb.nm}의 고비`,k:'combo',need:150},{ti:`${sb.nm} 정상으로`,k:'buy',id:si(1),nm:nm(si(1)),need:5}]};
+}
+function misNow(){ const C=misChain(), i=(S.misDone||{})[C.key]||0; if(i>=C.L.length) return {C,o:null,i}; const o=C.L[i];
+  if(!S.misCur||S.misCur.key!==C.key||S.misCur.i!==i){ S.misCur={key:C.key,i,base:MIS_T[o.k].abs?0:MIS_T[o.k].cur(o)}; if(o.k==='combo') S.misCombo=0; }
+  return {C,o,i,p:Math.max(0,Math.min(o.need,MIS_T[o.k].cur(o)-S.misCur.base))}; }
+function misTick(){ if(paused||!S) return; let M; try{ M=misNow(); }catch(e){ return; } const B=$('misB'); if(!B) return;
+  if(!M.o){ B.classList.remove('on'); return; }
+  if(M.p>=M.o.need){ S.misDone=S.misDone||{}; S.misDone[M.C.key]=M.i+1; const last=M.i+1>=M.C.L.length, sp=last?2:1, g=Math.max(500,cps()*600);
+    S.spBonus=(S.spBonus||0)+sp; earn(g); sfx('level'); B.classList.add('done'); B.innerHTML=`✅ <b>${M.o.ti}</b> 완료! SP +${sp}`; B._k='';
+    toast(`📜 미션 완료: ${M.o.ti} · SP +${sp} · +${fmt(g)}${last?' · '+M.C.ttl+' 끝!':''}`); setTimeout(()=>B.classList.remove('done'),2200); save(); return; }
+  if(B.classList.contains('done')) return;
+  const t=`📜 <b>${M.o.ti}</b> <em>${M.o.k==='buy'?Math.min(M.o.need,MIS_T.buy.cur(M.o)):M.p}/${M.o.need}</em><br>${MIS_T[M.o.k].t(M.o)}`;
+  if(B._k!==t){ B._k=t; B.innerHTML=t; } B.classList.add('on'); }
+setInterval(misTick,700);
+function misSheet(){ const M=misNow(), C=M.C, d=(S.misDone||{})[C.key]||0;
+  showModal(`<div class="mss"><h2>📜 ${C.ttl}</h2><p class="sm">미션을 깰 때마다 <b>SP +1</b> · 마지막은 <b>+2</b> · 돈 보상도 있어요</p><div class="ml">${C.L.map((o,i)=>{ const st=i<d?'ok':i===d?'on':''; const p=i===d&&M.o?M.p:i<d?o.need:0;
+    return `<div class="mr ${st}"><span>${i<d?'✅':emo(MIS_T[o.k].ic)}</span><div><b>${i+1}. ${o.ti}</b><small>${MIS_T[o.k].t(o)}</small>${st==='on'?`<i><u style="width:${(p/o.need*100).toFixed(0)}%"></u></i>`:''}</div><em>${i<d?'완료':i===d?p+'/'+o.need:'🔒'}</em></div>`; }).join('')}</div>
+    <button onclick="hideModal()">확인</button></div>`); }
+function guardOv(el,ms){ el.classList.add('guard'); clearTimeout(el._gt); el._gt=setTimeout(()=>el.classList.remove('guard'),ms||1100); }
 function modalBusy(){ return routeOpen || $('choice').classList.contains('show') || $('lvup').classList.contains('show') || ($('specov')&&$('specov').classList.contains('show')); }
 // 🎲 전직 시험: 고르면 확률 룰렛 · 실패해도 다음엔 확률이 올라가요
 function jobOdds(t){ const base={r:.7,s:.55,f:.45}[t], f=((S.jobFail||{})[t]||0); return Math.min(.95, base+.15*f+perkA('riskP')); }
@@ -3051,11 +3104,10 @@ function showRoute(){
     <div class="cards c5">${Object.entries(ROUTES).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${r.color}">
       <div class="ci">${emo(r.ic)}</div><div class="ct">${r.nm}</div><div class="cr">${r.desc}</div>
       <div class="co"><b>${r.perk}</b><span class="rpath">${r.st[0].name} → ${r.st[2].name} → ${r.st[4].name}<br>2차 전직 ${Object.keys(r.subs).length}갈래 · ${Object.values(r.subs).map(x=>x.ic).join('')}</span></div></button>`).join('')}</div>`;
-  R.classList.add('show');
-  R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{
-    const k=b.dataset.k; sfx('click'); R.querySelectorAll('.rcard').forEach(x=>x.classList.add(x===b?'pick':'dim'));
-    setTimeout(()=>jobExam('r',`${ROUTES[k].ic} ${ROUTES[k].nm} 전직 시험`,()=>{ S.route=k; S.sub=null; migrateItems(); save(); toast(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 루트! ${ROUTES[S.route].perk}`); buildCity(stageIdx()); renderList(); render(); }),600);
-  });
+  R.insertAdjacentHTML('beforeend',`<button id="rcGo" disabled>👆 길을 하나 골라요</button>`);
+  R.classList.add('show'); guardOv(R); let pk=null;
+  R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{ pk=b.dataset.k; sfx('click'); R.querySelectorAll('.rcard').forEach(x=>{ x.classList.toggle('pick',x===b); x.classList.toggle('dim',x!==b); }); const g=$('rcGo'); g.disabled=false; g.textContent=`🎲 ${ROUTES[pk].ic} ${ROUTES[pk].nm} 전직 시험 보기 · ${Math.round(jobOdds('r')*100)}%`; });
+  $('rcGo').onclick=()=>{ if(!pk) return; const k=pk; jobExam('r',`${ROUTES[k].ic} ${ROUTES[k].nm} 전직 시험`,()=>{ S.route=k; S.sub=null; migrateItems(); save(); toast(`${ROUTES[S.route].ic} ${ROUTES[S.route].nm} 루트! ${ROUTES[S.route].perk}`); buildCity(stageIdx(),1); renderList(); render(); }); };
 }
 function showSub(){
   if(modalBusy()||jobWait()>0) return;
@@ -3064,11 +3116,10 @@ function showSub(){
     <div class="cards c5">${Object.entries(RT.subs).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${RT.color}">
       <div class="ci">${emo(r.ic)}</div><div class="ct">${r.nm}</div><div class="cr">${r.perk}</div>
       <div class="co"><span class="rpath">${r.st.map(x=>x.name).join(' → ')}</span>${(S.routesDone||[]).includes(S.route+'.'+k)?'<br>✅ 클리어한 엔딩':''}</div></button>`).join('')}</div>`;
-  R.classList.add('show');
-  R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{
-    const k=b.dataset.k; sfx('click'); R.querySelectorAll('.rcard').forEach(x=>x.classList.add(x===b?'pick':'dim'));
-    setTimeout(()=>jobExam('s',`${RT.subs[k].ic} ${RT.subs[k].nm} 2차 전직 시험`,()=>{ S.sub=k; save(); const r=RT.subs[S.sub]; toast(`${r.ic} ${r.nm}의 길! ${r.perk}`); renderList(); render(); }),600);
-  });
+  R.insertAdjacentHTML('beforeend',`<button id="rcGo" disabled>👆 길을 하나 골라요</button>`);
+  R.classList.add('show'); guardOv(R); let pk=null;
+  R.querySelectorAll('.rcard').forEach(b=>b.onclick=()=>{ pk=b.dataset.k; sfx('click'); R.querySelectorAll('.rcard').forEach(x=>{ x.classList.toggle('pick',x===b); x.classList.toggle('dim',x!==b); }); const g=$('rcGo'); g.disabled=false; g.textContent=`🎲 ${RT.subs[pk].ic} ${RT.subs[pk].nm} 시험 보기 · ${Math.round(jobOdds('s')*100)}%`; });
+  $('rcGo').onclick=()=>{ if(!pk) return; const k=pk; jobExam('s',`${RT.subs[k].ic} ${RT.subs[k].nm} 2차 전직 시험`,()=>{ S.sub=k; save(); const r=RT.subs[S.sub]; toast(`${r.ic} ${r.nm}의 길! ${r.perk}`); buildCity(stageIdx(),1); renderList(); render(); }); };
 }
 // 👑 최종 끝판왕: 마지막 신분은 2차 전직마다 전용 끝판왕 · 등극하면 환생할지 계속할지 골라요
 function bossName(){ const R=S.route&&ROUTES[S.route], sb=R&&S.sub&&R.subs[S.sub]; return sb?`끝판왕 ${sb.st[1].name}`:'세계 최고 부자'; }
@@ -3077,8 +3128,8 @@ function showFinal(){
   R.innerHTML=`<div class="k">FINAL · 최종 전직</div><h3>👑 ${bossName()}</h3><div class="sub">${sb.nm}의 정점 · 마지막 시험만 남았어요</div>
     <div class="fin"><div class="ff">${kidSVG(lookOf({lk:{r:S.route,sub:S.sub,t:7,boss:1}}))}</div><p>등극하면 <b>끝판왕 모습</b>으로 바뀌고<br>끝판왕 Lv이 오를 때마다 <b>모든 수입 +3%</b></p>
     <button class="finb" id="finGo">👑 끝판왕 도전 · ${Math.round(jobOdds('f')*100)}%</button></div>`;
-  R.classList.add('show');
-  $('finGo').onclick=()=>jobExam('f',`👑 ${bossName()} 등극 시험`,()=>{ S.finalOK=1; S.finalAsk=1; save(); render(); });
+  R.classList.add('show'); guardOv(R);
+  $('finGo').onclick=()=>jobExam('f',`👑 ${bossName()} 등극 시험`,()=>{ S.finalOK=1; S.finalAsk=1; save(); buildCity(stageIdx(),1); render(); });
 }
 function finalAsk(){
   if(!S.finalAsk||paused||modalBusy()||$('modal').classList.contains('show')||(S.pending&&S.pending.length)) return; S.finalAsk=0;
@@ -3590,7 +3641,7 @@ function nextChoice(){
     <div class="cards c4 lc">${CH_CARDS.map((o,i)=>`<button class="card2 lcard fd rar-${o.r.k}" data-i="${i}" style="--cc:${o.r.c};--d:${i*.12}s"><span class="back"><b>?</b><i>${o.r.k==='n'?'':'✦'}</i></span><span class="rr">${o.r.nm}</span><div class="ci">${emo(o.ic)}</div><div class="ct">${o.nm}</div><div class="cr">${o.tn}${o.p<1?` · 성공 ${Math.round(o.p*100)}%`:''}</div><div class="co">${o.co}</div></button>`).join('')}</div>
     <button class="reroll" id="reroll" ${CH_REROLL||S.money<rr?'disabled':''}>🔄 다시 뽑기 ${CH_REROLL?'(이번엔 끝)':'· 현금 10% ('+fmt(rr)+')'}</button>
     <div class="res" id="res"></div>`;
-  C.classList.add('show');
+  C.classList.add('show'); guardOv(C,1300);
   C.dataset.flip=1;
   C.querySelectorAll('.lcard').forEach((b,j)=>{ const o=CH_CARDS[j]; setTimeout(()=>{ b.classList.remove('fd'); sfx(o.r.k==='l'?'level':o.r.k==='e'?'gold':'click');
       if(o.r.k==='l'||o.r.k==='e'){ b.classList.add('pop'); const r=b.getBoundingClientRect(); for(let q=0;q<(o.r.k==='l'?60:25);q++){ const a=Math.random()*Math.PI*2, sp=50+Math.random()*170; fxAdd({type:'spark',x:r.left+r.width/2,y:r.top+r.height/2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:10,r:.9+Math.random()*1.3,life:1+Math.random(),fo:.4}); } if(o.r.k==='l'){ C.classList.add('shake'); setTimeout(()=>C.classList.remove('shake'),450); toast('✨ 전설 카드 등장!'); } }
@@ -3918,6 +3969,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.3',d:'11/1',items:['🛑 <b>연타하다 잘못 눌림 방지</b>: 전직·레벨업 카드·특화 창이 뜨면 1초 동안은 안 눌려요 · 진로는 고른 뒤 <b>시험 보기</b> 버튼을 한 번 더','🏙️ <b>전직하면 배경도 바뀌어요</b>: 진로마다 랜드마크 (치킨집·병원·증권가·공연장·시청·경기장…) · 끝판왕이면 꼭대기에 왕관','📜 <b>직업 미션</b>: 꼬질이 머리 위 말풍선 · 거지 4단계 → 진로 6단계 → 2차 전직 3단계 · 깰 때마다 SP +1 (마지막 +2)','🥈 <b>등급과 특화를 하나로</b>: 실버(25개)·다이아(100개) 등급이 될 때 특화를 골라요']},
   {v:'v4.2',d:'11/1',items:['⚖️ <b>구걸 다시 정리</b>: 뒤에 나오는 구걸이 <b>항상</b> 앞의 것보다 1개당 더 벌어요 (고정 금액 + 초당 수입 % 둘 다)','🚶 <b>행인을 그림으로</b>: 이모지 대신 꼬질이 그림체의 행인 6종 (행인·직장인·관광객·부자·경찰·꼬마) · 다리와 팔을 흔들며 걸어요']},
   {v:'v4.1.2',d:'10/31',items:['👆 탭을 다시 <b>위로</b> 올렸어요 (창 맞춤은 그대로)']},
   {v:'v4.1.1',d:'10/31',items:['🪟 <b>미니창이 창 크기에 딱 맞게</b>: 길게 늘리지 않아도 돼요 · 목록만 안에서 스크롤','👇 탭을 <b>아래로</b> (폰 게임처럼) · 소리·신분·기록·계정은 오른쪽 위 ☰ 메뉴로','🧹 미니창에선 랭킹 칩·다음 신분 문구를 숨기고 버프가 없을 땐 상태줄도 숨겨요']},
@@ -4014,8 +4066,8 @@ function startFever(sec){
 function rng(seed){ return ()=>{ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; }; }
 let cityStage=-1;
 const HUES=[8,24,42,198,212,346,152,268,30,186];
-function buildCity(st){
-  if(st===cityStage) return; cityStage=st;
+function buildCity(st,force){
+  const ck=st+'|'+(S.route||'')+'|'+(S.finalOK?1:0); if(ck===cityStage&&!force) return; cityStage=ck;
   const r=rng(1234+st*77);
   const hmax=[52,56,62,70,80,90,100,110,120,128,134,140][st]||140, hmin=Math.round(hmax*.45);
   let h=`<defs>
@@ -4057,17 +4109,39 @@ function buildCity(st){
     h+=`</g>`;
     x+=w+1+r()*4;
   }
+  h+=landmarkSVG();
   // sidewalk + curb
   h+=`<rect id="curb" x="0" y="139" width="480" height="5"/><rect id="side" x="0" y="144" width="480" height="56"/>`;
   for(let sx=-20; sx<500; sx+=34) h+=`<line class="seam" x1="${sx}" y1="144" x2="${sx-18}" y2="200"/>`;
   h+=`<line class="seam" x1="0" y1="168" x2="480" y2="168"/>`;
   // trees & lamps
-  [[52,'t'],[150,'l'],[340,'l'],[430,'t']].forEach(([tx,k])=>{
+  [[52,'t'],[150,'l'],[S.route?296:340,'l'],[430,'t']].forEach(([tx,k])=>{
     if(k==='t') h+=`<g class="tree"><rect x="${tx-2}" y="118" width="4" height="26" fill="#7a5233"/><circle class="tc" cx="${tx}" cy="112" r="14"/><circle class="tc2" cx="${tx-8}" cy="118" r="9"/><circle class="tc2" cx="${tx+9}" cy="117" r="10"/></g>`;
     else h+=`<ellipse class="lg" cx="${tx}" cy="150" rx="40" ry="10" fill="url(#lampG)"/><path class="lp" d="M${tx} 146 V96 q0 -6 8 -6 h4" fill="none" stroke-width="2.4"/><rect class="lh" x="${tx+10}" y="88" width="9" height="4" rx="1.5"/>`;
   });
   $('city').innerHTML=h; applySky(true);
 }
+// 진로마다 뒤에 서는 랜드마크 (끝판왕이면 꼭대기에 왕관)
+function landmarkSVG(){
+  const r=S.route; if(!r) return ''; const O='#4a3728', st=`stroke="${O}" stroke-width="1.6" stroke-linejoin="round"`, X=318, B=141;
+  const win=(x,y,w,hh,c,rw,cl)=>{ let s=''; for(let j=0;j<rw;j++) for(let i=0;i<cl;i++) s+=`<rect x="${x+4+i*((w-8)/cl)}" y="${y+4+j*((hh-6)/rw)}" width="${(w-8)/cl-3}" height="${(hh-6)/rw-3}" rx=".8" fill="${c}"/>`; return s; };
+  const L={
+    biz:`<rect x="${X}" y="${B-62}" width="76" height="62" fill="#ffe2c2" ${st}/><path d="M${X-4} ${B-30} h84 l-4 10 h-76z" fill="#ef4444" ${st}/>${[0,1,2,3,4,5,6].map(i=>`<rect x="${X-2+i*12}" y="${B-30}" width="6" height="10" fill="#fff"/>`).join('')}<rect x="${X+8}" y="${B-58}" width="60" height="18" rx="3" fill="#f59e0b" ${st}/><text x="${X+38}" y="${B-45}" text-anchor="middle" font-size="11" font-weight="900" fill="#fff" font-family="sans-serif">치킨</text><rect x="${X+28}" y="${B-18}" width="20" height="18" fill="#8a5a36" ${st}/>`,
+    job:`<rect x="${X+6}" y="${B-118}" width="62" height="118" fill="#9cc7ef" ${st}/>${win(X+6,B-112,62,104,'#e0f2fe',9,4)}<rect x="${X+24}" y="${B-128}" width="26" height="10" fill="#475569" ${st}/><circle cx="${X+37}" cy="${B-108}" r="5" fill="#3b82f6" ${st}/>`,
+    inv:`<rect x="${X}" y="${B-96}" width="76" height="96" fill="#cbd5e1" ${st}/><rect x="${X+6}" y="${B-90}" width="64" height="34" rx="3" fill="#0f172a" ${st}/><path d="M${X+10} ${B-62} l10 -8 l8 5 l10 -12 l8 6 l12 -14" fill="none" stroke="#22c55e" stroke-width="2.2"/><path d="M${X+10} ${B-66} l14 6 l10 -6" fill="none" stroke="#ef4444" stroke-width="1.6"/>${win(X,B-52,76,40,'#e2e8f0',3,5)}`,
+    star:`<path d="M${X-6} ${B} v-56 q44 -26 88 0 v56z" fill="#c084fc" ${st}/><rect x="${X+6}" y="${B-48}" width="64" height="40" rx="4" fill="#1e1b4b" ${st}/><path d="M${X+38} ${B-42} l4 9 10 1 -8 6 3 10 -9 -6 -9 6 3 -10 -8 -6 10 -1z" fill="#fde047"/>${[0,1,2,3].map(i=>`<path d="M${X+12+i*18} ${B-8} l-6 -40" stroke="#fde68a" stroke-width="3" opacity=".5"/>`).join('')}`,
+    cre:`<rect x="${X+2}" y="${B-90}" width="72" height="90" fill="#e9d5ff" ${st}/><rect x="${X+8}" y="${B-84}" width="60" height="38" rx="5" fill="#ef4444" ${st}/><path d="M${X+32} ${B-74} l14 9 -14 9z" fill="#fff"/>${win(X+2,B-42,72,30,'#faf5ff',2,4)}`,
+    gov:`<rect x="${X-2}" y="${B-58}" width="80" height="58" fill="#f1f5f9" ${st}/><path d="M${X+12} ${B-58} q26 -34 52 0z" fill="#93c5fd" ${st}/><rect x="${X+37}" y="${B-96}" width="2" height="18" fill="${O}"/><path d="M${X+39} ${B-96} h14 v8 h-14z" fill="#ef4444" ${st}/>${[0,1,2,3,4].map(i=>`<rect x="${X+4+i*15}" y="${B-50}" width="6" height="40" fill="#e2e8f0" ${st}/>`).join('')}<rect x="${X-6}" y="${B-10}" width="88" height="10" fill="#cbd5e1" ${st}/>`,
+    doc:`<rect x="${X}" y="${B-100}" width="78" height="100" fill="#f8fafc" ${st}/>${win(X,B-70,78,58,'#bae6fd',4,5)}<rect x="${X+26}" y="${B-96}" width="26" height="26" rx="3" fill="#fff" ${st}/><path d="M${X+35} ${B-92} h8 v7 h7 v8 h-7 v7 h-8 v-7 h-7 v-8 h7z" fill="#ef4444"/><rect x="${X+28}" y="${B-14}" width="22" height="14" fill="#86efac" ${st}/>`,
+    ath:`<path d="M${X-8} ${B} v-40 q47 -30 94 0 v40z" fill="#86efac" ${st}/><path d="M${X} ${B} v-30 q39 -22 78 0 v30z" fill="#22c55e" ${st}/>${[X-4,X+82].map(x=>`<rect x="${x}" y="${B-80}" width="3" height="44" fill="#64748b"/><rect x="${x-5}" y="${B-86}" width="13" height="8" rx="2" fill="#fef9c3" ${st}/>`).join('')}<circle cx="${X+39}" cy="${B-16}" r="7" fill="#fff" ${st}/>`,
+    dev:`<rect x="${X+4}" y="${B-110}" width="66" height="110" fill="#334155" ${st}/>${win(X+4,B-104,66,96,'#38bdf8',10,3)}<rect x="${X+14}" y="${B-124}" width="46" height="14" rx="3" fill="#0f172a" ${st}/><text x="${X+37}" y="${B-113}" text-anchor="middle" font-size="10" font-weight="900" fill="#4ade80" font-family="monospace">&lt;/&gt;</text>`,
+    art:`<path d="M${X-4} ${B-62} l42 -22 l42 22z" fill="#fde68a" ${st}/><rect x="${X}" y="${B-62}" width="76" height="62" fill="#fff7ed" ${st}/>${[0,1,2,3].map(i=>`<rect x="${X+6+i*18}" y="${B-56}" width="7" height="48" fill="#fde68a" ${st}/>`).join('')}<rect x="${X+24}" y="${B-80}" width="28" height="14" fill="#f472b6" ${st}/><rect x="${X+28}" y="${B-77}" width="20" height="8" fill="#60a5fa"/>`,
+    chef:`<rect x="${X}" y="${B-66}" width="76" height="66" fill="#fef3c7" ${st}/><rect x="${X+54}" y="${B-86}" width="12" height="22" fill="#9ca3af" ${st}/><circle cx="${X+60}" cy="${B-94}" r="5" fill="#fff" opacity=".8"/><circle cx="${X+66}" cy="${B-104}" r="6" fill="#fff" opacity=".6"/><rect x="${X+10}" y="${B-58}" width="44" height="20" rx="4" fill="#fff" ${st}/><circle cx="${X+24}" cy="${B-54}" r="5" fill="#fff" ${st}/><circle cx="${X+32}" cy="${B-56}" r="6" fill="#fff" ${st}/><circle cx="${X+40}" cy="${B-54}" r="5" fill="#fff" ${st}/>${win(X,B-34,76,24,'#fdba74',1,4)}`,
+    law:`<path d="M${X-4} ${B-70} l42 -20 l42 20z" fill="#e5e7eb" ${st}/><rect x="${X}" y="${B-70}" width="76" height="70" fill="#f3f4f6" ${st}/>${[0,1,2,3,4].map(i=>`<rect x="${X+5+i*15}" y="${B-62}" width="7" height="54" fill="#e5e7eb" ${st}/>`).join('')}<path d="M${X+38} ${B-86} v-6 M${X+28} ${B-84} h20 M${X+28} ${B-84} l-4 7 h8z M${X+48} ${B-84} l-4 7 h8z" fill="#fbbf24" stroke="${O}" stroke-width="1.2"/>`,
+  };
+  let s=`<g class="lm">${L[r]||''}`;
+  if(S.finalOK){ const tp={biz:62,job:128,inv:96,star:82,cre:90,gov:96,doc:100,ath:86,dev:124,art:84,chef:104,law:90}[r]||100, y=B-tp-2; s+=`<path d="M${X+24} ${y} l4 -14 l7 8 l3 -12 l3 12 l7 -8 l4 14z" fill="#ffd34d" ${st}/>`; }
+  return s+'</g>'; }
 let skyKey='';
 function applySky(force){
   const hr=new Date().getHours()+new Date().getMinutes()/60;
@@ -4202,12 +4276,13 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.2';
+const GAME_VER='v4.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
 try{ $('stat').prepend($('skbar')); }catch(e){}
+$('misB').onclick=e=>{ e.stopPropagation(); misSheet(); };
 $('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
   showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
   document.querySelectorAll('.mmn [data-b]').forEach(b=>b.onclick=()=>{ hideModal(); setTimeout(()=>$(b.dataset.b).click(),50); }); };
