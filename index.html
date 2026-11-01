@@ -2981,22 +2981,25 @@ async function cloudCheck(){
   NET.checkAt=Date.now();
   const r=await api('load',{nick:NET.nick,token:NET.token}); if(!r.data) return false;
   const c=JSON.parse(r.data);
-  if(c.sid && c.sid!==NET.sid && c.last!==NET.seenLast){   // 내가 저장한 뒤에 다른 기기가 저장했어요
+  const newer = c.rev!=null ? (c.rev>(S.rev||0)) : (c.sid && c.last!==NET.seenLast);   // 저장 번호(rev)로 비교 · 기기 시계와 상관없이
+  if(c.sid && c.sid!==NET.sid && newer){   // 내가 저장한 뒤에 다른 기기가 저장했어요
     NET.seenLast=c.last; NET.mySaveLast=Date.now(); applyData(c); S.owner=NET.nick; grantOffline(true);
     toast('📱 다른 기기에서 한 기록을 불러왔어요'); return true; }
   return false; }
 function saveBeacon(){ // 탭을 숨기거나 닫을 때 (모바일은 이게 마지막 기회예요)
   if(!NET.nick||!NET.token||!NET.url||!NET.mySaveLast||paused) return; if(Date.now()-(NET.beaconAt||0)<2000) return; NET.beaconAt=Date.now();
-  S.sid=NET.sid; S.last=Date.now(); NET.mySaveLast=S.last; save();
+  S.sid=NET.sid; S.last=Date.now(); S.rev=(S.rev||0)+1; NET.mySaveLast=S.last; save();
   try{ fetch(NET.url,{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()})}); }catch(e){} }
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) saveBeacon(); else if(NET.mySaveLast && Date.now()-NET.checkAt>5000) cloudCheck().catch(()=>{}); });
 window.addEventListener('pagehide',saveBeacon);
+window.addEventListener('focus',()=>{ if(NET.mySaveLast && Date.now()-NET.checkAt>5000) cloudCheck().catch(()=>{}); });   // PC 창을 다시 클릭하면 바로 확인
+setInterval(()=>{ if(NET.mySaveLast && !document.hidden && Date.now()-NET.checkAt>20000) cloudCheck().catch(()=>{}); },20000);
 async function cloudSave(force,noCheck){
   if(!NET.nick||!NET.token||NET.saving) return;
   if(!force && Date.now()-NET.lastSave<55000) return;
   NET.saving=true; netChip();
   try{ if(!noCheck && await cloudCheck()){ NET.lastSave=Date.now(); NET.saving=false; netChip(); return; }
-    S.sid=NET.sid; S.last=Date.now(); NET.mySaveLast=S.last; const sr=await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); if(sr.events&&sr.events.length) handleEvents(sr.events); NET.lastSave=Date.now(); NET.boardAt=0; fetchBoard(true); }
+    S.sid=NET.sid; S.last=Date.now(); S.rev=(S.rev||0)+1; NET.mySaveLast=S.last; save(); const sr=await api('save',{nick:NET.nick,token:NET.token,data:JSON.stringify(S),meta:meta()}); if(sr.events&&sr.events.length) handleEvents(sr.events); NET.lastSave=Date.now(); NET.boardAt=0; fetchBoard(true); }
   catch(e){ if(String(e).includes('로그인')){ NET.token=''; NET.nick=''; netStore(); showGate(String(e)); } }
   NET.saving=false; netChip();
 }
@@ -3012,7 +3015,7 @@ async function afterLogin(silent){
     if(r.data){
       const cloud=JSON.parse(r.data);
       const sc=x=>(x.rebirth||0)*1e18+(x.total||0);
-      const useLocal = mine && (S.last||0) > (cloud.last||0) && sc(S) >= sc(cloud)*0.5;
+      const useLocal = mine && ((S.rev!=null||cloud.rev!=null) ? (S.rev||0) > (cloud.rev||0) : ((S.last||0) > (cloud.last||0) && sc(S) >= sc(cloud)*0.5));
       if(useLocal){ await cloudSave(true,true); }
       else { applyData(cloud); NET.seenLast=cloud.last; NET.mySaveLast=Date.now(); if(!silent) toast(`🌐 ${NET.nick}님 환영해요! 기록을 불러왔어요`); }
     } else {
@@ -4116,6 +4119,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.8.2',d:'11/1',items:['📱↔💻 <b>모바일·PC 기록이 서로 다르던 문제</b> 수정: 저장할 때마다 번호를 붙여서 기기 시계와 상관없이 <b>더 나중에 저장된 기록</b>을 써요 · PC 창을 다시 클릭하거나 20초마다 다른 기기 기록을 확인해요']},
   {v:'v4.8.1',d:'11/1',items:['🧹 <b>레이아웃 고정</b>: 위 줄은 버프가 늘어도 한 줄(넘치면 +N) · 미션 줄 높이 고정 · 카드 글자는 넘치면 … 처리','📈 시장표를 줄 맞춰 깔끔하게 (업종 · 등락률 두 칸)','🗑️ 돈벌이·구걸 카드의 회색 설명 줄을 뺐어요 (카드가 더 낮아져 목록이 더 많이 보여요)']},
   {v:'v4.8',d:'11/1',items:['📈 <b>시장 정세</b>: 전염병·전쟁·금리·유가·코인 광풍 같은 뉴스가 <b>업종</b>(외식·의료·IT·에너지·코인·부동산… 16개)을 흔들어요 · 5분마다 주식처럼 출렁 · 모든 유저 같은 시장','🏷️ 돈벌이 카드에 업종 ▲▼% 표시 · 위 줄 아이콘을 누르면 오늘의 시장표','⚡ <b>버프 스킬 다양화</b>: 가격 할인 · 크리티컬 · 콤보 유지 · 악재 면역 · 돈주머니 비 · 즉시 피버 · 시간 점프 (진로·2차 트리 40여 개 스킬에 나눠 넣었어요)']},
   {v:'v4.7.3',d:'11/1',items:['🧹 위 줄에 자동 스킬 아이콘이 쿨타임 중에도 흐릿하게 떠서 돈벌이처럼 보이던 문제 → <b>발동 중일 때만</b> 버프처럼 떠요 · 아이콘이 많아도 한 줄로']},
@@ -4496,7 +4500,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.8.1';
+const GAME_VER='v4.8.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
