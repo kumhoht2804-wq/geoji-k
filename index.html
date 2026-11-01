@@ -1226,6 +1226,7 @@
   #itemRow{display:none;gap:3px;margin-bottom:6px;padding:3px 4px;border-radius:9px;background:#f6ecdc;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
   #itemRow.on{display:none!important} #itemRow::-webkit-scrollbar{display:none} #itemRow .bi{background:#fffaf2}
   #misB{width:auto!important;box-sizing:border-box;border-radius:10px} #misB .mt{text-align:left}
+  #misB .mt b{color:#5a4436!important} #misB .mt small{font-size:.85em;color:#a08c78;margin-left:5px} body.mini #misB i{display:none} body.mini #misB .mt small{margin-left:3px}
   body.mini #itemRow{margin-bottom:4px;padding:2px 3px;gap:3px} body.mini #topRow{margin-bottom:4px}
   /* v4.7 합친 바 · 정세 */
   #lvBar{display:none!important}
@@ -3256,9 +3257,10 @@ function misTick(){ if(paused||!S) return; let M; try{ M=misNow(); }catch(e){ re
     S.spBonus=(S.spBonus||0)+sp; earn(g); sfx('level'); B.classList.add('done'); B.innerHTML=`<span class="mt">✅ <b>${M.o.ti}</b> 완료! SP +${sp}</span>`; B._k='';
     toast(`📜 미션 완료: ${M.o.ti} · SP +${sp} · +${fmt(g)}${last?' · '+M.C.ttl+' 끝!':''}`); setTimeout(()=>B.classList.remove('done'),2200); save(); return; }
   if(B.classList.contains('done')) return;
-  const pv=M.o.k==='buy'?Math.min(M.o.need,MIS_T.buy.cur(M.o)):M.p, t=`<span class="mt">📜 <b>${M.o.ti}</b> · ${MIS_T[M.o.k].t(M.o)}</span><i><u style="width:${(pv/M.o.need*100).toFixed(0)}%"></u></i><em>${pv}/${M.o.need}</em>`;
+  const pv=M.o.k==='buy'?Math.min(M.o.need,MIS_T.buy.cur(M.o)):M.p, t=`<span class="mt" title="${M.o.ti}">📜 <b>${MIS_T[M.o.k].t(M.o)}</b><small>${M.o.ti}</small></span><i><u style="width:${(pv/M.o.need*100).toFixed(0)}%"></u></i><em>${fmtN(pv)}/${fmtN(M.o.need)}</em>`;
   if(B._k!==t){ B._k=t; B.innerHTML=t; } B.classList.add('on'); }
 setInterval(misTick,700);
+function fmtN(n){ return n>=1e4?fmt(n).replace(/원$/,''):String(n); }
 function misSheet(){ const M=misNow(), C=M.C, d=(S.misDone||{})[C.key]||0;
   showModal(`<div class="mss"><h2>📜 ${C.ttl}</h2><p class="sm">미션을 깰 때마다 <b>SP +1</b> · 마지막은 <b>+2</b> · 돈 보상도 있어요</p><div class="ml">${C.L.map((o,i)=>{ const st=i<d?'ok':i===d?'on':''; const p=i===d&&M.o?M.p:i<d?o.need:0;
     return `<div class="mr ${st}"><span>${i<d?'✅':emo(MIS_T[o.k].ic)}</span><div><b>${i+1}. ${o.ti}</b><small>${MIS_T[o.k].t(o)}</small>${st==='on'?`<i><u style="width:${(p/o.need*100).toFixed(0)}%"></u></i>`:''}</div><em>${i<d?'완료':i===d?p+'/'+o.need:'🔒'}</em></div>`; }).join('')}</div>
@@ -4163,6 +4165,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.9.2',d:'11/1',items:['📜 미션 줄에서 <b>해야 할 일</b>이 잘려 안 보이던 문제 수정: 할 일을 맨 앞에 두고 미션 이름은 뒤에 작게']},
   {v:'v4.9.1',d:'11/1',items:['📦 <b>게임 파일 크기 절반</b> (0.96MB → 0.47MB): 3D 아이콘을 따로 받아서 한 번 저장해 두고 써요 · 켜는 속도도 빨라져요']},
   {v:'v4.9',d:'11/1',items:['🏗️ <b>새 진로 2개</b>: 건축가(부동산 업종 · 초고층·아파트·인테리어·인프라·친환경) · ⚡ 에너지 사업가(에너지 업종 · 석유·태양광·배터리·원자력·수소)','📈 업종 점검: 16개 업종이 모두 진로나 2차 전직으로 이어지게 다시 짰어요 (예: 서울시장 = 부동산, 푸드트럭 = 서민 경제, 배터리 = IT)','🧸 새 3D 아이콘 33개 · 파일 크기 줄이기']},
   {v:'v4.8.5',d:'11/1',items:['🧹 위 줄 아이콘 겹침 수정: 발동 중인 스킬도 버프 아이콘과 같은 줄에 같이 정렬 · 칸 폭에 맞게 들어갈 만큼만 보이고 나머지는 +N']},
@@ -4483,7 +4486,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.9.1';
+const GAME_VER='v4.9.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
