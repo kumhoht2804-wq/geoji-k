@@ -3287,11 +3287,13 @@ function doRebirth(){
   $('rbYes').onclick=()=>{
     const gain=rpGain();
     const keep={rp:(S.rp||0)+gain,petLv:S.petLv,petOn:S.petOn,petSlot2:S.petSlot2,petPicked:S.petPicked,owner:S.owner,ach:S.ach,chBest:S.chBest,maxCombo:S.maxCombo,clicks:S.clicks,golds:S.golds,start:S.start,
-      rebirth:(S.rebirth||0)+1, routesDone:[...new Set([...(S.routesDone||[]), endingKey(), S.route].filter(Boolean))]};
+      rebirth:(S.rebirth||0)+1, routesDone:[...new Set([...(S.routesDone||[]), endingKey(), S.route].filter(Boolean))],
+      rev:S.rev, daily:S.daily, newsBlk:S.newsBlk, fevers:S.fevers, evOK:S.evOK, lvSeen:1, stage:0};
+    for(const k in S) if(/^v\d+$/.test(k)) keep[k]=S[k];   // 예전 데이터 변환은 다시 안 돌게
     S=Object.assign(fresh(),keep); S.start=Date.now(); lastStage=-1; cityStage=-1; shownMoney=0; save();
     hideModal(); $('log').innerHTML=''; buildCity(0); renderList(); render();
     toast(`♻️ ${S.rebirth}번째 환생! 모든 수입 ×${rebirthMult().toFixed(1)} · 🐾 +${gain}`); renderPetz();
-    NET.lastSave=0; cloudSave(true);   // 랭킹에 바로 0원으로 반영
+    NET.lastSave=0; cloudSave(true,true);   // 랭킹에 바로 0원으로 반영 (환생 기록이 다른 기기 옛 기록에 덮이지 않게 저장 번호 유지)
   };
 }
 
@@ -4121,6 +4123,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.8.4',d:'11/1',items:['♻️ <b>환생이 취소되던 문제</b> 수정: 환생하면 저장 번호가 0으로 돌아가서, 서버에 있던 환생 전 기록을 \'더 최신\'으로 착각하고 다시 불러오던 오류 · 이제 환생 기록이 바로 서버에 저장돼요']},
   {v:'v4.8.3',d:'11/1',items:['🔧 <b>업데이트를 눌러도 \'지금 적용\'이 계속 뜨던 문제</b> 수정: 폰(웹)에선 새 버전이 실제로 반영된 뒤에만 알려줘요','🧪 12개 진로 × 모든 탭·창·이벤트·카드·특화·환생·전직 시험을 미니창·큰 창에서 점검 (오류 0개)']},
   {v:'v4.8.2',d:'11/1',items:['📱↔💻 <b>모바일·PC 기록이 서로 다르던 문제</b> 수정: 저장할 때마다 번호를 붙여서 기기 시계와 상관없이 <b>더 나중에 저장된 기록</b>을 써요 · PC 창을 다시 클릭하거나 20초마다 다른 기기 기록을 확인해요']},
   {v:'v4.8.1',d:'11/1',items:['🧹 <b>레이아웃 고정</b>: 위 줄은 버프가 늘어도 한 줄(넘치면 +N) · 미션 줄 높이 고정 · 카드 글자는 넘치면 … 처리','📈 시장표를 줄 맞춰 깔끔하게 (업종 · 등락률 두 칸)','🗑️ 돈벌이·구걸 카드의 회색 설명 줄을 뺐어요 (카드가 더 낮아져 목록이 더 많이 보여요)']},
@@ -4503,7 +4506,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.8.3';
+const GAME_VER='v4.8.4';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
