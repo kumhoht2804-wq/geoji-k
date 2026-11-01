@@ -1216,6 +1216,8 @@
   .bi.it{opacity:.55} .bi.it.on{opacity:1} .bi.it.g1{border-color:#94a3b8;box-shadow:0 0 0 1px #cbd5e1} .bi.it.g2{border-color:#d4a017;background:#fff8dc} .bi.it.g3{border-color:#0ea5e9;background:#f0f9ff} .bi.it.g4{border-color:#a855f7;background:#fdf4ff}
   body.mini .bi{width:19px;height:19px;border-width:1.5px;border-radius:6px} body.mini .bi img.e3d{width:13px;height:13px} body.mini .bi em{font-size:7px;right:-3px;bottom:-4px}
   body.mini #topRow{margin-bottom:5px;gap:4px} body.mini #topRow #stChip{padding:1px 6px 1px 2px!important}
+  #topRow #skbar .skb:not(.run){display:none!important}
+  #topRow #stc{flex-wrap:nowrap!important;overflow:hidden}
   #topRow #skbar .skb{width:24px!important;height:24px!important;border-width:2px!important;border-radius:7px!important;box-shadow:none!important} body.mini #topRow #skbar .skb{width:19px!important;height:19px!important;border-width:1.5px!important}
   /* v4.6.1 줄 정리: 위 줄(Lv·버프) → 돈벌이 줄 → 캐릭터 화면 → 미션 줄 → 신분 바 · 모두 같은 폭 */
   #topRow,#itemRow,#misB{margin-left:var(--scm,0)!important;margin-right:var(--scm,0)!important;align-self:stretch!important;width:auto!important;box-sizing:border-box}
@@ -4063,6 +4065,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.7.3',d:'11/1',items:['🧹 위 줄에 자동 스킬 아이콘이 쿨타임 중에도 흐릿하게 떠서 돈벌이처럼 보이던 문제 → <b>발동 중일 때만</b> 버프처럼 떠요 · 아이콘이 많아도 한 줄로']},
   {v:'v4.7.2',d:'11/1',items:['📱 <b>폰에서도 PC 미니창과 똑같이</b>: 같은 레이아웃을 화면 폭에 맞게 확대해서 보여줘요']},
   {v:'v4.7.1',d:'11/1',items:['🔧 진로·2차 전직을 고르기 전엔 신분이 더 올라가지 않게 수정']},
   {v:'v4.7',d:'11/1',items:['📊 <b>Lv 바와 신분 바를 하나로</b>: 평소엔 다음 Lv까지, 신분 상승 때가 되면 노란 바로 바뀌어요','⬆️ <b>신분 상승 조건</b>: Lv 조건 + 현금 조건 (예: Lv.36 + 현금 600억 모으기) · 둘 다 채우면 자동으로 올라가요','📰 <b>정세</b>: 30분마다 뉴스가 바뀌고 직업마다 수입이 달라져요 (예: 독감 대유행 → 의사 ×1.5) · 모든 유저가 같은 뉴스 · 위 줄 📰 아이콘을 누르면 직업별 표','🧹 목록 위 안내 문구와 돈벌이 아이콘 줄을 뺐어요']},
@@ -4440,7 +4443,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.7.2';
+const GAME_VER='v4.7.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
