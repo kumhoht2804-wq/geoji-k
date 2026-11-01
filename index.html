@@ -1234,6 +1234,7 @@
   .nws .nh{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff8e6;border-radius:12px;padding:8px;margin:4px 0 8px} .nws .nh img.e3d{width:34px;height:34px} .nws .nh b{font-size:15px} .nws .nh small{font-size:10.5px;color:#8a7560}
   .nws .nl{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px} .nws .nl>div{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;background:#fbf5ea;border-radius:8px;padding:4px 7px}
   .nws .nl img.e3d{width:14px;height:14px;vertical-align:-2px} .nws .nl .up b{color:#15803d} .nws .nl .dn b{color:#b91c1c} .nws .nl .me{outline:2px solid #f5b65c}
+  body.phone{background:#fdf6ea} body.phone .wrap{padding:4px!important;margin:0 auto}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -2424,7 +2425,7 @@ let tiltT=null;
 function tiltBowl(){ const b=$('bowl'); b.classList.add('tilt'); clearTimeout(tiltT); tiltT=setTimeout(()=>b.classList.remove('tilt'),70); }
 function floatText(x,y,txt){
   const f=document.createElement('div'); f.className='float'; f.textContent=txt;
-  f.style.left=x+'px'; f.style.top=y+'px'; $('scene').appendChild(f);
+  const z=parseFloat(document.querySelector('.wrap').style.zoom)||1; f.style.left=(x/z)+'px'; f.style.top=(y/z)+'px'; $('scene').appendChild(f);
   setTimeout(()=>f.remove(),1000);
 }
 
@@ -4062,6 +4063,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.7.2',d:'11/1',items:['📱 <b>폰에서도 PC 미니창과 똑같이</b>: 같은 레이아웃을 화면 폭에 맞게 확대해서 보여줘요']},
   {v:'v4.7.1',d:'11/1',items:['🔧 진로·2차 전직을 고르기 전엔 신분이 더 올라가지 않게 수정']},
   {v:'v4.7',d:'11/1',items:['📊 <b>Lv 바와 신분 바를 하나로</b>: 평소엔 다음 Lv까지, 신분 상승 때가 되면 노란 바로 바뀌어요','⬆️ <b>신분 상승 조건</b>: Lv 조건 + 현금 조건 (예: Lv.36 + 현금 600억 모으기) · 둘 다 채우면 자동으로 올라가요','📰 <b>정세</b>: 30분마다 뉴스가 바뀌고 직업마다 수입이 달라져요 (예: 독감 대유행 → 의사 ×1.5) · 모든 유저가 같은 뉴스 · 위 줄 📰 아이콘을 누르면 직업별 표','🧹 목록 위 안내 문구와 돈벌이 아이콘 줄을 뺐어요']},
   {v:'v4.6.1',d:'11/1',items:['🧹 줄 정리: 위 줄은 Lv + 버프만, 그 아래 한 줄에 돈벌이 아이콘 · 위 줄·돈벌이 줄·미션 줄을 캐릭터 화면 폭에 딱 맞췄어요']},
@@ -4386,10 +4388,16 @@ $('statsBtn').onclick=()=>{
 const isPopup = location.hash==='#mini';
 let paused=false, viewMode='mini';
 const isPhone = matchMedia('(pointer:coarse)').matches && innerWidth<700;
-try{ viewMode = localStorage.getItem('geoji_view') || (isPhone?'full':'mini'); }catch(e){ viewMode = isPhone?'full':'mini'; }
+try{ viewMode = localStorage.getItem('geoji_view') || 'mini'; }catch(e){ viewMode = 'mini'; }
+if(isPhone) viewMode='mini';   // 폰에서도 PC 미니창과 똑같이 (화면 폭에 맞게 확대)
+function phoneFit(){ // 미니창(262px) 레이아웃을 폰 화면 폭에 맞게 통째로 확대
+  const W=document.querySelector('.wrap'); if(!W) return;
+  if(!isPhone||!document.body.classList.contains('mini')){ W.style.zoom=''; W.style.height=''; W.style.maxWidth=''; document.body.classList.remove('phone'); return; }
+  document.body.classList.add('phone'); const vw=document.documentElement.clientWidth||innerWidth, vh=(window.visualViewport?visualViewport.height:innerHeight), z=vw/262;
+  W.style.maxWidth='262px'; W.style.zoom=z; W.style.height=(vh/z)+'px'; }
 function applyView(){
   const mini = isPopup || viewMode==='mini';
-  document.body.classList.toggle('mini', mini);
+  document.body.classList.toggle('mini', mini); setTimeout(phoneFit,0);
   $('sizeBtn').querySelector('.lbl').textContent = mini?' 크게 보기':' 작게 보기';
   $('sizeBtn').firstChild.textContent = mini?'⤢':'⤡';
 }
@@ -4399,6 +4407,7 @@ if(isPopup){
   try{ window.resizeTo(262,460); window.moveTo(screen.availWidth-280, screen.availHeight-480); }catch(e){}
 }
 applyView();
+addEventListener('resize',()=>phoneFit()); if(window.visualViewport) visualViewport.addEventListener('resize',()=>phoneFit());
 $('sizeBtn').onclick=()=>{
   viewMode = viewMode==='mini'?'full':'mini';
   try{ localStorage.setItem('geoji_view',viewMode); }catch(e){}
@@ -4431,7 +4440,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.7.1';
+const GAME_VER='v4.7.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
