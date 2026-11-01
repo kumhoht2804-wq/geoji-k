@@ -4165,6 +4165,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.9.3',d:'11/1',items:['🪟 <b>반투명 창</b>: PC 실행기(.bat)를 새로 받으면 미니창이 살짝 비쳐 보여요 (기본 75%) · .bat 맨 위에서 투명도와 항상 위 고정을 바꿀 수 있어요']},
   {v:'v4.9.2',d:'11/1',items:['📜 미션 줄에서 <b>해야 할 일</b>이 잘려 안 보이던 문제 수정: 할 일을 맨 앞에 두고 미션 이름은 뒤에 작게']},
   {v:'v4.9.1',d:'11/1',items:['📦 <b>게임 파일 크기 절반</b> (0.96MB → 0.47MB): 3D 아이콘을 따로 받아서 한 번 저장해 두고 써요 · 켜는 속도도 빨라져요']},
   {v:'v4.9',d:'11/1',items:['🏗️ <b>새 진로 2개</b>: 건축가(부동산 업종 · 초고층·아파트·인테리어·인프라·친환경) · ⚡ 에너지 사업가(에너지 업종 · 석유·태양광·배터리·원자력·수소)','📈 업종 점검: 16개 업종이 모두 진로나 2차 전직으로 이어지게 다시 짰어요 (예: 서울시장 = 부동산, 푸드트럭 = 서민 경제, 배터리 = IT)','🧸 새 3D 아이콘 33개 · 파일 크기 줄이기']},
@@ -4486,7 +4487,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.9.2';
+const GAME_VER='v4.9.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
