@@ -1173,6 +1173,13 @@
   body.mini .scene{height:112px!important}
   body.mini #stat{min-height:18px;margin-top:3px}
   .mmn button{display:block;width:100%;margin:0 0 6px!important}
+  /* v4.2 SVG 행인 */
+  .walker .wsvg{width:38px;height:58px;display:block} .walker.wk-kid .wsvg{width:34px;height:52px}
+  .walker{opacity:1!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.12))!important;font-size:0!important}
+  .wsvg .wl1{transform-origin:27px 62px;animation:wleg .55s ease-in-out infinite alternate} .wsvg .wl2{transform-origin:34px 62px;animation:wleg .55s ease-in-out infinite alternate-reverse}
+  .wsvg .wa{transform-origin:40px 46px;animation:warm .55s ease-in-out infinite alternate}
+  @keyframes wleg{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}} @keyframes warm{from{transform:rotate(12deg)}to{transform:rotate(-12deg)}}
+  body.hid .wsvg *{animation-play-state:paused!important}
   /* v4.1 전직 시험 · 끝판왕 */
   .rl.jx{max-width:320px;margin:18px auto 0} .rl.jx .rlt{margin-top:10px;font-size:14px;color:#fff}
   .fin{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px} .fin .ff,.fask .ff{width:120px;margin:0 auto} .fin p{color:#fff;font-size:13px;text-align:center;margin:0}
@@ -1744,11 +1751,11 @@ const CLICK = [
   {id:'c3', ic:'🎤', nm:'사연 낭독',        ds:'듣다 보면 다들 울고 가요',        base:8000,  add:30},
   {id:'c4', ic:'🐶', nm:'귀여운 강아지 동료', ds:'멍뭉이 덕에 손님이 두 배',        base:1.2e5, add:200},
   {id:'c5', ic:'📱', nm:'구걸 라이브 방송',   ds:'실시간 후원이 쏟아져요',          base:2e6,   add:1500},
-  {id:'c6', ic:'✨', nm:'황금 손',          ds:'내민 손에 초당 수입이 묻어나요',   base:5e7,   pct:0.03},
-  {id:'c7', ic:'🎻', nm:'감성 버스킹 무대',  ds:'노래 한 곡에 앵콜이 터져요',       base:2e9,   pct:0.05},
-  {id:'c8', ic:'📺', nm:'TV 사연 출연',     ds:'전국에 내 사연이 퍼졌어요',        base:8e10,  pct:0.12},
-  {id:'c9', ic:'🌍', nm:'해외 원정 구걸',    ds:'이제 달러로 받아요',              base:3e12,  pct:0.3},
-  {id:'c10',ic:'👑', nm:'구걸왕의 품격',     ds:'구걸도 경지에 오르면 예술',        base:1e14,  pct:0.8},
+  {id:'c6', ic:'✨', nm:'황금 손',          ds:'내민 손에 초당 수입이 묻어나요',   base:5e7,   add:1.2e4, pct:0.02},
+  {id:'c7', ic:'🎻', nm:'감성 버스킹 무대',  ds:'노래 한 곡에 앵콜이 터져요',       base:2e9,   add:1.2e5, pct:0.04},
+  {id:'c8', ic:'📺', nm:'TV 사연 출연',     ds:'전국에 내 사연이 퍼졌어요',        base:8e10,  add:1.2e6, pct:0.08},
+  {id:'c9', ic:'🌍', nm:'해외 원정 구걸',    ds:'이제 달러로 받아요',              base:3e12,  add:1.2e7, pct:0.16},
+  {id:'c10',ic:'👑', nm:'구걸왕의 품격',     ds:'구걸도 경지에 오르면 예술',        base:1e14,  add:1.2e8, pct:0.3},
 ];
 // 진로별 구걸 기술 3개 · 2차 전직 구걸 1개
 var CLICK_R={
@@ -1779,12 +1786,12 @@ var CLICK_S={
   'chef.star':['⭐','셰프 테이블'],'chef.tv':['🍳','요리 시연'],'chef.food':['🥟','마트 시식 행사'],'chef.bakery':['🥐','갓 구운 빵 냄새'],'chef.truck':['🌭','축제 시식'],
   'law.firm':['🏢','로펌 세미나'],'law.tvlaw':['📺','사이다 해설'],'law.intl':['🌐','국제 포럼'],'law.ip':['💡','특허 상담'],'law.pros':['🔍','정의 구현'],
 };
-var TIERS_CR=[[3e7,.01],[1.5e9,.04],[6e10,.1]], TIERS_CS=[[8e12,.45]];
+var TIERS_CR=[[3e7,.016,8e3],[1.5e9,.032,9e4],[6e10,.06,9e5]], TIERS_CS=[[8e12,.2,4e7]];
 var _clkKey='', _clkList=null;
 function clickList(){ const key=(S.route||'')+'|'+(S.sub||''); if(key===_clkKey&&_clkList) return _clkList;
   const L=CLICK.map(x=>Object.assign({grp:'common'},x));
-  if(S.route&&CLICK_R[S.route]) CLICK_R[S.route].forEach(([ic,nm,ds],i)=>L.push({id:`cr_${S.route}_${i}`,ic,nm,ds,base:TIERS_CR[i][0],pct:TIERS_CR[i][1],grp:'route'}));
-  const k2=S.route&&S.sub?S.route+'.'+S.sub:null; if(k2&&CLICK_S[k2]){ const [ic,nm]=CLICK_S[k2]; L.push({id:`cs_${k2}_0`,ic,nm,ds:'2차 전직만의 비기',base:TIERS_CS[0][0],pct:TIERS_CS[0][1],grp:'sub'}); }
+  if(S.route&&CLICK_R[S.route]) CLICK_R[S.route].forEach(([ic,nm,ds],i)=>L.push({id:`cr_${S.route}_${i}`,ic,nm,ds,base:TIERS_CR[i][0],pct:TIERS_CR[i][1],add:TIERS_CR[i][2],grp:'route'}));
+  const k2=S.route&&S.sub?S.route+'.'+S.sub:null; if(k2&&CLICK_S[k2]){ const [ic,nm]=CLICK_S[k2]; L.push({id:`cs_${k2}_0`,ic,nm,ds:'2차 전직만의 비기',base:TIERS_CS[0][0],pct:TIERS_CS[0][1],add:TIERS_CS[0][2],grp:'sub'}); }
   _clkKey=key; _clkList=L; return L; }
 
 const PASSERBY = [
@@ -1967,10 +1974,10 @@ function specSheet(a,slot){
 }
 function itemTotal(it,isA){ // 이 돈벌이/구걸이 지금 벌어주는 양
   if(isA){ let t=0; for(const a of autoList()) t+=itemRaw(a); return t>0? cps()*itemRaw(it)/t : 0; }
-  const n=S.click[it.id]||0; if(!n) return 0; const c=(it.add? n*it.add*msMult(n) : n*it.pct*baseCps()*msMult(n));
+  const n=S.click[it.id]||0; if(!n) return 0; const c=n*((it.add||0)+(it.pct||0)*baseCps())*msMult(n);
   return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click'); }
 function itemUnit(it,isA){ if(isA) return it.cps*ECON_A*stageBonus()*mgmtMult()*pathMult();
-  return (it.add? it.add : it.pct*baseCps())*ECON_C*stageBonus()*pathMult()*perkM('click'); }
+  return ((it.add||0)+(it.pct||0)*baseCps())*ECON_C*stageBonus()*pathMult()*perkM('click'); }
 function cpc(){
   let c=1; for(const k of clickList()){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
   return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
@@ -2258,6 +2265,31 @@ const PTYPES=[
   {k:'norm',ic:'🚶',nm:'행인',m:1,w:50},{k:'work',ic:'🧑‍💼',nm:'직장인',m:1.5,w:24},{k:'tour',ic:'📸',nm:'관광객',m:2,w:12},
   {k:'rich',ic:'🤵',nm:'부자',m:4,w:5},{k:'cop',ic:'👮',nm:'경찰',m:0,w:6},{k:'kid',ic:'🧒',nm:'꼬마',m:1,w:8}];
 const isMiniUI=()=>document.body.classList.contains('mini');
+// 행인: 꼬질이와 같은 그림체의 SVG (오른쪽을 보고 걸어요)
+const WLK={norm:{b:'#9ec5f8',p:'#5b6b8c',hair:'#4a3728'},work:{b:'#4b5563',p:'#374151',hair:'#2b2633',tie:'#ef4444',item:'brief'},tour:{b:'#fbbf24',p:'#60a5fa',hair:'#6b4423',hat:'#f97316',item:'cam'},
+  rich:{b:'#1f2937',p:'#111827',hair:'#2b2633',top:1,gold:1,tie:'#f5c451'},cop:{b:'#1e3a8a',p:'#1e293b',hair:'#2b2633',cop:1},kid:{b:'#f472b6',p:'#7c3aed',hair:'#6b4423',kid:1,balloon:1}};
+function walkerSVG(k){ const o=WLK[k]||WLK.norm, s=o.kid?.82:1, O='#4a3728', st=`stroke="${O}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"`;
+  let g=`<ellipse cx="30" cy="86" rx="15" ry="3.5" fill="${O}" opacity=".15"/>`;
+  g+=`<g transform="translate(30 ${o.kid?60:56}) scale(${s}) translate(-30 -56)">`;
+  if(o.balloon) g+=`<path d="M44 46 q6 -14 4 -30" stroke="${O}" stroke-width="1.4" fill="none"/><ellipse cx="48" cy="10" rx="8" ry="9.5" fill="#f87171" ${st}/>`;
+  g+=`<g class="wl1"><rect x="23" y="62" width="7" height="20" rx="3.5" fill="${o.p}" ${st}/><ellipse cx="28" cy="83" rx="6" ry="3.4" fill="${O}"/></g>`;
+  g+=`<g class="wl2"><rect x="31" y="62" width="7" height="20" rx="3.5" fill="${o.p}" ${st}/><ellipse cx="36" cy="83" rx="6" ry="3.4" fill="${O}"/></g>`;
+  g+=`<path d="M17 66 q-1 -24 13 -25 q14 1 13 25 q-13 4 -26 0z" fill="${o.b}" ${st}/>`;
+  if(o.tie) g+=`<path d="M28 43 h4 l1 4 l-3 12 l-3 -12z" fill="${o.tie}" stroke="${O}" stroke-width="1.6"/>`;
+  if(o.cop) g+=`<rect x="34" y="47" width="6" height="5" rx="1" fill="#ffd34d" stroke="${O}" stroke-width="1.4"/>`;
+  if(o.gold) g+=`<circle cx="24" cy="50" r="2.2" fill="#ffd34d"/>`;
+  g+=`<g class="wa"><path d="M40 46 q7 6 6 14" fill="none" stroke="${O}" stroke-width="7.5" stroke-linecap="round"/><path d="M40 46 q7 6 6 14" fill="none" stroke="${o.b}" stroke-width="4.5" stroke-linecap="round"/>`;
+  if(o.item==='brief') g+=`<rect x="40" y="60" width="13" height="10" rx="2" fill="#8a5a36" ${st}/>`;
+  if(o.item==='cam') g+=`<rect x="40" y="56" width="12" height="9" rx="2" fill="#374151" ${st}/><circle cx="46" cy="60.5" r="2.4" fill="#9fd3ff"/>`;
+  g+=`<circle cx="46" cy="61" r="3.4" fill="#ffe0c8" ${st}/></g>`;
+  g+=`<circle cx="31" cy="26" r="15" fill="#ffe3cf" ${st}/>`;
+  g+=`<path d="M16 25 q0 -17 16 -16 q15 0 14 14 q-6 -7 -13 -6 q-9 0 -17 8z" fill="${o.hair}" ${st}/>`;
+  g+=`<ellipse cx="36" cy="27" rx="1.9" ry="2.4" fill="${O}"/><ellipse cx="41" cy="31" rx="2.6" ry="1.6" fill="#ff9fae" opacity=".8"/><path d="M38 34 q2 1.4 4 0" fill="none" stroke="${O}" stroke-width="1.6" stroke-linecap="round"/>`;
+  if(o.hat) g+=`<path d="M15 20 q2 -14 16 -14 q14 0 15 14z" fill="${o.hat}" ${st}/><path d="M38 18 q10 -1 14 3 q-8 2 -14 1z" fill="${o.hat}" ${st}/>`;
+  if(o.top) g+=`<rect x="20" y="0" width="22" height="13" rx="2" fill="#111827" ${st}/><rect x="15" y="11" width="32" height="4" rx="2" fill="#111827" ${st}/><rect x="20" y="8" width="22" height="3" fill="#f5c451"/>`;
+  if(o.cop) g+=`<path d="M15 19 q16 -16 32 0 l-1 4 q-15 -6 -30 0z" fill="#1e3a8a" ${st}/><path d="M38 20 q9 0 12 4 q-7 1 -12 0z" fill="#111827"/><circle cx="31" cy="12" r="2.4" fill="#ffd34d"/>`;
+  if(o.kid) g+=`<path d="M17 18 q14 -14 28 0 l-1 3 q-13 -5 -26 0z" fill="#22c55e" ${st}/>`;
+  return `<svg class="wsvg" viewBox="0 -2 60 92">${g}</g></svg>`; }
 function pickType(){ let t=PTYPES.reduce((a,x)=>a+x.w,0)*Math.random(); for(const p of PTYPES){ if((t-=p.w)<0) return p; } return PTYPES[0]; }
 function zoneWalkers(){
   const sc=$('scene').getBoundingClientRect(), bg=$('beggar').getBoundingClientRect(), cx=bg.left+bg.width/2;
@@ -2293,7 +2325,7 @@ function spawnWalker(){
   const sc=$('scene'), w=document.createElement('div'), right=Math.random()<.5;
   const P=pickType(); w.dataset.k=P.k;
   w.className='walker '+(right?'r':'l')+' wk-'+P.k;
-  w.innerHTML=`<span style="${right?'':'transform:scaleX(-1);display:inline-block'}"><span>${P.ic}</span></span>`;
+  w.innerHTML=`<span style="${right?'transform:scaleX(-1);display:inline-block':'display:inline-block'}"><span>${walkerSVG(P.k)}</span></span>`;
   w.style.setProperty('--sw',sc.clientWidth+'px'); sc.appendChild(w);
   if(w.dataset.k==='norm' && Math.random()<.35*(1+perkA('walkX'))) setTimeout(()=>{
     if(!w.isConnected||paused) return;
@@ -3886,6 +3918,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.2',d:'11/1',items:['⚖️ <b>구걸 다시 정리</b>: 뒤에 나오는 구걸이 <b>항상</b> 앞의 것보다 1개당 더 벌어요 (고정 금액 + 초당 수입 % 둘 다)','🚶 <b>행인을 그림으로</b>: 이모지 대신 꼬질이 그림체의 행인 6종 (행인·직장인·관광객·부자·경찰·꼬마) · 다리와 팔을 흔들며 걸어요']},
   {v:'v4.1.2',d:'10/31',items:['👆 탭을 다시 <b>위로</b> 올렸어요 (창 맞춤은 그대로)']},
   {v:'v4.1.1',d:'10/31',items:['🪟 <b>미니창이 창 크기에 딱 맞게</b>: 길게 늘리지 않아도 돼요 · 목록만 안에서 스크롤','👇 탭을 <b>아래로</b> (폰 게임처럼) · 소리·신분·기록·계정은 오른쪽 위 ☰ 메뉴로','🧹 미니창에선 랭킹 칩·다음 신분 문구를 숨기고 버프가 없을 땐 상태줄도 숨겨요']},
   {v:'v4.1',d:'10/31',items:['💬 돈벌이·구걸 카드에 <b>한 줄 멘트</b> · 가진 것은 <b>지금 실제로 버는 양</b>(초당/클릭당)을 보여줘요','⚖️ <b>구걸 밸런스</b>: 황금 손 독주 끝! 뒤에 나오는 구걸일수록 더 세져요 (황금 손 5%→3%, 감성 버스킹 5%, TV 사연 12%, 해외 원정 30%, 구걸왕 80%)','📈 Lv 옆에 <b>다음 레벨(SP)까지 경험치 바</b>','🎛️ 캐릭터 화면을 키우고, 피버·버프·디버프·자동 스킬을 <b>화면 아래 한 줄</b>로 정리했어요','🎲 <b>전직 시험</b>: 진로·2차 전직은 확률 룰렛 (70%·55%) · 떨어지면 1분 뒤 +15%로 재도전','👑 <b>최종 끝판왕</b>: 마지막 신분은 2차 전직마다 전용 끝판왕 (왕관·망토) · 등극 시험 45% → 환생할지 계속할지 선택 · 계속하면 끝판왕 Lv마다 모든 수입 +3%']},
@@ -4169,7 +4202,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.1.2';
+const GAME_VER='v4.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
