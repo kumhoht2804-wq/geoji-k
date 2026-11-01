@@ -1216,7 +1216,7 @@
   .bi.it{opacity:.55} .bi.it.on{opacity:1} .bi.it.g1{border-color:#94a3b8;box-shadow:0 0 0 1px #cbd5e1} .bi.it.g2{border-color:#d4a017;background:#fff8dc} .bi.it.g3{border-color:#0ea5e9;background:#f0f9ff} .bi.it.g4{border-color:#a855f7;background:#fdf4ff}
   body.mini .bi{width:19px;height:19px;border-width:1.5px;border-radius:6px} body.mini .bi img.e3d{width:13px;height:13px} body.mini .bi em{font-size:7px;right:-3px;bottom:-4px}
   body.mini #topRow{margin-bottom:5px;gap:4px} body.mini #topRow #stChip{padding:1px 6px 1px 2px!important}
-  #topRow #skbar .skb:not(.run){display:none!important}
+  #topRow #skbar{display:none!important}
   #topRow #stc{flex-wrap:nowrap!important;overflow:hidden}
   #topRow #skbar .skb{width:24px!important;height:24px!important;border-width:2px!important;border-radius:7px!important;box-shadow:none!important} body.mini #topRow #skbar .skb{width:19px!important;height:19px!important;border-width:1.5px!important}
   /* v4.6.1 줄 정리: 위 줄(Lv·버프) → 돈벌이 줄 → 캐릭터 화면 → 미션 줄 → 신분 바 · 모두 같은 폭 */
@@ -1260,6 +1260,7 @@
   body.mini .nws .nl>div{height:22px;padding:0 5px!important;font-size:10.5px!important;grid-template-columns:minmax(0,1fr) 30px} body.mini .nws .nl>div span img.e3d{display:none} body.mini .nws .nl>div span{gap:2px} body.mini .nws .nl>div b{font-size:10.5px}
   .nws .nl .up b{color:#15803d!important} .nws .nl .dn b{color:#b91c1c!important}
   .nws .nf{font-size:11.5px;color:#5a4436;margin:6px 0} .nws .nf span{color:#9a8670;font-size:10.5px}
+  #topRow #stc>.bi{flex:none} #topRow #stat{justify-content:flex-end} #topRow #stChip{flex:0 1 auto;min-width:0}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -3865,7 +3866,8 @@ function statRender(){
   { const sc=getComputedStyle($('scene')), sec=$('scene').parentElement, ml=sc.marginLeft; if(sec._m!==ml){ sec._m=ml; sec.style.setProperty('--scm',ml); } }
   const key=C.map(c=>c.join('|')).join('/'); const el=$('stc'); if(el._k===key) return; el._k=key;
   $('stat').classList.toggle('empty',!C.length&&!(S.skill&&actSkills().length));
-  const MX=isMiniUI()?5:8, more=C.length-MX; if(more>0) C.length=MX;
+  for(const n of actSkills()){ const e=(S.actEnd||{})[n.id]||0; if(e>Date.now()) C.unshift(['bf sk',n.ic,n.nm,sec(e)]); }
+  const stw=$('stat').clientWidth||120, isz=isMiniUI()?23:29, cap=Math.max(2,Math.floor((stw+3)/isz)); let more=0; if(C.length>cap){ more=C.length-(cap-1); C.length=cap-1; }
   el.innerHTML=C.map(([k,i,t,s])=>`<span class="bi ${k}" title="${t}${s&&s!=='👔'?' · '+s:''}">${emo(i)}${s==='👔'?'<i class="mg">👔</i>':''}<em>${k.startsWith('it')?t:s||t.replace(/^.*×/,'×')}</em></span>`).join('')+(more>0?`<span class="bi more">+${more}</span>`:'');
   $('scene').classList.toggle('buffed', S.buffs.length>0);
 }
@@ -4123,6 +4125,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.8.5',d:'11/1',items:['🧹 위 줄 아이콘 겹침 수정: 발동 중인 스킬도 버프 아이콘과 같은 줄에 같이 정렬 · 칸 폭에 맞게 들어갈 만큼만 보이고 나머지는 +N']},
   {v:'v4.8.4',d:'11/1',items:['♻️ <b>환생이 취소되던 문제</b> 수정: 환생하면 저장 번호가 0으로 돌아가서, 서버에 있던 환생 전 기록을 \'더 최신\'으로 착각하고 다시 불러오던 오류 · 이제 환생 기록이 바로 서버에 저장돼요']},
   {v:'v4.8.3',d:'11/1',items:['🔧 <b>업데이트를 눌러도 \'지금 적용\'이 계속 뜨던 문제</b> 수정: 폰(웹)에선 새 버전이 실제로 반영된 뒤에만 알려줘요','🧪 12개 진로 × 모든 탭·창·이벤트·카드·특화·환생·전직 시험을 미니창·큰 창에서 점검 (오류 0개)']},
   {v:'v4.8.2',d:'11/1',items:['📱↔💻 <b>모바일·PC 기록이 서로 다르던 문제</b> 수정: 저장할 때마다 번호를 붙여서 기기 시계와 상관없이 <b>더 나중에 저장된 기록</b>을 써요 · PC 창을 다시 클릭하거나 20초마다 다른 기기 기록을 확인해요']},
@@ -4506,7 +4509,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.8.4';
+const GAME_VER='v4.8.5';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
