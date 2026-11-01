@@ -1233,8 +1233,11 @@
   .gate #bar{background:linear-gradient(90deg,#fde047,#f59e0b)!important}
   #xpTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%} body.mini #xpTxt{font-size:9px!important}
   .bi.nw{cursor:pointer}
+  .item .ef .sct{font-style:normal;font-size:9.5px;margin-left:4px;padding:0 4px;border-radius:5px;vertical-align:1px} .item .ef .sct.up{background:#dcfce7;color:#15803d} .item .ef .sct.dn{background:#fee2e2;color:#b91c1c} body.mini .item .ef .sct{font-size:8.5px}
+  .nws .nl b small{font-size:9px;color:#8a7560}
   .nws .nh{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff8e6;border-radius:12px;padding:8px;margin:4px 0 8px} .nws .nh img.e3d{width:34px;height:34px} .nws .nh b{font-size:15px} .nws .nh small{font-size:10.5px;color:#8a7560}
   .nws .nl{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px} .nws .nl>div{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;background:#fbf5ea;border-radius:8px;padding:4px 7px}
+  .nws .nl>div{white-space:nowrap;gap:4px} .nws .nl span{overflow:hidden;text-overflow:ellipsis} body.mini .nws .nl>div{font-size:10.5px;padding:3px 6px} body.mini .nws .nl{gap:3px}
   .nws .nl img.e3d{width:14px;height:14px;vertical-align:-2px} .nws .nl .up b{color:#15803d} .nws .nl .dn b{color:#b91c1c} .nws .nl .me{outline:2px solid #f5b65c}
   body.phone{background:#fdf6ea} body.phone .wrap{padding:4px!important;margin:0 auto}
   /* v4.4 직업 이벤트 */
@@ -1923,7 +1926,7 @@ function renderMoney(v){
   groups.forEach(([d],i)=>{ const q=(i===groups.length-1 && d===1)?Math.floor(r):Math.max(0,Math.floor(r/d+1e-9)); r=Math.max(0,r-q*d); const t=q.toLocaleString('ko-KR'); if(moneyEls[i].textContent!==t) moneyEls[i].textContent=t; });
 }
 var COST_G=1.25;
-const cost = (b,n)=>Math.ceil(b*Math.pow(COST_G,n)*Math.max(.5,1-perkA('discount')));
+const cost = (b,n)=>Math.ceil(b*Math.pow(COST_G,n)*Math.max(.5,1-perkA('discount'))*(typeof buffV==='function'&&buffV('disc')?buffV('disc'):1));
 
 function sk(id){ return (S.skill&&S.skill[id])||0; }
 function feverMult(){ return (typeof feverEnd!=='undefined' && Date.now()<feverEnd) ? 3+perkA('feverX') : 1; }
@@ -1968,7 +1971,7 @@ function traitList(){
 function trk(k){ let t=0; for(const T of traitList()){ const c=(S.trait||{})[T.t]; if(!c) continue; const f=c==='a'?T.fa:T.fb; if(f&&f[k]) t+=f[k]; } return t; }
 function tr(t){ return (S.trait||{})[t]||null; }
 function starMult(id){ return Math.pow(1.5,(S.star||{})[id]||0); }
-function itemRaw(a){ const n=S.auto[a.id]||0; return n*a.cps*msMult(n)*starMult(a.id)*synMult(a)*(a.grp==='route'?(S.rMul||1):1); }
+function itemRaw(a){ const n=S.auto[a.id]||0; return n*a.cps*msMult(n)*starMult(a.id)*synMult(a)*(a.grp==='route'?(S.rMul||1):1)*(typeof sectMul==='function'?sectMul(sectOf(a)):1); }
 function isMgr(id){ return !!(S.mgr||{})[id]; }
 function manualBoost(){ return 1; }
 var ECON_A=0.12, ECON_C=0.28;   // v2.3.3 수입 속도 조절
@@ -1985,21 +1988,38 @@ function onlineMult(){
   const ratio=(lead.total||1)/Math.max(1,mine.total||1);
   return Math.min(1.5, 1+Math.max(0,Math.log10(ratio))/8);
 }
+var SECT={street:['🥫','서민 경제'],food:['🍗','외식'],retail:['🛒','유통'],office:['🏢','기업'],finance:['🏦','금융'],ent:['🎤','연예'],media:['📺','미디어'],public:['🏛️','공공'],
+  medical:['🏥','의료'],sports:['⚽','스포츠'],tech:['💻','IT'],culture:['🎨','문화'],legal:['⚖️','법률'],estate:['🏙️','부동산'],energy:['🛢️','에너지'],crypto:['🪙','코인']};
+var R_SECT={biz:'food',job:'office',inv:'finance',star:'ent',cre:'media',gov:'public',doc:'medical',ath:'sports',dev:'tech',art:'culture',chef:'food',law:'legal'};
+var S_SECT={'biz.retail':'retail','biz.estate':'estate','biz.hotel':'estate','biz.deliv':'retail','job.startup':'tech','job.fire':'estate','inv.coin':'crypto','inv.oil':'energy','inv.gold':'finance','inv.vc':'tech',
+  'star.ad':'media','star.mc':'media','cre.game':'tech','cre.comm':'retail','cre.edu':'media','gov.judge':'legal','doc.bio':'medical','doc.tvdoc':'media','ath.caster':'media','dev.block':'crypto','dev.gamedev':'tech',
+  'art.webtoon':'media','chef.food':'retail','chef.tv':'media','law.ip':'tech'};
+var C_SECT={cup:'street',sign:'street',guitar:'street',paper:'street',store:'retail',fish:'food'};
+function sectOf(a){ if(C_SECT[a.id]) return C_SECT[a.id]; if(a.grp==='sub'&&S.route&&S.sub) return S_SECT[S.route+'.'+S.sub]||R_SECT[S.route]; if(a.grp==='route'&&S.route) return R_SECT[S.route]; return 'street'; }
 var NEWS=[
-  {ic:'🦠',t:'독감 대유행',m:{doc:1.5,chef:.85,star:.85,ath:.85}},{ic:'📈',t:'증시 대호황',m:{inv:1.6,biz:1.1,gov:.9}},{ic:'📉',t:'증시 폭락',m:{inv:.6,law:1.2,gov:1.15}},
-  {ic:'🎬',t:'K-콘텐츠 열풍',m:{star:1.5,cre:1.3,art:1.1}},{ic:'🤖',t:'AI 붐',m:{dev:1.6,job:.9,art:.85}},{ic:'⚽',t:'월드컵 개막',m:{ath:1.6,chef:1.2,cre:1.2}},
-  {ic:'🍗',t:'치맥 열풍',m:{biz:1.4,chef:1.3,doc:.9}},{ic:'🗳️',t:'선거철',m:{gov:1.4,law:1.2,cre:1.1}},{ic:'⚖️',t:'대형 소송 러시',m:{law:1.6,biz:.85}},
-  {ic:'🖼️',t:'미술품 경매 신기록',m:{art:1.6,inv:1.1}},{ic:'💼',t:'채용 시즌',m:{job:1.4,gov:1.1}},{ic:'🌧️',t:'긴 장마',m:{biz:1.2,cre:1.2,ath:.8,chef:.9}},
-  {ic:'💸',t:'경기 침체',m:{all:.9,gov:1.2,law:1.1,biz:.8},beg:1.2},{ic:'🎄',t:'연말 특수',m:{biz:1.3,star:1.3,chef:1.3},beg:1.3},{ic:'📱',t:'숏폼 대유행',m:{cre:1.6,star:1.1}},
-  {ic:'🍳',t:'요리 예능 대박',m:{chef:1.6,biz:1.1}},{ic:'🏗️',t:'부동산 들썩',m:{biz:1.3,inv:1.2,law:1.1}},{ic:'☀️',t:'평온한 하루',m:{}},{ic:'💉',t:'백신 개발 성공',m:{doc:1.4,inv:1.2}},{ic:'🎮',t:'게임 대회 시즌',m:{cre:1.4,dev:1.2}}];
+  {ic:'🦠',t:'신종 전염병 확산',m:{medical:1.7,media:1.3,tech:1.2,food:.7,ent:.6,sports:.6,street:.75,retail:.85}},
+  {ic:'⚔️',t:'국지전 발발',m:{energy:1.9,public:1.2,crypto:1.3,tech:1.1,finance:.7,estate:.8,food:.9,ent:.8}},
+  {ic:'💹',t:'기준금리 인하',m:{estate:1.5,finance:1.3,crypto:1.4,retail:1.1}},{ic:'🏦',t:'기준금리 인상',m:{estate:.7,crypto:.7,finance:1.2,tech:.85}},
+  {ic:'🛢️',t:'국제 유가 폭등',m:{energy:1.8,food:.85,retail:.85,street:.85}},{ic:'🤖',t:'AI 혁명',m:{tech:1.7,media:1.1,office:.8,culture:.85}},
+  {ic:'⚽',t:'월드컵 개막',m:{sports:1.7,food:1.3,media:1.2,ent:1.1}},{ic:'🎬',t:'한류 대폭발',m:{ent:1.6,media:1.3,culture:1.2,food:1.1}},
+  {ic:'🌪️',t:'초대형 태풍',m:{food:.8,retail:.8,street:.75,energy:1.2,public:1.3,legal:1.1}},{ic:'🗳️',t:'대선 정국',m:{public:1.4,media:1.3,legal:1.2}},
+  {ic:'🏚️',t:'부동산 거품 붕괴',m:{estate:.5,finance:.8,legal:1.4}},{ic:'🚀',t:'코인 광풍',m:{crypto:2,finance:1.1,tech:1.2}},{ic:'🧊',t:'코인 대폭락',m:{crypto:.4,legal:1.2,finance:.9}},
+  {ic:'🍗',t:'치맥 열풍',m:{food:1.5,retail:1.1,street:1.1}},{ic:'🎄',t:'연말 특수',m:{retail:1.4,food:1.3,ent:1.3,street:1.3}},
+  {ic:'💸',t:'경기 불황',m:{all:.9,public:1.25,legal:1.2,street:1.25,estate:.8}},{ic:'🧪',t:'신약 임상 성공',m:{medical:1.5,finance:1.1}},
+  {ic:'📱',t:'숏폼 대유행',m:{media:1.6,ent:1.1,culture:.9}},{ic:'🏗️',t:'대규모 국책 사업',m:{estate:1.3,public:1.3,energy:1.1,office:1.1}},
+  {ic:'🖼️',t:'미술품 경매 신기록',m:{culture:1.6,finance:1.1}},{ic:'💼',t:'수출 호황',m:{office:1.4,tech:1.2,finance:1.1}},{ic:'☀️',t:'평온한 하루',m:{}}];
 function newsNow(){ const blk=Math.floor(Date.now()/1800000); return {n:NEWS[hsh('news'+blk)%NEWS.length], left:1800000-(Date.now()%1800000), blk}; }
-function newsMul(n){ n=n||newsNow().n; if(!S.route) return n.beg||1; return (n.m[S.route]||1)*(n.m.all||1); }
+var _sct={t:0,v:{}};
+function sectMul(k){ const now=Date.now(); if(now-_sct.t>3000){ const N=newsNow().n, b5=Math.floor(now/300000), v={};
+    for(const s in SECT){ const w=.9+(hsh(s+':'+b5)%201)/1000; v[s]=(N.m[s]||1)*(N.m.all||1)*w; } _sct={t:now,v}; } return _sct.v[k]||1; }
+function sectPrev(k){ const b5=Math.floor(Date.now()/300000)-1, blk=Math.floor((b5*300000)/1800000), N=NEWS[hsh('news'+blk)%NEWS.length]; return (N.m[k]||1)*(N.m.all||1)*(.9+(hsh(k+':'+b5)%201)/1000); }
+function newsMul(){ let t=0,w=0; for(const a of autoList()){ const r=itemRaw(a); if(r>0){ w+=r; t+=r*sectMul(sectOf(a)); } } return w?t/w:1; }   // 내 돈벌이 전체에 미치는 영향
 var _nwsM={t:0,v:1};
 var _lastBegT=0, _clkM={t:0,v:1};
 function clockMult(){ const n=Date.now(); if(n-_clkM.t<5000) return _clkM.v; const d=new Date(), hr=d.getHours(), wd=d.getDay(); let v=1;
   if(hr>=21||hr<6) v*=1+perkA('nightX'); if(wd>0&&wd<6&&hr>=9&&hr<18) v*=1+perkA('workX'); _clkM={t:n,v}; return v; }
 function actMult(){ const d=performance.now()-_lastBegT; return d<1500?1+perkA('handsOn'):d>30000?1+perkA('idleBoost'):1; }
-function pathMult(){ const n=Date.now(); if(n-_nwsM.t>5000) _nwsM={t:n,v:newsMul()}; return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult()*clockMult()*(1+.03*bossLv())*_nwsM.v; }
+function pathMult(){ return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult()*clockMult()*(1+.03*bossLv()); }
 function cps(){ return baseCps()*feverMult()*pathMult(); }
 function managedShare(){ let m=0,t=0; for(const a of autoList()){ const v=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); t+=v; if(isMgr(a.id)) m+=v; } return t?m/t:0; }
 function managedCps(){ return cps()*managedShare(); }
@@ -2055,7 +2075,7 @@ function itemUnit(it,isA){ if(isA) return it.cps*ECON_A*stageBonus()*mgmtMult()*
   return ((it.add||0)+(it.pct||0)*baseCps())*ECON_C*stageBonus()*pathMult()*perkM('click'); }
 function cpc(){
   let c=1; for(const k of clickList()){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
-  return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
+  return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click')*sectMul('street');
 }
 function totalStage(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }   // Lv 계산용 (누적 수입)
 function stageIdx(){ return S.stage==null ? totalStage() : Math.min(S.stage, totalStage()); }       // 실제 신분 (조건을 채워야 올라가요)
@@ -2109,7 +2129,8 @@ function renderList(){
     el.dataset.id=it.id;
     const mm=msMult(n), nx=msNext(n), pv=msPrev(n);
     const unitT=tab==='auto'?'초당':'클릭당', tot=n?itemTotal(it,tab==='auto'):0;
-    const extra = n ? `${unitT} <b>+${fmt(tot)}</b>` : `1개 ${unitT} +${fmt(itemUnit(it,tab==='auto'))}`;
+    const sm=tab==='auto'?sectMul(sectOf(it)):1, smT=Math.abs(sm-1)>.02?` <i class="sct ${sm>1?'up':'dn'}">${SECT[sectOf(it)][0]}${sm>1?'▲':'▼'}${Math.round(Math.abs(sm-1)*100)}%</i>`:'';
+    const extra = (n ? `${unitT} <b>+${fmt(tot)}</b>` : `1개 ${unitT} +${fmt(itemUnit(it,tab==='auto'))}`)+smT;
     const msPct = nx ? ((n-pv)/(nx-pv)*100) : 100;
     const isA=tab==='auto', m=isA&&isMgr(it.id), stv=(S.star||{})[it.id]||0, so=isA?specOpen(it):-1, sp=isA?specOf(it.id).filter(Boolean):[];
     const dot = !isA||!n ? '' : so>=0 ? 'sp' : (!m && S.money>=mgrCost(it)) ? 'mg' : '';
@@ -2436,7 +2457,7 @@ let ch={on:false,end:0,count:0};
 function comboMult(){ return 1+Math.min(20+perkA('comboMax'),Math.floor(combo/10))*0.1; }
 function beg(x,y){
   const now=performance.now();
-  const cw=700*(1+perkA('comboKeep'));
+  const cw=buffV('combo')?3600000:700*(1+perkA('comboKeep'));
   combo = (now-lastBeg<cw) ? combo+1 : 1; lastBeg=now; _lastBegT=now;
   if(combo>S.maxCombo) S.maxCombo=combo; if(combo>(S.misCombo||0)) S.misCombo=combo; if(combo>(S.dayCombo||0)) S.dayCombo=combo;
   if(ch.on) ch.count++;
@@ -2445,7 +2466,7 @@ function beg(x,y){
   const wm=walkerMult();
   let v=cpc()*comboMult()*wm, big='';
   if(feverEnd>Date.now() && perkA('feverClick')) v*=1+perkA('feverClick');
-  if(Math.random()<perkA('critP')){ v*=10; big='💥 '; }
+  if(Math.random()<perkA('critP')+buffV('crit')){ v*=10; big='💥 '; }
   if(perkA('jackpot') && (S.clicks+1)%100===0){ v*=perkA('jackpot'); big='🎬 '; }
   earn(v); S.clicks++;
   if(perkA('comboBag') && combo%perkA('comboBag')===0) spawnGold();
@@ -2786,7 +2807,7 @@ function renderSkbar(force){
 function useAct(id,auto){
   const n=SKILLS.find(x=>x.id===id), l=sk(id); if(!n||!l) return; S.cd=S.cd||{}; S.actEnd=S.actEnd||{};
   const now=Date.now(); if((S.cd[id]||0)>now) return;
-  const dur=n.act.dur(l)*1000; S.buffs=S.buffs||[]; S.buffs.push({k:n.act.k,m:n.act.m(l),end:now+dur,label:n.ic,auto:1}); S.cd[id]=now+n.act.cd*1000; S.actEnd[id]=now+dur;
+  const dur=n.act.dur(l)*1000; S.buffs=S.buffs||[]; S.buffs.push({k:n.act.k,m:n.act.m(l),end:now+dur,label:n.ic,auto:1}); if(n.act.k==='combo') S.buffs.push({k:'click',m:2,end:now+dur,label:n.ic,auto:1}); S.cd[id]=now+n.act.cd*1000; S.actEnd[id]=now+dur; if(n.act.fx) try{ n.act.fx(l); }catch(e){}
   if(auto){ renderSkbar(); return; }
   const sc=$('scene').getBoundingClientRect(); for(let q=0;q<30;q++){ const a=Math.random()*Math.PI*2, sp=60+Math.random()*160; fxAdd({type:'spark',x:sc.left+sc.width/2,y:sc.top+sc.height*.6,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,drag:.95,g:20,r:1+Math.random(),life:1+Math.random(),fo:.4}); }
   renderSkbar(); render();
@@ -3260,10 +3281,18 @@ const JOB_ACT={biz:['⏰','타임 세일'],job:['📊','실적 몰아치기'],in
 const STT={ // 스킬 효과 종류 (레벨당)
   click:{click:.07}, auto:{auto:.06}, combo:{click:.035,comboMax:1}, luck:{goldFreq:.045,goldBonus:.06}, fever:{feverP:.015,feverS:1},
   idle:{idleEff:.035,idleH:.5}, def:{evRes:.035,pvpDef:.035}, disc:{discount:.012,mgrDisc:.035}, mgr:{mgrUp:.05}, tip:{tipP:.003,click:.025}};
-const SBUF={ clickB:{k:'click',m:l=>3,dur:l=>10+4*l,cd:180,t:'구걸'}, autoB:{k:'auto',m:l=>2.5,dur:l=>20+6*l,cd:480,t:'자동 수입'}, allB:{k:'all',m:l=>2,dur:l=>20+5*l,cd:600,t:'모든 수입'} };
+const SBUF={ clickB:{k:'click',m:l=>3,dur:l=>10+4*l,cd:180,t:'구걸'}, autoB:{k:'auto',m:l=>2.5,dur:l=>20+6*l,cd:480,t:'자동 수입'}, allB:{k:'all',m:l=>2,dur:l=>20+5*l,cd:600,t:'모든 수입'},
+  discB:{k:'disc',m:l=>.7,dur:l=>30+6*l,cd:420,ef:(l,d)=>`${d}초간 돈벌이 가격 -30%`},
+  critB:{k:'crit',m:l=>.2+.02*l,dur:l=>12+3*l,cd:300,ef:(l,d)=>`${d}초간 구걸 ${Math.round((.2+.02*l)*100)}% 확률로 ×10`},
+  comboB:{k:'combo',m:l=>2,dur:l=>12+3*l,cd:360,ef:(l,d)=>`${d}초간 콤보 안 끊김 + 구걸 ×2`},
+  shieldB:{k:'shield',m:l=>1,dur:l=>120+30*l,cd:900,ef:(l,d)=>`${d}초간 악재 면역`},
+  rainB:{k:'rain',m:l=>1,dur:l=>6,cd:600,ef:l=>`돈주머니 ${3+Math.floor(l/2)}개가 쏟아져요`,fx:l=>{ for(let i=0;i<3+Math.floor(l/2);i++) setTimeout(spawnGold,200+i*250); }},
+  feverB:{k:'fv',m:l=>1,dur:l=>8+2*l,cd:900,ef:(l,d)=>`즉시 피버 ${d}초`,fx:l=>startFever(8+2*l)},
+  warpB:{k:'warp',m:l=>1,dur:l=>4,cd:900,ef:l=>`즉시 ${2+l}분치 수입`,fx:l=>{ const g=cps()*60*(2+l); earn(g); toast(`⏩ ${2+l}분치 수입 +${fmt(g)}`); }} };
+function buffV(k){ const n=Date.now(); let v=0; for(const b of (S.buffs||[])) if(b.k===k&&b.end>n) v=Math.max(v,b.m); return v; }
 function mkSk(o){ // o:{id,br,ln,ic,nm,type,max,req,reqAny,route,sub,d,ult}
   const n=Object.assign({max:SBUF[o.type]?5:10},o); if(o.max==null) delete o.max;
-  if(SBUF[o.type]){ const b=SBUF[o.type]; n.act={k:b.k,m:b.m,dur:b.dur,cd:b.cd}; n.ef=l=>`${b.dur(l)}초간 ${b.t} ×${b.m(l)} · ${Math.round(b.cd/60)}분마다`; }
+  if(SBUF[o.type]){ const b=SBUF[o.type]; n.act={k:b.k,m:b.m,dur:b.dur,cd:b.cd,fx:b.fx}; n.ef=l=>`${b.ef?b.ef(l,b.dur(l)):`${b.dur(l)}초간 ${b.t} ×${b.m(l)}`} · ${Math.round(b.cd/60)}분마다`; }
   else { const e=o.eff||STT[o.type]; n.eff=e; n.ef=l=>effText(Object.fromEntries(Object.entries(e).map(([k,v])=>[k,+(v*l).toFixed(3)]))); }
   return n; }
 const TREE0={A:'🙏 구걸 길',B:'🏪 장사 길'};
@@ -3290,53 +3319,53 @@ var PSP={ // 길 전용 효과
 var PSPV={payday:20,walkX:1,offInt:.5,nightX:.5,workX:.3,handsOn:.3,idleBoost:.5,critP:.08,comboKeep:1,bagChain:.3,jackpot:50,feverBag:3,shield:1,pendCap:1,comboBag:50,feverClick:1,bigBag:.1,feverLong:.5,mgrDisc:.4};
 var RTREE={
   biz:{r:['🍗','장사 수완','auto'],u:['🏢','외식 제국'],
-    A:['🏪 확장 길',[['🏪','2호점','auto'],['💰','박리다매','disc'],['⏰','타임 세일','autoB']],['💵','정산일','payday']],
-    B:['🍗 맛집 길',[['📺','맛집 방송','luck'],['🔥','불맛 비법','fever'],['🎉','오픈 이벤트','allB']],['👥','줄 서는 집','walkX']],
+    A:['🏪 확장 길',[['🏪','2호점','auto'],['💰','박리다매','disc'],['⏰','타임 세일','discB']],['💵','정산일','payday']],
+    B:['🍗 맛집 길',[['📺','맛집 방송','luck'],['🔥','불맛 비법','fever'],['🎉','오픈 이벤트','rainB']],['👥','줄 서는 집','walkX']],
     C:['🛵 배달 길',[['🛵','배달앱 입점','idle'],['📦','묶음 배송','auto'],['🌙','야식 피크','autoB']],['🌙','자는 동안 주문','offInt']]},
   job:{r:['💼','회사 생활','auto'],u:['🏆','올해의 사원'],
-    A:['🌙 야근 길',[['☕','커피 수혈','click'],['🔥','야근 버프','fever'],['📊','실적 몰아치기','clickB']],['🌃','야근 수당','nightX']],
-    B:['📈 승진 길',[['🤝','사내 정치','auto'],['📑','보고서 장인','mgr'],['📈','연봉 협상','autoB']],['📊','성과 압박','handsOn']],
+    A:['🌙 야근 길',[['☕','커피 수혈','click'],['🔥','야근 버프','fever'],['📊','실적 몰아치기','critB']],['🌃','야근 수당','nightX']],
+    B:['📈 승진 길',[['🤝','사내 정치','auto'],['📑','보고서 장인','mgr'],['📈','연봉 협상','warpB']],['📊','성과 압박','handsOn']],
     C:['🏖️ 워라밸 길',[['🕔','칼퇴','idle'],['🏖️','연차 활용','idle'],['🧘','멘탈 관리','def']],['🛋️','여유','idleBoost']]},
   inv:{r:['📈','차트 감각','luck'],u:['🐋','고래'],
-    A:['📊 단타 길',[['⚡','스캘핑','fever'],['🎢','레버리지','luck'],['🚀','풀매수','allB']],['⚡','단타 적중','critP']],
-    B:['💎 장투 길',[['💎','존버','idle'],['🏦','배당주','auto'],['🛡️','손절의 미학','def']],['🏦','복리 이자','offInt']],
-    C:['🎰 몰빵 길',[['🎰','몰빵','luck'],['🎲','영끌','fever'],['🌕','떡상 기원','allB']],['🎰','잭팟','bigBag']]},
+    A:['📊 단타 길',[['⚡','스캘핑','fever'],['🎢','레버리지','luck'],['🚀','풀매수','critB']],['⚡','단타 적중','critP']],
+    B:['💎 장투 길',[['💎','존버','idle'],['🏦','배당주','auto'],['🛡️','손절의 미학','shieldB']],['🏦','복리 이자','offInt']],
+    C:['🎰 몰빵 길',[['🎰','몰빵','luck'],['🎲','영끌','fever'],['🌕','떡상 기원','rainB']],['🎰','잭팟','bigBag']]},
   star:{r:['🌟','스타성','click'],u:['👑','국민 스타'],
-    A:['🎤 무대 길',[['💖','팬서비스','combo'],['🔁','역주행','fever'],['🎤','앵콜 무대','clickB']],['🎶','앵콜 요청','comboKeep']],
+    A:['🎤 무대 길',[['💖','팬서비스','combo'],['🔁','역주행','fever'],['🎤','앵콜 무대','comboB']],['🎶','앵콜 요청','comboKeep']],
     B:['📢 광고 길',[['📢','CF 촬영','luck'],['🧸','굿즈 판매','auto'],['🎬','예능 출연','allB']],['📸','협찬 행렬','bagChain']],
-    C:['🎭 연기 길',[['🎭','캐릭터 분석','click'],['😢','눈물 연기','combo'],['🎬','명장면','clickB']],['🎬','인생 연기','jackpot']]},
+    C:['🎭 연기 길',[['🎭','캐릭터 분석','click'],['😢','눈물 연기','combo'],['🎬','명장면','critB']],['🎬','인생 연기','jackpot']]},
   cre:{r:['🎥','콘텐츠 감각','luck'],u:['🌐','갓튜버'],
-    A:['🔥 떡상 길',[['🤖','알고리즘','luck'],['🔥','떡상','fever'],['🔴','라이브 방송','allB']],['🔥','알고리즘 폭발','feverBag']],
+    A:['🔥 떡상 길',[['🤖','알고리즘','luck'],['🔥','떡상','fever'],['🔴','라이브 방송','rainB']],['🔥','알고리즘 폭발','feverBag']],
     B:['🐢 꾸준 길',[['📅','꾸준 업로드','auto'],['🤝','협찬','auto'],['💸','슈퍼챗','clickB']],['📅','정기 후원','payday']],
-    C:['💬 소통 길',[['💬','댓글 소통','click'],['🎁','구독자 이벤트','tip'],['🎮','합방','clickB']],['💬','실시간 소통','handsOn']]},
+    C:['💬 소통 길',[['💬','댓글 소통','click'],['🎁','구독자 이벤트','tip'],['🎮','합방','comboB']],['💬','실시간 소통','handsOn']]},
   gov:{r:['📁','행정 능력','auto'],u:['🏛️','고위 공직자'],
-    A:['📚 승진 길',[['📚','승진 시험','click'],['📈','호봉 승급','auto'],['📜','예산 집행','autoB']],['🏢','근무 시간','workX']],
-    B:['🍚 철밥통 길',[['🍚','철밥통','def'],['🏦','공무원 연금','idle'],['🕔','칼퇴','allB']],['🛡️','신분 보장','shield']],
+    A:['📚 승진 길',[['📚','승진 시험','click'],['📈','호봉 승급','auto'],['📜','예산 집행','warpB']],['🏢','근무 시간','workX']],
+    B:['🍚 철밥통 길',[['🍚','철밥통','def'],['🏦','공무원 연금','idle'],['🕔','칼퇴','shieldB']],['🛡️','신분 보장','shield']],
     C:['📮 민원 길',[['📞','민원 응대','click'],['🙇','친절 공무원','tip'],['📮','민원 폭주','clickB']],['📮','민원 처리','pendCap']]},
   doc:{r:['🩺','의술','auto'],u:['👨‍⚕️','명의'],
-    A:['🔪 외과 길',[['🔪','수술 집도','click'],['🫀','집중력','combo'],['🩸','마라톤 수술','clickB']],['🔪','연속 수술','comboBag']],
+    A:['🔪 외과 길',[['🔪','수술 집도','click'],['🫀','집중력','combo'],['🩸','마라톤 수술','comboB']],['🔪','연속 수술','comboBag']],
     B:['🩺 내과 길',[['💊','처방전','auto'],['🌙','당직 수당','idle'],['🏥','외래 진료','autoB']],['🩺','진료 시간','workX']],
-    C:['🚑 응급 길',[['🚑','응급 대응','fever'],['⏱️','골든타임','luck'],['🚑','응급 출동','clickB']],['🚑','골든타임','feverClick']]},
+    C:['🚑 응급 길',[['🚑','응급 대응','fever'],['⏱️','골든타임','luck'],['🚑','응급 출동','feverB']],['🚑','골든타임','feverClick']]},
   ath:{r:['🏃','체력','click'],u:['🥇','레전드'],
-    A:['⚽ 공격수 길',[['⚽','슈팅','click'],['⚡','폭발적 스퍼트','combo'],['⚡','폭풍 질주','clickB']],['⚽','골 결정력','critP']],
-    B:['🧱 수비수 길',[['🧱','철벽 수비','def'],['🤝','스폰서 계약','auto'],['🏆','우승 보너스','allB']],['🧱','철벽','shield']],
+    A:['⚽ 공격수 길',[['⚽','슈팅','click'],['⚡','폭발적 스퍼트','combo'],['⚡','폭풍 질주','feverB']],['⚽','골 결정력','critP']],
+    B:['🧱 수비수 길',[['🧱','철벽 수비','def'],['🤝','스폰서 계약','auto'],['🏆','우승 보너스','warpB']],['🧱','철벽','shield']],
     C:['🫁 체력 길',[['🫁','지구력','combo'],['🏋️','체력 단련','click'],['🔥','투혼','fever']],['🫁','지치지 않는 몸','comboKeep']]},
   dev:{r:['💻','코딩 실력','auto'],u:['🧠','10x 개발자'],
-    A:['⌨️ 손코딩 길',[['⌨️','손코딩','click'],['🔥','몰입','combo'],['🚀','긴급 배포','clickB']],['⌨️','커밋 폭주','comboBag']],
+    A:['⌨️ 손코딩 길',[['⌨️','손코딩','click'],['🔥','몰입','combo'],['🚀','긴급 배포','critB']],['⌨️','커밋 폭주','comboBag']],
     B:['⚙️ 자동화 길',[['⚙️','자동화 스크립트','idle'],['☁️','클라우드','auto'],['📦','오픈소스','autoB']],['⚙️','크론잡','idleBoost']],
-    C:['🐛 디버깅 길',[['🐛','버그 헌터','luck'],['🔎','로그 분석','fever'],['🏆','버그 바운티','allB']],['🐛','버그 포상금','bagChain']]},
+    C:['🐛 디버깅 길',[['🐛','버그 헌터','luck'],['🔎','로그 분석','fever'],['🏆','버그 바운티','rainB']],['🐛','버그 포상금','bagChain']]},
   art:{r:['🎨','미적 감각','luck'],u:['🏛️','거장'],
-    A:['💡 영감 길',[['💡','영감','luck'],['🎲','경매 촉','fever'],['🎨','라이브 드로잉','allB']],['💡','걸작','bigBag']],
+    A:['💡 영감 길',[['💡','영감','luck'],['🎲','경매 촉','fever'],['🎨','라이브 드로잉','feverB']],['💡','걸작','bigBag']],
     B:['🖌️ 노력 길',[['🖌️','붓터치 장인','click'],['🖼️','작품 값 상승','auto'],['📚','화집 출간','autoB']],['🖼️','백 번째 붓질','jackpot']],
-    C:['🌙 새벽 감성 길',[['🌙','밤샘 작업','click'],['☕','새벽 커피','combo'],['🌌','새벽 감성','clickB']],['🌌','새벽 영감','nightX']]},
+    C:['🌙 새벽 감성 길',[['🌙','밤샘 작업','click'],['☕','새벽 커피','combo'],['🌌','새벽 감성','critB']],['🌌','새벽 영감','nightX']]},
   chef:{r:['🔪','칼질','click'],u:['⭐','미슐랭 셰프'],
-    A:['🔥 불맛 길',[['🔥','불맛','fever'],['🍳','시그니처 메뉴','click'],['🔥','불쇼','clickB']],['🔥','강한 화력','feverLong']],
-    B:['📋 레시피 길',[['📋','레시피 노트','disc'],['🥘','비법 소스','auto'],['🍱','대량 생산','autoB']],['📋','주방 매뉴얼','mgrDisc']],
-    C:['🥢 손맛 길',[['🥢','손맛','click'],['😋','입소문','luck'],['🍲','단골 잔치','allB']],['😋','줄 서는 맛집','walkX']]},
+    A:['🔥 불맛 길',[['🔥','불맛','fever'],['🍳','시그니처 메뉴','click'],['🔥','불쇼','feverB']],['🔥','강한 화력','feverLong']],
+    B:['📋 레시피 길',[['📋','레시피 노트','disc'],['🥘','비법 소스','auto'],['🍱','대량 생산','discB']],['📋','주방 매뉴얼','mgrDisc']],
+    C:['🥢 손맛 길',[['🥢','손맛','click'],['😋','입소문','luck'],['🍲','단골 잔치','rainB']],['😋','줄 서는 맛집','walkX']]},
   law:{r:['⚖️','법률 지식','auto'],u:['🏛️','법조계 거물'],
-    A:['🗣️ 법정 길',[['🗣️','변론술','click'],['🛡️','법률 방패','def'],['⚖️','승소 판결','allB']],['⚖️','결정적 한 방','feverClick']],
+    A:['🗣️ 법정 길',[['🗣️','변론술','click'],['🛡️','법률 방패','def'],['⚖️','승소 판결','warpB']],['⚖️','결정적 한 방','feverClick']],
     B:['📜 자문 길',[['📚','판례 암기','auto'],['🤝','합의 전문','idle'],['📜','자문 계약','autoB']],['📜','자문료','payday']],
-    C:['🔍 증거 길',[['🔍','증거 수집','luck'],['🕵️','탐문','combo'],['📂','결정적 증거','clickB']],['📂','집요한 추심','pendCap']]},
+    C:['🔍 증거 길',[['🔍','증거 수집','luck'],['🕵️','탐문','combo'],['📂','결정적 증거','critB']],['📂','집요한 추심','pendCap']]},
 };
 var PL=['A','B','C'];
 function routeTrees(){ const out=[];
@@ -3359,65 +3388,65 @@ function pathSpecText(){ const p=pathSpec(); if(!p) return ''; const [ic,nm]=p.P
 // 2차 전직 트리 60종: [A길, B길, 뿌리, A1, A2, B1, B2, 궁극기]
 var STREE={
   'biz.food':['🏢 체인 길','🍷 미식 길',['🍽️','외식 경영','auto'],['🏢','직영점 100호','auto'],['📈','코스피 상장','autoB'],['⭐','미슐랭 가이드','luck'],['🍷','파인 다이닝','click'],['🤴','요식업 황제']],
-  'biz.retail':['🏬 매장 길','📦 물류 길',['🛒','유통 감각','auto'],['🏬','대형 마트','auto'],['🎉','블랙 프라이데이','allB'],['📦','물류 센터','idle'],['🚚','새벽 배송','mgr'],['🛍️','쇼핑 제국']],
+  'biz.retail':['🏬 매장 길','📦 물류 길',['🛒','유통 감각','auto'],['🏬','대형 마트','auto'],['🎉','블랙 프라이데이','discB'],['📦','물류 센터','idle'],['🚚','새벽 배송','mgr'],['🛍️','쇼핑 제국']],
   'biz.estate':['🏗️ 개발 길','🏠 임대 길',['🏗️','입지 보는 눈','luck'],['🏗️','재개발','luck'],['🏙️','랜드마크 준공','allB'],['🏠','월세 수익','idle'],['🔑','임대 사업','auto'],['🏙️','부동산 황제']],
   'biz.hotel':['🛎️ 서비스 길','🏝️ 리조트 길',['🏨','호텔 경영','auto'],['🛎️','VIP 응대','tip'],['🥂','갈라 디너','clickB'],['🏝️','휴양지 리조트','idle'],['🌴','성수기','autoB'],['🏝️','호텔 제국']],
   'biz.deliv':['📱 앱 길','🛵 라이더 길',['🛵','배달 네트워크','auto'],['📱','앱 수수료','mgr'],['🔥','주문 폭주','autoB'],['🛵','번개 배달','click'],['🌧️','우천 할증','fever'],['🚁','배달 제왕']],
   'job.exec':['📊 실적 길','🤝 인맥 길',['🏛️','경영 감각','auto'],['📊','분기 실적','auto'],['📈','어닝 서프라이즈','autoB'],['⛳','골프 접대','tip'],['🤝','이사회 장악','def'],['🏙️','회장님']],
-  'job.startup':['🚀 투자 길','🛠️ 제품 길',['🦄','창업 정신','luck'],['💸','시리즈 A','luck'],['🚀','유니콘 등극','allB'],['🛠️','MVP 출시','click'],['📈','그로스 해킹','combo'],['🦄','유니콘 창업자']],
+  'job.startup':['🚀 투자 길','🛠️ 제품 길',['🦄','창업 정신','luck'],['💸','시리즈 A','luck'],['🚀','유니콘 등극','warpB'],['🛠️','MVP 출시','click'],['📈','그로스 해킹','combo'],['🦄','유니콘 창업자']],
   'job.global':['✈️ 출장 길','🌐 현지화 길',['🌏','글로벌 감각','auto'],['✈️','마일리지','luck'],['🌍','해외 수주','autoB'],['🌐','현지 법인','auto'],['🗣️','5개 국어','click'],['🌏','글로벌 CEO']],
   'job.consult':['📑 보고서 길','🧠 전략 길',['📋','프레임워크','click'],['📑','PPT 장인','click'],['⏱️','데드라인 몰아치기','clickB'],['🧠','인사이트','luck'],['💼','리테이너 계약','idle'],['🏢','파트너']],
   'job.fire':['🏦 배당 길','🏝️ 자유 길',['🔥','절약 정신','disc'],['🏦','배당 ETF','idle'],['🏢','월세 받는 삶','auto'],['🏝️','디지털 노마드','idle'],['🛋️','완벽한 휴식','autoB'],['🏝️','건물주 백수']],
   'inv.wall':['🐺 공매도 길','📈 롱 길',['🐺','월가 감각','luck'],['📉','공매도','fever'],['🐺','늑대의 사냥','allB'],['📈','성장주','auto'],['🏦','기관 자금','mgr'],['🧙','투자의 신']],
-  'inv.coin':['⛏️ 채굴 길','🚀 펌핑 길',['🪙','코인 감각','luck'],['⛏️','채굴기','idle'],['🔋','채굴장 증설','auto'],['🚀','펌핑','fever'],['🌕','투 더 문','allB'],['🚀','비트 황제']],
-  'inv.oil':['📊 선물 길','⛽ 정유 길',['🛢️','원자재 감각','luck'],['📊','선물 거래','luck'],['💥','가격 폭등','allB'],['⛽','정유 공장','auto'],['🚢','유조선','idle'],['⛽','석유왕']],
-  'inv.vc':['🌱 시드 길','🔔 엑시트 길',['🦄','심사역의 눈','luck'],['🌱','시드 투자','auto'],['🌳','후속 투자','idle'],['🦄','유니콘 발굴','luck'],['🔔','IPO 대박','allB'],['🌱','유니콘 사냥꾼']],
+  'inv.coin':['⛏️ 채굴 길','🚀 펌핑 길',['🪙','코인 감각','luck'],['⛏️','채굴기','idle'],['🔋','채굴장 증설','auto'],['🚀','펌핑','fever'],['🌕','투 더 문','rainB'],['🚀','비트 황제']],
+  'inv.oil':['📊 선물 길','⛽ 정유 길',['🛢️','원자재 감각','luck'],['📊','선물 거래','luck'],['💥','가격 폭등','critB'],['⛽','정유 공장','auto'],['🚢','유조선','idle'],['⛽','석유왕']],
+  'inv.vc':['🌱 시드 길','🔔 엑시트 길',['🦄','심사역의 눈','luck'],['🌱','시드 투자','auto'],['🌳','후속 투자','idle'],['🦄','유니콘 발굴','luck'],['🔔','IPO 대박','warpB'],['🌱','유니콘 사냥꾼']],
   'inv.gold':['🧱 실물 길','⛏️ 광산 길',['🥇','금 감각','def'],['🧱','금괴 금고','def'],['🛡️','안전 자산','idle'],['⛏️','금광 개발','auto'],['✨','노다지','luck'],['⛏️','황금왕']],
-  'star.top':['🌍 월드 길','💖 팬덤 길',['🌟','스타 파워','click'],['🌍','월드 투어','auto'],['🏟️','스타디움 공연','allB'],['💖','팬덤','combo'],['🎁','팬미팅','clickB'],['🎬','엔터 제국']],
-  'star.mc':['🎙️ 진행 길','😂 예능 길',['🎙️','진행 실력','click'],['📺','고정 프로','auto'],['🏆','연예대상','autoB'],['😂','예능감','combo'],['🎉','시청률 대박','fever'],['📡','방송국 사장']],
+  'star.top':['🌍 월드 길','💖 팬덤 길',['🌟','스타 파워','click'],['🌍','월드 투어','auto'],['🏟️','스타디움 공연','allB'],['💖','팬덤','combo'],['🎁','팬미팅','comboB'],['🎬','엔터 제국']],
+  'star.mc':['🎙️ 진행 길','😂 예능 길',['🎙️','진행 실력','click'],['📺','고정 프로','auto'],['🏆','연예대상','autoB'],['😂','예능감','combo'],['🎉','시청률 대박','feverB'],['📡','방송국 사장']],
   'star.actor':['🎬 영화 길','📺 드라마 길',['🎭','연기력','click'],['🎬','천만 영화','luck'],['🏆','영화제 대상','allB'],['📺','미니시리즈','auto'],['🔁','재방송 수익','idle'],['🏆','할리우드 스타']],
   'star.musical':['🎶 무대 길','🏛️ 제작 길',['🎭','가창력','click'],['🎶','커튼콜','combo'],['🌹','기립 박수','clickB'],['🏛️','장기 공연','auto'],['🎟️','티켓 매진','mgr'],['🏛️','공연 제작자']],
   'star.ad':['🎥 CF 길','🛍️ 브랜드 길',['📢','광고 효과','luck'],['🎥','CF 촬영','luck'],['💸','모델료 인상','clickB'],['🛍️','개인 브랜드','auto'],['📦','완판 행진','autoB'],['🛍️','CF 제왕']],
   'cre.game':['🎮 프로 길','🏟️ 구단 길',['🕹️','피지컬','click'],['⚡','APM 400','combo'],['🏆','우승 세리머니','clickB'],['🏟️','구단 운영','auto'],['🎫','결승전 매진','autoB'],['🏟️','e스포츠 구단주']],
-  'cre.infl':['📸 피드 길','🤝 협찬 길',['📱','감성 피드','luck'],['📸','릴스 떡상','fever'],['🔥','바이럴','allB'],['🤝','브랜드 협찬','auto'],['💄','공동 구매','mgr'],['🌐','미디어 제국']],
-  'cre.comm':['🔴 라이브 길','📦 쇼핑몰 길',['🛍️','셀링 포인트','click'],['🔴','라이브 커머스','combo'],['⏰','마감 임박','clickB'],['📦','자사몰','auto'],['🚚','풀필먼트','idle'],['📦','이커머스 제왕']],
+  'cre.infl':['📸 피드 길','🤝 협찬 길',['📱','감성 피드','luck'],['📸','릴스 떡상','fever'],['🔥','바이럴','rainB'],['🤝','브랜드 협찬','auto'],['💄','공동 구매','mgr'],['🌐','미디어 제국']],
+  'cre.comm':['🔴 라이브 길','📦 쇼핑몰 길',['🛍️','셀링 포인트','click'],['🔴','라이브 커머스','combo'],['⏰','마감 임박','discB'],['📦','자사몰','auto'],['🚚','풀필먼트','idle'],['📦','이커머스 제왕']],
   'cre.vtuber':['🎤 방송 길','🌐 기획사 길',['🎀','캐릭터성','click'],['🎤','노래 방송','combo'],['💝','후원 폭주','clickB'],['🌐','버추얼 그룹','auto'],['🧸','굿즈 라인','mgr'],['🌐','버추얼 기획사']],
   'cre.edu':['✍️ 일타 길','🏫 플랫폼 길',['📚','강의력','click'],['✍️','족집게 강의','luck'],['🔥','수능 대목','clickB'],['🏫','인강 플랫폼','auto'],['📖','교재 판매','idle'],['🏫','교육 플랫폼 회장']],
   'gov.minister':['📜 정책 길','🤝 협치 길',['🏛️','국정 감각','auto'],['📜','정책 발표','auto'],['💰','추경 예산','autoB'],['🤝','여야 협치','def'],['🗳️','지지율 상승','luck'],['🏛️','장관']],
   'gov.judge':['🔨 판결 길','📚 법리 길',['⚖️','법관의 양심','def'],['🔨','명판결','click'],['⚖️','대법원 판례','clickB'],['📚','법리 연구','idle'],['🛡️','사법부 독립','def'],['⚖️','대법관']],
   'gov.diplo':['🤝 협상 길','🎌 의전 길',['🌐','외교 감각','def'],['🤝','협상 테이블','luck'],['✍️','조약 체결','allB'],['🥂','리셉션','tip'],['🎌','국빈 의전','auto'],['🌐','대사']],
-  'gov.police':['🔍 수사 길','🚓 치안 길',['🚔','수사 감각','click'],['🔍','잠복 수사','combo'],['🚨','일망타진','clickB'],['🛡️','치안 유지','def'],['🚓','순찰 강화','auto'],['🚔','경찰청장']],
-  'gov.mayor':['🏗️ 개발 길','🙋 복지 길',['🏙️','시정 운영','auto'],['🏗️','도시 재생','auto'],['🎆','축제 개최','autoB'],['🙋','주민 소통','tip'],['🏥','복지 확대','def'],['🏙️','서울시장']],
+  'gov.police':['🔍 수사 길','🚓 치안 길',['🚔','수사 감각','click'],['🔍','잠복 수사','combo'],['🚨','일망타진','critB'],['🛡️','치안 유지','def'],['🚓','순찰 강화','auto'],['🚔','경찰청장']],
+  'gov.mayor':['🏗️ 개발 길','🙋 복지 길',['🏙️','시정 운영','auto'],['🏗️','도시 재생','auto'],['🎆','축제 개최','rainB'],['🙋','주민 소통','tip'],['🏥','복지 확대','def'],['🏙️','서울시장']],
   'doc.dir':['🏢 경영 길','🩺 진료 길',['🏥','병원 경영','auto'],['🏢','병동 증축','auto'],['💉','건강검진 패키지','mgr'],['🩺','명의 진료','click'],['🌙','야간 응급실','fever'],['🏥','의료재단 이사장']],
   'doc.bio':['🧪 임상 길','💊 특허 길',['🧬','연구 감각','luck'],['🧪','임상 3상','luck'],['🎉','신약 승인','allB'],['💊','신약 특허','idle'],['💰','기술 수출','auto'],['💊','신약왕']],
   'doc.tvdoc':['📺 방송 길','📚 출판 길',['📺','방송 감각','click'],['🎙️','건강 상담','combo'],['📈','시청률 1위','clickB'],['📚','건강 베스트셀러','idle'],['💊','건강기능식품','auto'],['📺','건강 채널 제왕']],
   'doc.plastic':['💉 시술 길','🌏 의료관광 길',['✨','미적 감각','click'],['💉','쁘띠 시술','click'],['💎','VIP 시술','clickB'],['🌏','해외 환자','auto'],['🏨','메디컬 호텔','mgr'],['✨','뷰티 메디컬 그룹']],
-  'doc.mission':['🩹 봉사 길','🌍 재단 길',['🕊️','사명감','def'],['🩹','야전 병원','def'],['🙏','기적의 손','clickB'],['🌍','국제 재단','auto'],['💝','후원금 행렬','tip'],['🕊️','노벨 평화상']],
-  'ath.abroad':['⚽ 득점 길','💰 이적 길',['🌍','빅리그 적응','click'],['⚽','해트트릭','combo'],['🏆','챔스 우승','clickB'],['💰','이적료 대박','luck'],['👟','스폰서 신발','auto'],['🏆','발롱도르']],
+  'doc.mission':['🩹 봉사 길','🌍 재단 길',['🕊️','사명감','def'],['🩹','야전 병원','def'],['🙏','기적의 손','shieldB'],['🌍','국제 재단','auto'],['💝','후원금 행렬','tip'],['🕊️','노벨 평화상']],
+  'ath.abroad':['⚽ 득점 길','💰 이적 길',['🌍','빅리그 적응','click'],['⚽','해트트릭','combo'],['🏆','챔스 우승','feverB'],['💰','이적료 대박','luck'],['👟','스폰서 신발','auto'],['🏆','발롱도르']],
   'ath.owner':['📋 전술 길','🏟️ 경영 길',['📋','전술 이해','auto'],['🧠','명장 전술','click'],['🏆','리그 우승','allB'],['🏟️','홈 구장','auto'],['🎫','시즌권 완판','mgr'],['🏟️','구단주']],
   'ath.caster':['🔥 중계 길','📺 미디어 길',['🎙️','입담','click'],['🔥','샤우팅 중계','combo'],['📢','명중계','clickB'],['📺','스포츠 채널','auto'],['📡','중계권','idle'],['📡','스포츠 미디어 왕']],
-  'ath.golf':['🏆 투어 길','🏌️ 레슨 길',['⛳','스윙','click'],['🏆','상금 랭킹','luck'],['🕳️','홀인원','fever'],['🏌️','VIP 레슨','tip'],['🧢','골프 브랜드','auto'],['🏆','메이저 챔피언']],
+  'ath.golf':['🏆 투어 길','🏌️ 레슨 길',['⛳','스윙','click'],['🏆','상금 랭킹','luck'],['🕳️','홀인원','critB'],['🏌️','VIP 레슨','tip'],['🧢','골프 브랜드','auto'],['🏆','메이저 챔피언']],
   'ath.trainer':['🏋️ PT 길','🏢 체인 길',['💪','근성','click'],['🏋️','1:1 PT','combo'],['🔥','바디 프로필','clickB'],['🏢','헬스장 체인','auto'],['🥤','보충제 사업','mgr'],['🏢','피트니스 체인 회장']],
   'dev.cto':['🏗️ 설계 길','👥 조직 길',['🦄','기술 리더십','auto'],['🏗️','아키텍처 설계','idle'],['☁️','무중단 배포','autoB'],['👥','개발팀 빌딩','mgr'],['📈','스톡옵션','luck'],['🦄','테크 거물']],
   'dev.ai':['🧠 모델 길','📄 논문 길',['🤖','머신러닝','auto'],['🧠','대형 모델','auto'],['⚡','GPU 풀가동','autoB'],['📄','논문 인용','luck'],['🏆','최우수 논문','fever'],['🤖','AI 석학']],
   'dev.gamedev':['🎲 인디 길','🏢 대작 길',['🎮','게임 기획','click'],['🎲','갓겜 입소문','luck'],['🔥','인기 순위 1위','allB'],['🏢','대작 개발','auto'],['💎','한정판 패키지','mgr'],['🎮','게임사 회장']],
-  'dev.security':['🧱 방어 길','🐛 바운티 길',['🛡️','보안 감각','def'],['🧱','방화벽','def'],['🔐','제로 트러스트','idle'],['🐛','버그 바운티','luck'],['💰','취약점 포상금','clickB'],['🛡️','보안 기업 회장']],
+  'dev.security':['🧱 방어 길','🐛 바운티 길',['🛡️','보안 감각','def'],['🧱','방화벽','def'],['🔐','제로 트러스트','shieldB'],['🐛','버그 바운티','luck'],['💰','취약점 포상금','clickB'],['🛡️','보안 기업 회장']],
   'dev.block':['⛓️ 메인넷 길','🪙 토큰 길',['⛓️','블록체인 이해','auto'],['⛓️','메인넷 런칭','idle'],['🌐','탈중앙화','auto'],['🪙','토큰 발행','luck'],['🚀','에어드랍','allB'],['⛓️','웹3 황제']],
   'art.museum':['🖼️ 전시 길','🗿 소장품 길',['🏛️','안목','luck'],['🖼️','기획 전시','auto'],['🎟️','블록버스터 전시','autoB'],['🏛️','소장품 확장','idle'],['🗿','국보급 소장','def'],['🏛️','국립미술관장']],
-  'art.auction':['🔨 낙찰 길','💎 컬렉터 길',['🔨','경매 감각','luck'],['🔨','최고가 낙찰','luck'],['💥','경매 신기록','allB'],['💎','VIP 컬렉터','tip'],['🖼️','작품 재테크','idle'],['🖼️','살아있는 전설']],
+  'art.auction':['🔨 낙찰 길','💎 컬렉터 길',['🔨','경매 감각','luck'],['🔨','최고가 낙찰','luck'],['💥','경매 신기록','warpB'],['💎','VIP 컬렉터','tip'],['🖼️','작품 재테크','idle'],['🖼️','살아있는 전설']],
   'art.design':['🎨 브랜딩 길','🪑 제품 길',['✏️','디자인 감각','click'],['🎨','로고 리뉴얼','click'],['🏆','디자인상 수상','clickB'],['🪑','굿디자인 제품','auto'],['🏭','라이선스','mgr'],['✏️','디자인 하우스']],
   'art.webtoon':['📅 연재 길','🎬 IP 길',['📖','스토리텔링','click'],['📅','주 2회 연재','combo'],['🔥','실시간 1위','clickB'],['🎬','드라마화','luck'],['🧸','IP 굿즈','auto'],['📖','웹툰 스튜디오']],
   'art.photo':['📸 화보 길','🖼️ 전시 길',['📷','셔터 감각','click'],['📸','화보 촬영','luck'],['✨','결정적 순간','fever'],['🖼️','사진전','auto'],['📚','사진집','idle'],['📷','사진계 거장']],
   'chef.star':['⭐ 미슐랭 길','🍴 오너 길',['⭐','미각','click'],['🍽️','테이스팅 코스','luck'],['⭐','3스타 획득','allB'],['🍴','레스토랑 확장','auto'],['📋','주방 시스템','mgr'],['⭐','미슐랭 3스타']],
   'chef.tv':['🍳 쿡방 길','🎤 예능 길',['📺','방송용 요리','click'],['🍳','10분 레시피','combo'],['📈','레시피 대유행','clickB'],['🎤','예능 MC','auto'],['📺','고정 출연','idle'],['🎤','요리 예능 MC']],
   'chef.food':['🏭 공장 길','📦 밀키트 길',['🏭','식품 기술','auto'],['🏭','생산 라인','mgr'],['🚛','전국 유통','autoB'],['📦','밀키트','auto'],['🛒','편의점 입점','idle'],['🏭','식품 기업 회장']],
-  'chef.bakery':['🥖 장인 길','🏪 체인 길',['🥐','반죽 감각','click'],['🥖','새벽 빵','combo'],['🍞','오픈런','clickB'],['🏪','베이커리 체인','auto'],['🎂','케이크 예약','tip'],['🥐','베이커리 제국']],
+  'chef.bakery':['🥖 장인 길','🏪 체인 길',['🥐','반죽 감각','click'],['🥖','새벽 빵','combo'],['🍞','오픈런','comboB'],['🏪','베이커리 체인','auto'],['🎂','케이크 예약','tip'],['🥐','베이커리 제국']],
   'chef.truck':['🗺️ 투어 길','🌭 길거리 길',['🚚','푸드트럭 운영','auto'],['🗺️','전국 투어','idle'],['🎪','축제 출장','autoB'],['🌭','길거리 명물','click'],['🔥','불맛 쇼','fever'],['🚚','길거리 음식왕']],
-  'law.firm':['👔 대형 길','🤝 M&A 길',['🏢','로펌 경영','auto'],['👔','파트너 승진','auto'],['💼','대형 사건 수임','autoB'],['🤝','M&A 자문','luck'],['💰','성공 보수','allB'],['🏢','로펌 제국']],
+  'law.firm':['👔 대형 길','🤝 M&A 길',['🏢','로펌 경영','auto'],['👔','파트너 승진','auto'],['💼','대형 사건 수임','autoB'],['🤝','M&A 자문','luck'],['💰','성공 보수','warpB'],['🏢','로펌 제국']],
   'law.tvlaw':['📺 방송 길','📚 상담 길',['📺','쉬운 법률','click'],['🎙️','법률 예능','combo'],['📈','화제의 변호사','clickB'],['📚','무료 상담','tip'],['📱','법률 앱','auto'],['📺','법률 채널 왕']],
   'law.intl':['⚖️ 중재 길','✈️ 해외 길',['🌐','국제법','def'],['⚖️','국제 중재','luck'],['🏛️','국제 판정','allB'],['✈️','해외 사무소','auto'],['🗣️','영어 변론','click'],['🌐','국제 법조계 거물']],
   'law.ip':['📄 특허 길','⚔️ 소송 길',['💡','특허 감각','auto'],['📄','특허 출원','idle'],['💡','특허 포트폴리오','auto'],['⚔️','특허 소송','luck'],['💰','로열티 협상','allB'],['💡','특허 제국']],
-  'law.pros':['🔍 수사 길','⚖️ 공판 길',['🔍','수사 지휘','click'],['🔍','압수수색','combo'],['🚨','특수 수사','clickB'],['⚖️','공판 전략','def'],['📢','구형','luck'],['🔍','검찰총장']],
+  'law.pros':['🔍 수사 길','⚖️ 공판 길',['🔍','수사 지휘','click'],['🔍','압수수색','combo'],['🚨','특수 수사','critB'],['⚖️','공판 전략','def'],['📢','구형','luck'],['🔍','검찰총장']],
 };
 function subTrees(){ const out=[];
   for(const [r,R] of Object.entries(ROUTES)) for(const [k,sb] of Object.entries(R.subs)){ const p=`x_${r}_${k}_`, T=STREE[r+'.'+k]; if(!T) continue;
@@ -3804,8 +3833,8 @@ function statRender(){
   [[S.debuffEnd,'💸','빚독촉 ×0.5'],[S.slumpEnd,'📉','침체 ×0.5'],[S.fireEnd,'🔥','화재 자동 정지'],[S.sueEnd,'🧾','고소 ×0.7']].forEach(([e,i,t])=>{ if((e||0)>n) C.push(['db',i,t,sec(e)]); });
   if((S.insEnd||0)>n) C.push(['ok','🛡️','보험',sec(S.insEnd)]);
   const cm=clockMult(); if(cm>1.001) C.push(['ok',perkA('nightX')&&(new Date().getHours()>=21||new Date().getHours()<6)?'🌃':'🏢',`길 효과 ×${+cm.toFixed(2)}`,'']);
-  { const N=newsNow(), m=newsMul(N.n); C.unshift([m>1.001?'bf nw':m<.999?'db nw':'ok nw',N.n.ic,`📰 ${N.n.t} ×${+m.toFixed(2)}`,'×'+(+m.toFixed(1))]);
-    if(S.newsBlk!==N.blk){ const first=S.newsBlk==null; S.newsBlk=N.blk; if(!first) setTimeout(()=>toast(`📰 속보: ${N.n.ic} ${N.n.t}! ${S.route?`${ROUTES[S.route].nm} 수입 ×${+m.toFixed(2)}`:''}`),400); } }
+  { const N=newsNow(), m=newsMul(); C.unshift([m>1.001?'bf nw':m<.999?'db nw':'ok nw',N.n.ic,`📰 ${N.n.t} ×${+m.toFixed(2)}`,'×'+(+m.toFixed(1))]);
+    if(S.newsBlk!==N.blk){ const first=S.newsBlk==null; S.newsBlk=N.blk; if(!first) setTimeout(()=>toast(`📰 속보: ${N.n.ic} ${N.n.t}! 내 돈벌이 ×${+m.toFixed(2)}`),400); } }
   const bl=bossLv(); if(bl) C.push(['bs','👑',`끝판왕 Lv.${bl} ×${(1+.03*bl).toFixed(2)}`,'']);
   { const I=autoList().filter(x=>(S.auto[x.id]||0)>0), ik=I.map(x=>x.id+S.auto[x.id]+(isMgr(x.id)?'m':'')).join(); const ir=$('itemRow'); if(ir&&ir._k!==ik){ ir._k=ik; ir.innerHTML=I.map(x=>{ const g=gradeOf(S.auto[x.id]); return `<span class="bi it ${g?g[3]:''} ${isMgr(x.id)?'on':''}" title="${x.nm} ${S.auto[x.id]}개${isMgr(x.id)?' · 👔 자동':' · 매니저 없음'}">${emo(x.ic)}<em>${S.auto[x.id]}</em></span>`; }).join(''); ir.classList.toggle('on',I.length>0); } }
   { const sc=getComputedStyle($('scene')), sec=$('scene').parentElement, ml=sc.marginLeft; if(sec._m!==ml){ sec._m=ml; sec.style.setProperty('--scm',ml); } }
@@ -3827,6 +3856,7 @@ function rollEvent(){
   const pLuck=(low?.08:.03)*(1+perkA('luckEv'));
   const r=Math.random();
   if(S.route && Math.random()<.35 && r<p+pLuck+.06){ return jobEvent(); }
+  if(r<p && buffV('shield')){ toast('🛡️ 악재 면역 버프로 막았어요!'); return; }
   if(r<p && perkA('shield') && Date.now()>(S.shieldT||0)){ S.shieldT=Date.now()+600000; const sp=pathSpec(); toast(`${sp?sp.P[2][0]+' '+sp.P[2][1]:'🛡️'} 덕분에 악재를 막았어요!`); return; }
   if(r<p){
     const pool=[['pick',3],['slump',2],['fire',2]]; if(top3) pool.push(['tax',3]);
@@ -4065,6 +4095,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.8',d:'11/1',items:['📈 <b>시장 정세</b>: 전염병·전쟁·금리·유가·코인 광풍 같은 뉴스가 <b>업종</b>(외식·의료·IT·에너지·코인·부동산… 16개)을 흔들어요 · 5분마다 주식처럼 출렁 · 모든 유저 같은 시장','🏷️ 돈벌이 카드에 업종 ▲▼% 표시 · 위 줄 아이콘을 누르면 오늘의 시장표','⚡ <b>버프 스킬 다양화</b>: 가격 할인 · 크리티컬 · 콤보 유지 · 악재 면역 · 돈주머니 비 · 즉시 피버 · 시간 점프 (진로·2차 트리 40여 개 스킬에 나눠 넣었어요)']},
   {v:'v4.7.3',d:'11/1',items:['🧹 위 줄에 자동 스킬 아이콘이 쿨타임 중에도 흐릿하게 떠서 돈벌이처럼 보이던 문제 → <b>발동 중일 때만</b> 버프처럼 떠요 · 아이콘이 많아도 한 줄로']},
   {v:'v4.7.2',d:'11/1',items:['📱 <b>폰에서도 PC 미니창과 똑같이</b>: 같은 레이아웃을 화면 폭에 맞게 확대해서 보여줘요']},
   {v:'v4.7.1',d:'11/1',items:['🔧 진로·2차 전직을 고르기 전엔 신분이 더 올라가지 않게 수정']},
@@ -4443,7 +4474,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.7.3';
+const GAME_VER='v4.8';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
@@ -4451,11 +4482,11 @@ document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+
 try{ $('stat').prepend($('skbar')); const tr=document.createElement('div'); tr.id='topRow'; $('scene').before(tr); tr.append($('stChip'),$('stat')); const ir=document.createElement('div'); ir.id='itemRow'; $('scene').before(ir); }catch(e){}
 $('misB').onclick=e=>{ e.stopPropagation(); misSheet(); };
 $('stc').addEventListener('click',e=>{ if(e.target.closest('.nw')) newsSheet(); });
-window.newsSheet=function(){ const N=newsNow(), n=N.n, mm=Math.ceil(N.left/60000);
-  const L=Object.entries(ROUTES).map(([k,r])=>{ const v=(n.m[k]||1)*(n.m.all||1); return [k,r,v]; }).sort((a,b)=>b[2]-a[2]);
-  showModal(`<div class="nws"><h2>📰 오늘의 정세</h2><div class="nh">${emo(n.ic)} <b>${n.t}</b><small>${mm}분 뒤 다음 소식 · 모든 유저가 같은 뉴스를 봐요</small></div>
-    <div class="nl">${L.map(([k,r,v])=>`<div class="${k===S.route?'me':''} ${v>1.001?'up':v<.999?'dn':''}"><span>${emo(r.ic)} ${r.nm}</span><b>${v>1.001?'▲':v<.999?'▼':'–'} ×${+v.toFixed(2)}</b></div>`).join('')}</div>
-    ${n.beg?`<p class="sm">🥫 아직 진로가 없는 거지: 수입 ×${n.beg}</p>`:''}<button onclick="hideModal()">확인</button></div>`); };
+window.newsSheet=function(){ const N=newsNow(), n=N.n, mm=Math.ceil(N.left/60000), mine=new Set(autoList().filter(a=>(S.auto[a.id]||0)>0).map(sectOf));
+  const L=Object.keys(SECT).map(k=>[k,sectMul(k),sectPrev(k)]).sort((a,b)=>b[1]-a[1]);
+  showModal(`<div class="nws"><h2>📈 오늘의 시장</h2><div class="nh">${emo(n.ic)} <b>${n.t}</b><small>뉴스는 ${mm}분 뒤 바뀌고 · 시세는 5분마다 출렁여요 · 모든 유저 같은 시장</small></div>
+    <div class="nl">${L.map(([k,v,p])=>`<div class="${mine.has(k)?'me':''} ${v>1.02?'up':v<.98?'dn':''}"><span>${emo(SECT[k][0])} ${SECT[k][1]}</span><b>${v>1.02?'▲':v<.98?'▼':'–'} ${v>=1?'+':''}${Math.round((v-1)*100)}%<small>${v>p+.005?' ↗':v<p-.005?' ↘':''}</small></b></div>`).join('')}</div>
+    <p class="sm">테두리 = 내가 가진 돈벌이 업종 · 내 돈벌이 전체 <b>×${newsMul().toFixed(2)}</b></p><button onclick="hideModal()">확인</button></div>`); };
 $('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
   showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
   document.querySelectorAll('.mmn [data-b]').forEach(b=>b.onclick=()=>{ hideModal(); setTimeout(()=>$(b.dataset.b).click(),50); }); };
