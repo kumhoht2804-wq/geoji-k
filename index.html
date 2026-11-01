@@ -1217,6 +1217,14 @@
   body.mini .bi{width:19px;height:19px;border-width:1.5px;border-radius:6px} body.mini .bi img.e3d{width:13px;height:13px} body.mini .bi em{font-size:7px;right:-3px;bottom:-4px}
   body.mini #topRow{margin-bottom:5px;gap:4px} body.mini #topRow #stChip{padding:1px 6px 1px 2px!important}
   #topRow #skbar .skb{width:24px!important;height:24px!important;border-width:2px!important;border-radius:7px!important;box-shadow:none!important} body.mini #topRow #skbar .skb{width:19px!important;height:19px!important;border-width:1.5px!important}
+  /* v4.6.1 줄 정리: 위 줄(Lv·버프) → 돈벌이 줄 → 캐릭터 화면 → 미션 줄 → 신분 바 · 모두 같은 폭 */
+  #topRow,#itemRow,#misB{margin-left:var(--scm,0)!important;margin-right:var(--scm,0)!important;align-self:stretch!important;width:auto!important;box-sizing:border-box}
+  #topRow{justify-content:space-between}
+  #topRow{align-items:center} #topRow #stat{margin:0!important}
+  #itemRow{display:none;gap:3px;margin-bottom:6px;padding:3px 4px;border-radius:9px;background:#f6ecdc;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+  #itemRow.on{display:flex} #itemRow::-webkit-scrollbar{display:none} #itemRow .bi{background:#fffaf2}
+  #misB{width:auto!important;box-sizing:border-box;border-radius:10px} #misB .mt{text-align:left}
+  body.mini #itemRow{margin-bottom:4px;padding:2px 3px;gap:3px} body.mini #topRow{margin-bottom:4px}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -3770,8 +3778,8 @@ function statRender(){
   if((S.insEnd||0)>n) C.push(['ok','🛡️','보험',sec(S.insEnd)]);
   const cm=clockMult(); if(cm>1.001) C.push(['ok',perkA('nightX')&&(new Date().getHours()>=21||new Date().getHours()<6)?'🌃':'🏢',`길 효과 ×${+cm.toFixed(2)}`,'']);
   const bl=bossLv(); if(bl) C.push(['bs','👑',`끝판왕 Lv.${bl} ×${(1+.03*bl).toFixed(2)}`,'']);
-  autoList().filter(x=>(S.auto[x.id]||0)>0).reverse().forEach(x=>{ const g=gradeOf(S.auto[x.id]); C.push(['it '+(g?g[3]:'')+(isMgr(x.id)?' on':''),x.ic,`${S.auto[x.id]}`,isMgr(x.id)?'👔':'']); });
-  { const sc=getComputedStyle($('scene')), st=$('stat'), ml=sc.marginLeft, mr=sc.marginRight; if(st._m!==ml+mr){ st._m=ml+mr; st.style.marginLeft=ml; st.style.marginRight=mr; } }
+  { const I=autoList().filter(x=>(S.auto[x.id]||0)>0), ik=I.map(x=>x.id+S.auto[x.id]+(isMgr(x.id)?'m':'')).join(); const ir=$('itemRow'); if(ir&&ir._k!==ik){ ir._k=ik; ir.innerHTML=I.map(x=>{ const g=gradeOf(S.auto[x.id]); return `<span class="bi it ${g?g[3]:''} ${isMgr(x.id)?'on':''}" title="${x.nm} ${S.auto[x.id]}개${isMgr(x.id)?' · 👔 자동':' · 매니저 없음'}">${emo(x.ic)}<em>${S.auto[x.id]}</em></span>`; }).join(''); ir.classList.toggle('on',I.length>0); } }
+  { const sc=getComputedStyle($('scene')), sec=$('scene').parentElement, ml=sc.marginLeft; if(sec._m!==ml){ sec._m=ml; sec.style.setProperty('--scm',ml); } }
   const key=C.map(c=>c.join('|')).join('/'); const el=$('stc'); if(el._k===key) return; el._k=key;
   $('stat').classList.toggle('empty',!C.length&&!(S.skill&&actSkills().length));
   el.innerHTML=C.map(([k,i,t,s])=>`<span class="bi ${k}" title="${t}${s&&s!=='👔'?' · '+s:''}">${emo(i)}${s==='👔'?'<i class="mg">👔</i>':''}<em>${k.startsWith('it')?t:s||t.replace(/^.*×/,'×')}</em></span>`).join('');
@@ -4028,6 +4036,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.6.1',d:'11/1',items:['🧹 줄 정리: 위 줄은 Lv + 버프만, 그 아래 한 줄에 돈벌이 아이콘 · 위 줄·돈벌이 줄·미션 줄을 캐릭터 화면 폭에 딱 맞췄어요']},
   {v:'v4.6',d:'11/1',items:['🧭 캐릭터 화면 <b>위 줄</b>: 왼쪽 Lv·경험치, 오른쪽 버프·디버프·돈벌이를 <b>버프 아이콘</b>처럼 (숫자 = 남은 초 · 개수)','💼 가진 돈벌이 전부 아이콘으로 · 테두리 = 등급 · 매니저 있는 건 진하게(👔), 없는 건 흐리게','🚪 방 안에선 행인이 안 돌아다녀요']},
   {v:'v4.5',d:'11/1',items:['⬆️ <b>Lv은 위로</b>: 돈 아래에 Lv·경험치·신분 이름 · 캐릭터 화면엔 캐릭터와 이벤트만','💼 바닥에 놓여 있던 돈벌이 이모지 대신 <b>상태줄에 칩</b>으로 (아이콘·개수·등급 테두리·👔 매니저)']},
   {v:'v4.4',d:'11/1',items:['📜 미션 말풍선 → <b>캐릭터 화면 아래 한 줄</b> (진행 바 · 누르면 미션 목록)','🏠 <b>진로마다 방 배경</b>: 치킨집·사무실·트레이딩룸·무대·방송 스튜디오·구청·병실·라커룸·개발실·아틀리에·주방·법정 · 2차 전직하면 방이 좋아지고 끝판왕이면 레드카펫과 왕관','⚡ <b>직업 이벤트</b>: 의사 🚑응급 호출 · 개발자 🐛버그 잡기 · 연예인 ✍️팬 사인회 · 셰프 🧾주문 들어옴 등 직업마다 다른 일이 가끔 터져요 · 성공하면 큰 보상','📜 직업 미션 4번째 단계가 그 직업 이벤트 3번 성공으로 바뀌었어요']},
@@ -4394,12 +4403,12 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.6';
+const GAME_VER='v4.6.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
-try{ $('stat').prepend($('skbar')); const tr=document.createElement('div'); tr.id='topRow'; $('scene').before(tr); tr.append($('stChip'),$('stat')); }catch(e){}
+try{ $('stat').prepend($('skbar')); const tr=document.createElement('div'); tr.id='topRow'; $('scene').before(tr); tr.append($('stChip'),$('stat')); const ir=document.createElement('div'); ir.id='itemRow'; $('scene').before(ir); }catch(e){}
 $('misB').onclick=e=>{ e.stopPropagation(); misSheet(); };
 $('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
   showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
