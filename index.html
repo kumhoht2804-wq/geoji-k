@@ -2058,7 +2058,7 @@ function totalStage(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j;
 function stageIdx(){ return S.stage==null ? totalStage() : Math.min(S.stage, totalStage()); }       // 실제 신분 (조건을 채워야 올라가요)
 function stageLvReq(i){ return 1+i*5; }
 function stageCash(i){ return i<=0?0:Math.round(STAGES[i].need*0.1); }
-function promoteTick(){ if(S.stage==null) S.stage=totalStage(); const n=S.stage+1; if(n>LAST) return;
+function promoteTick(){ if(S.stage==null) S.stage=totalStage(); const n=S.stage+1; if(n>LAST) return; if((S.stage>=RS&&!S.route)||(S.stage>=SS&&!S.sub)) return;
   if(charLv()>=stageLvReq(n) && S.money>=stageCash(n)){ S.stage=n; save(); } }
 function stageBonus(){ return 1+stageIdx()*0.08; }
 
@@ -4062,6 +4062,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.7.1',d:'11/1',items:['🔧 진로·2차 전직을 고르기 전엔 신분이 더 올라가지 않게 수정']},
   {v:'v4.7',d:'11/1',items:['📊 <b>Lv 바와 신분 바를 하나로</b>: 평소엔 다음 Lv까지, 신분 상승 때가 되면 노란 바로 바뀌어요','⬆️ <b>신분 상승 조건</b>: Lv 조건 + 현금 조건 (예: Lv.36 + 현금 600억 모으기) · 둘 다 채우면 자동으로 올라가요','📰 <b>정세</b>: 30분마다 뉴스가 바뀌고 직업마다 수입이 달라져요 (예: 독감 대유행 → 의사 ×1.5) · 모든 유저가 같은 뉴스 · 위 줄 📰 아이콘을 누르면 직업별 표','🧹 목록 위 안내 문구와 돈벌이 아이콘 줄을 뺐어요']},
   {v:'v4.6.1',d:'11/1',items:['🧹 줄 정리: 위 줄은 Lv + 버프만, 그 아래 한 줄에 돈벌이 아이콘 · 위 줄·돈벌이 줄·미션 줄을 캐릭터 화면 폭에 딱 맞췄어요']},
   {v:'v4.6',d:'11/1',items:['🧭 캐릭터 화면 <b>위 줄</b>: 왼쪽 Lv·경험치, 오른쪽 버프·디버프·돈벌이를 <b>버프 아이콘</b>처럼 (숫자 = 남은 초 · 개수)','💼 가진 돈벌이 전부 아이콘으로 · 테두리 = 등급 · 매니저 있는 건 진하게(👔), 없는 건 흐리게','🚪 방 안에선 행인이 안 돌아다녀요']},
@@ -4430,7 +4431,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.7';
+const GAME_VER='v4.7.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
