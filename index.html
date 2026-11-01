@@ -1222,9 +1222,18 @@
   #topRow{justify-content:space-between}
   #topRow{align-items:center} #topRow #stat{margin:0!important}
   #itemRow{display:none;gap:3px;margin-bottom:6px;padding:3px 4px;border-radius:9px;background:#f6ecdc;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
-  #itemRow.on{display:flex} #itemRow::-webkit-scrollbar{display:none} #itemRow .bi{background:#fffaf2}
+  #itemRow.on{display:none!important} #itemRow::-webkit-scrollbar{display:none} #itemRow .bi{background:#fffaf2}
   #misB{width:auto!important;box-sizing:border-box;border-radius:10px} #misB .mt{text-align:left}
   body.mini #itemRow{margin-bottom:4px;padding:2px 3px;gap:3px} body.mini #topRow{margin-bottom:4px}
+  /* v4.7 합친 바 · 정세 */
+  #lvBar{display:none!important}
+  .gate #xpTxt{color:#5a3500!important;-webkit-text-stroke:0!important;text-shadow:0 1px 0 #fff!important}
+  .gate #bar{background:linear-gradient(90deg,#fde047,#f59e0b)!important}
+  #xpTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%} body.mini #xpTxt{font-size:9px!important}
+  .bi.nw{cursor:pointer}
+  .nws .nh{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff8e6;border-radius:12px;padding:8px;margin:4px 0 8px} .nws .nh img.e3d{width:34px;height:34px} .nws .nh b{font-size:15px} .nws .nh small{font-size:10.5px;color:#8a7560}
+  .nws .nl{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px} .nws .nl>div{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;background:#fbf5ea;border-radius:8px;padding:4px 7px}
+  .nws .nl img.e3d{width:14px;height:14px;vertical-align:-2px} .nws .nl .up b{color:#15803d} .nws .nl .dn b{color:#b91c1c} .nws .nl .me{outline:2px solid #f5b65c}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -1658,7 +1667,7 @@ for(const [k,R] of Object.entries(ROUTES)){ R.perk=perkText(PERKS[k]); for(const
 function perkSrc(){ return [PERKS[S.route], S.route&&S.sub?PERKS[S.route+'.'+S.sub]:null, ...petPerks()].filter(Boolean); }
 function perkM(k){ return perkSrc().reduce((a,p)=>a*(p[k]||1),1)*Math.max(.1,1+jsk(k)+trk(k)+synk(k)); }
 function perkA(k){ return perkSrc().reduce((a,p)=>a+(p[k]||0),0)+jsk(k)+trk(k)+synk(k)+(typeof psx==='function'?psx(k):0)+(k==='evDodge'?-.12*(S.curse||0):0); }
-function migrate45(){ if(S.v45) return; S.v45=1; if(stageIdx()>=LAST) S.finalOK=1; }
+function migrate45(){ if(S.v45) return; S.v45=1; if(totalStage()>=LAST) S.finalOK=1; }
 function migrate43(){ setTimeout(migrate45,0); if(S.v43) return; S.v43=1; if(Object.keys(S.skill||{}).length){ S.skill={}; setTimeout(()=>toast('💎 이제 SP는 직접 찍어요! 자동으로 찍혔던 SP를 모두 돌려드렸어요'),3000); } }
 function migrate41(){ setTimeout(migrate43,0); if(S.v41) return; S.v41=1; for(const id of Object.keys(S.skill||{})){ if(!SKILLS.find(x=>x.id===id)) delete S.skill[id]; } }
 function migrate40(){ setTimeout(migrate41,0); if(S.v40) return; S.v40=1; S.skill={}; S.tpath={}; delete S.skFocus; }
@@ -1973,11 +1982,21 @@ function onlineMult(){
   const ratio=(lead.total||1)/Math.max(1,mine.total||1);
   return Math.min(1.5, 1+Math.max(0,Math.log10(ratio))/8);
 }
+var NEWS=[
+  {ic:'🦠',t:'독감 대유행',m:{doc:1.5,chef:.85,star:.85,ath:.85}},{ic:'📈',t:'증시 대호황',m:{inv:1.6,biz:1.1,gov:.9}},{ic:'📉',t:'증시 폭락',m:{inv:.6,law:1.2,gov:1.15}},
+  {ic:'🎬',t:'K-콘텐츠 열풍',m:{star:1.5,cre:1.3,art:1.1}},{ic:'🤖',t:'AI 붐',m:{dev:1.6,job:.9,art:.85}},{ic:'⚽',t:'월드컵 개막',m:{ath:1.6,chef:1.2,cre:1.2}},
+  {ic:'🍗',t:'치맥 열풍',m:{biz:1.4,chef:1.3,doc:.9}},{ic:'🗳️',t:'선거철',m:{gov:1.4,law:1.2,cre:1.1}},{ic:'⚖️',t:'대형 소송 러시',m:{law:1.6,biz:.85}},
+  {ic:'🖼️',t:'미술품 경매 신기록',m:{art:1.6,inv:1.1}},{ic:'💼',t:'채용 시즌',m:{job:1.4,gov:1.1}},{ic:'🌧️',t:'긴 장마',m:{biz:1.2,cre:1.2,ath:.8,chef:.9}},
+  {ic:'💸',t:'경기 침체',m:{all:.9,gov:1.2,law:1.1,biz:.8},beg:1.2},{ic:'🎄',t:'연말 특수',m:{biz:1.3,star:1.3,chef:1.3},beg:1.3},{ic:'📱',t:'숏폼 대유행',m:{cre:1.6,star:1.1}},
+  {ic:'🍳',t:'요리 예능 대박',m:{chef:1.6,biz:1.1}},{ic:'🏗️',t:'부동산 들썩',m:{biz:1.3,inv:1.2,law:1.1}},{ic:'☀️',t:'평온한 하루',m:{}},{ic:'💉',t:'백신 개발 성공',m:{doc:1.4,inv:1.2}},{ic:'🎮',t:'게임 대회 시즌',m:{cre:1.4,dev:1.2}}];
+function newsNow(){ const blk=Math.floor(Date.now()/1800000); return {n:NEWS[hsh('news'+blk)%NEWS.length], left:1800000-(Date.now()%1800000), blk}; }
+function newsMul(n){ n=n||newsNow().n; if(!S.route) return n.beg||1; return (n.m[S.route]||1)*(n.m.all||1); }
+var _nwsM={t:0,v:1};
 var _lastBegT=0, _clkM={t:0,v:1};
 function clockMult(){ const n=Date.now(); if(n-_clkM.t<5000) return _clkM.v; const d=new Date(), hr=d.getHours(), wd=d.getDay(); let v=1;
   if(hr>=21||hr<6) v*=1+perkA('nightX'); if(wd>0&&wd<6&&hr>=9&&hr<18) v*=1+perkA('workX'); _clkM={t:n,v}; return v; }
 function actMult(){ const d=performance.now()-_lastBegT; return d<1500?1+perkA('handsOn'):d>30000?1+perkA('idleBoost'):1; }
-function pathMult(){ return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult()*clockMult()*(1+.03*bossLv()); }
+function pathMult(){ const n=Date.now(); if(n-_nwsM.t>5000) _nwsM={t:n,v:newsMul()}; return (S.pathMul||1)*rebirthMult()*evMult()*onlineMult()*clockMult()*(1+.03*bossLv())*_nwsM.v; }
 function cps(){ return baseCps()*feverMult()*pathMult(); }
 function managedShare(){ let m=0,t=0; for(const a of autoList()){ const v=itemRaw(a)*(isMgr(a.id)?1:manualBoost()); t+=v; if(isMgr(a.id)) m+=v; } return t?m/t:0; }
 function managedCps(){ return cps()*managedShare(); }
@@ -2035,7 +2054,12 @@ function cpc(){
   let c=1; for(const k of clickList()){ const n=S.click[k.id]||0; if(k.add) c+=n*k.add*msMult(n); if(k.pct) c+=n*k.pct*baseCps()*msMult(n); }
   return c*ECON_C*stageBonus()*feverMult()*pathMult()*perkM('click')*buffM('click');
 }
-function stageIdx(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }
+function totalStage(){ let i=0; STAGES.forEach((s,j)=>{ if(S.total>=s.need) i=j; }); return i; }   // Lv 계산용 (누적 수입)
+function stageIdx(){ return S.stage==null ? totalStage() : Math.min(S.stage, totalStage()); }       // 실제 신분 (조건을 채워야 올라가요)
+function stageLvReq(i){ return 1+i*5; }
+function stageCash(i){ return i<=0?0:Math.round(STAGES[i].need*0.1); }
+function promoteTick(){ if(S.stage==null) S.stage=totalStage(); const n=S.stage+1; if(n>LAST) return;
+  if(charLv()>=stageLvReq(n) && S.money>=stageCash(n)){ S.stage=n; save(); } }
 function stageBonus(){ return 1+stageIdx()*0.08; }
 
 /* ---------- UI ---------- */
@@ -2057,7 +2081,7 @@ function renderList(){
     const showSyn = Object.values(TC).some(x=>x) || O.some(a=>(S.auto[a.id]||0)>=8);
     const tags=Object.entries(TAGS).filter(([k])=>TC[k]).map(([k,t])=>emo(t.ic)+TC[k]).join(' ');
     const guide = tab==='auto' ? '사두면 시간이 지날수록 돈이 들어와요' : '꼬질이를 누를 때 버는 돈이 늘어요';
-    L.insertAdjacentHTML('beforeend',`<div class="sumbar"><span class="sg">${guide}</span>
+    L.insertAdjacentHTML('beforeend',`<div class="sumbar"><span class="sg"></span>
       ${tab==='auto'&&O.length?`<button class="sb" id="sbMgr">👔 ${hired}/${O.length}</button>`:''}
       ${tab==='auto'&&showSyn?`<button class="sb" id="sbSyn">🔗 ${tags||'시너지'}</button>`:''}
       ${S.daily?`<button class="sb qb ${S.daily.all?'ok':''}" id="sbQ">📋 ${S.daily.q.filter(o=>o.done).length}/3</button>`:''}<button class="sb q" id="sbHelp">?</button></div>`);
@@ -2202,6 +2226,7 @@ function render(){
   renderMoney(shownMoney);
   setTxt('cps','초당 '+fmt(cps())); setTxt('cpc','클릭당 '+fmt(cpc()));
   fixSub();
+  promoteTick();
   let i=stageIdx();
   if(i>=RS && (!S.route||!ROUTES[S.route])){ i=RS-1; showRoute(); }
   else if(i>=SS && !S.sub){ i=SS-1; showSub(); }
@@ -2213,15 +2238,14 @@ function render(){
     if(lastStage!==-1 && i>lastStage){ S.pending=S.pending||[]; for(let q=lastStage+1;q<=i;q++) S.pending.push(q); levelUp(getStage(lastStage), st, i); log(`🎉 ${st.name}(으)로 신분 상승!`); if(traitList().some(T=>T.lv===i && !T.nojob && !tr(T.t))) setTimeout(()=>toast('🧬 새 특성을 고를 수 있어요! 스킬 탭에서'),5500); if(i>=LAST) setTimeout(()=>toast('♻️ 이제 환생할 수 있어요! 🏆 랭킹 탭에서'),5000); renderList(); }
     lastStage=i;
   }
-  if(nx){
-    const p=(S.total-st.need)/(nx.need-st.need);
-    $('bar').style.width=Math.min(100,p*100)+'%';
-    $('xpTxt').textContent=Math.floor(Math.min(1,p)*100)+'%';
-    const fk=st.name+'>'+nx.name; if($('xpFrom').dataset.k!==fk){ $('xpFrom').dataset.k=fk; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML=(nx.name==='진로 선택'||nx.name==='갈림길')?'<b>?</b>':charSVG(i+1,false,nx); }
-    $('next').textContent = nx.need<=S.total ? '🔀 진로를 선택하세요!' : `다음 신분 "${nx.name}"까지 ${fmt(nx.need-S.total)}`;
-  } else { const lf=lvFrac(), bl=bossLv(); $('bar').style.width=(lf*100)+'%'; $('xpTxt').textContent=Math.floor(lf*100)+'%'; if($('xpFrom').dataset.k!=='boss'+st.name){ $('xpFrom').dataset.k='boss'+st.name; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML='<b>👑</b>'; } $('next').textContent=`👑 끝판왕 Lv.${bl+1}까지 ${fmt(nextLvNeed())} · Lv마다 수입 +3%`; }
+  { const cl=charLv(), lf=lvFrac(), n=i+1, gate=nx && cl>=stageLvReq(n) && !(n===RS&&!S.route) ; let w,txt,cls='';
+    if(nx && gate){ const need=stageCash(n), p=need?Math.min(1,S.money/need):1; w=p*100; txt=`⬆️ 신분 상승 · 현금 ${fmt(Math.min(S.money,need))}/${fmt(need)}`; cls='gate';
+      $('next').textContent=`Lv.${stageLvReq(n)} 달성! 현금 ${fmt(need)}을 모으면 "${nx.name}"(으)로 올라가요`; }
+    else { w=lf*100; const bl=bossLv(); txt=!nx?`👑 끝판왕 Lv.${bl} → ${bl+1}`:`Lv.${cl} → ${cl+1}${nx&&cl+1>=stageLvReq(n)?' · 다음은 신분 상승':''}`;
+      $('next').textContent= !nx ? `👑 끝판왕 Lv.${bl+1}까지 ${fmt(nextLvNeed())} · Lv마다 수입 +3%` : `다음 Lv까지 ${fmt(nextLvNeed())} · "${nx.name}"은(는) Lv.${stageLvReq(n)} + 현금 ${fmt(stageCash(n))}`; }
+    const bar=$('bar'); if(bar._w!==Math.round(w)){ bar._w=Math.round(w); bar.style.width=w+'%'; } setTxt('xpTxt',txt); const xp=bar.parentElement; if(xp._c!==cls){ xp._c=cls; xp.classList.toggle('gate',!!cls); }
+    const fk=st.name+'>'+(nx?nx.name:'boss'); if($('xpFrom').dataset.k!==fk){ $('xpFrom').dataset.k=fk; $('xpFrom').innerHTML=charSVG(i,false,st); $('xpTo').innerHTML=!nx?'<b>👑</b>':(nx.name==='진로 선택'||nx.name==='갈림길')?'<b>?</b>':charSVG(i+1,false,nx); } }
   if($('stName').textContent!==st.name) $('stName').textContent=st.name;
-  { const lf=Math.round(lvFrac()*100); const u=$('lvBar').firstChild; if(u._w!==lf){ u._w=lf; u.style.width=lf+'%'; $('lvBar').title=`다음 레벨(SP +1)까지 ${100-lf}% · ${fmt(nextLvNeed())}`; } }
   const cl=charLv(); if($('stLv').textContent!=='Lv.'+cl){ $('stLv').textContent='Lv.'+cl; if(S.lvSeen && cl>S.lvSeen){ lvFloat(cl, cl-S.lvSeen); sfx('level'); } S.lvSeen=cl; }
 }
 
@@ -3455,11 +3479,11 @@ function jsk(k){
   return t;
 }
 // 캐릭터 레벨: 신분 1단계마다 5레벨 (신분 안에서 고르게 오름)
-function lvSeg(){ const i=stageIdx(), a=Math.max(10,STAGES[i].need), b=STAGES[i+1]?STAGES[i+1].need:a*20; return {i,a,b}; }
+function lvSeg(){ const i=totalStage(), a=Math.max(10,STAGES[i].need), b=STAGES[i+1]?STAGES[i+1].need:a*20; return {i,a,b}; }
 function lvQ(){ const {i,a,b}=lvSeg(); return {i,q:Math.max(0,Math.log(Math.max(1,S.total)/a)/Math.log(b/a))*5}; }
 function charLv(){ const {i,q}=lvQ(); return 1+i*5+(i>=LAST?Math.floor(q):Math.min(4,Math.floor(q))); }
 function lvFrac(){ const {i,q}=lvQ(); return i>=LAST||q<5 ? q-Math.floor(q) : 1; }
-function bossLv(){ return stageIdx()>=LAST&&S.finalOK ? Math.max(0,charLv()-(1+LAST*5)) : 0; }
+function bossLv(){ return stageIdx()>=LAST&&totalStage()>=LAST&&S.finalOK ? Math.max(0,charLv()-(1+LAST*5)) : 0; }
 function spTotal(){ return (charLv()-1)+3*stageIdx()+(S.spBonus||0)+achSP()+itemSP()+5*(S.rebirth||0); }
 function itemSP(){ let k=0; for(const a of autoList()){ const n=S.auto[a.id]||0; if(n>=50)k++; if(n>=100)k++; if(n>=200)k++; } return k; }
 function achSP(){ return Object.values(S.ach||{}).filter(Boolean).length; }
@@ -3777,6 +3801,8 @@ function statRender(){
   [[S.debuffEnd,'💸','빚독촉 ×0.5'],[S.slumpEnd,'📉','침체 ×0.5'],[S.fireEnd,'🔥','화재 자동 정지'],[S.sueEnd,'🧾','고소 ×0.7']].forEach(([e,i,t])=>{ if((e||0)>n) C.push(['db',i,t,sec(e)]); });
   if((S.insEnd||0)>n) C.push(['ok','🛡️','보험',sec(S.insEnd)]);
   const cm=clockMult(); if(cm>1.001) C.push(['ok',perkA('nightX')&&(new Date().getHours()>=21||new Date().getHours()<6)?'🌃':'🏢',`길 효과 ×${+cm.toFixed(2)}`,'']);
+  { const N=newsNow(), m=newsMul(N.n); C.unshift([m>1.001?'bf nw':m<.999?'db nw':'ok nw',N.n.ic,`📰 ${N.n.t} ×${+m.toFixed(2)}`,'×'+(+m.toFixed(1))]);
+    if(S.newsBlk!==N.blk){ const first=S.newsBlk==null; S.newsBlk=N.blk; if(!first) setTimeout(()=>toast(`📰 속보: ${N.n.ic} ${N.n.t}! ${S.route?`${ROUTES[S.route].nm} 수입 ×${+m.toFixed(2)}`:''}`),400); } }
   const bl=bossLv(); if(bl) C.push(['bs','👑',`끝판왕 Lv.${bl} ×${(1+.03*bl).toFixed(2)}`,'']);
   { const I=autoList().filter(x=>(S.auto[x.id]||0)>0), ik=I.map(x=>x.id+S.auto[x.id]+(isMgr(x.id)?'m':'')).join(); const ir=$('itemRow'); if(ir&&ir._k!==ik){ ir._k=ik; ir.innerHTML=I.map(x=>{ const g=gradeOf(S.auto[x.id]); return `<span class="bi it ${g?g[3]:''} ${isMgr(x.id)?'on':''}" title="${x.nm} ${S.auto[x.id]}개${isMgr(x.id)?' · 👔 자동':' · 매니저 없음'}">${emo(x.ic)}<em>${S.auto[x.id]}</em></span>`; }).join(''); ir.classList.toggle('on',I.length>0); } }
   { const sc=getComputedStyle($('scene')), sec=$('scene').parentElement, ml=sc.marginLeft; if(sec._m!==ml){ sec._m=ml; sec.style.setProperty('--scm',ml); } }
@@ -4036,6 +4062,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.7',d:'11/1',items:['📊 <b>Lv 바와 신분 바를 하나로</b>: 평소엔 다음 Lv까지, 신분 상승 때가 되면 노란 바로 바뀌어요','⬆️ <b>신분 상승 조건</b>: Lv 조건 + 현금 조건 (예: Lv.36 + 현금 600억 모으기) · 둘 다 채우면 자동으로 올라가요','📰 <b>정세</b>: 30분마다 뉴스가 바뀌고 직업마다 수입이 달라져요 (예: 독감 대유행 → 의사 ×1.5) · 모든 유저가 같은 뉴스 · 위 줄 📰 아이콘을 누르면 직업별 표','🧹 목록 위 안내 문구와 돈벌이 아이콘 줄을 뺐어요']},
   {v:'v4.6.1',d:'11/1',items:['🧹 줄 정리: 위 줄은 Lv + 버프만, 그 아래 한 줄에 돈벌이 아이콘 · 위 줄·돈벌이 줄·미션 줄을 캐릭터 화면 폭에 딱 맞췄어요']},
   {v:'v4.6',d:'11/1',items:['🧭 캐릭터 화면 <b>위 줄</b>: 왼쪽 Lv·경험치, 오른쪽 버프·디버프·돈벌이를 <b>버프 아이콘</b>처럼 (숫자 = 남은 초 · 개수)','💼 가진 돈벌이 전부 아이콘으로 · 테두리 = 등급 · 매니저 있는 건 진하게(👔), 없는 건 흐리게','🚪 방 안에선 행인이 안 돌아다녀요']},
   {v:'v4.5',d:'11/1',items:['⬆️ <b>Lv은 위로</b>: 돈 아래에 Lv·경험치·신분 이름 · 캐릭터 화면엔 캐릭터와 이벤트만','💼 바닥에 놓여 있던 돈벌이 이모지 대신 <b>상태줄에 칩</b>으로 (아이콘·개수·등급 테두리·👔 매니저)']},
@@ -4403,13 +4430,19 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.6.1';
+const GAME_VER='v4.7';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
 document.querySelectorAll('.tabs button[data-tab]').forEach(b=>{ const k='tab_'+b.dataset.tab, t=b.textContent.replace(/[^가-힣]/g,''); if(ICON[k]) b.innerHTML=`<span class="ti">${ICON[k]}</span><span class="tl">${t}</span>`; });
 try{ $('stat').prepend($('skbar')); const tr=document.createElement('div'); tr.id='topRow'; $('scene').before(tr); tr.append($('stChip'),$('stat')); const ir=document.createElement('div'); ir.id='itemRow'; $('scene').before(ir); }catch(e){}
 $('misB').onclick=e=>{ e.stopPropagation(); misSheet(); };
+$('stc').addEventListener('click',e=>{ if(e.target.closest('.nw')) newsSheet(); });
+window.newsSheet=function(){ const N=newsNow(), n=N.n, mm=Math.ceil(N.left/60000);
+  const L=Object.entries(ROUTES).map(([k,r])=>{ const v=(n.m[k]||1)*(n.m.all||1); return [k,r,v]; }).sort((a,b)=>b[2]-a[2]);
+  showModal(`<div class="nws"><h2>📰 오늘의 정세</h2><div class="nh">${emo(n.ic)} <b>${n.t}</b><small>${mm}분 뒤 다음 소식 · 모든 유저가 같은 뉴스를 봐요</small></div>
+    <div class="nl">${L.map(([k,r,v])=>`<div class="${k===S.route?'me':''} ${v>1.001?'up':v<.999?'dn':''}"><span>${emo(r.ic)} ${r.nm}</span><b>${v>1.001?'▲':v<.999?'▼':'–'} ×${+v.toFixed(2)}</b></div>`).join('')}</div>
+    ${n.beg?`<p class="sm">🥫 아직 진로가 없는 거지: 수입 ×${n.beg}</p>`:''}<button onclick="hideModal()">확인</button></div>`); };
 $('mmenu').onclick=()=>{ const B=[['sndBtn','소리'],['treeBtn','신분 트리'],['statsBtn','기록'],['accBtn','계정'],['sizeBtn','크게 보기']].filter(([id])=>$(id));
   showModal(`<div class="mmn"><h2>☰ 메뉴</h2>${B.map(([id,t])=>`<button data-b="${id}">${$(id).childNodes[0].textContent.trim()} ${t}</button>`).join('')}<button class="gray" onclick="hideModal()">닫기</button><p class="sm">제작자 KSW · ${GAME_VER}</p></div>`);
   document.querySelectorAll('.mmn [data-b]').forEach(b=>b.onclick=()=>{ hideModal(); setTimeout(()=>$(b.dataset.b).click(),50); }); };
