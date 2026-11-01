@@ -2,7 +2,7 @@
 chcp 65001 >nul
 rem ===== 설정 =====
 rem 투명도: 100 = 안 비침 · 75 = 살짝 비침 · 50 = 반투명 (20~100)
-set "GEOJI_OPACITY=75"
+set "GEOJI_OPACITY=100"
 rem 항상 위에 띄우기: 1 = 켜기 · 0 = 끄기
 set "GEOJI_TOP=0"
 rem ================

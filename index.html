@@ -502,6 +502,7 @@
   .cards.c5{flex-wrap:wrap;max-width:760px}
   .cards.c5 .card2{flex:1 1 150px;max-width:170px}
   .cards.c5{max-width:780px}
+  .cards.c5.r16{max-width:760px} .cards.c5.r16 .card2{flex:1 1 170px;max-width:180px}
   @media (max-width:560px){
     .cards,.cards.c5{flex-direction:column;align-items:stretch;gap:7px}
     .cards .card2,.cards.c5 .card2{flex:none;max-width:none;width:100%;display:grid!important;grid-template-columns:34px 1fr;text-align:left;align-items:center;column-gap:8px;padding:9px 10px}
@@ -1662,7 +1663,21 @@ const ROUTES={
           solar:{ic:'☀️',nm:'태양광',st:[{name:'태양광 단지 대표',face:'🕴️',bowl:'☀️'},{name:'태양의 지배자',face:'🤴',bowl:'🌞'}]},
           battery:{ic:'🔋',nm:'배터리',st:[{name:'배터리 공장장',face:'🧑‍🔬',bowl:'🔋'},{name:'배터리 황제',face:'🤴',bowl:'🚗'}]},
           nuclear:{ic:'⚛️',nm:'원자력',st:[{name:'원전 책임자',face:'🧑‍🔬',bowl:'⚛️'},{name:'에너지 국가 설계자',face:'🤴',bowl:'🏭'}]},
-          hydro:{ic:'💧',nm:'수소',st:[{name:'수소 충전소 체인',face:'🕴️',bowl:'💧'},{name:'수소 경제 황제',face:'🤴',bowl:'🚀'}]}}}
+          hydro:{ic:'💧',nm:'수소',st:[{name:'수소 충전소 체인',face:'🕴️',bowl:'💧'},{name:'수소 경제 황제',face:'🤴',bowl:'🚀'}]}}},
+  shop:{ic:'🛍️',nm:'유통 사장',color:'#14b8a6',perk:'',desc:'싸게 사서 비싸게 판다',
+    st:[{name:'동네 슈퍼 알바',face:'🧑‍💼',bowl:'🧃'},{name:'구멍가게 사장',face:'🧑‍💼',bowl:'🏪'},{name:'마트 점장',face:'🧑‍💼',bowl:'🛒'},{name:'쇼핑몰 대표',face:'🤵',bowl:'🛍️'},{name:'유통 그룹 회장',face:'🤵',bowl:'🏬'}],
+    subs:{online:{ic:'🖥️',nm:'온라인 쇼핑몰',st:[{name:'오픈마켓 셀러',face:'🧑‍💻',bowl:'🖥️'},{name:'이커머스 황제',face:'🤴',bowl:'📦'}]},
+          luxury:{ic:'💎',nm:'명품 편집숍',st:[{name:'편집숍 대표',face:'🕴️',bowl:'💎'},{name:'명품 그룹 회장',face:'🤴',bowl:'👜'}]},
+          mart:{ic:'🛒',nm:'대형마트',st:[{name:'마트 체인 대표',face:'🕴️',bowl:'🛒'},{name:'유통 공룡',face:'🤴',bowl:'🏬'}]},
+          cvs:{ic:'🏪',nm:'편의점 체인',st:[{name:'편의점 본부장',face:'🕴️',bowl:'🏪'},{name:'편의점 제국',face:'🤴',bowl:'🍙'}]},
+          export:{ic:'🚢',nm:'무역상',st:[{name:'무역 회사 대표',face:'🕴️',bowl:'🚢'},{name:'무역왕',face:'🤴',bowl:'🌏'}]}}},
+  crypto:{ic:'🪙',nm:'코인 개척자',color:'#f97316',perk:'',desc:'블록 하나에 인생을 건다',
+    st:[{name:'코인 초보',face:'🧑‍💻',bowl:'📱'},{name:'채굴꾼',face:'🧑‍💻',bowl:'⛏️'},{name:'코인 유튜버',face:'🧑‍💻',bowl:'🎥'},{name:'거래소 직원',face:'🧑‍💼',bowl:'💹'},{name:'코인 펀드 대표',face:'🤵',bowl:'🪙'}],
+    subs:{exch:{ic:'🏦',nm:'거래소',st:[{name:'거래소 대표',face:'🕴️',bowl:'🏦'},{name:'코인 거래소 황제',face:'🤴',bowl:'💹'}]},
+          nft:{ic:'🖼️',nm:'NFT',st:[{name:'NFT 아티스트',face:'🧑‍🎨',bowl:'🖼️'},{name:'메타버스 지주',face:'🤴',bowl:'🌐'}]},
+          defi:{ic:'🔗',nm:'디파이',st:[{name:'디파이 설계자',face:'🧑‍💻',bowl:'🔗'},{name:'탈중앙 금융왕',face:'🤴',bowl:'⛓️'}]},
+          mine:{ic:'⛏️',nm:'채굴',st:[{name:'채굴장 대표',face:'🕴️',bowl:'⛏️'},{name:'해시 파워 황제',face:'🤴',bowl:'🔋'}]},
+          meme:{ic:'🐶',nm:'밈코인',st:[{name:'밈코인 창시자',face:'🤪',bowl:'🐶'},{name:'밈의 신',face:'🤴',bowl:'🚀'}]}}}
 };
 const PERKS={
   biz:{auto:1.4},
@@ -1701,6 +1716,9 @@ const PERKS={
   build:{auto:1.25,idleEff:.2}, energy:{auto:1.2,feverS:5,goldX:1.3},
   'build.tower':{auto:1.3}, 'build.apt':{auto:1.2,idleEff:.2}, 'build.interior':{auto:1.1,click:1.3}, 'build.infra':{auto:1.15,evRes:.3}, 'build.eco':{auto:1.1,goldFreq:.2},
   'energy.oilco':{auto:1.3}, 'energy.solar':{auto:1.1,idleEff:.3}, 'energy.battery':{auto:1.2,discount:.08}, 'energy.nuclear':{auto:1.25,evRes:.2}, 'energy.hydro':{auto:1.1,feverP:.05,goldX:1.3},
+  shop:{auto:1.2,discount:.08}, crypto:{auto:1.1,goldX:1.5,feverP:.05},
+  'shop.online':{auto:1.2,idleEff:.2}, 'shop.luxury':{auto:1.1,goldX:1.5}, 'shop.mart':{auto:1.3}, 'shop.cvs':{auto:1.15,idleEff:.25,idleH:4}, 'shop.export':{auto:1.15,betP:.08},
+  'crypto.exch':{auto:1.3}, 'crypto.nft':{goldX:1.6,goldFreq:.2}, 'crypto.defi':{auto:1.15,idleEff:.3}, 'crypto.mine':{auto:1.2,idleEff:.2}, 'crypto.meme':{click:1.3,feverP:.08,betP:.1},
 };
 function perkText(o){
   const L={auto:v=>`자동 ×${v}`,click:v=>`클릭 ×${v}`,idleEff:v=>`방치 효율 +${Math.round(v*100)}%`,idleH:v=>`방치 최대 +${v}시간`,
@@ -1775,6 +1793,8 @@ const ROUTE_ITEMS={
   law:[['📝','법률 상담','30분에 10만 원'],['⚖️','수임료','이기면 두 배'],['🏢','기업 자문','고문 계약'],['📜','성공 보수','대형 사건 승소'],['🏢','법무법인 설립','간판에 내 이름']],
   build:[['🧱','벽돌 나르기','허리는 소중해요'],['🛠️','인테리어 시공','견적은 넉넉하게'],['🏠','주택 분양','완판 행진'],['🏗️','건설 현장','타워크레인 가동'],['🏢','오피스 빌딩','임대료가 따박따박']],
   energy:[['🔌','전기 공사','감전 주의'],['⛽','주유소','기름값은 오늘도 상승'],['🏭','소형 발전소','전기가 곧 돈'],['🛢️','정유 공장','검은 황금'],['⚡','송전망','나라 전체에 전기를']],
+  shop:[['🧃','음료 진열','냉장고 정리는 기본'],['🏪','구멍가게','동네 사랑방'],['🛒','동네 마트','1+1의 마법'],['🛍️','쇼핑몰 입점','주말 매출 폭발'],['🏬','유통 센터','전국으로 출고']],
+  crypto:[['📱','코인 앱 알림','새벽에도 깨어 있다'],['⛏️','채굴기','전기세는 비밀'],['🎥','코인 방송','오늘의 떡상 종목'],['💹','차익 거래','김치 프리미엄'],['🪙','코인 펀드','남의 코인으로 돈 벌기']],
 };
 const SUB_ITEMS={
   'biz.food':[['🍽️','파인다이닝','예약은 3달 후'],['🌟','미슐랭 체인','별이 주렁주렁'],['🏯','외식 그룹 본사','브랜드만 30개'],['🌏','글로벌 외식 제국','전 세계 입맛 점령']],
@@ -1847,6 +1867,16 @@ const SUB_ITEMS={
   'energy.battery':[['🔋','배터리 공장','전기차 대란'],['🚗','전기차 브랜드','충전 한 번에 천 킬로'],['🏭','기가 팩토리','공장이 도시만 해'],['🌐','배터리 제국','모든 기계에 내 배터리']],
   'energy.nuclear':[['⚛️','원자력 발전소','깨끗한 대용량'],['🔬','소형 원자로','작지만 강하다'],['🌞','핵융합 연구소','인공 태양'],['🌍','핵융합 발전망','무한 에너지']],
   'energy.hydro':[['💧','수소 충전소','물에서 에너지를'],['🚛','수소 트럭','배기가스 대신 물'],['🏭','수소 생산 기지','그린 수소 대량 생산'],['🚀','수소 우주선','우주까지 수소로']],
+  'shop.online':[['🖥️','오픈마켓 스토어','리뷰 1만 개'],['📦','로켓 배송 센터','자고 나면 도착'],['🛰️','해외 직구 플랫폼','전 세계가 내 창고'],['🌐','이커머스 제국','클릭 한 번에 다 산다']],
+  'shop.luxury':[['💎','명품 편집숍','오픈런 행렬'],['👜','한정판 리셀','웃돈이 두 배'],['🏰','명품 플래그십','건물 통째로 매장'],['👑','명품 그룹','세계 3대 명품']],
+  'shop.mart':[['🛒','대형마트 체인','주말엔 주차 전쟁'],['🏬','창고형 매장','박스째로 판다'],['🚛','전국 물류망','새벽 배송'],['🌏','글로벌 유통 공룡','세계 1위 마트']],
+  'shop.cvs':[['🏪','편의점 체인','골목마다 하나'],['🍙','PB 도시락','편의점 맛집'],['🤖','무인 편의점','24시간 무인'],['🌏','해외 편의점','아시아 1만 호점']],
+  'shop.export':[['🚢','수출 컨테이너','배 한 척 가득'],['🏭','해외 공장','만들어서 판다'],['✈️','항공 화물','하루 만에 배송'],['🌏','무역 제국','바다를 지배한다']],
+  'crypto.exch':[['🏦','코인 거래소','수수료가 쏟아진다'],['💹','선물 거래','레버리지 100배'],['🌐','글로벌 거래소','24시간 쉬지 않는다'],['🏛️','디지털 자산 은행','코인 대출까지']],
+  'crypto.nft':[['🖼️','NFT 컬렉션','픽셀 한 장에 억'],['🎮','P2E 게임','놀면서 번다'],['🌐','메타버스 땅','가상 부동산'],['👑','메타버스 왕국','가상 세계의 주인']],
+  'crypto.defi':[['🔗','스테이킹 풀','맡겨두면 이자'],['💧','유동성 풀','수수료 나눠 먹기'],['⛓️','크로스체인 브릿지','체인을 잇는다'],['🏛️','탈중앙 은행','은행 없는 금융']],
+  'crypto.mine':[['⛏️','채굴장','팬 소리가 돈 소리'],['🔋','전용 발전소','전기도 내가 만든다'],['🧊','북극 채굴 기지','냉각비 0원'],['🛰️','우주 채굴 위성','해시 파워 무한']],
+  'crypto.meme':[['🐶','밈코인 발행','강아지 코인'],['🚀','펌핑 커뮤니티','투 더 문'],['🎪','밈 페스티벌','밈이 곧 돈'],['🌕','달 착륙 코인','진짜 달에 간다']],
 };
 let _autoKey='', _autoList=null;
 function autoList(){
@@ -1892,6 +1922,8 @@ var CLICK_R={
   law:[['📝','무료 법률 상담','상담하다 사건 수임'],['⚖️','억울함 대변','이웃의 억울한 사연'],['🤝','합의 중재','양쪽에서 감사비']],
   build:[['🦺','안전모 동냥','현장 반장님 용돈'],['🧱','벽돌 한 장만','티끌 모아 태산'],['📐','무료 견적','상담하다 계약']],
   energy:[['🔌','충전기 빌려주기','폰 배터리 구조대'],['⛽','셀프 주유 도우미','팁 받고 주유'],['💡','절전 꿀팁 강의','전기세 아껴드려요']],
+  shop:[['🧃','시식 코너 도우미','한 입 드셔보세요'],['🧾','영수증 이벤트','추첨 경품'],['📣','반짝 세일 호객','지금만 이 가격']],
+  crypto:[['📱','지갑 주소 공유','후원 받아요'],['🪂','에어드랍 사냥','공짜 코인 줍기'],['🚀','떡상 예언','맞으면 후원 폭주']],
 };
 var CLICK_S={
   'biz.food':['🍽️','미식가 시식회'],'biz.retail':['🛍️','사은품 이벤트'],'biz.estate':['🔑','집들이 초대'],'biz.hotel':['🛎️','VIP 팁'],'biz.deliv':['🛵','배달 팁'],
@@ -1908,6 +1940,8 @@ var CLICK_S={
   'law.firm':['🏢','로펌 세미나'],'law.tvlaw':['📺','사이다 해설'],'law.intl':['🌐','국제 포럼'],'law.ip':['💡','특허 상담'],'law.pros':['🔍','정의 구현'],
   'build.tower':['🏙️','모델하우스 투어'],'build.apt':['🏘️','청약 상담'],'build.interior':['🛋️','집들이 컨설팅'],'build.infra':['🌉','준공식 축사'],'build.eco':['🌿','친환경 강연'],
   'energy.oilco':['🛢️','유전 투자 설명회'],'energy.solar':['☀️','햇빛 발전 체험'],'energy.battery':['🔋','시승 이벤트'],'energy.nuclear':['⚛️','원자력 견학'],'energy.hydro':['💧','수소차 시승'],
+  'shop.online':['🖥️','라방 셀러'],'shop.luxury':['💎','VIP 쇼핑 도우미'],'shop.mart':['🛒','시식 행사'],'shop.cvs':['🏪','야간 손님 팁'],'shop.export':['🚢','바이어 접대'],
+  'crypto.exch':['🏦','상장 설명회'],'crypto.nft':['🖼️','NFT 민팅 이벤트'],'crypto.defi':['🔗','디파이 강의'],'crypto.mine':['⛏️','채굴장 투어'],'crypto.meme':['🐶','밈 챌린지'],
 };
 var TIERS_CR=[[3e7,.016,8e3],[1.5e9,.032,9e4],[6e10,.06,9e5]], TIERS_CS=[[8e12,.2,4e7]];
 var _clkKey='', _clkList=null;
@@ -2006,7 +2040,7 @@ const RTRAIT={
   job:[[['🌙','야근러',{click:.4,idleEff:-.2}],['🏠','칼퇴러',{idleEff:.3,idleH:4,click:-.2}]],[['🏢','회사형 인간',{auto:.3,riskP:-.15}],['🦄','사이드 프로젝트',{riskP:.2,betP:.1,auto:-.1}]]],
   inv:[[['📊','단타',{feverP:.08,feverS:4,idleEff:-.2}],['💎','장기 투자',{idleEff:.35,feverP:-.05}]],[['🎢','레버리지',{feverX:1,evRes:-.25}],['🛡️','분산 투자',{evRes:.35,feverX:-.5}]]],
   star:[[['💖','팬서비스',{click:.35,comboMax:3,auto:-.1}],['📺','방송 체질',{auto:.25,click:-.15}]],[['🔥','노이즈 마케팅',{goldFreq:.5,evDodge:-.4}],['😇','바른 이미지',{evDodge:.4,goldFreq:-.2}]]],
-  cre:[[['🤖','알고리즘 사냥꾼',{goldFreq:.4,goldBonus:-.15}],['🧑‍🤝‍🧑','찐팬 관리',{goldBonus:.5,goldFreq:-.2}]],[['📈','떡상 노리기',{betP:.15,riskP:.1,auto:-.1}],['🐢','꾸준 업로드',{auto:.25,idleEff:.15,betP:-.1}]]],
+  cre:[[['🤖','알고리즘 사냥꾼',{goldFreq:.4,goldBonus:-.15}],['👥','찐팬 관리',{goldBonus:.5,goldFreq:-.2}]],[['📈','떡상 노리기',{betP:.15,riskP:.1,auto:-.1}],['🐢','꾸준 업로드',{auto:.25,idleEff:.15,betP:-.1}]]],
   gov:[[['📚','승진 시험',{click:.3,idleEff:-.15}],['🍚','철밥통',{evRes:.3,evDodge:.2,click:-.15}]],[['🏛️','고위직 루트',{auto:.3,mgrDisc:-.3}],['🏦','연금 생활',{idleEff:.4,idleH:6,auto:-.1}]]],
   doc:[[['🔪','외과 체질',{click:.4,comboMax:3,idleEff:-.2}],['🩺','내과 체질',{auto:.25,evRes:.1,click:-.2}]],[['🚑','응급실 에이스',{feverP:.08,feverS:6,evDodge:-.2}],['🏥','개원의',{auto:.2,mgrDisc:.3,feverP:-.04}]]],
   ath:[[['🏃','공격수',{click:.4,comboMax:4,evRes:-.15}],['🧱','수비수',{evRes:.3,pvpDef:.2,click:-.15}]],[['🏆','우승 청부사',{goldX:.5,feverX:.5,auto:-.1}],['💰','몸값 협상',{auto:.3,goldX:-.2}]]],
@@ -2016,6 +2050,8 @@ const RTRAIT={
   law:[[['🗣️','법정 싸움꾼',{robP:.1,pvpDisc:.2,evRes:-.15}],['🤝','합의 전문',{evRes:.3,pvpDef:.2,robP:-.05}]],[['💼','대형 사건',{riskP:.2,goldX:.3,idleEff:-.15}],['📜','자문 계약',{auto:.25,idleEff:.2,riskP:-.1}]]],
   build:[[['🏗️','속도전',{auto:.3,evRes:-.15}],['🧱','튼튼 시공',{evRes:.3,idleEff:.2,auto:-.1}]],[['🏙️','대형 수주',{goldX:.5,auto:.1,goldFreq:-.15}],['🏠','실속 분양',{discount:.1,auto:.15,goldX:-.2}]]],
   energy:[[['⚡','고출력',{auto:.35,idleEff:-.15}],['🔋','장기 저장',{idleEff:.35,idleH:4,auto:-.1}]],[['🛢️','유가 베팅',{betP:.15,goldX:.4,evRes:-.15}],['☀️','친환경 전환',{auto:.25,evRes:.15,goldX:-.2}]]],
+  shop:[[['🏷️','박리다매',{discount:.12,goldX:-.2}],['💎','프리미엄 진열',{auto:.3,discount:-.1}]],[['📦','재고 몰빵',{auto:.35,evRes:-.2}],['🧾','깐깐한 장부',{evRes:.3,idleEff:.2,auto:-.1}]]],
+  crypto:[[['🚀','풀 레버리지',{betP:.2,goldX:.5,evRes:-.25}],['🧊','콜드 월렛',{evRes:.35,pvpDef:.3,goldX:-.2}]],[['⛏️','채굴 몰입',{idleEff:.35,idleH:4,click:-.15}],['📈','단타 매매',{click:.4,feverP:.05,idleEff:-.2}]]],
 };
 function effText(o){ const L={auto:'자동 수입',click:'구걸 수입',goldFreq:'돈주머니 등장',goldBonus:'돈주머니 보상',goldX:'돈주머니 보상',feverP:'피버 확률',feverX:'피버 배율',feverS:'피버 시간',comboMax:'콤보 배율',idleEff:'방치 효율',idleH:'방치 시간',mgrDisc:'매니저 할인',discount:'가격 할인',evRes:'악재 피해 감소',evDodge:'악재 회피',betP:'도박 성공',riskP:'도전 성공',pvpDef:'뜯기 방어',pvpDisc:'뜯기·고소 할인',robP:'뜯기 성공',mgrUp:'매니저 돈벌이',pvpDef:'뜯기 방어',tipP:'용돈 확률'};
   return Object.entries(o).map(([k,v])=>{ const n=L[k]||k, up=v>0, x= k==='feverX'?(up?'+':'')+v : k==='feverS'?(up?'+':'')+v+'초' : k==='idleH'?(up?'+':'')+v+'시간' : k==='comboMax'?(up?'+':'')+(v/10).toFixed(1) : (up?'+':'')+Math.round(v*100)+'%'; return `${n} ${x}`; }).join(' · '); }
@@ -2047,8 +2083,8 @@ function onlineMult(){
 }
 var SECT={street:['🥫','서민경제'],food:['🍗','외식'],retail:['🛒','유통'],office:['🏢','기업'],finance:['🏦','금융'],ent:['🎤','연예'],media:['📺','미디어'],public:['🏛️','공공'],
   medical:['🏥','의료'],sports:['⚽','스포츠'],tech:['💻','IT'],culture:['🎨','문화'],legal:['⚖️','법률'],estate:['🏙️','부동산'],energy:['🛢️','에너지'],crypto:['🪙','코인']};
-var R_SECT={build:'estate',energy:'energy',biz:'food',job:'office',inv:'finance',star:'ent',cre:'media',gov:'public',doc:'medical',ath:'sports',dev:'tech',art:'culture',chef:'food',law:'legal'};
-var S_SECT={'build.interior':'retail','build.infra':'public','energy.battery':'tech','energy.nuclear':'energy','gov.mayor':'estate','doc.mission':'public','art.auction':'finance','art.design':'retail','chef.truck':'street','law.tvlaw':'media','law.pros':'public','biz.retail':'retail','biz.estate':'estate','biz.hotel':'estate','biz.deliv':'retail','job.startup':'tech','job.fire':'estate','inv.coin':'crypto','inv.oil':'energy','inv.gold':'finance','inv.vc':'tech',
+var R_SECT={shop:'retail',crypto:'crypto',build:'estate',energy:'energy',biz:'food',job:'office',inv:'finance',star:'ent',cre:'media',gov:'public',doc:'medical',ath:'sports',dev:'tech',art:'culture',chef:'food',law:'legal'};
+var S_SECT={'shop.online':'tech','shop.export':'finance','crypto.exch':'finance','crypto.nft':'culture','crypto.mine':'energy','build.interior':'retail','build.infra':'public','energy.battery':'tech','energy.nuclear':'energy','gov.mayor':'estate','doc.mission':'public','art.auction':'finance','art.design':'retail','chef.truck':'street','law.tvlaw':'media','law.pros':'public','biz.retail':'retail','biz.estate':'estate','biz.hotel':'estate','biz.deliv':'retail','job.startup':'tech','job.fire':'estate','inv.coin':'crypto','inv.oil':'energy','inv.gold':'finance','inv.vc':'tech',
   'star.ad':'media','star.mc':'media','cre.game':'tech','cre.comm':'retail','cre.edu':'media','gov.judge':'legal','doc.bio':'medical','doc.tvdoc':'media','ath.caster':'media','dev.block':'crypto','dev.gamedev':'tech',
   'art.webtoon':'media','chef.food':'retail','chef.tv':'media','law.ip':'tech'};
 var C_SECT={cup:'street',sign:'street',guitar:'street',paper:'street',store:'retail',fish:'food'};
@@ -2683,6 +2719,8 @@ const KLOOK={
   law:{b:['#6b7280','#4b5563','#374151'],item:'gavel',tie:'#dc2626',lapel:1},
   build:{b:['#fde68a','#fbbf24','#f59e0b'],hat:['cap','#facc15'],item:'box',lanyard:1},
   energy:{b:['#bfdbfe','#93c5fd','#60a5fa'],hat:['cap','#2563eb'],item:'clip'},
+  shop:{b:['#99f6e4','#5eead4','#2dd4bf'],hat:['visor','#0d9488'],item:'bag',apron:1},
+  crypto:{b:['#fed7aa','#fdba74','#fb923c'],hat:['headset','#f97316'],item:'coin',glass:'round'},
 };
 // 고른 길(1차 진로 트리)에 따라 바뀌는 소품
 var KPATH={
@@ -2700,6 +2738,8 @@ var KPATH={
   law:{A:{item:'gavel'},B:{item:'folder'},C:{item:'book',glass:'round'}},
   build:{A:{item:'box'},B:{item:'book'},C:{item:'chart'}},
   energy:{A:{item:'coin'},B:{item:'chart',hat:['visor','#22c55e']},C:{item:'coffee'}},
+  shop:{A:{item:'box'},B:{item:'bag'},C:{item:'chart'}},
+  crypto:{A:{item:'coin'},B:{item:'laptop'},C:{item:'dice'}},
 };
 const KBASE=[
   {b:['#ffcf8a','#f2b66b','#e8a258'],item:'cup',patch:1,dirt:1},
@@ -2844,7 +2884,7 @@ const ICON={
   gold:`<svg viewBox="0 0 48 48"><path d="M14 16q-12 14 -2 26q12 6 24 0q10 -12 -2 -26z" fill="#f5c451" ${IO}/><path d="M16 16h16l-4 -9h-8z" fill="#f5c451" ${IO}/><path d="M15 16q9 3 18 0" ${IO} fill="none"/><text x="24" y="37" text-anchor="middle" font-size="15" font-weight="900" fill="#5a4436" font-family="sans-serif">₩</text></svg>`,
 };
 // Fluent Emoji 3D (Microsoft, MIT License)
-var ICON_VER='254a635b', E3D={}, E3N={};   // 3D 아이콘은 icons.json으로 분리 (게임 파일 크기 절반)
+var ICON_VER='5444ffee', E3D={}, E3N={};   // 3D 아이콘은 icons.json으로 분리 (게임 파일 크기 절반)
 function setIcons(o){ E3D=o||{}; E3N={}; for(const k in E3D) E3N[k.replace(/\uFE0F/g,'')]=E3D[k]; }
 try{ const c=JSON.parse(localStorage.getItem('geoji_icons')||'null'); if(c&&c.v===ICON_VER) setIcons(c.d); }catch(e){}
 function iconsReady(){ try{ moneyKey=''; _skbKey=''; propsKey=''; const st=$('stc'); if(st) st._k=''; const mb=$('misB'); if(mb) mb._k=''; cityStage=''; lastStage=-1; renderList(); render(); renderSkbar(true); }catch(e){} }
@@ -3206,7 +3246,7 @@ var EVJ={doc:{ic:'🚑',nm:'응급 호출',ty:'tap',n:1,t:4,d:'환자를 눌러�
   art:{ic:'💡',nm:'영감 번뜩',ty:'tap',n:1,t:3,d:'영감을 붙잡아요!'},cre:{ic:'💬',nm:'댓글 폭주',ty:'tap',n:4,t:6,d:'댓글에 답해요!'},
   inv:{ic:'📈',nm:'급등 신호',ty:'tap',n:1,t:2.5,d:'지금이야! 눌러요!'},job:{ic:'📊',nm:'긴급 보고',ty:'tap',n:3,t:6,d:'보고서를 올려요!'},
   star:{ic:'✍️',nm:'팬 사인회',ty:'rush',n:45,t:10,d:'꼬질이를 연타!'},ath:{ic:'⚽',nm:'결승골 찬스',ty:'rush',n:30,t:8,d:'꼬질이를 연타!'},
-  chef:{ic:'🧾',nm:'주문 들어옴',ty:'order',n:3,t:60,d:'주문대로 사요!'},build:{ic:'🧱',nm:'자재 도착',ty:'tap',n:4,t:6,d:'자재를 옮겨요!'},energy:{ic:'⚡',nm:'정전 복구',ty:'tap',n:3,t:5,d:'끊긴 전선을 이어요!'},biz:{ic:'📦',nm:'단체 주문',ty:'order',n:3,t:60,d:'주문대로 사요!'}};
+  chef:{ic:'🧾',nm:'주문 들어옴',ty:'order',n:3,t:60,d:'주문대로 사요!'},build:{ic:'🧱',nm:'자재 도착',ty:'tap',n:4,t:6,d:'자재를 옮겨요!'},shop:{ic:'🛒',nm:'타임 세일 손님',ty:'order',n:3,t:60,d:'주문대로 사요!'},crypto:{ic:'🚀',nm:'급등 알림',ty:'tap',n:1,t:2.5,d:'지금 매수!'},energy:{ic:'⚡',nm:'정전 복구',ty:'tap',n:3,t:5,d:'끊긴 전선을 이어요!'},biz:{ic:'📦',nm:'단체 주문',ty:'order',n:3,t:60,d:'주문대로 사요!'}};
 var EV=null;
 function evBusy(){ return paused||document.hidden||!S.route||modalBusy()||$('modal').classList.contains('show')||(S.pending&&S.pending.length)||$('gate').classList.contains('show'); }
 function evStart(){
@@ -3235,7 +3275,8 @@ var MIS_RT={biz:['첫 장사','손님 끌기','장사 대박','단골 만들기'
   cre:['첫 영상','라이브 방송','떡상 기원','슈퍼챗 세례','채널 확장','알고리즘 폭발'],gov:['첫 발령','민원 폭주','야근 결재','표창 받기','예산 편성','감사 통과'],
   doc:['인턴 첫날','회진 돌기','첫 수술','감사 편지','병동 확장','응급실 당직'],ath:['첫 경기','강훈련','해트트릭','MVP 보너스','스폰서 계약','결승전'],
   dev:['첫 커밋','버그 잡기','밤샘 코딩','오픈소스 후원','서비스 확장','긴급 배포'],art:['첫 작품','거리 드로잉','영감 폭발','작품 판매','전시 준비','개인전 대박'],
-  chef:['첫 주방','칼질 연습','불맛 연타','팁 받기','메뉴 확장','불쇼 타임'],build:['첫 출근','벽돌 나르기','타워크레인','준공 검사','분양 대박','랜드마크 착공'],energy:['첫 배선','주유소 개업','정전 복구','유가 상승','발전소 가동','에너지 대란'],
+  chef:['첫 주방','칼질 연습','불맛 연타','팁 받기','메뉴 확장','불쇼 타임'],shop:['첫 진열','손님 맞이','반짝 세일','단골 만들기','2호점 오픈','블랙 프라이데이'],crypto:['첫 지갑','첫 채굴','떡상 기원','급등 포착','펀드 결성','불장'],
+  build:['첫 출근','벽돌 나르기','타워크레인','준공 검사','분양 대박','랜드마크 착공'],energy:['첫 배선','주유소 개업','정전 복구','유가 상승','발전소 가동','에너지 대란'],
   law:['첫 상담','변론 연습','명변론','성공 보수','사무소 확장','승소 판결']};
 var MIS_T={ buy:{ic:'🛒',t:o=>`${o.nm} ${o.need}개`,cur:o=>S.auto[o.id]||0,abs:1}, clicks:{ic:'👋',t:o=>`구걸 ${o.need}번`,cur:()=>S.clicks},
   combo:{ic:'🔥',t:o=>`콤보 ${o.need}`,cur:()=>S.misCombo||0,abs:1}, golds:{ic:'💰',t:o=>`돈주머니 ${o.need}개`,cur:()=>S.golds}, fever:{ic:'🎉',t:o=>`피버 ${o.need}번`,cur:()=>S.fevers||0}, ev:{ic:'⚡',t:o=>`${(EVJ[S.route]||{}).ic||'⚡'} ${(EVJ[S.route]||{}).nm||'직업 이벤트'} ${o.need}번 성공`,cur:()=>S.evOK||0} };
@@ -3286,7 +3327,7 @@ function showRoute(){
   if(modalBusy()||jobWait()>0) return;
   routeOpen=true; const R=$('route');
   R.innerHTML=`<div class="k">CAREER ROUTE</div><h3>어떤 길을 걸을까?</h3><div class="sub">한 번 정하면 환생 전까지 바꿀 수 없어요</div>
-    <div class="cards c5">${Object.entries(ROUTES).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${r.color}">
+    <div class="cards c5 r16">${Object.entries(ROUTES).map(([k,r])=>`<button class="card2 rcard" data-k="${k}" style="--cc:${r.color}">
       <div class="ci">${emo(r.ic)}</div><div class="ct">${r.nm}</div><div class="cr">${r.desc}</div>
       <div class="co"><b>${r.perk}</b><span class="rpath">${r.st[0].name} → ${r.st[2].name} → ${r.st[4].name}<br>2차 전직 ${Object.keys(r.subs).length}갈래 · ${Object.values(r.subs).map(x=>x.ic).join('')}</span></div></button>`).join('')}</div>`;
   R.insertAdjacentHTML('beforeend',`<button id="rcGo" disabled>👆 길을 하나 골라요</button>`);
@@ -3348,7 +3389,7 @@ function doRebirth(){
 /* ---------- skill tree ---------- */
 const BR=[{nm:'👋 구걸',c:'#f0a92e'},{nm:'🙏 구걸술',c:'#f0a92e'},{nm:'🏪 장사술',c:'#3d8bfd'},{nm:'🍀 눈치',c:'#2fb36a'},{nm:'🎭 직업',c:'#8b5cf6'},{nm:'🛡️ 생존',c:'#e5484d'}];
 const BR_ORDER=[1,2,3,5,4];
-const JOB_ACT={build:['🏗️','공기 단축'],energy:['⚡','풀가동'],biz:['⏰','타임 세일'],job:['📊','실적 몰아치기'],inv:['📈','풀매수'],star:['🎤','앵콜 무대'],cre:['🔴','라이브 방송'],gov:['📜','예산 집행'],doc:['🚑','응급 출동'],ath:['⚡','폭풍 질주'],dev:['🚀','긴급 배포'],art:['🎨','라이브 드로잉'],chef:['🔥','불쇼'],law:['⚖️','승소 판결']};
+const JOB_ACT={shop:['🏷️','반짝 세일'],crypto:['🚀','풀매수'],build:['🏗️','공기 단축'],energy:['⚡','풀가동'],biz:['⏰','타임 세일'],job:['📊','실적 몰아치기'],inv:['📈','풀매수'],star:['🎤','앵콜 무대'],cre:['🔴','라이브 방송'],gov:['📜','예산 집행'],doc:['🚑','응급 출동'],ath:['⚡','폭풍 질주'],dev:['🚀','긴급 배포'],art:['🎨','라이브 드로잉'],chef:['🔥','불쇼'],law:['⚖️','승소 판결']};
 
 // ===== 전직 트리: 0차(거지) · 1차(진로 12종) · 2차(전직 60종) =====
 const STT={ // 스킬 효과 종류 (레벨당)
@@ -3446,7 +3487,15 @@ var RTREE={
   energy:{r:['⚡','전력 감각','auto'],u:['🌍','에너지 군주'],
     A:['🛢️ 석유 길',[['⛽','주유소 운영','auto'],['🛢️','유전 개발','luck'],['💥','유가 폭등','critB']],['🛢️','오일 머니','bigBag']],
     B:['☀️ 재생 길',[['☀️','태양광 패널','idle'],['🌬️','풍력 터빈','auto'],['🔋','에너지 저장','shieldB']],['☀️','24시간 발전','offInt']],
-    C:['⚡ 전력망 길',[['🔌','배선 달인','click'],['⚡','고압 송전','combo'],['🔥','풀가동','feverB']],['⚡','전력 피크','nightX']]}
+    C:['⚡ 전력망 길',[['🔌','배선 달인','click'],['⚡','고압 송전','combo'],['🔥','풀가동','feverB']],['⚡','전력 피크','nightX']]},
+  shop:{r:['🛒','장사 눈썰미','auto'],u:['🏬','유통 황제'],
+    A:['🏷️ 세일 길',[['🏷️','가격표 갈이','disc'],['🧾','쿠폰 뿌리기','luck'],['⏰','반짝 세일','discB']],['🏷️','오픈런','walkX']],
+    B:['📦 물류 길',[['📦','재고 관리','idle'],['🚚','빠른 배송','auto'],['⏩','새벽 배송','warpB']],['📦','자동 발주','idleBoost']],
+    C:['💎 명품 길',[['💎','VIP 응대','tip'],['👜','한정판','luck'],['🎉','VIP 데이','rainB']],['💎','리셀 대박','bigBag']]},
+  crypto:{r:['🪙','코인 감각','luck'],u:['🐋','코인 고래'],
+    A:['📈 단타 길',[['📈','차트 분석','click'],['⚡','스캘핑','combo'],['💥','풀매수','critB']],['📈','급등 포착','critP']],
+    B:['⛏️ 채굴 길',[['⛏️','채굴기 증설','idle'],['🔋','전기세 절약','disc'],['🛡️','콜드 월렛','shieldB']],['⛏️','자는 동안 채굴','offInt']],
+    C:['🚀 밈 길',[['🐶','밈 커뮤니티','luck'],['🎰','몰빵','fever'],['🌕','투 더 문','rainB']],['🚀','펌핑','feverBag']]}
 };
 var PL=['A','B','C'];
 function routeTrees(){ const out=[];
@@ -3538,6 +3587,16 @@ var STREE={
   'energy.battery':['🔋 셀 길','🚗 전기차 길',['🔋','셀 기술','auto'],['🔋','고밀도 셀','auto'],['🛡️','안전 설계','shieldB'],['🚗','전기차 출시','click'],['🎉','사전 예약 대박','rainB'],['🚗','배터리 황제']],
   'energy.nuclear':['⚛️ 원전 길','🌞 핵융합 길',['⚛️','원자력 공학','auto'],['🛡️','안전 계통','def'],['🛡️','완벽한 격납','shieldB'],['🌞','토카막','luck'],['🔥','인공 태양','feverB'],['🏭','에너지 국가 설계자']],
   'energy.hydro':['💧 생산 길','🚛 모빌리티 길',['💧','수전해','auto'],['💧','그린 수소','idle'],['⏩','대량 생산','warpB'],['🚛','수소 트럭','click'],['🚀','수소 로켓','critB'],['🚀','수소 경제 황제']],
+  'shop.online':['🖥️ 셀러 길','📦 물류 길',['🖥️','상세페이지','click'],['⭐','리뷰 관리','luck'],['🔴','라방 대박','comboB'],['📦','풀필먼트','idle'],['⏩','로켓 배송','warpB'],['📦','이커머스 황제']],
+  'shop.luxury':['💎 큐레이션 길','👜 리셀 길',['💎','명품 안목','luck'],['👔','VIP 라운지','tip'],['🛡️','정품 보증','shieldB'],['👜','한정판 확보','luck'],['💥','리셀 대박','critB'],['👜','명품 그룹 회장']],
+  'shop.mart':['🛒 매장 길','🚛 물류 길',['🛒','매장 운영','auto'],['🏷️','1+1 행사','disc'],['🏷️','창고 대방출','discB'],['🚛','물류 센터','idle'],['🚛','전국 배송','autoB'],['🏬','유통 공룡']],
+  'shop.cvs':['🏪 점포 길','🍙 PB 길',['🏪','점포 관리','auto'],['🌙','야간 영업','idle'],['🛡️','방범 시스템','shieldB'],['🍙','PB 도시락','click'],['🎉','신상 대란','rainB'],['🍙','편의점 제국']],
+  'shop.export':['🚢 해운 길','🤝 협상 길',['🚢','무역 감각','auto'],['🚢','컨테이너선','idle'],['⏩','대량 선적','warpB'],['🤝','바이어 협상','luck'],['💥','대형 계약','critB'],['🌏','무역왕']],
+  'crypto.exch':['🏦 거래소 길','💹 선물 길',['🏦','거래소 운영','auto'],['🔔','신규 상장','luck'],['🎉','상장 축포','rainB'],['💹','레버리지','click'],['💥','청산 사냥','critB'],['💹','코인 거래소 황제']],
+  'crypto.nft':['🖼️ 민팅 길','🌐 메타버스 길',['🖼️','픽셀 아트','click'],['🖼️','컬렉션 완판','luck'],['💥','블루칩 NFT','critB'],['🌐','가상 부동산','idle'],['⏩','메타버스 붐','warpB'],['🌐','메타버스 지주']],
+  'crypto.defi':['🔗 스테이킹 길','💧 유동성 길',['🔗','스마트 컨트랙트','auto'],['🔗','스테이킹','idle'],['🛡️','감사 통과','shieldB'],['💧','유동성 풀','auto'],['🌾','이자 농사','autoB'],['⛓️','탈중앙 금융왕']],
+  'crypto.mine':['⛏️ 채굴 길','🔋 전력 길',['⛏️','채굴 효율','idle'],['⛏️','ASIC 채굴기','auto'],['⏩','반감기 특수','warpB'],['🔋','전용 발전소','disc'],['🔥','풀가동','feverB'],['🔋','해시 파워 황제']],
+  'crypto.meme':['🐶 밈 길','🚀 펌핑 길',['🐶','밈 감각','click'],['😂','밈 대유행','combo'],['🔗','밈 챌린지','comboB'],['🚀','펌핑','fever'],['🌕','투 더 문','rainB'],['🚀','밈의 신']],
 };
 function subTrees(){ const out=[];
   for(const [r,R] of Object.entries(ROUTES)) for(const [k,sb] of Object.entries(R.subs)){ const p=`x_${r}_${k}_`, T=STREE[r+'.'+k]; if(!T) continue;
@@ -3767,7 +3826,7 @@ const CTYPE={
   devil:{ic:'😈',nm:'악마의 거래',p:1,w:3,min:'r',names:['악마의 거래','영혼 담보 대출','검은 계약서']},
   mystery:{ic:'🎁',nm:'미스터리 박스',p:1,w:5,names:['미스터리 박스','수상한 상자','뽑기 기계','랜덤 박스']},
 };
-const JOBCARD={build:['🏗️','대형 수주'],energy:['⚡','전력 특수'],biz:['🍗','단골 대폭발'],job:['💼','연봉 협상 성공'],inv:['📈','종목 대박'],star:['🎤','음원 역주행'],cre:['🤖','알고리즘 픽'],gov:['🏛️','특별 승진'],doc:['🩺','명의 소문'],ath:['🏆','MVP 수상'],dev:['🚀','서비스 대박'],art:['🖼️','작품 완판'],chef:['⭐','맛집 랭킹 1위'],law:['⚖️','세기의 재판 승소']};
+const JOBCARD={shop:['🛍️','완판 행진'],crypto:['🚀','상장 대박'],build:['🏗️','대형 수주'],energy:['⚡','전력 특수'],biz:['🍗','단골 대폭발'],job:['💼','연봉 협상 성공'],inv:['📈','종목 대박'],star:['🎤','음원 역주행'],cre:['🤖','알고리즘 픽'],gov:['🏛️','특별 승진'],doc:['🩺','명의 소문'],ath:['🏆','MVP 수상'],dev:['🚀','서비스 대박'],art:['🖼️','작품 완판'],chef:['⭐','맛집 랭킹 1위'],law:['⚖️','세기의 재판 승소']};
 const RORD=['n','r','e','l'];
 function ownedItems(){ return autoList().filter(a=>(S.auto[a.id]||0)>0); }
 function cardAvail(t){ const O=ownedItems();
@@ -3963,6 +4022,10 @@ function jobEvent(){
          ()=>{ addBuff('all',1-.4*dm,60000,'🎨'); badEvent('🎨 슬럼프…','1분 동안 모든 수입 -40%'); }],
     chef:[()=>{ addBuff('auto',2,60000,'⭐×2'); goodEvent('⭐ 맛집 랭킹 1위!','1분 동안 자동 수입 ×2'); },
           ()=>{ S.fireEnd=Date.now()+30000*dm; badEvent('🔥 주방 화재 경보!',`${Math.round(30*dm)}초 동안 자동 수입 정지`); }],
+    shop:[()=>{ addBuff('auto',2,60000,'🛍️×2'); goodEvent('🛍️ 완판 행진!','1분 동안 자동 수입 ×2'); },
+         ()=>{ const l=S.money*.04*dm; S.money-=l; badEvent('📦 재고 폭탄!',`현금 ${fmt(l)} 손실`); }],
+    crypto:[()=>{ const g=S.money*.1; S.money+=g; goodEvent('🚀 상장 대박!',`현금 +${fmt(g)}`); },
+         ()=>{ const l=S.money*.08*dm; S.money-=l; badEvent('🧊 코인 폭락!',`현금 ${fmt(l)} 증발`); }],
     build:[()=>{ const g=Math.max(1e4,cps()*300); earn(g); goodEvent('🏗️ 대형 수주!',`+${fmt(g)}`); },
          ()=>{ S.fireEnd=Date.now()+30000*dm; badEvent('🚧 공사 중단!',`${Math.round(30*dm)}초 동안 자동 수입 정지`); }],
     energy:[()=>{ addBuff('auto',2,60000,'⚡×2'); goodEvent('⚡ 전력 특수!','1분 동안 자동 수입 ×2'); },
@@ -4165,6 +4228,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v5.0',d:'11/1',items:['🛍️ <b>새 진로</b>: 유통 사장(유통 업종 · 온라인몰·명품·대형마트·편의점·무역) · 🪙 코인 개척자(코인 업종 · 거래소·NFT·디파이·채굴·밈코인) → 진로 <b>16개</b>','📈 이제 시장 업종마다 그 업종이 주력인 진로가 있어요 (서민 경제는 거지 시절)','🗺️ 진로 고르기 화면 4×4로 정리']},
   {v:'v4.9.3',d:'11/1',items:['🪟 <b>반투명 창</b>: PC 실행기(.bat)를 새로 받으면 미니창이 살짝 비쳐 보여요 (기본 75%) · .bat 맨 위에서 투명도와 항상 위 고정을 바꿀 수 있어요']},
   {v:'v4.9.2',d:'11/1',items:['📜 미션 줄에서 <b>해야 할 일</b>이 잘려 안 보이던 문제 수정: 할 일을 맨 앞에 두고 미션 이름은 뒤에 작게']},
   {v:'v4.9.1',d:'11/1',items:['📦 <b>게임 파일 크기 절반</b> (0.96MB → 0.47MB): 3D 아이콘을 따로 받아서 한 번 저장해 두고 써요 · 켜는 속도도 빨라져요']},
@@ -4330,6 +4394,13 @@ function roomSVG(st){
       <path d="M180 30 h120" stroke="#6b7280" stroke-width="3"/>${[0,1,2].map(i=>`<path d="M${198+i*40} 30 v8" stroke="${O}" stroke-width="2"/><circle cx="${198+i*40}" cy="${50}" r="${10-i}" fill="#374151" ${k2}/><rect x="${196+i*40}" y="36" width="4" height="6" fill="#a16207"/>`).join('')}
       <path d="M330 30 h140 l-14 26 h-112z" fill="#d1d5db" ${K}/><rect x="320" y="104" width="156" height="44" fill="#9ca3af" ${K}/><rect x="320" y="98" width="156" height="8" fill="#4b5563" ${K}/>${[0,1].map(i=>`<ellipse cx="${360+i*70}" cy="98" rx="20" ry="4" fill="#1f2937"/>`).join('')}<rect x="342" y="74" width="36" height="24" rx="4" fill="#ef4444" ${K}/><circle cx="352" cy="66" r="6" fill="#fff" opacity=".7"/><circle cx="366" cy="58" r="7" fill="#fff" opacity=".5"/>
       ${base('#d1d5db')}${floorT('#f3f4f6','#d1d5db')}`,
+    shop:()=>wall('#f0fdfa')+frame()+`${[0,1,2].map(j=>`<rect x="296" y="${30+j*36}" width="176" height="6" fill="#0f766e" ${k2}/>${Array.from({length:8},(_,i)=>`<rect x="${300+i*21}" y="${12+j*36}" width="16" height="18" rx="2" fill="${['#f87171','#fbbf24','#60a5fa','#34d399','#f472b6'][(i+j)%5]}" ${k2}/>`).join('')}`).join('')}
+      <rect x="170" y="18" width="80" height="26" rx="5" fill="#ef4444" ${K}/><text x="210" y="36" font-size="13" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">SALE 50%</text>
+      ${base('#0f766e')}${floorT('#ccfbf1','#99f6e4')}<rect x="300" y="112" width="70" height="34" fill="#94a3b8" ${K}/><rect x="306" y="104" width="30" height="10" rx="2" fill="#0f172a" ${k2}/><rect x="420" y="118" width="36" height="28" fill="#cbd5e1" ${K}/><path d="M418 118 h40 l-4 -8 h-32z" fill="#94a3b8" ${k2}/>`,
+    crypto:()=>wall('#18181b')+frame('#3f3f46')+`${[0,1,2].map(i=>`<rect x="${296+i*60}" y="20" width="54" height="40" rx="3" fill="#000" ${k2}/><path d="M${300+i*60} 50 l10 -8 l8 6 l12 -16 l8 4 l12 -14" fill="none" stroke="${i===1?'#ef4444':'#22c55e'}" stroke-width="2"/>`).join('')}
+      <circle cx="210" cy="36" r="18" fill="#f59e0b" ${K}/><text x="210" y="42" font-size="18" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">₿</text>
+      ${[0,1,2].map(i=>`<rect x="${320+i*50}" y="96" width="40" height="50" rx="3" fill="#3f3f46" ${K}/>${[0,1,2].map(j=>`<rect x="${325+i*50}" y="${102+j*14}" width="30" height="8" rx="1" fill="#52525b"/><circle cx="${350+i*50}" cy="${106+j*14}" r="1.6" fill="#22c55e"/>`).join('')}`).join('')}
+      ${base('#27272a')}${floorW('#3f3f46','#27272a')}`,
     build:()=>wall('#fef3c7')+frame()+`<rect x="300" y="18" width="150" height="80" fill="#1e40af" ${K}/>${[0,1,2,3].map(i=>`<line x1="${310+i*36}" y1="24" x2="${310+i*36}" y2="92" stroke="#93c5fd" stroke-width="1"/>`).join('')}<path d="M316 84 v-48 h50 v28 h50 v20z" fill="none" stroke="#fff" stroke-width="2"/><path d="M340 36 l26 -10 l26 10" fill="none" stroke="#fff" stroke-width="1.6"/>
       <rect x="170" y="40" width="70" height="5" fill="#a16207" ${k2}/>${[0,1,2].map(i=>`<path d="M${178+i*22} 40 q8 -14 16 0z" fill="#facc15" ${k2}/>`).join('')}
       ${base('#d97706')}${floorT('#e7d3a8','#d4b77c')}<path d="M440 146 l10 -30 l10 30z" fill="#f97316" ${K}/><rect x="444" y="128" width="12" height="4" fill="#fff"/><rect x="320" y="118" width="70" height="28" fill="#b45309" ${K}/>${[0,1,2].map(i=>`<rect x="${324+i*22}" y="${104}" width="20" height="14" fill="#dc2626" ${k2}/>`).join('')}`,
@@ -4487,7 +4558,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.9.3';
+const GAME_VER='v5.0';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
