@@ -4069,7 +4069,9 @@ const UPD_SRC='https://raw.githubusercontent.com/kumhoht2804-wq/geoji-k/main/ind
 let updSeen=null, updDismissedAt=0;
 async function checkUpdate(){
   try{
-    const r=await fetch(UPD_SRC+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
+    // 웹(github.io)에선 이 주소가 실제로 새 버전을 내려줄 때만 알려요 (배포 반영이 늦어서 '적용'이 반복되던 문제)
+    const web=/^https?:$/.test(location.protocol), src=web? location.origin+location.pathname : UPD_SRC;
+    const r=await fetch(src+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
     const t=await r.text(); const m=t.match(/const GAME_VER='(v[0-9.]+)'/); if(!m) return;
     const nv=m[1]; if(nv===GAME_VER){ try{ for(const k of Object.keys(sessionStorage)) if(k.startsWith('geoji_upd_try_')) sessionStorage.removeItem(k); }catch(e){} return; }
     // 최신 버전 내용 미리 저장 → 실행기가 바로 이걸로 켜요
@@ -4119,6 +4121,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v4.8.3',d:'11/1',items:['🔧 <b>업데이트를 눌러도 \'지금 적용\'이 계속 뜨던 문제</b> 수정: 폰(웹)에선 새 버전이 실제로 반영된 뒤에만 알려줘요','🧪 12개 진로 × 모든 탭·창·이벤트·카드·특화·환생·전직 시험을 미니창·큰 창에서 점검 (오류 0개)']},
   {v:'v4.8.2',d:'11/1',items:['📱↔💻 <b>모바일·PC 기록이 서로 다르던 문제</b> 수정: 저장할 때마다 번호를 붙여서 기기 시계와 상관없이 <b>더 나중에 저장된 기록</b>을 써요 · PC 창을 다시 클릭하거나 20초마다 다른 기기 기록을 확인해요']},
   {v:'v4.8.1',d:'11/1',items:['🧹 <b>레이아웃 고정</b>: 위 줄은 버프가 늘어도 한 줄(넘치면 +N) · 미션 줄 높이 고정 · 카드 글자는 넘치면 … 처리','📈 시장표를 줄 맞춰 깔끔하게 (업종 · 등락률 두 칸)','🗑️ 돈벌이·구걸 카드의 회색 설명 줄을 뺐어요 (카드가 더 낮아져 목록이 더 많이 보여요)']},
   {v:'v4.8',d:'11/1',items:['📈 <b>시장 정세</b>: 전염병·전쟁·금리·유가·코인 광풍 같은 뉴스가 <b>업종</b>(외식·의료·IT·에너지·코인·부동산… 16개)을 흔들어요 · 5분마다 주식처럼 출렁 · 모든 유저 같은 시장','🏷️ 돈벌이 카드에 업종 ▲▼% 표시 · 위 줄 아이콘을 누르면 오늘의 시장표','⚡ <b>버프 스킬 다양화</b>: 가격 할인 · 크리티컬 · 콤보 유지 · 악재 면역 · 돈주머니 비 · 즉시 피버 · 시간 점프 (진로·2차 트리 40여 개 스킬에 나눠 넣었어요)']},
@@ -4500,7 +4503,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v4.8.2';
+const GAME_VER='v4.8.3';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
