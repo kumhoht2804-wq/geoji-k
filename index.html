@@ -1263,6 +1263,9 @@
   .nws .nl .up b{color:#15803d!important} .nws .nl .dn b{color:#b91c1c!important}
   .nws .nf{font-size:11.5px;color:#5a4436;margin:6px 0} .nws .nf span{color:#9a8670;font-size:10.5px}
   #topRow #stc>.bi{flex:none} #topRow #stat{justify-content:flex-end} #topRow #stChip{flex:0 1 auto;min-width:0}
+  #say{position:absolute;left:50%;bottom:58%;transform:translate(-10%,6px);z-index:7;font-family:'Jua',sans-serif;font-size:11.5px;color:#5a4436;background:#fff;border:2px solid #5a4436;border-radius:12px;padding:2px 9px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+  #say.on{opacity:1;transform:translate(-10%,0)} #say:after{content:'';position:absolute;left:14%;bottom:-7px;border:5px solid transparent;border-top-color:#5a4436}
+  body.mini #say{font-size:9.5px;padding:1px 7px;border-width:1.5px}
   /* v4.4 직업 이벤트 */
   .evt{position:absolute;z-index:11;font-size:18px;line-height:1;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
@@ -2573,7 +2576,7 @@ function beg(x,y){
   const bb=$('bowl').getBoundingClientRect(); coinBurst(bb.left+bb.width/2, bb.top+4, combo>=30?3:combo>=10?2:1);
   const r=$('scene').getBoundingClientRect();
   floatText(x-r.left-20+(Math.random()*30-15), y-r.top-30, big+'+'+fmt(v+(pv>=1?pv:0)));
-  if(Math.random()<0.004) log(PASSERBY[Math.floor(Math.random()*PASSERBY.length)]);
+  if(Math.random()<0.004){ const L=S.route?SAY[S.route]:PASSERBY; log(L[Math.floor(Math.random()*L.length)]); }
   render(); refreshAffordable();
 }
 $('beggar').addEventListener('click',e=>beg(e.clientX,e.clientY));
@@ -3953,7 +3956,7 @@ function statRender(){
   if(feverEnd>n) C.push(['fv','🔥',`피버 ×${3+perkA('feverX')}`,sec(feverEnd)]);
   S.buffs=(S.buffs||[]).filter(b=>b.end>n);
   S.buffs.filter(b=>!b.auto).forEach(b=>C.push(['bf',(b.label||'✨').replace(/[^\p{Extended_Pictographic}\u200d\ufe0f]+.*/u,'')||'✨',`${b.k==='click'?'구걸':b.k==='auto'?'자동':'수입'} ×${b.m}`,sec(b.end)]));
-  [[S.debuffEnd,'💸','빚독촉 ×0.5'],[S.slumpEnd,'📉','침체 ×0.5'],[S.fireEnd,'🔥','화재 자동 정지'],[S.sueEnd,'🧾','고소 ×0.7']].forEach(([e,i,t])=>{ if((e||0)>n) C.push(['db',i,t,sec(e)]); });
+  [[S.debuffEnd,'💸','빚독촉 ×0.5'],[S.slumpEnd,'📉',jt(1).replace(/^\S+\s/,'').replace('!','')+' ×0.5'],[S.fireEnd,'🔥',jt(2).replace(/^\S+\s/,'').replace('!','')+' 자동 정지'],[S.sueEnd,'🧾','고소 ×0.7']].forEach(([e,i,t])=>{ if((e||0)>n) C.push(['db',i,t,sec(e)]); });
   if((S.insEnd||0)>n) C.push(['ok','🛡️','보험',sec(S.insEnd)]);
   const cm=clockMult(); if(cm>1.001) C.push(['ok',perkA('nightX')&&(new Date().getHours()>=21||new Date().getHours()<6)?'🌃':'🏢',`길 효과 ×${+cm.toFixed(2)}`,'']);
   { const N=newsNow(), m=newsMul(); C.unshift([m>1.001?'bf nw':m<.999?'db nw':'ok nw',N.n.ic,`📰 ${N.n.t} ×${+m.toFixed(2)}`,'×'+(+m.toFixed(1))]);
@@ -3973,6 +3976,50 @@ setInterval(statRender,500);
 /* ---------- random events (악재 / 행운) ---------- */
 function myRankInfo(){ if(!NET.nick||!NET.board) return {rank:0,n:0}; const L=liveBoard(); return {rank:L.findIndex(x=>String(x.nick).toLowerCase()===NET.nick.toLowerCase())+1, n:L.length}; }
 function dmgMult(){ return ((S.insEnd||0)>Date.now()?0.5:1)*Math.max(.2,1-perkA('evRes')); }
+// 🗞️ 직업마다 다른 사건 문구 [소매치기형, 침체형, 화재(자동 정지)형, 세무조사형, 행운, 대박]
+var JOBT={
+  base:['🤏 소매치기!','📉 경기 침체!','🚓 단속 나왔어요!','🕵️ 국세청 세무조사!','💵 길에서 돈다발을 주웠어요!','🎟️ 복권 당첨!'],
+  biz:['🧾 손님 먹튀!','📉 손님 뚝 끊김!','🔥 주방에 불이 났어요!','🕵️ 매출 세무조사!','💵 단체 손님 대박!','🎟️ 맛집 TV 출연!'],
+  job:['💸 법카 사용 적발!','📉 회사 실적 쇼크!','🖥️ 사내 전산 마비!','🕵️ 연말정산 폭탄!','💵 깜짝 성과급!','🎟️ 우리사주 대박!'],
+  inv:['📉 물려버렸다!','🐻 하락장 시작!','⛔ 거래 정지!','🕵️ 금감원 조사!','💹 배당금 입금!','🚀 상한가 직행!'],
+  star:['📸 악성 루머!','📉 인기 하락!','🎤 공연 취소!','🕵️ 탈세 의혹 조사!','💐 팬클럽 서포트!','🎟️ 음원 차트 1위!'],
+  cre:['🚫 노란 딱지!','📉 알고리즘 외면!','🔴 방송 송출 사고!','🕵️ 광고 표기 조사!','💸 슈퍼챗 폭탄!','🎟️ 구독자 100만 돌파!'],
+  gov:['📰 갑질 보도!','📉 예산 삭감!','🖥️ 행정망 마비!','🕵️ 감사원 감사!','🎖️ 모범 공무원 포상!','🎟️ 특별 승진!'],
+  doc:['💊 약품 분실!','📉 환자 감소!','🚨 병원 정전!','🕵️ 보험 청구 실사!','💌 환자 감사 선물!','🎟️ 명의 선정!'],
+  ath:['🤕 부상 악재!','📉 슬럼프!','⛔ 경기 취소!','🕵️ 도핑 검사 소동!','🏅 출전 수당 입금!','🎟️ MVP 상금!'],
+  dev:['🐛 결제 버그!','📉 서비스 이탈!','🔥 서버 다운!','🕵️ 개인정보 점검!','💸 외주 잔금 입금!','🎟️ 앱 1위 등극!'],
+  art:['🎨 작품 표절 시비!','📉 미술 시장 냉각!','💧 작업실 누수!','🕵️ 작품 가격 조사!','🖼️ 작품 판매!','🎟️ 경매 신기록!'],
+  chef:['🧾 손님 먹튀!','📉 손님 뚝 끊김!','🔥 주방 화재 경보!','🕵️ 위생 점검!','💵 단체 예약!','🎟️ 미슐랭 스타!'],
+  law:['📁 서류 분실!','📉 사건 수임 뚝!','⛔ 법원 휴정!','🕵️ 변협 징계 조사!','💼 성공 보수 입금!','🎟️ 세기의 재판 승소!'],
+  build:['🧱 자재 도난!','📉 부동산 냉각!','🚧 공사 중단 명령!','🕵️ 부실 공사 조사!','🏗️ 공사 대금 입금!','🎟️ 대형 수주!'],
+  energy:['🔌 전선 도난!','📉 유가 급락!','⚡ 대정전!','🕵️ 환경 규제 조사!','⛽ 기름값 특수!','🎟️ 신규 유전 발견!'],
+  shop:['🧾 상품권 사기!','📉 소비 침체!','📦 물류 마비!','🕵️ 공정위 조사!','🛍️ 깜짝 완판!','🎟️ 블랙 프라이데이 대박!'],
+  crypto:['🔓 지갑 해킹!','🧊 코인 겨울!','⛔ 거래소 점검!','🕵️ 코인 과세 통지!','🪂 에어드랍 당첨!','🎟️ 상장 대박!'],
+};
+function jt(i){ return (JOBT[S.route]||JOBT.base)[i]; }
+// 💬 꼬질이 혼잣말: 직업마다 다르게 가끔
+var SAY={
+  base:['배고프다…','오늘은 좀 들어오려나','저기요… 1원만…','언젠가 나도 부자가 될 거야','비둘기야 너도 배고프니'],
+  biz:['오늘 닭이 잘 튀겨졌다!','단골손님 또 왔네','사장님 소리 아직 어색해','배달 주문 폭주!','2호점 내볼까?'],
+  job:['월요일 싫다…','점심 뭐 먹지','결재 올렸습니다!','오늘은 칼퇴각','부장님 표정 안 좋다'],
+  inv:['파란불… 아니 빨간불!','물타기 할까','존버는 승리한다','차트가 웃고 있어','오늘은 익절이다'],
+  star:['팬 여러분 사랑해요!','오늘 무대 최고였다','악플은 안 봐요','사인해 드릴게요~','앵콜 받습니다!'],
+  cre:['구독 좋아요 알림 설정!','썸네일 장인 등판','오늘 라방 켭니다','알고리즘님 제발','편집하다 밤 샜다'],
+  gov:['민원 처리 완료!','오늘도 정시 퇴근','도장 쾅!','예산 맞추기 힘드네','국민을 위해!'],
+  doc:['다음 환자분~','수술 잘 끝났습니다','당직은 힘들어','손 씻기 중요해요','감사 편지 받았다'],
+  ath:['한 골만 더!','오늘 컨디션 최고','훈련은 배신 안 해','팬들 함성 들려?','다음 경기 이긴다'],
+  dev:['일단 돌아가긴 해','이거 내 코드 아님','커피 수혈 중','배포 금요일은 안 돼','버그 잡았다!'],
+  art:['영감이 온다…','이 색 좋다','작품 하나 완성!','전시회 언제 하지','붓이 춤을 춘다'],
+  chef:['불맛 제대로!','간 좀 볼게요','주문 들어왔어요!','오늘의 특선 메뉴','칼질은 기본'],
+  law:['이의 있습니다!','판례 찾는 중','합의 보시죠','증거는 충분해','승소 예감'],
+  build:['안전모 착용!','콘크리트 굳는 중','공기 맞출 수 있다','도면 다시 보자','준공까지 조금만'],
+  energy:['전기 들어왔다!','유가가 오른다','태양광 풀가동','정전은 안 돼','에너지가 곧 돈'],
+  shop:['어서 오세요~','오늘만 이 가격!','재고 정리 중','1+1 행사합니다','단골 할인 해드려요'],
+  crypto:['투 더 문!','존버 간다','지갑 주소 확인','김프 붙었다','이번엔 진짜다'],
+};
+function sayTick(){ if(paused||document.hidden||EV||modalBusy()||$('modal').classList.contains('show')) return; const L=SAY[S.route]||SAY.base, sc=$('scene'); if(!sc) return;
+  let b=$('say'); if(!b){ b=document.createElement('div'); b.id='say'; sc.appendChild(b); } b.textContent=L[Math.floor(Math.random()*L.length)]; b.classList.remove('on'); void b.offsetWidth; b.classList.add('on'); clearTimeout(b._t); b._t=setTimeout(()=>b.classList.remove('on'),3500); }
+(function sayLoop(){ setTimeout(()=>{ sayTick(); sayLoop(); }, 60000+Math.random()*80000); })();
 function rollEvent(){
   if(paused || !NET.nick || $('gate').classList.contains('show') || $('lvup').classList.contains('show')) return;
   const {rank,n}=myRankInfo(); if(!n) return;
@@ -3987,14 +4034,14 @@ function rollEvent(){
     const pool=[['pick',3],['slump',2],['fire',2]]; if(top3) pool.push(['tax',3]);
     let t=pool.reduce((a,x)=>a+x[1],0)*Math.random(), k='pick'; for(const [x,w] of pool){ if((t-=w)<0){ k=x; break; } }
     const dm=dmgMult(), now=Date.now();
-    if(k==='tax'){ const l=S.money*.15*dm; S.money-=l; badEvent('🕵️ 국세청 세무조사!',`현금 ${fmt(l)} 추징당했어요`); }
-    if(k==='pick'){ const l=S.money*.05*dm; S.money-=l; badEvent('🤏 소매치기!',`현금 ${fmt(l)}을 털렸어요`); }
-    if(k==='slump'){ S.slumpEnd=now+60000*dm; badEvent('📉 경기 침체!',`${Math.round(60*dm)}초 동안 모든 수입 반토막`); }
-    if(k==='fire'){ S.fireEnd=now+30000*dm; badEvent('🔥 가게에 불이 났어요!',`${Math.round(30*dm)}초 동안 자동 수입 정지`); }
+    if(k==='tax'){ const l=S.money*.15*dm; S.money-=l; badEvent(jt(3),`현금 ${fmt(l)} 추징당했어요`); }
+    if(k==='pick'){ const l=S.money*.05*dm; S.money-=l; badEvent(jt(0),`현금 ${fmt(l)} 손실`); }
+    if(k==='slump'){ S.slumpEnd=now+60000*dm; badEvent(jt(1),`${Math.round(60*dm)}초 동안 모든 수입 반토막`); }
+    if(k==='fire'){ S.fireEnd=now+30000*dm; badEvent(jt(2),`${Math.round(30*dm)}초 동안 자동 수입 정지`); }
   } else if(r<p+pLuck){
     const big=Math.random()<.12, g=Math.max(1000,cps()*(big?600:120))*(1+perkA('luckEv'));
     earn(g); sfx('gold');
-    toast(big?`🎟️ 복권 당첨! +${fmt(g)}`:`💵 길에서 돈다발을 주웠어요! +${fmt(g)}`);
+    toast(big?`${jt(5)} +${fmt(g)}`:`${jt(4)} +${fmt(g)}`);
   }
 }
 function addBuff(k,m,ms,label){ S.buffs=(S.buffs||[]).filter(b=>b.end>Date.now() && b.label!==label); S.buffs.push({k,m,end:Date.now()+ms,label}); }
@@ -4230,6 +4277,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v5.2',d:'11/2',items:['🗞️ <b>직업마다 다른 사건 문구</b>: 악재·행운이 직업에 맞게 (예: 의사 🚨병원 정전 · 개발자 🔥서버 다운 · 코인 🔓지갑 해킹 · 연예인 🎟️음원 차트 1위)','💬 꼬질이가 가끔 직업에 맞는 <b>혼잣말</b>을 해요 (예: 의사 "다음 환자분~" · 개발자 "이거 내 코드 아님")']},
   {v:'v5.1',d:'11/2',items:['🐦 <b>새 펫 까치</b>: 돈주머니를 대신 주워 와요 (Lv.1 40% → Lv.5 80%) · 환생 포인트 10','⚡ 직업 이벤트 아이콘이 안내 줄에 가려 안 보이던 문제 수정 (아이콘은 화면 아래쪽에, 안내 줄보다 위에 떠요)']},
   {v:'v5.0',d:'11/1',items:['🛍️ <b>새 진로</b>: 유통 사장(유통 업종 · 온라인몰·명품·대형마트·편의점·무역) · 🪙 코인 개척자(코인 업종 · 거래소·NFT·디파이·채굴·밈코인) → 진로 <b>16개</b>','📈 이제 시장 업종마다 그 업종이 주력인 진로가 있어요 (서민 경제는 거지 시절)','🗺️ 진로 고르기 화면 4×4로 정리']},
   {v:'v4.9.3',d:'11/1',items:['🪟 <b>반투명 창</b>: PC 실행기(.bat)를 새로 받으면 미니창이 살짝 비쳐 보여요 (기본 75%) · .bat 맨 위에서 투명도와 항상 위 고정을 바꿀 수 있어요']},
@@ -4562,7 +4610,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v5.1';
+const GAME_VER='v5.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
