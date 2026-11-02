@@ -1235,6 +1235,8 @@
   .gate #bar{background:linear-gradient(90deg,#fde047,#f59e0b)!important}
   #xpTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%} body.mini #xpTxt{font-size:9px!important}
   .bi.nw{cursor:pointer}
+  .item .ic .scb{position:absolute;left:-5px;top:-6px;z-index:2;font-style:normal;font-family:'Black Han Sans','Jua',sans-serif;font-size:8.5px;line-height:1;padding:2px 3px;border-radius:6px;border:1.5px solid #fff;color:#fff} .item .ic .scb.up{background:#16a34a} .item .ic .scb.dn{background:#dc2626}
+  body.mini .item .ic .scb{font-size:7.5px;padding:1px 2px;left:-4px;top:-5px}
   .item .ef .sct{font-style:normal;font-size:9.5px;margin-left:4px;padding:0 4px;border-radius:5px;vertical-align:1px} .item .ef .sct.up{background:#dcfce7;color:#15803d} .item .ef .sct.dn{background:#fee2e2;color:#b91c1c} body.mini .item .ef .sct{font-size:8.5px;padding:0 2px;margin-left:2px} body.mini .item .ef .sct .pc{display:none}
   .nws .nl b small{font-size:9px;color:#8a7560}
   .nws .nh{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff8e6;border-radius:12px;padding:8px;margin:4px 0 8px} .nws .nh img.e3d{width:34px;height:34px} .nws .nh b{font-size:15px} .nws .nh small{font-size:10.5px;color:#8a7560}
@@ -2232,8 +2234,8 @@ function renderList(){
     const dot = !isA||!n ? '' : so>=0 ? 'sp' : (!m && S.money>=mgrCost(it)) ? 'mg' : '';
     const gd=gradeOf(n);
     el.innerHTML = prevOwned
-      ? `<div class="ic ${ICON[it.id]?'svg':''} ${gd?gd[3]:''}">${icon(it.id,it.ic)}${n>0?`<span class="lvb">${n}</span>`:''}${dot?`<i class="dot ${dot}"></i>`:''}${m?'<i class="mgk">👔</i>':''}</div>
-         <div class="mid"><div class="nm"><span class="nmt">${gd?`<i class="gdn ${gd[3]}">${gd[2]}</i>`:''}${it.nm}</span>${stv?`<b class="stv">${'★'.repeat(stv)}</b>`:''}${sp.map(k=>`<b class="tgi">${emo(TAGS[k].ic)}</b>`).join('')}</div><div class="ef">${extra}${mm>1?` <u>×${+mm.toFixed(1)}</u>`:''}${smT}</div></div>
+      ? `<div class="ic ${ICON[it.id]?'svg':''} ${gd?gd[3]:''}">${icon(it.id,it.ic)}${smT?`<i class="scb ${sm>1?'up':'dn'}" title="${SECT[sectOf(it)][1]} 업종 ${sm>1?'+':'−'}${Math.round(Math.abs(sm-1)*100)}%">${sm>1?'▲':'▼'}${Math.round(Math.abs(sm-1)*100)}</i>`:''}${n>0?`<span class="lvb">${n}</span>`:''}${dot?`<i class="dot ${dot}"></i>`:''}${m?'<i class="mgk">👔</i>':''}</div>
+         <div class="mid"><div class="nm"><span class="nmt">${gd?`<i class="gdn ${gd[3]}">${gd[2]}</i>`:''}${it.nm}</span>${stv?`<b class="stv">${'★'.repeat(stv)}</b>`:''}${sp.map(k=>`<b class="tgi">${emo(TAGS[k].ic)}</b>`).join('')}</div><div class="ef">${extra}${mm>1?` <u>×${+mm.toFixed(1)}</u>`:''}</div></div>
          <div class="rt"><button class="buyb"><b>${fmt(price)}</b></button><div class="nxt">${n?(nx?`×2까지 ${nx-n}개`:'최대'):'첫 구매'}</div></div>
          ${n>0&&nx?`<div class="msl"><i style="width:${msPct.toFixed(1)}%"></i></div>`:''}
          ${isA&&n>0?`<div class="acts">${m?`<span class="act mg on">👔 자동</span>`:`<button class="act mg" data-a="mg" data-c="${mgrCost(it)}">👔 매니저 <b>${fmt(mgrCost(it))}</b></button>`}${n>=10?(stv<3?`<button class="act st" data-a="st" data-c="${starCost(it)}">⭐ 강화 <b>${fmt(starCost(it))}</b></button>`:`<span class="act st on">★★★</span>`):''}${so>=0?`<button class="act sp" data-a="sp">💎 특화 고르기</button>`:''}</div>`:''}`
@@ -4277,6 +4279,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v5.2.1',d:'11/2',items:['📈 돈벌이가 25개(×2)가 되면 시장 ▲▼ 표시가 밀려서 안 보이던 문제 → <b>아이콘 왼쪽 위 배지</b>로 옮겼어요 (예: ▲7 = 업종 +7%) · 시장 효과는 계속 수입에 반영되고 있어요']},
   {v:'v5.2',d:'11/2',items:['🗞️ <b>직업마다 다른 사건 문구</b>: 악재·행운이 직업에 맞게 (예: 의사 🚨병원 정전 · 개발자 🔥서버 다운 · 코인 🔓지갑 해킹 · 연예인 🎟️음원 차트 1위)','💬 꼬질이가 가끔 직업에 맞는 <b>혼잣말</b>을 해요 (예: 의사 "다음 환자분~" · 개발자 "이거 내 코드 아님")']},
   {v:'v5.1',d:'11/2',items:['🐦 <b>새 펫 까치</b>: 돈주머니를 대신 주워 와요 (Lv.1 40% → Lv.5 80%) · 환생 포인트 10','⚡ 직업 이벤트 아이콘이 안내 줄에 가려 안 보이던 문제 수정 (아이콘은 화면 아래쪽에, 안내 줄보다 위에 떠요)']},
   {v:'v5.0',d:'11/1',items:['🛍️ <b>새 진로</b>: 유통 사장(유통 업종 · 온라인몰·명품·대형마트·편의점·무역) · 🪙 코인 개척자(코인 업종 · 거래소·NFT·디파이·채굴·밈코인) → 진로 <b>16개</b>','📈 이제 시장 업종마다 그 업종이 주력인 진로가 있어요 (서민 경제는 거지 시절)','🗺️ 진로 고르기 화면 4×4로 정리']},
@@ -4610,7 +4613,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v5.2';
+const GAME_VER='v5.2.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
