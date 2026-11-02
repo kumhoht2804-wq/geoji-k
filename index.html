@@ -4279,6 +4279,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v5.2.2',d:'11/2',items:['📱 카톡 등 화면이 낮은 폰 브라우저에서 아래 목록이 안 보이던 문제 수정: 화면 높이에 맞춰 확대를 줄이고 남는 폭은 넓게 써요']},
   {v:'v5.2.1',d:'11/2',items:['📈 돈벌이가 25개(×2)가 되면 시장 ▲▼ 표시가 밀려서 안 보이던 문제 → <b>아이콘 왼쪽 위 배지</b>로 옮겼어요 (예: ▲7 = 업종 +7%) · 시장 효과는 계속 수입에 반영되고 있어요']},
   {v:'v5.2',d:'11/2',items:['🗞️ <b>직업마다 다른 사건 문구</b>: 악재·행운이 직업에 맞게 (예: 의사 🚨병원 정전 · 개발자 🔥서버 다운 · 코인 🔓지갑 해킹 · 연예인 🎟️음원 차트 1위)','💬 꼬질이가 가끔 직업에 맞는 <b>혼잣말</b>을 해요 (예: 의사 "다음 환자분~" · 개발자 "이거 내 코드 아님")']},
   {v:'v5.1',d:'11/2',items:['🐦 <b>새 펫 까치</b>: 돈주머니를 대신 주워 와요 (Lv.1 40% → Lv.5 80%) · 환생 포인트 10','⚡ 직업 이벤트 아이콘이 안내 줄에 가려 안 보이던 문제 수정 (아이콘은 화면 아래쪽에, 안내 줄보다 위에 떠요)']},
@@ -4566,8 +4567,9 @@ if(isPhone) viewMode='mini';   // 폰에서도 PC 미니창과 똑같이 (화면
 function phoneFit(){ // 미니창(262px) 레이아웃을 폰 화면 폭에 맞게 통째로 확대
   const W=document.querySelector('.wrap'); if(!W) return;
   if(!isPhone||!document.body.classList.contains('mini')){ W.style.zoom=''; W.style.height=''; W.style.maxWidth=''; document.body.classList.remove('phone'); return; }
-  document.body.classList.add('phone'); const vw=document.documentElement.clientWidth||innerWidth, vh=(window.visualViewport?visualViewport.height:innerHeight), z=vw/262;
-  W.style.maxWidth='262px'; W.style.zoom=z; W.style.height=(vh/z)+'px'; }
+  document.body.classList.add('phone'); const vw=document.documentElement.clientWidth||innerWidth, vh=(window.visualViewport?visualViewport.height:innerHeight);
+  const z=Math.max(1,Math.min(vw/262, vh/440));   // 화면이 낮으면(카톡 브라우저 등) 덜 확대하고 남는 폭은 그대로 써요
+  W.style.maxWidth=Math.floor(vw/z)+'px'; W.style.width=Math.floor(vw/z)+'px'; W.style.zoom=z; W.style.height=(vh/z)+'px'; }
 function applyView(){
   const mini = isPopup || viewMode==='mini';
   document.body.classList.toggle('mini', mini); setTimeout(phoneFit,0);
@@ -4613,7 +4615,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v5.2.1';
+const GAME_VER='v5.2.2';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
