@@ -1264,7 +1264,7 @@
   .nws .nf{font-size:11.5px;color:#5a4436;margin:6px 0} .nws .nf span{color:#9a8670;font-size:10.5px}
   #topRow #stc>.bi{flex:none} #topRow #stat{justify-content:flex-end} #topRow #stChip{flex:0 1 auto;min-width:0}
   /* v4.4 직업 이벤트 */
-  .evt{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
+  .evt{position:absolute;z-index:11;font-size:18px;line-height:1;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2.5px solid #5a4436;background:#fffaf2;box-shadow:0 3px 0 #5a4436,0 0 0 4px rgba(255,211,77,.6);padding:0;cursor:pointer;animation:evIn .3s backwards,evBob 1s .3s ease-in-out infinite alternate}
   .evt img.e3d{width:24px;height:24px} body.mini .evt{width:26px;height:26px;margin:-13px 0 0 -13px;border-width:2px} body.mini .evt img.e3d{width:18px;height:18px}
   @keyframes evIn{from{transform:scale(0)}} @keyframes evBob{to{transform:translateY(-4px)}}
   #evL{position:absolute;left:50%;top:6px;transform:translateX(-50%);z-index:9;font-family:'Jua',sans-serif;font-size:11.5px;color:#5a4436;background:linear-gradient(#fff3c4,#ffe08a);border:2px solid #5a4436;border-radius:999px;padding:2px 10px;white-space:nowrap;box-shadow:0 2px 0 #5a4436;animation:evIn .25s}
@@ -2851,6 +2851,8 @@ var PETS=[
    o:{ears:'bunny',c:'#ffffff',hl:'#ffffff',in:'#ffeef3',nose:'#ff8fa3'}},
   {k:'fox',nm:'여우',ds:'잔머리 · 도전·도박 성공률 상승',fx:{riskP:.1,betP:.1},cost:8,
    o:{ears:'fox',tail:'fox',c:'#f59e5b',hl:'#ffc48f',in:'#fff4e6'}},
+  {k:'magpie',nm:'까치',ds:'반짝이는 걸 좋아해요 · 돈주머니를 대신 주워 와요',fx:{autoBag:.4},cost:10,
+   o:{c:'#2b3445',hl:'#56627a',in:'#ffffff',paw:'#2b3445',snout:'beak',head:`<ellipse cx="74" cy="112" rx="30" ry="18" fill="#fff"/>`,wear:`<path d="M36 140 q-10 -6 -6 -22 q14 4 16 20z M112 140 q10 -6 6 -22 q-14 4 -16 20z" fill="#3b82f6" ${KST}/>`}},
   {k:'pig',nm:'황금 돼지',ds:'복덩이 · 모든 수입과 돈주머니 UP',fx:{auto:1.2,click:1.2,goldX:1.5},cost:15,
    o:{ears:'pig',c:'#ffd34d',hl:'#fff1b8',in:'#ffe28a',snout:'pig',top:`<path d="M50 54 l6 -16 l9 9 l9 -14 l9 14 l9 -9 l6 16z" fill="#ff8fa3" ${KS2}/>`}},
 ];
@@ -3253,7 +3255,7 @@ function evStart(){
   if(EV||evBusy()) return; const D=EVJ[S.route]; if(!D) return; const sc=$('scene'); const now=Date.now();
   EV={D,end:now+D.t*1000,left:D.n,base:S.clicks,els:[]};
   if(D.ty==='order'){ const own=autoList().filter(a=>a.grp!=='common'&&(S.auto[a.id]||0)>0); const a=own.length?own[Math.floor(Math.random()*own.length)]:autoList()[0]; EV.it=a; EV.base=S.auto[a.id]||0; }
-  if(D.ty==='tap') for(let i=0;i<D.n;i++){ const b=document.createElement('button'); b.className='evt'; b.innerHTML=emo(D.ic); b.style.left=(8+Math.random()*78)+'%'; b.style.top=(18+Math.random()*48)+'%'; b.style.animationDelay=(i*.08)+'s';
+  if(D.ty==='tap') for(let i=0;i<D.n;i++){ const b=document.createElement('button'); b.className='evt'; b.innerHTML=emo(D.ic); b.style.left=(10+Math.random()*80)+'%'; b.style.top=(42+Math.random()*36)+'%'; b.style.animationDelay=(i*.08)+'s';
     b.onclick=e=>{ e.stopPropagation(); if(!EV) return; b.remove(); EV.left--; sfx('gold'); const r=sc.getBoundingClientRect(); floatText(e.clientX-r.left-10,e.clientY-r.top-16,'✔'); if(EV.left<=0) evEnd(true); };
     sc.appendChild(b); EV.els.push(b); }
   const L=document.createElement('div'); L.id='evL'; sc.appendChild(L); EV.L=L; sfx('fever'); evTick();
@@ -4228,6 +4230,7 @@ function forceUpd(nv,note,tries){
 
 /* ---------- patch notes ---------- */
 const PATCH_NOTES=[
+  {v:'v5.1',d:'11/2',items:['🐦 <b>새 펫 까치</b>: 돈주머니를 대신 주워 와요 (Lv.1 40% → Lv.5 80%) · 환생 포인트 10','⚡ 직업 이벤트 아이콘이 안내 줄에 가려 안 보이던 문제 수정 (아이콘은 화면 아래쪽에, 안내 줄보다 위에 떠요)']},
   {v:'v5.0',d:'11/1',items:['🛍️ <b>새 진로</b>: 유통 사장(유통 업종 · 온라인몰·명품·대형마트·편의점·무역) · 🪙 코인 개척자(코인 업종 · 거래소·NFT·디파이·채굴·밈코인) → 진로 <b>16개</b>','📈 이제 시장 업종마다 그 업종이 주력인 진로가 있어요 (서민 경제는 거지 시절)','🗺️ 진로 고르기 화면 4×4로 정리']},
   {v:'v4.9.3',d:'11/1',items:['🪟 <b>반투명 창</b>: PC 실행기(.bat)를 새로 받으면 미니창이 살짝 비쳐 보여요 (기본 75%) · .bat 맨 위에서 투명도와 항상 위 고정을 바꿀 수 있어요']},
   {v:'v4.9.2',d:'11/1',items:['📜 미션 줄에서 <b>해야 할 일</b>이 잘려 안 보이던 문제 수정: 할 일을 맨 앞에 두고 미션 이름은 뒤에 작게']},
@@ -4468,11 +4471,12 @@ function spawnGold(){
     earn(bonus); S.golds++;
     if(Math.random()<perkA('bagChain')) setTimeout(spawnGold,500);
     const r=sc.getBoundingClientRect();
-    floatText(e.clientX-r.left-30, e.clientY-r.top-20, (lucky?'🌟 황금 ':'💰 ')+'+'+fmt(bonus));
+    floatText(e.clientX-r.left-30, e.clientY-r.top-20, (g._pet?'🐦 ':'')+(lucky?'🌟 황금 ':'💰 ')+'+'+fmt(bonus));
     log(`💰 돈주머니를 주웠다! +${fmt(bonus)}`);
     g.remove(); render(); refreshAffordable();
   };
   sc.appendChild(g);
+  const ab=perkA('autoBag'); if(ab>0 && Math.random()<Math.min(.95,ab)) setTimeout(()=>{ if(!g.isConnected||paused) return; const r=g.getBoundingClientRect(); g._pet=1; g.onclick({clientX:r.left+r.width/2,clientY:r.top+r.height/2}); },1300);
   setTimeout(()=>g.remove(),7000);
 }
 (function goldLoop(){ setTimeout(()=>{ if(!paused) spawnGold(); goldLoop(); }, (25000+Math.random()*35000)/Math.max(.3,1+perkA('goldFreq'))); })();
@@ -4558,7 +4562,7 @@ function tick(now){
 /* start */
 document.querySelectorAll('.tabs button').forEach(b=>{ const t=b.textContent.trim(), sp=t.indexOf(' '); if(sp>0){ const dot=b.id==='pvpTab'; b.innerHTML=`<i class="ti">${t.slice(0,sp)}</i><span>${t.slice(sp+1)}</span>`; } });
 setTimeout(requireLogin,0);
-const GAME_VER='v5.0';
+const GAME_VER='v5.1';
 document.querySelector('.credit').textContent='제작자 KSW · '+GAME_VER;
 try{ if(sessionStorage.getItem('geoji_updated')){ sessionStorage.removeItem('geoji_updated'); setTimeout(()=>{ toast('🆕 최신 버전('+GAME_VER+')으로 업데이트됐어요!'); const w=setInterval(()=>{ if(!$('gate').classList.contains('show') && !$('modal').classList.contains('show')){ clearInterval(w); showPatchNotes(); } },800); },1500); } }catch(e){}
 setTimeout(()=>{ if(S.pending&&S.pending.length) nextChoice(); },1200);
